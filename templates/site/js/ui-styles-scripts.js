@@ -1,8 +1,11 @@
-function setPlaceholderText(){
-    var searchInputElement = document.getElementById("searchInput");
+function setPlaceholderText(searchInputElement){
     searchInputElement.setAttribute("placeholder", "Search by keyword");
 }
-function updatePlaceholderText(){
-    var searchInputElement = document.getElementById("searchInput");
+function updatePlaceholderText(searchInputElement){
     searchInputElement.setAttribute("placeholder", "Type to search");
+}
+
+function toggleDropdownStyles(){
+    var dropdownLink = document.getElementById("dropdownLink");
+    dropdownLink.classList.toggle("dropdown-transition-styles");
 }
