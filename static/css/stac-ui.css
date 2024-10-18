@@ -1,5 +1,7 @@
 /*Legacy styles from design*/
 :root {
+    /*Override Bootstrap*/
+    --bs-dropdown-spacer: 0px;
 
     /*Fonts*/
     --main-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -34,6 +36,7 @@
 
     /*Shadows*/
     --text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    --partial-shadow-right: 0px 0px 4px rgba(0, 0, 0, 0.25);
 
     /*Backgrounds*/
     --background: #FFFFFF;
@@ -324,4 +327,65 @@ h6{
     color: var(--gray-500);
     right: 30px;
     z-index: 25;
+}
+
+/*Dropdown*/
+
+.dropdown-container{
+    display: flex;
+    border-radius: 30px;
+    background-color: var(--white);
+
+}
+
+/*Override Bootstrap*/
+.dropdown-menu{
+    border-width: 0px;
+    margin-top: var(--bs-dropdown-spacer);
+}
+
+.dropdown-toggle::after{
+    content: none;
+}
+
+.dropdown-button-link{
+    width: 172px;
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 24px;
+    line-height: var(--line-height-normal);
+    color: var(--text-on-dark);
+    border-radius: 30px;
+    border: 1px solid var(--indigo-200);
+    background-color: var(--primary);
+    box-shadow: var(--text-shadow);
+    padding: 16px 24px;
+}
+
+.dropdown-transition-styles{
+    background-color: var(--white);
+    border: none;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: var(--partial-shadow-right);
+}
+
+.dropdown-chevron{
+    font-size: 12px;
+    color: var(--text-on-dark);
+    margin-left: 90px;
+    margin-bottom: 5px;
+    transition: all 0.4s ease-in-out;
+}
+
+.dropdown-chevron:focus{
+    transform: rotateZ(180deg);
+}
+
+.dropdown-body{
+    width: 172px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: var(--text-shadow);
+    padding: 16px 24px;
 }
