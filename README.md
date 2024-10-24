@@ -9,6 +9,4 @@ An affix file is not needed for dictionaries of 100,000 words or less.
 
 The word list file is a list of words separated by a newline character.
 
-As there isn't that much information online for creating these files, they are saved as pdfs in this repository:
-[Creating .aff file](documentation/hunspell-dictionary/create-aff-file.pdf)
-[Creating a .dic file](documentation/hunspell-dictionary/creating-a-hunspell-dictionary-file.pdf)
+[Documentation](https://manpages.ubuntu.com/manpages/focal/man5/hunspell.5.html)
