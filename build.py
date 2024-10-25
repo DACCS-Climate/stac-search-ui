@@ -10,10 +10,7 @@ THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(THIS_DIR, "templates")
 SITE_PATH = os.path.join(TEMPLATE_PATH, "site")
 CSV_PATH = os.path.join(THIS_DIR, "csv")
-CSV_FILENAME = 'CMIP6_Variables.csv'
-CUSTOM_DICTIONARY_NAME = "stac_dictionary"
-DICTIONARY_TEMPLATE_PATH = os.path.join(TEMPLATE_PATH, "dictionary", CUSTOM_DICTIONARY_NAME)
-DICTIONARY_PATH = os.path.join(THIS_DIR, "build/dictionary", CUSTOM_DICTIONARY_NAME)
+DICTIONARY_DIR = "dictionary"
 
 def readKeywordCSV():
     keywordDF = pandas.DataFrame()
@@ -58,35 +55,57 @@ def getVariableLongNameList(DF):
 
     return splitLongNameList
 
-def createDictionaryFile(variableList):
+def createDictionaryFile(custom_dictionary_name, variableList):
     listLength = len(variableList)
+    custom_dictionary_directory = custom_dictionary_name
+    dictionary_name = custom_dictionary_name + ".dic"
 
-    with open(os.path.join(DICTIONARY_TEMPLATE_PATH,"stac_dictionary.dic"), "w") as f:
-        f.write(f"{str(listLength)}\n")
-        f.close()
-
-    with open(os.path.join(DICTIONARY_TEMPLATE_PATH, "stac_dictionary.dic"), "a") as f:
-        for variable in variableList:
-            f.write(f"{variable}\n")
-
-        f.close()
-
-def createAffixFile(variableList):
-    encoding = "UTF-8"
-    if(len(variableList) < 100000):
-        with open(os.path.join(DICTIONARY_TEMPLATE_PATH, "stac_dictionary.aff" ), "w") as f:
-            f.write("SET " + encoding)
+    try:
+        os.mkdir(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR,custom_dictionary_directory))
+        with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory, dictionary_name), "w") as f:
+            f.write(f"{str(listLength)}\n")
             f.close()
 
+        with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory, dictionary_name), "a") as f:
+            for variable in variableList:
+                f.write(f"{variable}\n")
+    except FileExistsError:
+
+        with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR,custom_dictionary_directory, dictionary_name), "w") as f:
+            f.write(f"{str(listLength)}\n")
+            f.close()
+
+        with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory, dictionary_name), "a") as f:
+            for variable in variableList:
+                f.write(f"{variable}\n")
+
+        f.close()
+
+def createAffixFile(custom_dictionary_name, variableList):
+    encoding = "UTF-8"
+    custom_dictionary_directory = custom_dictionary_name
+    dictionary_affix_name = custom_dictionary_directory + ".aff"
+    if(len(variableList) < 100000):
+        try:
+            os.mkdir(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory))
+
+            with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory, dictionary_affix_name ), "w") as f:
+                f.write("SET " + encoding)
+                f.close()
+        except FileExistsError:
+            with open(os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_directory, dictionary_affix_name ), "w") as f:
+                f.write("SET " + encoding)
+                f.close()
 
 
-def buildDictionary():
+
+def buildDictionary(custom_dictionary_name):
     dataframe = readKeywordCSV()
     longNameList = getVariableLongNameList(dataframe)
     testList = longNameList[0:9]
 
-    createAffixFile(testList)
-    createDictionaryFile(testList)
+    createAffixFile(custom_dictionary_name, testList)
+    createDictionaryFile(custom_dictionary_name, testList)
 
 
 def filter_site_templates(template, extensions=("js", "html")):
@@ -97,9 +116,10 @@ def filter_site_templates(template, extensions=("js", "html")):
             basename.rsplit(".", 1)[1] in extensions)
 
 
-def build(build_directory, custom_dictionary_directory, clean=True):
+def build(build_directory, custom_dictionary_name, clean=True):
+    DICTIONARY_TEMPLATE_PATH = os.path.join(TEMPLATE_PATH, DICTIONARY_DIR, custom_dictionary_name)
 
-    buildDictionary()
+    buildDictionary(custom_dictionary_name)
 
     if clean:
         shutil.rmtree(build_directory, ignore_errors=True)
@@ -108,7 +128,7 @@ def build(build_directory, custom_dictionary_directory, clean=True):
     )
 
     shutil.copytree(os.path.join(THIS_DIR, "static"), build_directory, dirs_exist_ok=True)
-    shutil.copytree(os.path.join(THIS_DIR, DICTIONARY_TEMPLATE_PATH), os.path.join(build_directory, "dictionary", custom_dictionary_directory), dirs_exist_ok=True)
+    shutil.copytree(os.path.join(THIS_DIR, DICTIONARY_TEMPLATE_PATH), os.path.join(build_directory, DICTIONARY_DIR, custom_dictionary_name), dirs_exist_ok=True)
 
     for template in env.list_templates(filter_func=filter_site_templates):
         build_destination = os.path.join(
@@ -116,7 +136,7 @@ def build(build_directory, custom_dictionary_directory, clean=True):
         )
         os.makedirs(os.path.dirname(build_destination), exist_ok=True)
         with open(build_destination, "w") as f:
-            f.write(env.get_template(template).render())
+            f.write(env.get_template(template).render(custom_typojs_dictionary = custom_dictionary_name))
 
 
 
@@ -132,9 +152,9 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-d",
-        "--custom-dictionary-directory",
-        default=os.path.join(THIS_DIR, "build/dictionary/stac_dictionary"),
-        help="location on disk to write dictionary files to.",
+        "--custom-dictionary-name",
+        default="stac_dictionary",
+        help="name of dictionary.",
     )
 
     parser.add_argument(
@@ -144,4 +164,4 @@ if __name__ == "__main__":
         help="clean build directories before building.",
     )
     args = parser.parse_args()
-    build(args.build_directory, args.custom_dictionary_directory, args.clean)
+    build(args.build_directory, args.custom_dictionary_name, args.clean)
