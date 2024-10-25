@@ -43,7 +43,9 @@ python3 -m http.server
 3. Type in the search field and see the suggested words below it 
 
 
-# Creating Custom Dictionaries
+
+# Development notes
+## Creating Custom Dictionaries
 
 A dictionary requires two files an `"affix"` file (`.aff`) and a word list file (`.dic`).  The affix file is a list of 
 prefixes and suffixes a word can have.  For example, "supply" can have the suffix "ied" when dropping the "y" to make
