@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function (){
         setPlaceholderText(searchInputElement);
     });
 
-    searchInputElement.addEventListener("keydown", function(){
+    searchInputElement.addEventListener("keyup", function(){
         getWord("searchInput");
     })
 
