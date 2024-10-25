@@ -18,11 +18,12 @@ automatically built into the `build/dictionary/stac_dictionary` directory
 Custom dictionaries can be used by providing a csv file with column name/headers "Variable", "Standard name", and 
 "Long name".
 
-1. Put your CSV source file in the `csv` folder
-2. Go to the root of your project and run the build command in the terminal with the custom dictionary flag `-d` and the 
+1. Remove the default `CMIP6_Variables.csv` file already in the folder
+2. Put your CSV source file in the `csv` folder
+3. Go to the root of your project and run the build command in the terminal with the custom dictionary flag `-d` and the 
 name of your dictionary.
 `python3 build.py -d <your-dictionary-name>`
-3. The dictionary files will be created under the `templates/dictionary/<your-dictionary-name>` directory and then 
+4. The dictionary files will be created under the `templates/dictionary/<your-dictionary-name>` directory and then 
 automatically built under the `build/dictionary/<your-dictionary-name>` directory.
 
 # Running the dictionary
