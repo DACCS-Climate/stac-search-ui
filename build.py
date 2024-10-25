@@ -10,11 +10,19 @@ THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(THIS_DIR, "templates")
 SITE_PATH = os.path.join(TEMPLATE_PATH, "site")
 CSV_PATH = os.path.join(THIS_DIR, "csv")
+CSV_FILENAME = 'CMIP6_Variables.csv'
 CUSTOM_DICTIONARY_NAME = "stac_dictionary"
-DICTIONARY_PATH = os.path.join(TEMPLATE_PATH, "dictionary", CUSTOM_DICTIONARY_NAME)
+DICTIONARY_TEMPLATE_PATH = os.path.join(TEMPLATE_PATH, "dictionary", CUSTOM_DICTIONARY_NAME)
+DICTIONARY_PATH = os.path.join(THIS_DIR, "build/dictionary", CUSTOM_DICTIONARY_NAME)
 
 def readKeywordCSV():
-    keywordDF = pandas.read_csv(os.path.join(CSV_PATH, 'CMIP6_Variables.csv'))
+    keywordDF = pandas.DataFrame()
+    fileList = os.listdir(CSV_PATH)
+
+    for csvFile in fileList:
+        if(os.path.isfile(os.path.join(CSV_PATH, csvFile))):
+            keywordDF = pandas.read_csv(os.path.join(CSV_PATH, csvFile))
+
     return keywordDF
 
 
@@ -53,11 +61,11 @@ def getVariableLongNameList(DF):
 def createDictionaryFile(variableList):
     listLength = len(variableList)
 
-    with open(os.path.join(DICTIONARY_PATH,"stac_dictionary.dic"), "w") as f:
+    with open(os.path.join(DICTIONARY_TEMPLATE_PATH,"stac_dictionary.dic"), "w") as f:
         f.write(f"{str(listLength)}\n")
         f.close()
 
-    with open(os.path.join(DICTIONARY_PATH, "stac_dictionary.dic"), "a") as f:
+    with open(os.path.join(DICTIONARY_TEMPLATE_PATH, "stac_dictionary.dic"), "a") as f:
         for variable in variableList:
             f.write(f"{variable}\n")
 
@@ -66,7 +74,7 @@ def createDictionaryFile(variableList):
 def createAffixFile(variableList):
     encoding = "UTF-8"
     if(len(variableList) < 100000):
-        with open(os.path.join(DICTIONARY_PATH, "stac_dictionary.aff" ), "w") as f:
+        with open(os.path.join(DICTIONARY_TEMPLATE_PATH, "stac_dictionary.aff" ), "w") as f:
             f.write("SET " + encoding)
             f.close()
 
@@ -100,7 +108,7 @@ def build(build_directory, custom_dictionary_directory, clean=True):
     )
 
     shutil.copytree(os.path.join(THIS_DIR, "static"), build_directory, dirs_exist_ok=True)
-    shutil.copytree(os.path.join(THIS_DIR, DICTIONARY_PATH), custom_dictionary_directory, dirs_exist_ok=True)
+    shutil.copytree(os.path.join(THIS_DIR, DICTIONARY_TEMPLATE_PATH), os.path.join(build_directory, "dictionary", custom_dictionary_directory), dirs_exist_ok=True)
 
     for template in env.list_templates(filter_func=filter_site_templates):
         build_destination = os.path.join(
