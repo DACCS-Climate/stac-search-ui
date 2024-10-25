@@ -4,6 +4,9 @@ Tools to build the dictionary files, client-side functionality, and basic search
 # Requirements
 - [Typo.js](https://github.com/cfinke/Typo.js)
 *(Typo.js is already included in the main.html file via CDN link)*
+- [Python](https://www.python.org/)
+- [Pandas](https://pypi.org/project/pandas/)
+- [Jinja2](https://pypi.org/project/Jinja2/)
 
 # Build the dictionary
 The STAC Search UI dictionary comes with a default dictionary of words and terms currently used in the STAC catalog. 
