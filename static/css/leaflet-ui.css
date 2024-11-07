@@ -1,0 +1,24 @@
+@import url("stac-ui.css");
+
+#map{
+    height: 400px;
+}
+
+.leaflet-control-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+}
+
+.leaflet-control-button:focus{
+    background-color: var(--gray-700);
+}
+
+.button-square-icon{
+    color: var(--black);
+}
+
+.button-location-icon{
+    color: var(--black);
+}
