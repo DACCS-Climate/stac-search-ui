@@ -1,22 +1,112 @@
-<div class="dropdown-container">
-<ul class="navbar">
-    <li class="nav-item dropdown">
+{% set dropdown_library = {
+        "regular_dropdown": {
+        "container_id": "dropdownRegularContainer",
+            "container_class":"dropdown-container",
+            "label_id": "dropdownRegularLabel",
+            "chevron_id": "dropdownRegularChevron",
+            "list_items":[
+                {
+                    "item_type":"link",
+                    "item_label": "Catalogs"
+                },
+                {
+                    "item_type":"link",
+                    "item_label": "Collections"
+                },
+                {
+                    "item_type":"link",
+                    "item_label": "Data Sets"
+                }
+            ],
+        },
+        "medium_dropdown":{
+            "container_id": "dropdownMediumContainer",
+            "container_class":"dropdown-container",
+            "label_id": "dropdownMediumLabel",
+            "chevron_id": "dropdownMediumChevron",
+            "list_items":[
+                {
+                "item_type":"accordion",
+                "accordion_items":
+                    [
+                        {
+                            "item_label": "Ascending",
+                            "accordion_body":
+                                [
+                                    {"accordion_item_label": "Date & Time"},
+                                    {"accordion_item_label": "ID"},
+                                    {"accordion_item_label": "Title" }
+                                ]
+                        },
+                        {
+                            "item_label": "Descending",
+                            "accordion_body":
+                                [
+                                    {"accordion_item_label": "Date & Time"},
+                                    {"accordion_item_label": "ID"},
+                                    {"accordion_item_label": "Title" }
+                                ]
+                            },
+                    ]
+                },
+                {
+                "item_type":"link",
+                "item_label": "Last Modified"
+                }
+            ]
+        }
+    }
+%}
 
-        <a id="dropdownLink" class="nav-link dropdown-toggle dropdown-button-link" href="#" data-bs-toggle="dropdown" data-bs-target="dropdown" aria-expanded="false">
-            All <i class="fa-solid fa-chevron-down dropdown-chevron"></i>
-        </a>
-        <ul class="dropdown-menu dropdown-body" data-bs-theme="light" aria-labelledby="dropdownLink">
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item rounded-2" href="#">Action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item rounded-2" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item rounded-2" href="#">Something else here</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item rounded-2" href="#">Separated link</a></li>
-          </ul>
-    </li>
 
-</ul>
-</div>
-<!--gap-1 p-2 rounded-3 mx-0 shadow w-220px -->
+{% if dropdown_type == "regular_dropdown" %}
+    <div  id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <label  id="{{ dropdown_library[dropdown_type]["label_id"] }}" class="dropdown-label" for="touchRegular">
+            <h6>{{ dropdown_label_text|safe }}</h6>
+            <i id="{{ dropdown_library[dropdown_type]["chevron_id"] }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
+        <input type="checkbox" id="touchRegular">
+
+        <ul class="dropdown-regular-list">
+            {% for item in dropdown_library[dropdown_type]["list_items"] %}
+
+                <li><hr class='dropdown-custom-divider'></li>
+                <li class="dropdown-regular-item"><a href="#"><h6>{{ item["item_label"]|safe }}</h6></a></li>
+
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if dropdown_type == "medium_dropdown" %}
+    <div  id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <label  id="{{ dropdown_library[dropdown_type]["label_id"] }}" class="dropdown-label" for="touchMedium">
+            {{ dropdown_label_text|safe }}
+            <i id="{{ dropdown_library[dropdown_type]["chevron_id"] }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
+        <input type="checkbox" id="touchMedium">
+
+        <ul class="dropdown-medium-list">
+            {% for item in dropdown_library[dropdown_type]["list_items"] %}
+
+                {% if item["item_type"] == "accordion" %}
+                    {% for accordion in item["accordion_items"] %}
+                        <li class="dropdown-medium-item">
+                             <a class="subtitle-2" href="#">
+                                {% with %}
+                                    {% set accordion_index = loop.index %}
+                                    {% set accordion_button_label = accordion["item_label"]|safe %}
+                                    {% set accordion_body_items = accordion["accordion_body"] %}
+                                    {% include "partials/accordion.html" %}
+                                {% endwith %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                {% if item["item_type"] == "link" %}
+                    {% set link_button_label = item["item_label"] %}
+                    <li class="dropdown-medium-item"><a class="subtitle-2" href="#">{{ link_button_label|safe }}</a></li>
+                {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
