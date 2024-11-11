@@ -2,9 +2,25 @@
 
 {% block content %}
     {% include "partials/searchbox.html" %}
-    {% include "partials/dropdown.html" %}
 
+    {% with %}
+        {% set dropdown_type = "regular_dropdown" %}
+        {% set dropdown_label_text = "All" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+
+    {% with %}
+        {% set dropdown_type = "medium_dropdown" %}
+        {% set dropdown_label_text = "Most Recent" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    {% include "partials/toggle.html" %}
 
         <script src="js/sample.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/toggle.js"></script>
+
 {% endblock %}
