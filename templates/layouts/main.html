@@ -25,6 +25,7 @@
                 crossorigin="anonymous"></script>
     
     <!--TypoJS Spellchecker -->
+    <!-- TODO Remove TypoJS requirement and related code once FuseJS search is functional with STAC queryables in fuse-word-search branch -->
     <script src="https://cdn.jsdelivr.net/npm/typo-js@1.2.4/typo.min.js"></script>
 
     <!-- Leaflet -->
@@ -32,15 +33,19 @@
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
 
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
+     <!-- Make sure this is put AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
 
     <!-- Leaflet Plugin Requirements -->
-    <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.7/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/fuse.min.js"
+            integrity="sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- Leaflet Plugin -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.7/require.min.js"></script>-->
+
+    <!-- Leaflet Plugins -->
 
     <!--<script src="js/leaflet-shades.js"></script>-->
     <!--<link href="css/leaflet-shades.css" rel="stylesheet">-->
@@ -48,13 +53,21 @@
     <!--<script src="js/node_modules/@bopen/leaflet-area-selection/dist/index.js"></script>-->
     <!--<link href="css/index.css" rel="stylesheet">-->
 
-        <script src="js/Leaflet.Editable.js"></script>
+    <!-- Allows drawing shapes on map -->
+    <script src="js/Leaflet.Editable.js"></script>
 
+    <!-- Adds search bar on map -->
+    <script src="js/leaflet.fusesearch.js"></script>
+    <link href="css/leaflet.fusesearch.css" rel="stylesheet">
+
+    <!--<script src="js/leaflet.infopane.js"></script>
+    <link href="css/leaflet.infopane.css" rel="stylesheet">-->
     <!--Custom spellcheck-->
     <script src="js/spellcheck.js"></script>
 
     <link href="css/stac-ui.css" rel="stylesheet">
     <link href="css/leaflet-ui.css" rel="stylesheet">
+
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <meta charset="UTF-8">
     <title>{{ page_title }}</title>
