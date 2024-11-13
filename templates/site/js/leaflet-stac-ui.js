@@ -1,13 +1,37 @@
-var map = L.map('map', {editable: true});
+var map = createMap("Toronto");
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-map.setView([0,0], 5);
+
+//Adds drawing menu
+createDrawMenu(map);
 
 
-createMenu()
+addSearch(map);
 
-var control = new L.Control.Button();
-control.addTo(map);
+
+
+
+
+//var jsonData = "js/neighborhoods.js"
+//'name', 'company', 'details'
+
+
+
+/*
+fetch("https://raw.githubusercontent.com/adamw523/toronto-geojson/refs/heads/master/neighbourhoods.js").then(
+    response).then(jsonData => {
+        searchCtrl.indexFeatures(jsonData.features, ['properties']);
+
+        L.geoJson(jsonData.features, {
+            onEachFeature: function (feature, layer) {
+            feature.layer = layer;
+            }
+        });
+
+
+
+    })*/
+
 
 //map.editTools.startPolyline();  // map.editTools has been created
                                 // by passing editable: true option to the map
