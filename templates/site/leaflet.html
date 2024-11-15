@@ -3,8 +3,18 @@
 {% block content %}
  <div id="map"></div>
 
-<script src="js/leaflet-area-selection.js" type="module"></script>
-<script src="js/leaflet-ui.js"></script>
+
+<button id="layerButton">Get Layers</button>
+<!--
+<button id="buttonRemoveLayers">Remove Layers</button>
+-->
+    <br>
+{% include 'partials/upload-form.html' %}
+
+
+<script src="js/leaflet-ui-functions.js"></script>
+<script src="js/leaflet-stac-ui.js" type="module"></script>
+
 
 <!--<script src="js/node_modules/@bopen/leaflet-area-selection/index.js"></script>-->
 
