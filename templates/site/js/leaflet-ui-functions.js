@@ -23,7 +23,8 @@ function createMap(city){
     var location={
         "Toronto":[43.6532, -79.3832],
         "London":[51.509865, -0.118092],
-        "Hong Kong":[22.302711, 114.177216]
+        "Hong Kong":[22.302711, 114.177216],
+        "startPoint" : [43.1249, 1.254]
     };
 
     var map = L.map('map',{
@@ -50,6 +51,23 @@ function removeLayers(map){
     })
 }
 
+function clear(){
+    drawnItems.clearLayers();
+}
+
+
+var deleteShape = function (e) {
+    if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) && this.editEnabled())
+    {
+          this.editor.deleteShapeAt(e.latlng);
+    }
+
+}
+
+
+
+
+
 function createDrawMenu(map){
     L.Control.Button = L.Control.extend({
     options:{
@@ -58,74 +76,106 @@ function createDrawMenu(map){
     onAdd: function(map) {
         let selectArea;
         let selected_features;
-        let newRectangle;
+        let shapeDict ={}  ;
+        let newShape;
         var container = L.DomUtil.create("div", "leaflet-control leaflet-bar");
-
 
         var buttonDrawSquare = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonDrawSquare.title = "Click and drag to draw a square";
+        buttonDrawSquare.innerHTML = '<i class="fa-solid fa-square-full button-square-icon"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawSquare);
         L.DomEvent.on(buttonDrawSquare, "click", function () {
-            //Clear previously drawn layer(s)
-            removeLayers(map);
+
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            if(Object.keys(shapeDict).length > 0){
+                shapeDict["shape"].remove();
+                delete shapeDict.shape;
+            }
 
             // Start drawing rectangle
-            map.editTools.startRectangle();
+            newShape = map.editTools.startRectangle();
+
+            //Store drawn shape
+            shapeDict["shape"] = newShape;
         })
-
-        /*
-                map.on("mouseup", function () {
-                   //getRectangleFeature()
-                    selected_features = selectArea.getFeaturesSelected( 'rectangle' );
-                    console.log(selected_features);
-                })*/
-
-        buttonDrawSquare.innerHTML = '<i class="fa-solid fa-square-full button-square-icon"></i>';
 
 
         var buttonDrawCircle = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonDrawCircle.title = "Click and drag to draw a circle";
+        buttonDrawCircle.innerHTML = '<i class="fa-solid fa-circle"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawCircle);
         L.DomEvent.on(buttonDrawCircle, "click", function () {
-            //Clear previously drawn layer(s)
-            removeLayers(map);
+
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            if(Object.keys(shapeDict).length > 0){
+                shapeDict["shape"].remove();
+                delete shapeDict.shape;
+            }
+
             // Start drawing circle
-            map.editTools.startCircle();
+            newShape = map.editTools.startCircle();
+
+            //Store drawn shape
+            shapeDict["shape"] = newShape;
         })
-        buttonDrawCircle.innerHTML = '<i class="fa-solid fa-circle"></i>';
 
 
         var buttonDrawPolygon = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonDrawPolygon.title = "Click to add Polygon vertexes";
+        buttonDrawPolygon.innerHTML = '<i class="fa-solid fa-draw-polygon"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawPolygon);
         L.DomEvent.on(buttonDrawPolygon, "click", function () {
-            //Clear previously drawn layer(s)
-            removeLayers(map);
+
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            if(Object.keys(shapeDict).length > 0){
+                shapeDict["shape"].remove();
+                delete shapeDict.shape;
+            }
+
             // Click to add points to map that will be automatically joined into a polygon
-            map.editTools.startPolygon();
+            newShape = map.editTools.startPolygon();
+
+            //Store drawn shape
+            shapeDict["shape"] = newShape;
         })
-        buttonDrawPolygon.innerHTML = '<i class="fa-solid fa-draw-polygon"></i>';
 
 
         var buttonLocationMarker = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonLocationMarker.title = "Add Location marker";
+        buttonLocationMarker.innerHTML = '<i class="fa-solid fa-location-dot button-location-icon"></i>';
         L.DomEvent.disableClickPropagation(buttonLocationMarker);
         L.DomEvent.on(buttonLocationMarker, "click", function () {
-            //Clear previously drawn layer(s)
-            removeLayers(map);
+
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            if(Object.keys(shapeDict).length > 0){
+                shapeDict["shape"].remove();
+                delete shapeDict.shape;
+            }
+
             // Add location marker to map
-            map.editTools.startMarker();
+            newShape = map.editTools.startMarker();
+
+            //Store drawn shape
+            shapeDict["shape"] = newShape;
         })
-        buttonLocationMarker.innerHTML = '<i class="fa-solid fa-location-dot button-location-icon"></i>';
+
 
         var buttonClearFeatures = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonClearFeatures.title = "Clear";
+        buttonClearFeatures.innerHTML = '<i class="fa-solid fa-eraser"></i>';
         L.DomEvent.disableClickPropagation(buttonClearFeatures);
         L.DomEvent.on(buttonClearFeatures, "click", function () {
-            //Remove added shape
-            removeLayers(map);
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            if(Object.keys(shapeDict).length > 0){
+                shapeDict["shape"].remove();
+                delete shapeDict.shape;
+            }
         })
-        buttonClearFeatures.innerHTML = '<i class="fa-solid fa-eraser"></i>';
 
 
         var buttonSelectRectangleArea = L.DomUtil.create("a", "leaflet-control-button", container);
@@ -173,18 +223,7 @@ function createDrawMenu(map){
         buttonNewRectangle.innerText = 'Rect';
 
 
-        /*
-        var buttonSelectArea = L.DomUtil.create("a", "leaflet-control-button", container);
-        L.DomEvent.disableClickPropagation(buttonSelectArea);
-        L.DomEvent.on(buttonSelectArea, "click", function () {
-            // Disable select area plugin
-            //selected_features = selectArea.getFeaturesSelected( 'rectangle' );
-            //console.log(selected_features);
-            //disableSelectArea();
 
-        })
-        buttonNewRectangle.innerText = 'NewR';
-        */
 
         return container;
     },
@@ -195,28 +234,77 @@ function createDrawMenu(map){
     control.addTo(map);
 }
 
-function addSearch(map){
+async function addSearch(map){
+    //var geojsonTextarea = document.getElementById("geojsonInput");
+    let jsonData;
+    let properties;
 
-     var options = {
-         maxResultLength: 15,
-         threshold: 0.5,
-         showInvisibleFeatures: true,
-         showResultFct: function (feature, container) {
-             props = feature.properties;
+    var options = {
+     maxResultLength: 15,
+     threshold: 0.5,
+     showInvisibleFeatures: true,
+     showResultFct: function (feature, container) {
+         props = feature.properties;
 
-             var name = L.DomUtil.create('a', null, container);
-             name.innerText = props.AREA_NAME;
+         var name = L.DomUtil.create('a', null, container);
+         name.innerText = props.AREA_NAME;
 
-             container.appendChild(L.DomUtil.create('br', null, container));
+         container.appendChild(L.DomUtil.create('br', null, container));
 
-             //var cat = props.libtype ? props.libtype : props.libcategor,info = '' + cat + ', ' + props.commune;
-             //container.appendChild(document.createTextNode(info));
-         }
+         //var cat = props.libtype ? props.libtype : props.libcategor,info = '' + cat + ', ' + props.commune;
+         //container.appendChild(document.createTextNode(info));
      }
+    }
 
     //Leaflet-fuse-search plugin
     var searchCtrl = L.control.fuseSearch(options);
     searchCtrl.addTo(map);
+
+    getGeoJSON().then( response => response.json()).then( jsonData => {
+        console.log(jsonData);
+            if(jsonData.features.properties.name != null){
+                properties = ['name']; //Optionally pass more than one feature property by adding to the array
+            }
+            else{
+                properties = ['AREA_NAME']; //Optionally pass more than one feature property by adding to the array
+            }
+
+
+
+            searchCtrl.indexFeatures(jsonData.features, properties);
+
+            L.geoJson(jsonData, {
+                onEachFeature: function (feature, layer) {
+
+                    feature.layer = layer;
+
+                    if (feature.properties.AREA_S_CD != null){
+                        feature.properties.AREA_S_CD;
+
+                        if(feature.geometry.type == "Polygons"){
+                            L.geoJson(jsonData, {
+                                style: stylePolygons
+                            }).addTo(map);
+                        }
+                    }
+                    else{
+                        feature.properties.name;
+                    }
+
+
+
+                    //stylePolygons(feature.geometry);
+
+                }
+
+            }).addTo(map);
+
+    })
+
+    //console.log(jsonData.features);
+
+
+
 
     //var icons = setupIcons();
 
@@ -242,24 +330,19 @@ function addSearch(map){
 //var myLayer = L.geoJSON().addTo(map);
 
 //layer.feature.properties.description
-//https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson
-//https://raw.githubusercontent.com/adamw523/toronto-geojson/refs/heads/master/neighbourhoods.js
-    fetch("https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson").then(
-        response => response.json()).then(jsonData => {
+
+    //fetch("https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson").then(
+        //response => response.json()).then(jsonData => {
 
             //displayFeatures(jsonData.features, layers, icons);
-            var properties = ['AREA_NAME']; //Optionally pass more than one feature property by adding to the array
+           // var properties = ['AREA_NAME']; //Optionally pass more than one feature property by adding to the array
 
-            searchCtrl.indexFeatures(jsonData.features, properties);
 
-            L.geoJson(jsonData, {
-                onEachFeature: function (feature, layer) {
 
-                    feature.layer = layer;
-                    feature.properties.AREA_S_CD
-                    //feature.properties.AREA_S_CD.setStyle
-                }
-            })
+
+
+
+
 
 
 
@@ -270,35 +353,66 @@ function addSearch(map){
     //myLayer.addData(jsonData);
 
 
-    })
+   // })
 
 
 }
 
-/** @param {Event} event */
-function handleSubmit(event) {
-    const form = event.currentTarget;
-    const url = new URL(form.action);
-    const formData = new FormData(form);
+function stylePolygons(feature) {
+    return {
+        fillColor: '#bab6e7',
+        fillOpacity: 0.7,
+        weight: 2,
+        opacity: 1,
+        color: '#9999ff' //Outline color
 
-
-    const fetchOptions = {
-        method: form.method,
-        body: formData,
     };
-
-fetch(url, fetchOptions);
-
-    event.preventDefault();
 }
 
-function addCustomGeoJSON(){
-    ,
-                style: {
-                    "color": "#238858",
-                    "weight": 0,
-                    "fillOpacity": .75
-                }
+function submitFile(){
+    const selectedFile = document.getElementById("uploadFile").files[0];
+    let formData = new FormData();
+
+    formData.append("uploadedFile", selectedFile);
+
+    fetch('/upload/geojson', {method: "POST", body: formData});
+
+}
+
+
+
+async function getGeoJSON(){
+    let geojsonInput;
+    let urlResponse;
+    let geojsonDefaultURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places_simple.geojson";
+    var geojsonTextarea = document.getElementById("geojsonInput");
+
+    if(geojsonTextarea.value != ''){
+        geojsonInput = geojsonTextarea.value.json();
+    }
+    else{
+        urlResponse = await fetch(geojsonDefaultURL);
+        //geojsonInput = await urlResponse.json();
+        geojsonInput = urlResponse;
+        console.log("else");
+        console.log(geojsonInput);
+    }
+/*
+async function getWordlist() {
+    const resp = await fetch("{{ stac_catalog_url }}/collections")
+    const json = await resp.json()
+    const collection_ids = json.collections.map(collection => collection.id)
+    return await Promise.all(collection_ids.map(async (id) => {
+        const resp_1 = await fetch(`{{ stac_catalog_url }}/collections/${id}/queryables`)
+        const json_1 = await resp_1.json()
+        return Object.entries(json_1.properties).map(([key, val]) => {
+            val["key"] = key
+            return val
+        })
+    })).then(queryables => queryables.flat())
+}
+    */
+return geojsonInput;
 }
 
 function enableSelectArea(){
@@ -314,3 +428,5 @@ function getRectangleFeature(){
     selected_features = selectArea.getFeaturesSelected( 'rectangle' );
     console.log(selected_features);
 }
+
+
