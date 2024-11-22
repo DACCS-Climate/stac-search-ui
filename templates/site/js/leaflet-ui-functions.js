@@ -1,22 +1,40 @@
-//let selectArea;
-//let selected_features;
-
-/*
-
-
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-mouseLatLng();
-*/
 function mouseLatLng(){
     map.on("mousedown", function(event){
         //var latlng = map.mouseEventToLatLng(event.originalEvent);
         var latlng = event.latlng;
         console.log(latlng.lat + ", " + latlng.lng);
     })
+}
+
+function getLayers(map){
+    map.eachLayer(function(layer){
+        console.log(layer._leaflet_id);
+    })
+}
+
+function checkControlExists(customControl){
+    L.Map.include({
+    hasCustomControl: function (customControl) {
+        if(this.customControl){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+});
+}
+
+function getTextareaGeoJSON(){
+    var geojsonTextarea = document.getElementById("geojsonInput");
+
+    if(geojsonTextarea.value != ''){
+        return geojsonTextarea.value;
+    }
+    else {
+        return false;
+    }
 }
 
 function createMap(city){
@@ -35,36 +53,6 @@ function createMap(city){
 
     return map;
 }
-
-function getLayers(map){
-    map.eachLayer(function(layer){
-        console.log(layer._leaflet_id);
-    })
-}
-
-function removeLayers(map){
-    map.eachLayer(function(layer){
-        if(layer._leaflet_id != 24 && layer._leaflet_id != 25 && layer._leaflet_id != 27){
-            map.removeLayer(layer);
-        }
-
-    })
-}
-
-function clear(){
-    drawnItems.clearLayers();
-}
-
-
-var deleteShape = function (e) {
-    if ((e.originalEvent.ctrlKey || e.originalEvent.metaKey) && this.editEnabled())
-    {
-          this.editor.deleteShapeAt(e.latlng);
-    }
-
-}
-
-
 
 
 
@@ -235,130 +223,62 @@ function createDrawMenu(map){
 }
 
 async function addSearch(map){
-    //var geojsonTextarea = document.getElementById("geojsonInput");
-    let jsonData;
-    let properties;
+    var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
+    let options;
 
-    var options = {
-     maxResultLength: 15,
-     threshold: 0.5,
-     showInvisibleFeatures: true,
-     showResultFct: function (feature, container) {
-         props = feature.properties;
+    //https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson
 
-         var name = L.DomUtil.create('a', null, container);
-         name.innerText = props.AREA_NAME;
+    fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
+        let locationMarkerList = {};
+        options = {
+            maxResultLength: 15,
+            threshold: 0.5,
+            showInvisibleFeatures: true,
+            showResultFct: function (feature, container) {
+                var name = L.DomUtil.create('button', 'button-search-result', container);
+                props = feature.properties;
+                geoms = feature.geometry;
+                name.innerText = props.NAME;
+                name.id = props.NAME;
+                name.value = geoms.coordinates;
 
-         container.appendChild(L.DomUtil.create('br', null, container));
+                //Add click function to search result button
+                //Removes previous location marker from map when a new one is added/ when new location is clicked
+                name.addEventListener('click', function(){
+                    var coordinates = name.value.split(',');
+                    var locationMarker = L.marker([coordinates[1], coordinates[0]]);
 
-         //var cat = props.libtype ? props.libtype : props.libcategor,info = '' + cat + ', ' + props.commune;
-         //container.appendChild(document.createTextNode(info));
-     }
-    }
-
-    //Leaflet-fuse-search plugin
-    var searchCtrl = L.control.fuseSearch(options);
-    searchCtrl.addTo(map);
-
-    getGeoJSON().then( response => response.json()).then( jsonData => {
-        console.log(jsonData);
-            if(jsonData.features.properties.name != null){
-                properties = ['name']; //Optionally pass more than one feature property by adding to the array
-            }
-            else{
-                properties = ['AREA_NAME']; //Optionally pass more than one feature property by adding to the array
-            }
-
-
-
-            searchCtrl.indexFeatures(jsonData.features, properties);
-
-            L.geoJson(jsonData, {
-                onEachFeature: function (feature, layer) {
-
-                    feature.layer = layer;
-
-                    if (feature.properties.AREA_S_CD != null){
-                        feature.properties.AREA_S_CD;
-
-                        if(feature.geometry.type == "Polygons"){
-                            L.geoJson(jsonData, {
-                                style: stylePolygons
-                            }).addTo(map);
-                        }
-                    }
-                    else{
-                        feature.properties.name;
+                    if(Object.keys(locationMarkerList).length > 0){
+                        locationMarkerList["marker"].remove();
+                        delete locationMarkerList.marker;
                     }
 
+                    locationMarker.addTo(map);
+                    locationMarkerList["marker"] = locationMarker;
+
+                    map.panTo([coordinates[1], coordinates[0]]);
+                })
+                container.appendChild(L.DomUtil.create('br', null, container));
+            }
+        }
 
 
-                    //stylePolygons(feature.geometry);
+        //Leaflet-fuse-search plugin
+        var searchCtrl = L.control.fuseSearch(options);
+        searchCtrl.addTo(map);
 
-                }
+        searchCtrl.indexFeatures(jsonData.features, ["NAME"]);
 
-            }).addTo(map);
-
+         L.geoJson(jsonData, {
+             //style:stylePolygons, //Optionally customize how geoJSON polygons  are coloured
+             onEachFeature: function (feature, layer) {
+                 feature.layer = layer;
+             }
+        })
     })
-
-    //console.log(jsonData.features);
-
-
-
-
-    //var icons = setupIcons();
-
-     // Layer control, setting up 1 layer per category
-    /*
-    var layers = {},
-        cultureLayer = L.layerGroup(),
-        layerCtrl = L.control.layers();
-    for (var icat in categories) {
-        var layer = L.featureGroup();
-        layers[icat] = layer;
-        cultureLayer.addLayer(layer);
-
-        var cat = categories[icat],
-            desc = '<img class="layer-control-img" src="images/' + cat.icon + '"> ' + cat.desc;
-        layerCtrl.addOverlay(layer, desc);
-    }
-    cultureLayer.addTo(map);*/
-
-
-
-
-//var myLayer = L.geoJSON().addTo(map);
-
-//layer.feature.properties.description
-
-    //fetch("https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson").then(
-        //response => response.json()).then(jsonData => {
-
-            //displayFeatures(jsonData.features, layers, icons);
-           // var properties = ['AREA_NAME']; //Optionally pass more than one feature property by adding to the array
-
-
-
-
-
-
-
-
-
-
-            /*
-            .bindPopup(function (layer) {
-    return feature.layer;
-}).addTo(map);*/
-    //myLayer.addData(jsonData);
-
-
-   // })
-
-
 }
 
-function stylePolygons(feature) {
+function stylePolygons() {
     return {
         fillColor: '#bab6e7',
         fillOpacity: 0.7,
@@ -369,19 +289,38 @@ function stylePolygons(feature) {
     };
 }
 
-function submitFile(){
-    const selectedFile = document.getElementById("uploadFile").files[0];
-    let formData = new FormData();
+function uploadGeoJSON(map){
+    var geojsonTextarea = document.getElementById("geojsonInput");
 
-    formData.append("uploadedFile", selectedFile);
+    const geoJSONData = JSON.parse(geojsonTextarea.value);
 
-    fetch('/upload/geojson', {method: "POST", body: formData});
 
+
+
+    var geoJSONLayer = L.geoJson(geoJSONData, {
+        //style:stylePolygons, //Optionally customize how geoJSON items are coloured
+        onEachFeature: function (feature, layer) {
+
+            feature.layer = layer;
+            feature.properties;
+/*
+            if (feature.properties.AREA_S_CD != null){
+                feature.properties.AREA_S_CD;
+            }
+            else{
+                feature.properties.name;
+            }*/
+
+        }
+    }).addTo(map);
+
+    //addSearch(map, geoJSONLayer);
 }
 
 
 
-async function getGeoJSON(){
+
+async function getGeoJSON(map){
     let geojsonInput;
     let urlResponse;
     let geojsonDefaultURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places_simple.geojson";
@@ -389,13 +328,15 @@ async function getGeoJSON(){
 
     if(geojsonTextarea.value != ''){
         geojsonInput = geojsonTextarea.value.json();
+        //addSearch(map, geojsonInput);
     }
     else{
         urlResponse = await fetch(geojsonDefaultURL);
-        //geojsonInput = await urlResponse.json();
-        geojsonInput = urlResponse;
+        geojsonInput = await urlResponse.json();
+        //geojsonInput = urlResponse;
         console.log("else");
         console.log(geojsonInput);
+        //addSearch(map, geojsonInput);
     }
 /*
 async function getWordlist() {
