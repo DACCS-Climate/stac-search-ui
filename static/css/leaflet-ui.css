@@ -9,6 +9,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--white);
+    cursor: pointer;
 }
 
 .leaflet-control-button:focus{
@@ -21,4 +22,23 @@
 
 .button-location-icon{
     color: var(--black);
+}
+
+
+/*Search panel styles*/
+.button-search-result{
+    width: 100%;
+    background-color: var(--white);
+    border: none;
+    text-align: start;
+}
+
+.button-search-result:hover{
+    background-color: var(--gray-400);
+}
+
+
+/*GeoJSON Input Styles*/
+.geojson-error{
+    color: var(--error);
 }
