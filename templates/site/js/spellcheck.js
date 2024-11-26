@@ -1,4 +1,4 @@
-var dictionary = new Typo(`{{ custom_typojs_dictionary }}`, false, false, { dictionaryPath: "dictionary" })
+//var dictionary = new Typo(`{{ custom_typojs_dictionary }}`, false, false, { dictionaryPath: "dictionary" })
 
 
 function getWord(elementID){
