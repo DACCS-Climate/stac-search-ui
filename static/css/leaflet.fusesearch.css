@@ -21,7 +21,7 @@
 .leaflet-fusesearch-panel {
     position: absolute;
     height: 100%;
-    width: 350px;
+    width: 200px;
     
     z-index: -1;
     opacity: 0;
