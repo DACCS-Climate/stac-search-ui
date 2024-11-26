@@ -301,7 +301,7 @@ h6{
     display: flex;
 }
 
-.search-input{
+.input-stac-search{
     width: 622px;
     height: 64px;
     text-align: center;
