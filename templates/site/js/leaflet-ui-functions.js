@@ -83,9 +83,15 @@ function createDrawMenu(map){
 
             // Start drawing rectangle
             newShape = map.editTools.startRectangle();
-
+/*
+            newShape.on("dragend", function(){
+                console.log(newShape);
+            })
+*/
             //Store drawn shape
             shapeDict["shape"] = newShape;
+            console.log(shapeDict["shape"].getLatLngs());
+            console.log(shapeDict["shape"].getBounds());
         })
 
 
@@ -222,14 +228,13 @@ function createDrawMenu(map){
     control.addTo(map);
 }
 
-async function addSearch(map){
+function addSearch(map){
     var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
     let options;
 
-    //https://raw.githubusercontent.com/jasonicarter/toronto-geojson/refs/heads/master/toronto_crs84.geojson
-
     fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
         let locationMarkerList = {};
+
         options = {
             maxResultLength: 15,
             threshold: 0.5,
@@ -291,30 +296,26 @@ function stylePolygons() {
 
 function uploadGeoJSON(map){
     var geojsonTextarea = document.getElementById("geojsonInput");
+    let geoJSONData;
 
-    const geoJSONData = JSON.parse(geojsonTextarea.value);
+    try{
+        JSON.parse(geojsonTextarea.value)
+        geoJSONData = JSON.parse(geojsonTextarea.value);
+    }
+    catch (error){
+        var errorDiv = document.getElementById("geoJSONError");
+        errorDiv.innerText = error;
+    }
 
-
-
-
-    var geoJSONLayer = L.geoJson(geoJSONData, {
+    L.geoJson(geoJSONData, {
         //style:stylePolygons, //Optionally customize how geoJSON items are coloured
         onEachFeature: function (feature, layer) {
 
             feature.layer = layer;
             feature.properties;
-/*
-            if (feature.properties.AREA_S_CD != null){
-                feature.properties.AREA_S_CD;
-            }
-            else{
-                feature.properties.name;
-            }*/
 
         }
     }).addTo(map);
-
-    //addSearch(map, geoJSONLayer);
 }
 
 
@@ -338,21 +339,7 @@ async function getGeoJSON(map){
         console.log(geojsonInput);
         //addSearch(map, geojsonInput);
     }
-/*
-async function getWordlist() {
-    const resp = await fetch("{{ stac_catalog_url }}/collections")
-    const json = await resp.json()
-    const collection_ids = json.collections.map(collection => collection.id)
-    return await Promise.all(collection_ids.map(async (id) => {
-        const resp_1 = await fetch(`{{ stac_catalog_url }}/collections/${id}/queryables`)
-        const json_1 = await resp_1.json()
-        return Object.entries(json_1.properties).map(([key, val]) => {
-            val["key"] = key
-            return val
-        })
-    })).then(queryables => queryables.flat())
-}
-    */
+
 return geojsonInput;
 }
 
