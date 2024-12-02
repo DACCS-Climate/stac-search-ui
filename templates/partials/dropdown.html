@@ -1,25 +1,35 @@
 {% set dropdown_library = {
-        "regular_dropdown": {
-        "container_id": "dropdownRegularContainer",
-            "container_class":"dropdown-container",
-            "label_id": "dropdownRegularLabel",
-            "chevron_id": "dropdownRegularChevron",
+        "regular_dropdown_list": {
+            "container_class":"dropdown-list-container",
             "list_items":[
                 {
-                    "item_type":"link",
+                    "item_type": "link",
+                    "item_id": "catalogsCheckbox",
                     "item_label": "Catalogs"
                 },
                 {
                     "item_type":"link",
+                    "item_id": "collectionsCheckbox",
                     "item_label": "Collections"
                 },
                 {
                     "item_type":"link",
+                    "item_id": "datasetsCheckbox",
                     "item_label": "Data Sets"
                 }
             ],
         },
-        "medium_dropdown":{
+        "regular_dropdown_source": {
+            "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link'></i>"
+        },
+        "regular_dropdown_share": {
+            "dropdown_icon": "<i class='fa-solid fa-share-nodes'></i>"
+        },
+
+
+
+
+        "medium_dropdown": {
             "container_id": "dropdownMediumContainer",
             "container_class":"dropdown-container",
             "label_id": "dropdownMediumLabel",
@@ -59,23 +69,90 @@
 %}
 
 
-{% if dropdown_type == "regular_dropdown" %}
-    <div  id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <label  id="{{ dropdown_library[dropdown_type]["label_id"] }}" class="dropdown-label" for="touchRegular">
+{% if dropdown_type == "regular_dropdown_list" %}
+    <div  id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <label  id={{ label_id }} class="dropdown-regular-list-label" for="touchRegularList">
             <h6>{{ dropdown_label_text|safe }}</h6>
-            <i id="{{ dropdown_library[dropdown_type]["chevron_id"] }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
-        <input type="checkbox" id="touchRegular">
+            <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
+        <input type="checkbox" id="touchRegularList">
 
         <ul class="dropdown-regular-list">
             {% for item in dropdown_library[dropdown_type]["list_items"] %}
 
                 <li><hr class='dropdown-custom-divider'></li>
-                <li class="dropdown-regular-item"><a href="#"><h6>{{ item["item_label"]|safe }}</h6></a></li>
+            {% with %}
+                {% set checkbox_label = item["item_label"]|safe %}
+                {% set checkbox_id = item["item_id"] %}
+                {% include "partials/checkbox.html" %}
+            {% endwith %}
+                <!--<li class="dropdown-regular-item"><a href="#"><h6>{{ item["item_label"]|safe }}</h6></a></li>-->
 
             {% endfor %}
         </ul>
     </div>
 {% endif %}
+
+
+{% if dropdown_type == "regular_dropdown_source" or dropdown_type == "regular_dropdown_share" %}
+    <div  id="{{ container_id }}" class="dropdown-regular-container">
+    {% if dropdown_type == "regular_dropdown_source" %}
+        <label  id="{{ label_id }}" class="dropdown-regular-label" for="{{ checkbox_id }}">
+    {% endif %}
+
+    {% if dropdown_type == "regular_dropdown_share" %}
+        <label  id="{{ label_id }}" class="dropdown-regular-label" for="{{ checkbox_id }}">
+    {% endif %}
+
+            <span class="dropdown-regular-label-container">
+                {% if dropdown_type == "regular_dropdown_source" %}
+                    <h6 id="{{ title_id }}" class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</h6>
+                {% else %}
+                    <h6 class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</h6>
+                {% endif %}
+
+                {% if dropdown_type == "regular_dropdown_source" %}
+                    {{ dropdown_library["regular_dropdown_source"]["dropdown_icon"] | safe }}
+                {% endif %}
+
+                {% if dropdown_type == "regular_dropdown_share" %}
+                    {{ dropdown_library["regular_dropdown_share"]["dropdown_icon"] | safe }}
+                {% endif %}
+
+            </span>
+            <div class="dropdown-chevron-container">
+                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>
+            </div>
+        </label>
+    {% if dropdown_type == "regular_dropdown_source" %}
+        <input type="checkbox" id="{{ checkbox_id }}">
+    {% endif %}
+    {% if dropdown_type == "regular_dropdown_share" %}
+        <input type="checkbox" id="{{ checkbox_id }}">
+    {% endif %}
+        <ul class="dropdown-regular padding-unset margin-unset">
+            <li>
+                <div class="dropdown-panel">
+                    <div class="dropdown-panel-content">
+
+                        {% with %}
+                            {% set button_type = "button_sm_default_copy" %}
+                            {% set button_label = "Copy" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+
+
+                        {% with %}
+                            {% set button_type = "button_sm_default_open" %}
+                            {% set button_label = "Open" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+{% endif %}
+
 
 {% if dropdown_type == "medium_dropdown" %}
     <div  id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
