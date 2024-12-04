@@ -4,19 +4,131 @@
     {% include "partials/searchbox.html" %}
 
     {% with %}
-        {% set dropdown_type = "regular_dropdown" %}
-        {% set dropdown_label_text = "All" %}
+        {% set dropdown_type = "default_dropdown_list" %}
+        {% set container_id = "dropdownListDefaultContainer" %}
+        {% set label_id = "dropdownListDefaultLabel" %}
+        {% set chevron_id = "dropdownListDefaultChevron" %}
+        {% set dropdown_label_text = "All Catalogs" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
+
+       <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_source" %}
+        {% set container_id = "dropdownRegularSourceContainer" %}
+        {% set title_id = "dropdownRegularSourceTitle" %}
+        {% set label_id = "dropdownRegularSourceLabel" %}
+        {% set chevron_id = "dropdownRegularSourceChevron" %}
+        {% set checkbox_id = "touchRegularSource" %}
+        {% set dropdown_label_text = "Source" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+
+       <br>
+    <br>
 
 
     {% with %}
-        {% set dropdown_type = "medium_dropdown" %}
-        {% set dropdown_label_text = "Most Recent" %}
+        {% set dropdown_type = "regular_dropdown_share" %}
+        {% set container_id = "dropdownRegularShareContainer" %}
+        {% set label_id = "dropdownRegularShareLabel" %}
+        {% set chevron_id = "dropdownRegularShareChevron" %}
+        {% set checkbox_id = "touchRegularShare" %}
+        {% set dropdown_label_text = "Share" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
-    {% include "partials/toggle.html" %}
+
+    <br>
+    <br>
+
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_metadata" %}
+        {% set container_id = "dropdownListRegularMetadataContainer" %}
+        {% set label_id = "dropdownListRegularMetadataLabel" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "NEX-GDDP"
+                },
+                {
+                    "item_label": "CMIP6"
+                }
+            ]
+        %}
+        {% set chevron_id = "dropdownListRegularMetadataChevron" %}
+        {% set dropdown_label_text = "Metadata" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+       <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_license" %}
+        {% set container_id = "dropdownListRegularLicenseContainer" %}
+        {% set label_id = "dropdownListRegularLicenseLabel" %}
+        {% set chevron_id = "dropdownListRegularLicenseChevron" %}
+        {% set dropdown_label_text = "License" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+
+    {% with %}
+        {% set dataset_type_title = "NEX-GDDP" %}
+        {% include "partials/popup.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+
+
+    {% with %}
+        {% set button_type = "button_lg_nav_previous" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_med_select_ascending" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_nav" %}
+        {% set button_label = "First" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_default_open" %}
+        {% set button_label = "Open" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_default_copy" %}
+        {% set button_label = "Copy" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "close_button_x" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+
+        {% include "partials/tag.html" %}
+    {% endwith %}
+
 
         <script src="js/sample.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
