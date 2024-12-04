@@ -6,17 +6,26 @@ function updatePlaceholderText(searchInputElement){
 }
 
 
-function toggleDropdownStyles(containerElementID, labelElementID, chevronElementID){
+function toggleDropdownStyles(elementID, className){
+    var domElement = document.getElementById(elementID);
 
-    var dropdownContainer = document.getElementById(containerElementID);
-    var dropdownLabel = document.getElementById(labelElementID);
-    var dropdownChevron = document.getElementById(chevronElementID);
+    domElement.classList.toggle(className);
+}
 
-    dropdownContainer.classList.toggle("dropdown-transition-styles");
-    dropdownLabel.classList.toggle("dropdown-label-toggle");
-    dropdownChevron.classList.toggle("dropdown-chevron-dark");
-    dropdownChevron.classList.toggle("dropdown-chevron-rotate");
-    //dropdownChevron.classList.toggle("dropdown-chevron-unrotate");
+function toggleDropdownTitleText(elementID, newText){
+    var domElement = document.getElementById(elementID);
+    var oldText = domElement.innerText
+    var icon = document.getElementById("dropdownSourceIcon");
+
+    if(oldText == "Source"){
+        domElement.innerText = newText;
+        icon.classList.toggle("display-none");
+    }
+    else{
+        domElement.innerText = "Source";
+        icon.classList.toggle("display-none");
+    }
+
 
 }
 
