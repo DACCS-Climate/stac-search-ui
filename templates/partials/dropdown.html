@@ -1,5 +1,7 @@
+{% set dropdown_list = list_items %}
+
 {% set dropdown_library = {
-        "regular_dropdown_list": {
+        "default_dropdown_list": {
             "container_class":"dropdown-list-container",
             "list_items":[
                 {
@@ -19,11 +21,30 @@
                 }
             ],
         },
+        "regular_dropdown_list_metadata": {
+            "checkbox_id": "touchRegularMetadata"
+        },
+
+
+        "regular_dropdown_list_license": {
+            "checkbox_id": "touchRegularLicense",
+            "list_items": [
+                {
+                    "item_label": "CC-BY-4.0"
+                }
+            ]
+        },
+
         "regular_dropdown_source": {
-            "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link'></i>"
+            "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link dropdown-regular-icon'></i>"
         },
         "regular_dropdown_share": {
-            "dropdown_icon": "<i class='fa-solid fa-share-nodes'></i>"
+            "dropdown_icon": "<i class='fa-solid fa-share-nodes dropdown-regular-icon'></i>",
+            "panel_icons":[
+                {"share_icon": "<i class='fa-brands fa-square-x-twitter'></i>"},
+                {"share_icon": "<i class='fa-solid fa-square-envelope'></i>"}
+            ],
+
         },
 
 
@@ -69,25 +90,65 @@
 %}
 
 
-{% if dropdown_type == "regular_dropdown_list" %}
+{% if dropdown_type == "default_dropdown_list" %}
     <div  id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <label  id={{ label_id }} class="dropdown-regular-list-label" for="touchRegularList">
+        <label  id={{ label_id }} class="dropdown-default-list-label" for="touchDefaultList">
             <h6>{{ dropdown_label_text|safe }}</h6>
             <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
-        <input type="checkbox" id="touchRegularList">
+        <input type="checkbox" id="touchDefaultList">
 
-        <ul class="dropdown-regular-list">
+        <ul class="dropdown-default-list">
             {% for item in dropdown_library[dropdown_type]["list_items"] %}
 
                 <li><hr class='dropdown-custom-divider'></li>
-            {% with %}
-                {% set checkbox_label = item["item_label"]|safe %}
-                {% set checkbox_id = item["item_id"] %}
-                {% include "partials/checkbox.html" %}
-            {% endwith %}
-                <!--<li class="dropdown-regular-item"><a href="#"><h6>{{ item["item_label"]|safe }}</h6></a></li>-->
-
+                {% with %}
+                    {% set checkbox_label = item["item_label"]|safe %}
+                    {% set checkbox_id = item["item_id"] %}
+                    {% include "partials/checkbox.html" %}
+                {% endwith %}
             {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+{% if dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" %}
+    <div  id="{{ container_id }}" class="dropdown-regular-list-container">
+        <label  id={{ label_id }} class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
+            <span class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</span>
+            <span class="dropdown-chevron-container">
+                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
+            </span>
+        <input type="checkbox" id="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
+
+        <ul class="dropdown-regular-list margin-unset">
+            {%  if dropdown_type == "regular_dropdown_list_metadata" %}
+                {% for item in dropdown_list %}
+                    <li id="{{ [item["item_label"]|replace("-", "")|replace("_", "")|replace(" ", "")|lower, "ModalLink"]|join }}" class="dropdown-regular-list-item">
+                            <p class="dropdown-regular-list-link subtitle-1 margin-unset" href="#">
+                                {{ item["item_label"]|safe }}
+                            </p>
+                            <span class="dropdown-chevron-container">
+                                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
+                            </span>
+                    </li>
+                {% endfor %}
+        {% endif %}
+
+        {%  if dropdown_type == "regular_dropdown_list_license" %}
+            {% for item in dropdown_library[dropdown_type]["list_items"] %}
+                <li class="dropdown-regular-list-item">
+                    <a class="dropdown-regular-list-link subtitle-1" href="#">
+                        {{ item["item_label"]|safe }}
+                    </a>
+                    <span class="dropdown-chevron-container">
+                        <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
+                    </span>
+                </li>
+            {% endfor %}
+        {% endif %}
+
+
         </ul>
     </div>
 {% endif %}
@@ -105,9 +166,9 @@
 
             <span class="dropdown-regular-label-container">
                 {% if dropdown_type == "regular_dropdown_source" %}
-                    <h6 id="{{ title_id }}" class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</h6>
+                    <h6 id="{{ title_id }}" class="margin-unset subtitle-1 dropdown-regular-title">{{ dropdown_label_text|safe }}</h6>
                 {% else %}
-                    <h6 class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</h6>
+                    <h6 class="margin-unset subtitle-1 dropdown-regular-title">{{ dropdown_label_text|safe }}</h6>
                 {% endif %}
 
                 {% if dropdown_type == "regular_dropdown_source" %}
@@ -125,10 +186,6 @@
         </label>
     {% if dropdown_type == "regular_dropdown_source" %}
         <input type="checkbox" id="{{ checkbox_id }}">
-    {% endif %}
-    {% if dropdown_type == "regular_dropdown_share" %}
-        <input type="checkbox" id="{{ checkbox_id }}">
-    {% endif %}
         <ul class="dropdown-regular padding-unset margin-unset">
             <li>
                 <div class="dropdown-panel">
@@ -150,6 +207,24 @@
                 </div>
             </li>
         </ul>
+    {% endif %}
+    {% if dropdown_type == "regular_dropdown_share" %}
+        <input type="checkbox" id="{{ checkbox_id }}">
+        <ul class="dropdown-regular padding-unset margin-unset">
+            <li>
+                <div class="dropdown-panel">
+                    <div class="dropdown-panel-content">
+                        {%  for icon in dropdown_library["regular_dropdown_share"]["panel_icons"] %}
+                            <a class="icon-share-panel"> {{ icon["share_icon"]|safe }}  </a>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endif %}
+
     </div>
 {% endif %}
 
