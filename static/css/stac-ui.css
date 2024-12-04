@@ -7,7 +7,6 @@
     /*Fonts*/
     --main-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --secondary-font-family: Helvetica, Arial, sans-serif;
-    --bs-icon-font-family: "Bootstrap-icons", Helvetica, Arial, sans-serif;
     --light-font-weight: 300;
     --h3-reg-font-weight: 300;
     --reg-font-weight: 400;
@@ -16,6 +15,9 @@
     --h6-bold-font-weight: 700;
     --line-height-normal: normal;
     --line-height-body1: 25px;
+
+    /*Custom fonts*/
+    --bs-icon-font-family: "Bootstrap-icons", Helvetica, Arial, sans-serif;
 
     /*Borders*/
     --elevation-1: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 1px 2px 0px rgba(0, 0, 0, 0.30), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
@@ -39,6 +41,8 @@
     /*Shadows*/
     --text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     --dropdown-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    --button-close-shadow: 0px 5px 15px rgba(37, 44, 97, 0.25), 0px 3px 4px rgba(136, 144, 194, 0.25);
+    --popup-metadata-shadow: 4px 4px 17px 0px rgba(0, 0, 0, 0.25);
 
     /*Backgrounds*/
     --background: #FFFFFF;
@@ -287,6 +291,20 @@ h6{
     letter-spacing: 0.15px;
 }
 
+/*Global Styles*/
+/*Spacing*/
+.margin-unset{
+    margin: unset;
+}
+
+.padding-unset{
+    padding: unset;
+}
+/*Display*/
+.display-none{
+    display: none;
+}
+
 /* Custom default button */
 .btn-light,
 .btn-light:hover,
@@ -295,6 +313,430 @@ h6{
   text-shadow: none; /* Prevent inheritance from `body` */
 }
 /*End legacy styles from design*/
+
+/*Buttons*/
+/*Used in button template partial*/
+.button-close-x{
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+    background-color: var(--background-transparent);
+    border: none;
+    outline: none;
+}
+
+.button-close-x:focus, .button-close-x:active{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+    border: none;
+    outline: none;
+    box-shadow: var(--button-close-shadow);
+}
+
+.image-close-icon{
+    width: 15px;
+    height: 15px;
+    mask-image:  url("../images/button/close_x.svg");
+    -webkit-mask-image:  url("../images/button/close_x.svg");
+    mask-size: 15px 15px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: var(--white);
+}
+
+/*Used in button template partial*/
+.image-close-icon-dark{
+    width: 15px;
+    height: 15px;
+    mask-image:  url("../images/button/close_x.svg");
+    -webkit-mask-image:  url("../images/button/close_x.svg");
+    mask-size: 15px 15px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: var(--black);
+}
+
+.popup-button-close{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: end;
+
+}
+
+/*Used in button template partial*/
+.button-icon-position{
+    overflow: visible;
+    box-sizing: content-box;
+    display: inline-block;
+    height: 1em;
+    vertical-align: -.125em;
+}
+
+/*Used in button template partial*/
+.image-delete-icon-red{
+    width: 16px;
+    height: 15px;
+    background-image: url("../images/button/exclamation_triangle_red.svg");
+    background-repeat: no-repeat;
+    margin-right: 12px;
+}
+
+/*Legacy style from design*/
+.image-delete-icon-white{
+    width: 16px;
+    height: 15px;
+    background-image: url("../images/button/exclamation_triangle_white.svg");
+    background-repeat: no-repeat;
+    margin-right: 12px;
+}
+
+
+.button-anchor-tag{
+    align-self: flex-start;
+}
+
+.undecorated-link{
+    text-decoration: none
+}
+
+/*Used in button template partial*/
+.button-reg{
+    width: 158px;
+    height: 60px;
+    color: var(--primary);
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    box-shadow: var(--d-elevation-1);
+    flex-shrink: 0;
+}
+
+/*Used in button template partial*/
+.button-reg-reverse{
+    width: 158px;
+    height: 60px;
+    color: var(--white);
+    background-color: var(--primary);
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+    flex-shrink: 0;
+}
+
+/*Legacy style from design*/
+.button-reg-alt:hover{
+    color: var(--white);
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-1);
+}
+
+
+/*Buttons for Search Mechanism*/
+.button-sm-default{
+    width: 77px;
+    height: 33px;
+    border: none;
+}
+
+.button-sm-default-open{
+    color: var(--primary);
+    background-color: var(--white);
+    border-width: 1px;
+    border: solid;
+    border-color:var(--primary);
+}
+
+.button-sm-default-open:focus, .button-sm-default-open:hover{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+}
+
+.button-sm-default-copy{
+    background-color: var(--gray-100);
+    box-shadow: var(--d-elevation-1);
+}
+
+.button-sm-default-copy:hover{
+    background-color: var(--gray-400);
+}
+
+.button-sm-nav{
+    width: 110px;
+    height: 65px;
+    background-color: var(--gray-100);
+    border: none;
+}
+
+.button-sm-nav span{
+    color: var(--text-on-surface);
+}
+
+.button-sm-nav:focus span, .button-sm-nav:hover span, .button-sm-nav:active span{
+    color: var(--text-on-dark);
+}
+
+.button-sm-nav:focus, .button-sm-nav:hover, .button-sm-nav:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-lg-nav{
+    width: 142px;
+    height: 65px;
+    background-color: var(--gray-100);
+    border: none;
+}
+
+/*Used in button template partial*/
+.button-lg-nav span{
+    color: var(--text-on-surface);
+}
+
+/*Used in button template partial*/
+.button-lg-nav .icon-nav-previous{
+    color: var(--primary);
+}
+
+/*Used in button template partial*/
+.button-lg-nav:focus, .button-lg-nav:hover, .button-lg-nav:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+.button-lg-nav:focus span, .button-lg-nav:hover span, .button-lg-nav:active span{
+    color: var(--text-on-dark);
+}
+
+.button-lg-nav:focus .icon-nav-previous, .button-lg-nav:hover .icon-nav-previous, .button-lg-nav:active .icon-nav-previous{
+    color: var(--white);
+}
+
+/*Used in button template partial*/
+.button-med-select{
+    width: 116px;
+    height: 65px;
+    color: var(--primary);
+    background-color: var(--gray-100);
+    border: none;
+}
+
+/*Used in button template partial*/
+.button-med-select span{
+    color: var(--text-on-surface);
+}
+
+/*Used in button template partial*/
+.button-med-select .icon-select-ascending{
+    color: var(--primary);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus, .button-med-select:hover, .button-med-select:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus span, .button-med-select:hover span, .button-med-select:active span{
+    color: var(--text-on-dark);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus .icon-select-ascending, .button-med-select:hover .icon-select-ascending, .button-med-select:active .icon-select-ascending{
+    color: var(--white);
+}
+
+
+/*Used in button template partial*/
+.button-reg:hover, .button-med:hover{
+    color: var(--white);
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-reg:focus, .button-med:focus{
+    color: var(--white);
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-med-delete{
+    width: 150px;
+    height: 60px;
+    color: var(--text-on-surface);
+    background-color: var(--white);
+    border: none;
+    box-shadow: var(--d-elevation-3);
+}
+
+/*Used in button template partial*/
+.button-med-delete:hover{
+    color: var(--text-on-dark);
+    background-color: var(--error);
+    box-shadow: var(--d-elevation-3);
+}
+
+/*Used in button template partial*/
+.button-med-delete:hover .image-delete-icon-red{
+    background-image: url("../images/button/exclamation_triangle_white.svg");
+}
+
+/*Used in button template partial*/
+.button-med-delete-no-icon{
+    width: 150px;
+    height: 60px;
+    color: var(--text-on-dark);
+    background-color: var(--error);
+    border: none;
+    box-shadow: var(--d-elevation-3);
+}
+
+/*Used in button template partial*/
+.button-med-round{
+    width: 79px;
+    height: 79px;
+    background-color: var(--indigo-50);
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--elevation-1);
+}
+
+/*Used in button template partial*/
+.button-med-round-icon{
+    width: 46px;
+    height: 49px;
+    color: var(--primary);
+}
+
+.button-med-action-alt-image{
+    margin-right: 12px;
+}
+
+/*Used in button template partial*/
+.button-med-alt:hover{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+}
+
+.disabled{
+    color: var(--gray-600);
+    background-color: var(--gray-500);
+    pointer-events: none;
+}
+
+/*Used in button template partial*/
+.button-spinner-alignment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*Used in button template partial*/
+.spinner-not-visible{
+    display:none;
+}
+
+/*Used in ui-styles-scripts.js*/
+.spinner-visible{
+    display:flex;
+}
+
+/*Used in button template partial*/
+.checkmark-not-visible{
+    display: none;
+}
+/*End Button*/
+
+
+
+
+/*Checkbox*/
+
+.checkbox-buffer{
+    width: 25px;
+    height: 25px;
+}
+
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 3px;
+    border-color: var(--primary);
+    box-shadow: var(--d-elevation-1);
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+    background-color: inherit;
+    box-shadow: var(--d-elevation-2);
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 3px;
+    bottom: 3px;
+    width: 8px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 0.15em 0.15em 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
 
 
 /*Search box*/
@@ -359,7 +801,7 @@ h6{
 
 
 /*Dropdown*/
-
+/*
 .dropdown-regular-container{
     width: 172px;
     border-radius: 30px;
@@ -368,9 +810,9 @@ h6{
     box-shadow: var(--dropdown-shadow);
     padding: 16px 24px;
     margin-bottom: 0px;
-    /*Optional positioning*/
+    /*Optional positioning
     /*position:absolute;
-    z-index: 1000;*/
+    z-index: 1000;
 }
 
 .dropdown-regular-container:focus{
@@ -381,8 +823,12 @@ h6{
     padding-left:unset;
     margin-bottom: unset;
 }
+*/
 
-.dropdown-container{
+
+
+
+.dropdown-list-container{
     width: 172px;
     border-radius: 30px;
     border: 1px solid var(--indigo-200);
@@ -392,7 +838,12 @@ h6{
     margin-bottom: 0px;
 }
 
-.dropdown-container ul{
+.dropdown-list-container:focus{
+    background-color: var(--white);
+}
+
+
+.dropdown-list-container ul{
     padding-left:unset;
     margin-bottom: unset;
 }
@@ -421,13 +872,7 @@ h6{
     background-color: var(--indigo250-opacity-light);
 }
 
-.dropdown-transition-styles{
-    color: var(--text-on-surface);
-    background-color: var(--white);
-    border: none;
-}
-
-.dropdown-label{
+.dropdown-default-list-label{
     display:flex;
     align-items: center;
     justify-content: space-between;
@@ -435,20 +880,20 @@ h6{
     cursor: pointer;
 }
 
-.dropdown-label h6{
+.dropdown-default-list-label h6{
     margin-bottom: unset;
 }
 
-.dropdown-label::after{
+.dropdown-default-list-label::after{
     float: right;
     right: 10%;
 }
 
-.dropdown-label-toggle{
+.dropdown-default-list-label-toggle{
     color: var(--text-on-surface);
 }
 
-.dropdown-label-toggle i{
+.dropdown-default-list-label-toggle i{
     color: var(--text-on-surface);
 }
 
@@ -482,26 +927,9 @@ h6{
     padding-bottom: 16px;
 }
 
-.dropdown-regular-item{
-    padding-top: unset;
-    padding-bottom: unset;
-}
 
-.dropdown-regular-item a{
-    /*H6 fontstyle*/
-    font-family: var(--secondary-font-family);
-    font-weight: var(--reg-font-weight);
-    font-size: 20px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-
-}
-
-.dropdown-regular-item:hover{
-    background-color: var(--indigo250-opacity-light);
-}
-
-.dropdown-regular-list{
+/*Default dropdown list*/
+.dropdown-default-list{
     background-color: var(--white);
     clear:both;
     width:100%;
@@ -512,11 +940,11 @@ h6{
     transition: height .4s ease;
 }
 
-.dropdown-regular-list li{
+.dropdown-default-list li{
     text-align: center;
 }
 
-.dropdown-regular-list li a{
+.dropdown-default-list li a{
     color: var(--text-on-surface);
     text-decoration: none;
 }
@@ -528,17 +956,322 @@ h6{
     margin-bottom: 7px;
 }
 
+/*Checkbox style for default dropdown*/
+#touchDefaultList{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchDefaultList:checked + .dropdown-default-list{
+    height: auto;
+}
+
+
+/*Dropdown regular list*/
+.dropdown-regular-list-container{
+    width: 290px;
+    background: var(--indigo250-opacity-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dropdown-regular-list-label{
+    height: 70px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--indigo-700);
+    padding-left: 32px;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+.dropdown-regular-list-link{
+    text-decoration: none;
+    color: var(--indigo-700);
+}
+
+#touchRegularList{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularList:checked + .dropdown-regular-list{
+    height: auto;
+}
+
+.dropdown-regular-list{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: start;
+    list-style-type:none;
+    transition: height .4s ease;
+    padding-left: 0px;
+}
+
+.dropdown-regular-list-item{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+.dropdown-regular-list-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+/*End Dropdown Regular List*/
+
+/*Dropdown Regular*/
+
+.dropdown-regular-container{
+    width: 290px;
+    background: var(--indigo250-opacity-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.dropdown-regular-container h6{
+    padding-right: 4px;
+}
+
+.dropdown-regular-container-transition{
+    background-color: var(--white);
+}
+
+.dropdown-regular{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: center;
+    list-style-type:none;
+    transition: height .4s ease;
+}
+
+.dropdown-regular-title{
+    color: var(--indigo-700);
+}
+
+.dropdown-regular-icon{
+    color: var(--indigo-700);
+}
+
+.dropdown-regular li{
+    text-align: center;
+}
+
+.dropdown-regular-label-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-regular-label{
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown-chevron-container{
+    width: 29px;
+    height: 29px;
+    background-color: var(--primary);
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-panel{
+    width: 100%;
+    height: 89px;
+    background-color: var(--white);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dropdown-panel-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*Regular Panel*/
 #touchRegular{
     position: absolute;
     opacity: 0;
     height: 0px;
 }
 
-#touchRegular:checked + .dropdown-regular-list{
+#touchRegular:checked + .dropdown-regular{
     height: auto;
 }
 
-/*Dropdown Medium*/
+/*Regular Source ul Panel*/
+#touchRegularSource{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularSource:checked + .dropdown-regular{
+    height: auto;
+}
+
+/*Regular Share ul Panel*/
+#touchRegularShare{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularShare:checked + .dropdown-regular{
+    height: auto;
+}
+
+.icon-share-panel svg{
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: space-evenly;
+    color: var(--primary);
+
+}
+
+/*End Dropdown Regular Share*/
+
+
+/*Dropdown Regular Metadata */
+#touchRegularMetadata{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularMetadata:checked + .dropdown-regular-list{
+    height: auto;
+}
+
+
+/*Dropdown Regular License */
+#touchRegularLicense{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularLicense:checked + .dropdown-regular-list{
+    height: auto;
+}
+
+/*Dropdown transitions for all dropdowns styles when dropdown is clicked*/
+.dropdown-transition-styles{
+    color: var(--text-on-surface);
+    background-color: var(--white);
+    border: none;
+}
+
+
+/*Popup*/
+/*Metadata Popup*/
+
+.dialog-metadata{
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.dialog-metadata::backdrop{
+    background-color: var(--white-opacity-darker);
+}
+
+.popup-metadata-container{
+    width: 1065px;
+    height: 690px;
+    background-color: var(--white);
+    /*backdrop-filter: var(--backdrop-filter-attention);*/
+    box-shadow: var(--popup-metadata-shadow);
+}
+
+.popup-metadata-content{
+    width: 876px;
+    height: 542px;
+    background-color: var(--indigo250-opacity-light);
+}
+
+.metadata-content-value span:not(:last-child){
+    margin-right: 24px;
+}
+
+.popup-metadata-title{
+    color: var(--indigo-700);
+}
+
+.popup-button-close{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: end;
+
+}
+
+
+/*End Popup*/
+
+
+/*Tags*/
+.tag-container{
+    width: 999px;
+    height: 26px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--gray-400);
+}
+
+.tag-container:hover{
+    background-color: var(--gray-500);
+}
+
+.tag-container .tag:not(:first-child){
+    margin-left: 26px;
+}
+
+.tag-container .tag:not(:last-child){
+    margin-right: 26px;
+}
+
+.tag{
+    display: flex;
+    width: 89px;
+    height: 26px;
+    padding: 3px 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: var(--indigo-800);
+    color: var(--text-on-dark);
+}
+
+.tag-divider{
+    color: var(--text-on-dark);
+}
+
+/*End Tags*/
 
 /*Override Bootstrap*/
 
@@ -666,18 +1399,7 @@ h6{
 }
 
 
-
-
 /*Toggle*/
-html, body{
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-}
-
-body{
-    display: table;
-}
 
 /*switch styles*/
 
@@ -687,12 +1409,6 @@ div.btn-container{
     text-align: center;
 }
 
-div.btn-container i{
-    display: inline-block;
-    position: relative;
-    top: -9px;
-}
-
 label {
     /*h6 styles*/
     font-family: var(--secondary-font-family);
@@ -700,11 +1416,6 @@ label {
     font-size: 20px;
     letter-spacing: 0.03px;
     line-height: var(--line-height-normal);
-}
-
-.label.btn-color-mode-switch-inner{
-    display: flex;
-    justify-content: space-between;
 }
 
 /*Controls switch background*/
@@ -757,18 +1468,11 @@ label {
     border-radius: 26px;
     position: absolute;
     left: 2px;
-    top: 2px;
+    top: 0px;
     text-align: center;
     transition: all 0.3s ease;
     box-shadow: 0px 0px 6px -2px #111;
     padding: 5px 0px;
-}
-
-.btn-color-mode-switch > .alert{
-    display: none;
-    background: #FF9800;
-    border: none;
-    color: #fff;
 }
 
 .btn-color-mode-switch input[type="checkbox"]{
@@ -813,51 +1517,27 @@ label {
     color: var(--primary);
 }
 
-.btn-color-mode-switch input[type="checkbox"]:checked ~ .alert{
-    display: block;
+.toggle-control-panel-container{
+    width: 214px;
+    height: 163px;
+    border-radius: 10px;
+    box-shadow: var(--dropdown-shadow);
 }
 
-/*mode preview*/
-.dark-preview{
-    background: #0d0d0d;
+.toggle-panel-title{
+    width: 214px;
+    height: 37px;
+    border-radius: 10px;
+    background: var(--indigo-50);
 }
 
-.dark-preview div.btn-container i.fa-sun-o{
-    color: #777;
+.toggle-panel-content{
+    width: 214px;
 }
 
-.dark-preview div.btn-container i.fa-moon-o{
-    color: #fff;
-    text-shadow: 0px 0px 11px #fff;
-}
-
-.white-preview{
-    background: #fff;
-}
-
-.white-preview div.btn-container i.fa-sun-o{
-    color: #ffa500;
-    text-shadow: 0px 0px 16px #ffa500;
-}
-
-.white-preview div.btn-container i.fa-moon-o{
-    color: #777;
-}
-
-p.by {
-
-}
-
-p.by a{
-    text-decoration: none;
-    color: #000;
-}
-
-.dark-preview p.by a{
-    color: #777;
-}
-
-.white-preview p.by a{
-    color: #000;
+.toggle-panel-links{
+    width: 214px;
+    display: flex;
+    justify-content: space-between;
 }
 /*End Toggle*/
