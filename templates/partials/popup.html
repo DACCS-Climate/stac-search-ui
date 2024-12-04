@@ -1,0 +1,237 @@
+{% set popup_content = {
+    "version": {
+        "content_title": "Version",
+        "value": "1.0"
+    },
+    "calendar":{
+        "content_title": "Calendar",
+        "value":
+            [
+                {
+                    "calendar_type": "360_day"
+                },
+                {
+                    "calendar_type": "365_day"
+                },
+                {
+                    "calendar_type": "Proleptic_Gregorian"
+                },
+                {
+                    "calendar_type": "Standard"
+                }
+
+            ]
+        },
+    "frequency": {
+        "content_title": "Frequency",
+        "value": "Day"
+    },
+    "conventions": {
+        "content_title": "Frequency",
+        "value": "CF-1.7"
+    },
+    "variable_id":{
+     "content_title": "Variable ID",
+     "value":
+        [
+            {
+                "variable_name": "hurs"
+            },
+            {
+                "variable_name": "huss"
+            },
+            {
+                "variable_name": "pr"
+            },
+            {
+                "variable_name": "rlds"
+            },
+            {
+                "variable_name": "rsds"
+            },
+            {
+                "variable_name": "sfcWind"
+            },
+            {
+                "variable_name": "tas"
+            },
+            {
+                "variable_name": "tasmax"
+            },
+            {
+                "variable_name": "tasmin"
+            }
+        ]
+    },
+    "cmip_version": {
+    "content_title": "Variable ID",
+    "value": "CMIP6"
+    },
+    "experiment_ID":{
+    "content_title": "Experiment ID",
+    "value":
+
+        [
+            {
+                "experiment_name": "historical"
+            },
+            {
+                "experiment_name": "ssp126"
+            },
+            {
+                "experiment_name": "ssp245"
+            },
+            {
+                "experiment_name": "ssp370"
+            },
+            {
+                "experiment_name": "ssp585"
+            }
+        ]
+    },
+    "variant_label":{
+    "content_title": "Experiment ID",
+    "value":
+        [
+            {
+                "label_name": "r1i1p1f1"
+            },
+            {
+                "label_name": "r1i1p1f2"
+            },
+            {
+                "label_name": "r1i1p1f3"
+            },
+            {
+                "label_name": "r3i1p1f1"
+            },
+            {
+                "label_name": "r4i1p1f1"
+            }
+        ]
+    },
+    "institution_id":
+    {
+    "content_title": "Experiment ID",
+    "value":
+        [
+            {
+                "institution_name": "AS-RCEC"
+            },
+            {
+                "institution_name": "BCC"
+            },
+            {
+                "institution_name": "CAS"
+            },
+            {
+                "institution_name": "CCCR-IITM"
+            },
+            {
+                "institution_name": "CCC-ma"
+            },
+            {
+                "institution_name": "CMCC"
+            },
+            {
+                "institution_name": "CNRM-CERFACS"
+            },
+            {
+                "institution_name": "CSIRO"
+            },
+            {
+                "institution_name": "CSIRO-ARCCSS"
+            },
+            {
+                "institution_name": "EC-Earth-Consortium"
+            },
+            {
+                "institution_name": "INM"
+            },
+            {
+                "institution_name": "IPSL"
+            },
+            {
+                "institution_name": "KIOST"
+            },
+            {
+                "institution_name": "MIROC"
+            },
+            {
+                "institution_name": "MOHC"
+            },
+            {
+                "institution_name": "MPI-M"
+            },
+            {
+                "institution_name": "MRI"
+            },
+            {
+                "institution_name": "NASA-GISS"
+            },
+            {
+                "institution_name": "NCAR"
+            },
+            {
+                "institution_name": "NCC"
+            },
+            {
+                "institution_name": "NIMS-KMA"
+            },
+            {
+                "institution_name": "NOAA-GFDL"
+            },
+            {
+                "institution_name": "NUIST"
+            }
+        ]
+    }
+
+}
+%}
+
+
+
+
+<dialog id="metadataModal" class="dialog-metadata">
+    <div class="popup-metadata-container">
+
+        <div class="popup-metadata-content-container">
+
+            <h4 class="popup-metadata-title margin-unset">Metadata</h4>
+            <h5 class="popup-metadata-title margin-unset">{{ dataset_type_title }}</h5>
+
+            <div class="popup-button-close">
+                {% with button_type = "close_button_x"%}
+                    {% set button_id = "popupMetadataCloseModal" %}
+                    {% include "partials/button.html" %}
+                {% endwith %}
+            </div>
+
+            <div class="popup-metadata-content">
+            <table>
+                {% for content in popup_content %}
+                    <tr>
+                        <td>{{ popup_content[content]["content_title"] }}</td>
+                        <td class="metadata-content-value">
+                            {% if popup_content[content]["value"]|length > 1 %}
+                                {% for index in range(popup_content[content]["value"]|length) %}
+                                    <span>{{ popup_content[content]["value"][index] }}</span>
+                                {% endfor %}
+                            {% else %}
+                                {{ popup_content[content]["value"] }}
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </table>
+
+            </div>
+
+
+        </div>
+    </div>
+</dialog>
+
+<script src="js/modal-metadata.js"></script>
