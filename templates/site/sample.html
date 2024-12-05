@@ -102,6 +102,16 @@
     {% endwith %}
 
     {% with %}
+        {% set button_type = "button_med_select_descending" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_lg_nav_next" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
         {% set button_type = "button_sm_nav" %}
         {% set button_label = "First" %}
         {% include "partials/button.html" %}
