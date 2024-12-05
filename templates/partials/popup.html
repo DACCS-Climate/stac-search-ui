@@ -5,7 +5,7 @@
     },
     "calendar":{
         "content_title": "Calendar",
-        "value": [ "360_day", "365_day", "Proleptic_Gregorian""Standard"]
+        "value": [ "360_day", "365_day", "Proleptic_Gregorian", "Standard"]
         },
     "frequency": {
         "content_title": "Frequency",
@@ -65,10 +65,11 @@
             </div>
 
             <div class="popup-metadata-content">
-                <table>
+                <table >
+                    <tbody class="popup-metadata-table">
                     {% for content in popup_content %}
                         <tr>
-                            <td>{{ popup_content[content]["content_title"] }}</td>
+                            <td class="metadata-content-title">{{ popup_content[content]["content_title"] }}</td>
                             <td class="metadata-content-value">
                                 {% if popup_content[content]["value"] is iterable and popup_content[content]["value"] is not string %}
                                     {% for index in range(popup_content[content]["value"]|length) %}
@@ -81,6 +82,7 @@
                         </tr>
 
                     {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
