@@ -35,6 +35,17 @@
             ]
         },
 
+        "regular_dropdown_list_frequency": {
+            "checkbox_id": "touchRegularFrequency",
+            "list_items": [
+                {
+                    "item_label": "Monthly"
+                }
+            ]
+        },
+
+
+
         "regular_dropdown_source": {
             "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link dropdown-regular-icon'></i>"
         },
@@ -112,7 +123,7 @@
 {% endif %}
 
 
-{% if dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" %}
+{% if dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
     <div  id="{{ container_id }}" class="dropdown-regular-list-container">
         <label  id={{ label_id }} class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
             <span class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</span>
@@ -135,7 +146,7 @@
                 {% endfor %}
         {% endif %}
 
-        {%  if dropdown_type == "regular_dropdown_list_license" %}
+        {%  if dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
             {% for item in dropdown_library[dropdown_type]["list_items"] %}
                 <li class="dropdown-regular-list-item">
                     <a class="dropdown-regular-list-link subtitle-1" href="#">
