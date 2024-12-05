@@ -80,6 +80,18 @@
     <br>
     <br>
 
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_frequency" %}
+        {% set container_id = "dropdownListRegularFrequencyContainer" %}
+        {% set label_id = "dropdownListRegularFrequencyLabel" %}
+        {% set chevron_id = "dropdownListRegularFrequencyChevron" %}
+        {% set dropdown_label_text = "Frequency" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
 
     {% with %}
         {% set dataset_type_title = "NEX-GDDP" %}
