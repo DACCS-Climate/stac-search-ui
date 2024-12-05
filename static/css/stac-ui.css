@@ -338,6 +338,8 @@ h6{
     box-shadow: var(--button-close-shadow);
 }
 
+/*Used in button template partial*/
+/*
 .image-close-icon{
     width: 15px;
     height: 15px;
@@ -349,7 +351,7 @@ h6{
     background-color: var(--white);
 }
 
-/*Used in button template partial*/
+
 .image-close-icon-dark{
     width: 15px;
     height: 15px;
@@ -360,7 +362,7 @@ h6{
     mask-position: center;
     background-color: var(--black);
 }
-
+*/
 .popup-button-close{
     width: 100%;
     height: 30px;
@@ -379,6 +381,7 @@ h6{
 }
 
 /*Used in button template partial*/
+/*
 .image-delete-icon-red{
     width: 16px;
     height: 15px;
@@ -387,7 +390,7 @@ h6{
     margin-right: 12px;
 }
 
-/*Legacy style from design*/
+
 .image-delete-icon-white{
     width: 16px;
     height: 15px;
@@ -395,12 +398,14 @@ h6{
     background-repeat: no-repeat;
     margin-right: 12px;
 }
+*/
 
-
+/*Used in button template partial*/
 .button-anchor-tag{
     align-self: flex-start;
 }
 
+/*Used in button template partial*/
 .undecorated-link{
     text-decoration: none
 }
@@ -456,14 +461,16 @@ h6{
     width: 77px;
     height: 33px;
     border: none;
+
 }
 
 .button-sm-default-open{
     color: var(--primary);
     background-color: var(--white);
     border-width: 1px;
-    border: solid;
+    border-style: solid;
     border-color:var(--primary);
+    box-shadow: var(--d-elevation-1);
 }
 
 .button-sm-default-open:focus, .button-sm-default-open:hover{
@@ -1165,6 +1172,10 @@ h6{
     height: auto;
 }
 
+.icon-share-panel{
+    cursor: pointer;
+}
+
 .icon-share-panel svg{
     width: 52px;
     height: 52px;
@@ -1197,6 +1208,18 @@ h6{
 }
 
 #touchRegularLicense:checked + .dropdown-regular-list{
+    height: auto;
+}
+
+
+/*Dropdown Regular Frequency*/
+#touchRegularFrequency{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularFrequency:checked + .dropdown-regular-list{
     height: auto;
 }
 
@@ -1291,11 +1314,11 @@ h6{
 
 /*Tags*/
 .tag-container{
-    width: 999px;
-    height: 26px;
+    width: 1050px;
     display: flex;
     flex-direction: row;
     background-color: var(--gray-400);
+    padding: 10px;
 }
 
 .tag-container:hover{
@@ -1312,7 +1335,6 @@ h6{
 
 .tag{
     display: flex;
-    width: 89px;
     height: 26px;
     padding: 3px 16px;
     justify-content: center;
