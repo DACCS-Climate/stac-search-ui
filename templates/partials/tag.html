@@ -1,0 +1,39 @@
+{% set tag_dict = {
+    "tag":[
+    {
+        "tag_name": "NASA"
+        },
+        {
+        "tag_name": "CMIP6"
+        },
+    {
+        "tag_name": "Climate"
+        },
+    {
+        "tag_name": "Humidity"
+        },
+    {
+        "tag_name": "Temperature"
+        },
+    {
+        "tag_name": "Precipitation"
+        },
+    {
+        "tag_name": "Radiation"
+        }
+        ]
+
+    }
+
+%}
+
+
+
+<div class="tag-container">
+    {% for tag in tag_dict["tag"] %}
+        <div class="tag">{{ tag["tag_name"] }}</div>
+        {% if loop.index != tag_dict["tag"]|length %}
+            <div class="tag-divider">|</div>
+        {% endif %}
+    {% endfor %}
+</div>
