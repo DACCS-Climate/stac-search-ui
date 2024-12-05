@@ -1194,6 +1194,8 @@ h6{
 .dialog-metadata{
     overflow-x: hidden;
     overflow-y: auto;
+    border: none;
+    box-shadow: var(--popup-metadata-shadow);
 }
 
 .dialog-metadata::backdrop{
@@ -1201,16 +1203,35 @@ h6{
 }
 
 .popup-metadata-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 1065px;
     height: 690px;
     background-color: var(--white);
-    /*backdrop-filter: var(--backdrop-filter-attention);*/
-    box-shadow: var(--popup-metadata-shadow);
+}
+
+.popup-metadata-content-container{
+
+}
+
+.popup-metadata-heading-container{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.popup-metadata-title-container{
+    display: flex;
+    flex-direction: column;
 }
 
 .popup-metadata-content{
     width: 876px;
     height: 542px;
+    display: flex;
+    justify-content: center;
     background-color: var(--indigo250-opacity-light);
 }
 
@@ -1218,8 +1239,14 @@ h6{
     margin-right: 24px;
 }
 
-.popup-metadata-title{
+.popup-metadata-main-title{
     color: var(--indigo-700);
+    margin-bottom: 17px;
+}
+
+.popup-metadata-subtitle{
+    color: var(--black);
+    margin-bottom: 17px;
 }
 
 .popup-button-close{
@@ -1227,7 +1254,7 @@ h6{
     height: 30px;
     display: flex;
     justify-content: end;
-
+    margin-right: 13px;
 }
 
 
