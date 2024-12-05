@@ -325,6 +325,11 @@ h6{
     outline: none;
 }
 
+.button-close-x svg{
+    width: 28px;
+    height: 28px;
+}
+
 .button-close-x:focus, .button-close-x:active{
     color: var(--text-on-dark);
     background-color: var(--primary);
@@ -509,7 +514,7 @@ h6{
 }
 
 /*Used in button template partial*/
-.button-lg-nav .icon-nav-previous{
+.button-lg-nav .icon-nav-previous, .button-lg-nav .icon-nav-next{
     color: var(--primary);
 }
 
@@ -523,7 +528,8 @@ h6{
     color: var(--text-on-dark);
 }
 
-.button-lg-nav:focus .icon-nav-previous, .button-lg-nav:hover .icon-nav-previous, .button-lg-nav:active .icon-nav-previous{
+.button-lg-nav:focus .icon-nav-previous, .button-lg-nav:hover .icon-nav-previous, .button-lg-nav:active .icon-nav-previous,
+.button-lg-nav:focus .icon-nav-next, .button-lg-nav:hover .icon-nav-next, .button-lg-nav:active .icon-nav-next {
     color: var(--white);
 }
 
@@ -542,7 +548,7 @@ h6{
 }
 
 /*Used in button template partial*/
-.button-med-select .icon-select-ascending{
+.button-med-select .icon-select-ascending, .button-med-select .icon-select-descending{
     color: var(--primary);
 }
 
@@ -558,7 +564,9 @@ h6{
 }
 
 /*Used in button template partial*/
-.button-med-select:focus .icon-select-ascending, .button-med-select:hover .icon-select-ascending, .button-med-select:active .icon-select-ascending{
+.button-med-select:focus .icon-select-ascending, .button-med-select:hover .icon-select-ascending,
+.button-med-select:active .icon-select-ascending,.button-med-select:focus .icon-select-descending,
+.button-med-select:hover .icon-select-descending, .button-med-select:active .icon-select-descending{
     color: var(--white);
 }
 
@@ -1245,6 +1253,14 @@ h6{
     display: flex;
     justify-content: center;
     background-color: var(--indigo250-opacity-light);
+}
+
+.popup-metadata-table tr:not(:last-child){
+    margin-bottom: 20px;
+}
+
+.metadata-content-title{
+    width: 276px;
 }
 
 .metadata-content-value span:not(:last-child){
