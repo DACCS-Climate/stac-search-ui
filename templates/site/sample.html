@@ -120,9 +120,27 @@
     {% endwith %}
 
     {% with %}
+        {% set button_type = "button_reg_default" %}
+        {% set button_label = "Apply" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_reg_default-alt" %}
+        {% set button_label = "Clear" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+
+
+    {% with %}
         {% set button_type = "close_button_x" %}
         {% include "partials/button.html" %}
     {% endwith %}
+
+
+
+
 
     {% with %}
 
