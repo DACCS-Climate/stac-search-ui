@@ -413,6 +413,23 @@ h6{
     flex-shrink: 0;
 }
 
+.button-reg-alt{
+    width: 158px;
+    height: 60px;
+    color: var(--text-on-surface);
+    background-color: var(--gray-100);
+    border: none;
+    box-shadow: var(--d-elevation-1);
+    flex-shrink: 0;
+}
+
+/*Legacy style from design, Used in button template partial*/
+.button-reg-alt:hover{
+    color: var(--text-on-dark);
+    background-color: var(--gray-500);
+    box-shadow: var(--d-elevation-1);
+}
+
 /*Used in button template partial*/
 .button-reg-reverse{
     width: 158px;
@@ -426,12 +443,7 @@ h6{
     flex-shrink: 0;
 }
 
-/*Legacy style from design*/
-.button-reg-alt:hover{
-    color: var(--white);
-    background-color: var(--primary);
-    box-shadow: var(--d-elevation-1);
-}
+
 
 
 /*Buttons for Search Mechanism*/
