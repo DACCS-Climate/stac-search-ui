@@ -1,10 +1,6 @@
-function setPlaceholderText(searchInputElement){
-    searchInputElement.setAttribute("placeholder", "Search by keyword");
+function setPlaceholderText(element, text){
+    element.setAttribute("placeholder", text);
 }
-function updatePlaceholderText(searchInputElement){
-    searchInputElement.setAttribute("placeholder", "Type to search");
-}
-
 
 function toggleDropdownStyles(elementID, className){
     var domElement = document.getElementById(elementID);
@@ -25,9 +21,34 @@ function toggleDropdownTitleText(elementID, newText){
         domElement.innerText = "Source";
         icon.classList.toggle("display-none");
     }
-
-
 }
+
+function setTextboxBackground(element){
+    if(element.classList.contains("input-number-small-background")){
+        element.classList.remove("input-number-small-background");
+    }
+
+    if(element.value.length > 0){
+        element.classList.add("input-number-small-background");
+    }
+}
+
+function convertDate(elementID){
+    var domElement = document.getElementById(elementID);
+    if(typeof domElement.value != "date") {
+        var dateParse = Date.parse(domElement.value);
+        var newDate = new Date(dateParse).toUTCString();
+        var dateArray = newDate.split(" ");
+
+        domElement.value = dateArray[2] + " - " + dateArray[1] + " - " + dateArray[3];
+    }
+}
+
+
+
+
+
+
 
 function toggleChevronRotate(){
     var dropdownChevron = document.getElementById("dropdownChevron")
