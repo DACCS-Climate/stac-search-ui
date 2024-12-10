@@ -92,10 +92,63 @@
     <br>
     <br>
 
+    {% with %}
+        {% set dropdown_type = "medium_dropdown_list" %}
+        {% set container_id = "dropdownMediumContainer" %}
+        {% set label_id = "dropdownMediumLabel" %}
+        {% set chevron_id = "dropdownMediumChevron" %}
+        {% set dropdown_label_text = "Does Not Repeat" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
 
     {% with %}
         {% set dataset_type_title = "NEX-GDDP" %}
         {% include "partials/popup.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set input_type = "input_number_sm" %}
+        {% set input_id = "inputNumberSmall" %}
+        {% include "partials/textbox.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set button_type = "spin_button_sm" %}
+        {% set button_id = "spinButtonSmall" %}
+        {% set spin_button_up_id = "spinButtonUp" %}
+        {% set spin_button_down_id = "spinButtonDown" %}
+        {% set target_id = "inputNumberSmall" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set input_type = "input_date_reg" %}
+        {% set input_label = "Date"  %}
+        {% set input_id = "inputDateRegular" %}
+        {% include "partials/textbox.html" %}
+    {% endwith %}
+
+        <br>
+    <br>
+
+    {% with %}
+        {% set input_type = "input_time_sm" %}
+        {% set input_label = "Time"  %}
+        {% set input_id = "inputTimeSmall" %}
+        {% include "partials/textbox.html" %}
     {% endwith %}
 
     <br>
