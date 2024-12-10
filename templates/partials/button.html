@@ -44,6 +44,9 @@
             "class":"button-close-x" ,
             "content": '<i class="fa-solid fa-xmark"></i>'
         },
+        "spin_button_sm": {
+            "class": "spin-button-small"
+        },
 
 
 
@@ -122,10 +125,10 @@
 
 {% set button = button_library[button_type] %}
 
-{% if button_type != "dropdown" %}
+{% if button_type != "dropdown" and button_type != "spin_button_sm"%}
     <a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
 {% endif %}
-
+{% if button_type != "spin_button_sm" %}
     <button id="{{ button_id|default(button['id']) }}" 
             class="{{ button['class'] }} {{ extra_button_class }} {{ disabled }}" 
             type="button"
@@ -144,7 +147,19 @@
             {{ button['content']|safe }}
         {% endif %}
     </button>
-
-{% if button_type != "dropdown" %}
+{% endif %}
+{% if button_type != "dropdown" and button_type != "spin_button_sm" %}
     </a>
+{% endif %}
+
+{% if button_type == "spin_button_sm" %}
+    <div class="spin-button-small">
+        <div id="{{ spin_button_up_id }}" class="spin-button-sm-up">
+            <i class="fa-solid fa-play spin-button-sm-up-icon"></i>
+        </div>
+        <div id="{{ spin_button_down_id }}" class="spin-button-sm-dn">
+            <i class="fa-solid fa-play spin-button-sm-dn-icon"></i>
+        </div>
+
+    </div>
 {% endif %}
