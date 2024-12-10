@@ -2,20 +2,61 @@ document.addEventListener("DOMContentLoaded", function (){
 
     //setDropdownItemRemoveChevron();
 
+    //Set placeholder text for the following elements
+
+    //For search input box
     var searchInputElement = document.getElementById("searchInput");
-    setPlaceholderText(searchInputElement);
+    setPlaceholderText(searchInputElement, "Search by keyword");
 
     searchInputElement.addEventListener("click", function(){
-        updatePlaceholderText(searchInputElement);
+        setPlaceholderText(searchInputElement, "Type to search");
     });
 
     searchInputElement.addEventListener("focus", function(){
-        updatePlaceholderText(searchInputElement);
+        setPlaceholderText(searchInputElement, "Type to search");
     });
 
     searchInputElement.addEventListener("blur", function(){
-        setPlaceholderText(searchInputElement);
+        setPlaceholderText(searchInputElement , "Search by keyword");
     });
+
+    //For text input small
+    var textInputElement = document.getElementById("inputNumberSmall");
+
+    setPlaceholderText(textInputElement, "1");
+
+    textInputElement.addEventListener("click", function(){
+        setPlaceholderText(textInputElement, "");
+        setTextboxBackground(textInputElement);
+    });
+
+    textInputElement.addEventListener("focus", function(){
+        setPlaceholderText(textInputElement, "");
+    });
+
+    textInputElement.addEventListener("blur", function(){
+        setPlaceholderText(textInputElement , "1");
+        setTextboxBackground(textInputElement);
+    });
+
+//For Date input regular
+    var dateInputElement = document.getElementById("inputDateRegular");
+    dateInputElement.addEventListener("blur", function(){
+        convertDate("inputDateRegular");
+    })
+
+
+    //For Spin button
+    var spinButtonUp = document.getElementById("spinButtonUp");
+    spinButtonUp.addEventListener("click", function(){
+        increment("inputNumberSmall");
+    });
+
+    var spinButtonDown = document.getElementById("spinButtonDown");
+    spinButtonDown.addEventListener("click", function(){
+        decrement("inputNumberSmall");
+    });
+
 
     //var dropdownLink = document.getElementById("dropdownLink");
    // dropdownLink.addEventListener("click", toggleDropdownStyles);
