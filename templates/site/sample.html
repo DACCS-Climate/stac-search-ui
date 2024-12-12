@@ -97,7 +97,26 @@
         {% set container_id = "dropdownMediumContainer" %}
         {% set label_id = "dropdownMediumLabel" %}
         {% set chevron_id = "dropdownMediumChevron" %}
+        {% set checkbox_id = "touchMediumList" %}
         {% set dropdown_label_text = "Does Not Repeat" %}
+        {% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade", "Custom"] %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "small_dropdown_list" %}
+        {% set container_id = "dropdownSmallContainer" %}
+        {% set label_id = "dropdownSmallLabel" %}
+        {% set chevron_id = "dropdownSmallChevron" %}
+        {% set checkbox_id = "touchSmallList" %}
+        {% set first_item  = "Day"%}
+        {% set list_items = ["Week", "Month", "Year", "Decade"] %}
+        {% set dropdown_label_text = "Repeat" %}
+
+
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
@@ -213,15 +232,41 @@
         {% include "partials/button.html" %}
     {% endwith %}
 
+    {% with %}
+        {% set button_type = "radio_button_sm" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
 
 
 
 
     {% with %}
-
         {% include "partials/tag.html" %}
     {% endwith %}
 
+    <br>
+    <br>
+
+    {% with %}
+        {% set display_type = "display_row" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
 
         <script src="js/sample.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
