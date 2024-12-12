@@ -1,38 +1,18 @@
-{% set tag_dict = {
-    "tag":[
-    {
-        "tag_name": "NASA"
-        },
-        {
-        "tag_name": "CMIP6"
-        },
-    {
-        "tag_name": "Climate"
-        },
-    {
-        "tag_name": "Humidity"
-        },
-    {
-        "tag_name": "Temperature"
-        },
-    {
-        "tag_name": "Precipitation"
-        },
-    {
-        "tag_name": "Radiation"
-        }
-        ]
 
+{% set default_tag = {
+    "container_class": "tag-container",
+    "class": "tag",
+    "tag_array":[ "NASA", "CMIP6","Climate","Humidity","Temperature","Precipitation","Radiation"]
     }
 
 %}
 
+{% set tag_input = tag_input_custom | default(default_tag) %}
 
-
-<div class="tag-container">
-    {% for tag in tag_dict["tag"] %}
-        <div class="tag">{{ tag["tag_name"] }}</div>
-        {% if loop.index != tag_dict["tag"]|length %}
+<div class="{{ tag_input["container_class"] }}">
+    {% for tag in tag_input["tag_array"] %}
+        <div class="{{ tag_input["class"] }}">{{ tag }}</div>
+        {% if tag_input["class"] == "tag" and loop.index != tag_input["tag_array"]|length %}
             <div class="tag-divider">|</div>
         {% endif %}
     {% endfor %}
