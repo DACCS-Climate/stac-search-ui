@@ -47,6 +47,9 @@
         "spin_button_sm": {
             "class": "spin-button-small"
         },
+        "radio_button_sm": {
+            "class": "radio-button-small"
+        },
 
 
 
@@ -125,10 +128,10 @@
 
 {% set button = button_library[button_type] %}
 
-{% if button_type != "dropdown" and button_type != "spin_button_sm"%}
+{% if button_type != "dropdown" and button_type != "spin_button_sm" and button_type != "radio_button_sm"%}
     <a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
 {% endif %}
-{% if button_type != "spin_button_sm" %}
+{% if button_type != "spin_button_sm" and button_type != "radio_button_sm" %}
     <button id="{{ button_id|default(button['id']) }}" 
             class="{{ button['class'] }} {{ extra_button_class }} {{ disabled }}" 
             type="button"
@@ -148,7 +151,7 @@
         {% endif %}
     </button>
 {% endif %}
-{% if button_type != "dropdown" and button_type != "spin_button_sm" %}
+{% if button_type != "dropdown" and button_type != "spin_button_sm" and button_type != "radio_button_sm" %}
     </a>
 {% endif %}
 
@@ -162,4 +165,8 @@
         </div>
 
     </div>
+{% endif %}
+
+{% if button_type == "radio_button_sm" %}
+    <input type="radio" class="{{ button_library[button_type]["class"] }}"/>
 {% endif %}
