@@ -22,10 +22,8 @@
             ],
         },
         "regular_dropdown_list_metadata": {
-            "checkbox_id": "touchRegularMetadata"
+            "checkbox_id": "touchRegularMetadata",
         },
-
-
         "regular_dropdown_list_license": {
             "checkbox_id": "touchRegularLicense",
             "list_items": [
@@ -34,7 +32,6 @@
                 }
             ]
         },
-
         "regular_dropdown_list_frequency": {
             "checkbox_id": "touchRegularFrequency",
             "list_items": [
@@ -43,9 +40,6 @@
                 }
             ]
         },
-
-
-
         "regular_dropdown_source": {
             "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link dropdown-regular-icon'></i>"
         },
@@ -57,45 +51,19 @@
             ],
 
         },
-
-
-
-
-        "medium_dropdown": {
-            "container_id": "dropdownMediumContainer",
-            "container_class":"dropdown-container",
-            "label_id": "dropdownMediumLabel",
-            "chevron_id": "dropdownMediumChevron",
-            "list_items":[
-                {
-                "item_type":"accordion",
-                "accordion_items":
-                    [
-                        {
-                            "item_label": "Ascending",
-                            "accordion_body":
-                                [
-                                    {"accordion_item_label": "Date & Time"},
-                                    {"accordion_item_label": "ID"},
-                                    {"accordion_item_label": "Title" }
-                                ]
-                        },
-                        {
-                            "item_label": "Descending",
-                            "accordion_body":
-                                [
-                                    {"accordion_item_label": "Date & Time"},
-                                    {"accordion_item_label": "ID"},
-                                    {"accordion_item_label": "Title" }
-                                ]
-                            },
-                    ]
-                },
-                {
-                "item_type":"link",
-                "item_label": "Last Modified"
-                }
-            ]
+        "small_dropdown_list": {
+            "container_class":"dropdown-small-container",
+            "label_container_class": "dropdown-small-label-container",
+            "label_class": "dropdown-small-list-label",
+            "chevron_class": "dropdown-small-chevron",
+            "list_class": "dropdown-small-list"
+        },
+        "medium_dropdown_list": {
+            "container_class":"dropdown-medium-container",
+            "label_container_class": "dropdown-medium-label-container",
+            "label_class": "dropdown-medium-list-label",
+            "chevron_class": "dropdown-medium-chevron",
+            "list_class": "dropdown-medium-list"
         }
     }
 %}
@@ -125,7 +93,7 @@
 
 {% if dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
     <div  id="{{ container_id }}" class="dropdown-regular-list-container">
-        <label  id={{ label_id }} class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
+        <label  id="{{ label_id }}" class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
             <span class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</span>
             <span class="dropdown-chevron-container">
                 <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
@@ -152,9 +120,11 @@
                     <a class="dropdown-regular-list-link subtitle-1" href="#">
                         {{ item["item_label"]|safe }}
                     </a>
-                    <span class="dropdown-chevron-container">
-                        <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
-                    </span>
+                    {% if dropdown_type != "regular_dropdown_list_frequency" %}
+                        <span class="dropdown-chevron-container">
+                            <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
+                        </span>
+                    {% endif %}
                 </li>
             {% endfor %}
         {% endif %}
@@ -240,36 +210,41 @@
 {% endif %}
 
 
-{% if dropdown_type == "medium_dropdown" %}
-    <div  id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <label  id="{{ dropdown_library[dropdown_type]["label_id"] }}" class="dropdown-label" for="touchMedium">
-            {{ dropdown_label_text|safe }}
-            <i id="{{ dropdown_library[dropdown_type]["chevron_id"] }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
-        <input type="checkbox" id="touchMedium">
+{% if dropdown_type == "medium_dropdown_list" %}
+    <div  id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <div class="{{ dropdown_library[dropdown_type]["label_container_class"] }}">
+            <label  id="{{ label_id }}" class="{{ dropdown_library[dropdown_type]["label_class"] }}" for="{{ checkbox_id }}">
+                <span class="caption">{{ dropdown_label_text|safe }}</span>
 
-        <ul class="dropdown-medium-list">
-            {% for item in dropdown_library[dropdown_type]["list_items"] %}
+                    <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down {{ dropdown_library[dropdown_type]["chevron_class"] }}"></i>
 
-                {% if item["item_type"] == "accordion" %}
-                    {% for accordion in item["accordion_items"] %}
-                        <li class="dropdown-medium-item">
-                             <a class="subtitle-2" href="#">
-                                {% with %}
-                                    {% set accordion_index = loop.index %}
-                                    {% set accordion_button_label = accordion["item_label"]|safe %}
-                                    {% set accordion_body_items = accordion["accordion_body"] %}
-                                    {% include "partials/accordion.html" %}
-                                {% endwith %}
-                            </a>
-                        </li>
-                    {% endfor %}
-                {% endif %}
+            </label>
+        </div>
 
-                {% if item["item_type"] == "link" %}
-                    {% set link_button_label = item["item_label"] %}
-                    <li class="dropdown-medium-item"><a class="subtitle-2" href="#">{{ link_button_label|safe }}</a></li>
-                {% endif %}
-        {% endfor %}
+        <input type="checkbox" id="{{ checkbox_id }}">
+
+        <ul class="{{ dropdown_library[dropdown_type]["list_class"] }}">
+            {% for item in list_items %}
+                <li><div class="dropdown-medium-item caption">{{ item }}</div></li>
+
+            {% endfor %}
         </ul>
+    </div>
+{% endif %}
+
+
+{% if dropdown_type == "small_dropdown_list" %}
+    <div id="dd" class="dropdown-small-container">
+        <div  class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle dropdown-small-link" href="#" role="button" data-boundary="dd"  data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown link
+            </a>
+
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
     </div>
 {% endif %}
