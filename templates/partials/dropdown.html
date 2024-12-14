@@ -52,18 +52,24 @@
 
         },
         "small_dropdown_list": {
-            "container_class":"dropdown-small-container",
+            "menu_class": "dropdown-small-menu",
+            "menu_title_class": "dropdown-small-title",
+            "container_class":"dropdown-container dropdown-small-container",
             "label_container_class": "dropdown-small-label-container",
             "label_class": "dropdown-small-list-label",
             "chevron_class": "dropdown-small-chevron",
-            "list_class": "dropdown-small-list"
+            "list_class": "dropdown-small-list",
+            "list_item_class": "dropdown-small-item"
         },
         "medium_dropdown_list": {
-            "container_class":"dropdown-medium-container",
+            "menu_class": "dropdown-medium-menu",
+            "menu_title_class": "dropdown-medium-title",
+            "container_class":"dropdown-container dropdown-medium-container",
             "label_container_class": "dropdown-medium-label-container",
             "label_class": "dropdown-medium-list-label",
             "chevron_class": "dropdown-medium-chevron",
-            "list_class": "dropdown-medium-list"
+            "list_class": "dropdown-medium-list",
+            "list_item_class": "dropdown-medium-item"
         }
     }
 %}
@@ -210,7 +216,7 @@
 {% endif %}
 
 
-{% if dropdown_type == "medium_dropdown_list" %}
+{% if dropdown_type == "large_dropdown_list" %}
     <div  id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div class="{{ dropdown_library[dropdown_type]["label_container_class"] }}">
             <label  id="{{ label_id }}" class="{{ dropdown_library[dropdown_type]["label_class"] }}" for="{{ checkbox_id }}">
@@ -233,17 +239,17 @@
 {% endif %}
 
 
-{% if dropdown_type == "small_dropdown_list" %}
-    <div id="dd" class="dropdown-small-container">
-        <div  class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle dropdown-small-link" href="#" role="button" data-boundary="dd"  data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown link
+{% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
+    <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <div  class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
+            <a class="btn btn-secondary dropdown-toggle caption {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ dropdown_label_text }}
             </a>
 
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
+                {% for item in list_items %}
+                    <li><a class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
+                {% endfor %}
             </ul>
         </div>
     </div>
