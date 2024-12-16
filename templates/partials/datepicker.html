@@ -1,0 +1,9 @@
+{% set datepicker = {
+    "placeholder_text": "YYYY MM DD",
+    "class": "datepicker-input caption"
+} %}
+
+<div class="datepicker-container">
+    <label for="{{ datepicker_id }}">{{ datepicker_label }}</label>
+    <input type="text" id="{{ datepicker_id }}" class="{{ datepicker["class"] }}"  placeholder="{{ datepicker["placeholder_text"] }}">
+</div>
