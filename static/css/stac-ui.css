@@ -357,67 +357,12 @@ h6{
     box-shadow: var(--button-close-shadow);
 }
 
-/*Used in button template partial*/
-/*
-.image-close-icon{
-    width: 15px;
-    height: 15px;
-    mask-image:  url("../images/button/close_x.svg");
-    -webkit-mask-image:  url("../images/button/close_x.svg");
-    mask-size: 15px 15px;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    background-color: var(--white);
-}
-
-
-.image-close-icon-dark{
-    width: 15px;
-    height: 15px;
-    mask-image:  url("../images/button/close_x.svg");
-    -webkit-mask-image:  url("../images/button/close_x.svg");
-    mask-size: 15px 15px;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    background-color: var(--black);
-}
-*/
 .popup-button-close{
     width: 100%;
     height: 30px;
     display: flex;
     justify-content: end;
-
 }
-
-/*Used in button template partial*/
-.button-icon-position{
-    overflow: visible;
-    box-sizing: content-box;
-    display: inline-block;
-    height: 1em;
-    vertical-align: -.125em;
-}
-
-/*Used in button template partial*/
-/*
-.image-delete-icon-red{
-    width: 16px;
-    height: 15px;
-    background-image: url("../images/button/exclamation_triangle_red.svg");
-    background-repeat: no-repeat;
-    margin-right: 12px;
-}
-
-
-.image-delete-icon-white{
-    width: 16px;
-    height: 15px;
-    background-image: url("../images/button/exclamation_triangle_white.svg");
-    background-repeat: no-repeat;
-    margin-right: 12px;
-}
-*/
 
 /*Used in button template partial*/
 .button-anchor-tag{
@@ -459,28 +404,12 @@ h6{
     box-shadow: var(--d-elevation-1);
 }
 
-/*Used in button template partial*/
-.button-reg-reverse{
-    width: 158px;
-    height: 60px;
-    color: var(--white);
-    background-color: var(--primary);
-    border-style: solid;
-    border-width: 1px;
-    border-color: var(--primary);
-    box-shadow: var(--d-elevation-2);
-    flex-shrink: 0;
-}
-
-
-
 
 /*Buttons for Search Mechanism*/
 .button-sm-default{
     width: 77px;
     height: 33px;
     border: none;
-
 }
 
 .button-sm-default-open{
@@ -645,34 +574,10 @@ h6{
     pointer-events: none;
 }
 
-/*Used in button template partial*/
-.button-spinner-alignment{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/*Used in button template partial*/
-.spinner-not-visible{
-    display:none;
-}
-
-/*Used in ui-styles-scripts.js*/
-.spinner-visible{
-    display:flex;
-}
-
-/*Used in button template partial*/
-.checkmark-not-visible{
-    display: none;
-}
 /*End Button*/
 
 
-
-
 /*Checkbox*/
-
 .checkbox-buffer{
     width: 25px;
     height: 25px;
@@ -1020,7 +925,6 @@ h6{
 /*End Dropdown Regular List*/
 
 /*Dropdown Regular*/
-
 .dropdown-regular-container{
     width: 290px;
     background: var(--indigo250-opacity-light);
@@ -1143,9 +1047,7 @@ h6{
     display: flex;
     justify-content: space-evenly;
     color: var(--primary);
-
 }
-
 /*End Dropdown Regular Share*/
 
 
@@ -1270,7 +1172,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .dropdown-small-container{
     width: 67px;
-    min-height: 28px;
+    height: 28px;
     border-radius: 4px;
 }
 
@@ -1369,10 +1271,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 1065px;
     height: 690px;
     background-color: var(--white);
-}
-
-.popup-metadata-content-container{
-
 }
 
 .popup-metadata-heading-container{
@@ -1475,7 +1373,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: row;
     background-color: var(--background-transparent);
 }
-
 
 .tag-info-card-container div:not(:last-child){
     margin-right: 6px;
@@ -1594,24 +1491,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 
 /*Input date*/
-
 .date-container{
     display: flex;
     flex-direction: column;
 }
-/*
-.input-date-reg{
-    width: 143px;
-    height: 62px;
-    color: var(--gray-500);
-    background-color: var(--white);
-    border-radius: 9px;
-    border: solid;
-    border-width: 1px;
-    border-color: var(--gray-400);
-    text-transform: uppercase;
-    text-align: center;
-}*/
 
 .input-time-sm{
     width: 100px;
@@ -1633,7 +1516,6 @@ input[type="time"]:invalid:before{
 
 /*Result Display*/
 /*Display as row*/
-
 .result-display-row{
     display: flex;
     flex-direction: row;
@@ -1683,6 +1565,7 @@ input[type="time"]:invalid:before{
     margin-left: 15px;
 }
 
+/*Display as card*/
 .result-display-card{
     width: 453px;
     height: 167px;
@@ -1695,7 +1578,6 @@ input[type="time"]:invalid:before{
     border-width: 1px;
     border-color: var(--display-card-border);
 }
-
 
 .display-card-time-range{
     display: flex;
@@ -1710,196 +1592,56 @@ input[type="time"]:invalid:before{
 
 
 /*Date Picker*/
-/*Override jquery css*/
-.ui-datepicker {
-    width: 300px;
-    height: 300px;
-    margin: 5px auto 0;
 
-    /*Subtitle-1 font*/
-    font-family: var(--main-font-family);
-    font-weight: var(--med-font-weight);
-    font-size: 16px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-}
 
-.ui-state-default{
-    /*Subtitle-1 font*/
-    font-family: var(--main-font-family);
-    font-weight: var(--med-font-weight);
-    font-size: 16px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-    color: var(--text-on-surface);
-}
+/*End Date Picker CSS*/
 
-.ui-priority-secondary{
-    color: var(--gray-400);
-    opacity: 1.0;
-
-    /*Subtitle-1 font*/
-    font-family: var(--main-font-family);
-    font-weight: var(--med-font-weight);
-    font-size: 16px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-}
-
-.ui-datepicker table {
-    width: 100%;
-}
-
-.ui-datepicker-header {
-    background: var(--white);
-    color: var(--gray-900);
-
-    border-width: 1px 0 0 0;
-    border-style: solid;
-    border-color: #111;
-}
-
-.ui-datepicker-title {
-    text-align: center;
-    /*Subtitle-1 font*/
-    font-family: var(--main-font-family);
-    font-weight: var(--med-font-weight);
-    font-size: 16px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-    color: var(--text-on-surface);
-}
-
-.ui-icon{
-    text-indent: 0px;
-}
-
-.ui-datepicker-prev {
-    float: left;
-    cursor: pointer;
-    background-position: center -30px;
-}
-
-.ui-datepicker-prev span::before{
-    font-family: var(--bs-icon-font-family);
-    content: "\F284";
-}
-
-.ui-widget-header .ui-icon {
-    background-image: unset;
-}
-
-.ui-datepicker-next {
-    float: right;
-    cursor: pointer;
-    background-position: center 0px;
-}
-
-.ui-datepicker .ui-icon{
-    text-indent: 0px;
-}
-
-.ui-datepicker-next span::before{
-    font-family: var(--bs-icon-font-family);
-    content: "\F285";
-}
-
-.ui-datepicker thead {
-    background-color: #f7f7f7;
-}
-
-.ui-datepicker th {
-    background-color: var(--white);
-}
-
-.ui-datepicker th span{
-    /*Subtitle-1 font*/
-    font-family: var(--main-font-family);
-    font-weight: var(--med-font-weight);
-    font-size: 16px;
-    letter-spacing: 0.03px;
-    line-height: var(--line-height-normal);
-    color: var(--text-on-surface);
-}
-
-.ui-datepicker tbody td {
-    padding: 0;
-}
-
-.ui-datepicker tbody td:last-child {
-    border-right: 0px;
-}
-
-.ui-datepicker tbody tr {
-    border-bottom: none;
-}
-
-.ui-datepicker tbody tr:last-child {
-    border-bottom: 0px;
-}
-
-.ui-datepicker a {
-    text-decoration: none;
-}
-
-.ui-datepicker td span, .ui-datepicker td a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 30px;
-    height: 30px;
-    color: #ffffff;
-}
-
-.ui-datepicker-calendar .ui-state-default {
-    background: var(--white);
-    color: var(--text-on-surface);
-    width:40px;
-    height:30px;
-    border: solid;
-    border-width: 0px;
-    border-color: var(--background-transparent);
-}
-
-.ui-datepicker-calendar .ui-state-hover {
-    background: var(--indigo250-opacity-light);
-    color: var(--text-on-surface);
-    border: solid;
-    border-color: var(--indigo250-opacity-light);
-    border-radius: 10px;
-    border-width: 1px;
-}
-
-.ui-datepicker-calendar .ui-state-active {
-    background: var(--indigo250-opacity-light);
-    color: var(--text-on-surface);
-
-    position: relative;
-    margin: -1px;
-}
-
-.ui-datepicker-unselectable .ui-state-default {
-    background: #D6E4BE;
-    color: #000;
-}
-/*End override jQuery datepicker CSS*/
-
-/*Custom datepicker CSS*/
-
-.datepicker-container{
-    display: flex;
-    flex-direction: column;
-}
-
-.datepicker-input{
-    color: var(--gray-500);
-    text-transform: uppercase;
-    text-align: center;
-    width: 123px;
-    height: 46px;
-    border-radius: 9px;
+/*Recurrence Modal*/
+.recurrence-dialog{
+    border-radius: 5px;
     border: solid;
     border-width: 1px;
     border-color: var(--gray-400);
+    padding: 26px;
+}
+
+.recurrence-container{
+    width: 250px;
+    height: 227px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.recurrence-title{
+    width: 100%;
+    text-align: start;
+    margin-bottom: 45px;
+}
+
+.recurrence-interval-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 62px;
+}
+
+.recurrence-interval-text{
+    margin-right: 6px;
+    margin-bottom: unset;
+}
+
+.recurrence-interval-container div{
+    margin-left: 3px;
+}
+
+.recurrence-buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.recurrence-buttons-container a:not(:last-child){
+    margin-right: 32px;
 }
