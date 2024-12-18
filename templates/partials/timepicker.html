@@ -1,0 +1,23 @@
+{% set timepicker = {
+    "placeholder_text": "HH:MM",
+    "class": "input-time-sm caption"
+} %}
+
+<div class="timepicker-container">
+    <label for="{{ timepicker_id }}">{{ timepicker_label }}</label>
+    <input type="text" id="{{ timepicker_id }}" class="{{ timepicker["class"] }}"  placeholder="{{ timepicker["placeholder_text"] }}">
+</div>
+
+<script>
+    initializeTimepicker("00:00", "23:59");
+
+    function initializeTimepicker(startTime, endTime){
+        flatpickr("#{{ timepicker_id }}", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            minTime: startTime,
+            maxTime: endTime
+        });
+    }
+</script>
