@@ -1,0 +1,54 @@
+{% set recurrence_title = "Custom recurrence" %}
+<dialog id="modalRecurrence" class="recurrence-dialog">
+    <div class="recurrence-container">
+        <div class="recurrence-title button">{{ recurrence_title }}</div>
+        <div class="recurrence-interval-container">
+            <p class="recurrence-interval-text">Repeat Every</p>
+            {% with %}
+                {% set input_type = "input_number_sm" %}
+                {% set input_id = "inputNumberRecurrence" %}
+                {% include "partials/textbox.html" %}
+            {% endwith %}
+
+
+            {% with %}
+                {% set button_type = "spin_button_sm" %}
+                {% set button_id = "spinButtonRecurrence" %}
+                {% set spin_button_up_id = "spinButtonUpRecurrence" %}
+                {% set spin_button_down_id = "spinButtonDownRecurrence" %}
+                {% set target_id = "inputNumberRecurrence" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set dropdown_type = "small_dropdown_list" %}
+                {% set dropdown_id = "recurrenceModalDay" %}
+                {% set container_id = "dropdownSmallRecurrenceContainer" %}
+                {% set label_id = "dropdownSmallRecurrenceLabel" %}
+                {% set dropdown_list_id = "recurrenceModalDayList" %}
+                {% set list_items = ["Day", "Week", "Month", "Year", "Decade"] %}
+                {% set dropdown_label_text = "Day" %}
+                {% include "partials/dropdown.html" %}
+            {% endwith %}
+
+        </div>
+        <div class="recurrence-buttons-container">
+            {% with %}
+                {% set button_type = "button_sm_default_open" %}
+                {% set button_label = "Apply" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set button_type = "button_sm_default_copy" %}
+                {% set button_label = "Clear" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+        </div>
+
+        <script src="js/spinbutton.js"></script>
+
+    </div>
+</dialog>
+
+        <script src="js/modal-recurrence.js"></script>
