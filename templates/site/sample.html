@@ -114,9 +114,7 @@
         {% set checkbox_id = "touchSmallList" %}
         {% set first_item  = "Day"%}
         {% set list_items = ["Week", "Month", "Year", "Decade"] %}
-        {% set dropdown_label_text = "Repeat" %}
-
-
+        {% set dropdown_label_text = "Day" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
@@ -126,7 +124,7 @@
 
     {% with %}
         {% set dataset_type_title = "NEX-GDDP" %}
-        {% include "partials/popup.html" %}
+        {% include "partials/modal-metadata.html" %}
     {% endwith %}
 
     <br>
@@ -152,27 +150,6 @@
 
     <br>
     <br>
-
-    {% with %}
-        {% set input_type = "input_date_reg" %}
-        {% set input_label = "Date"  %}
-        {% set input_id = "inputDateRegular" %}
-        {% include "partials/textbox.html" %}
-    {% endwith %}
-
-        <br>
-    <br>
-
-    {% with %}
-        {% set input_type = "input_time_sm" %}
-        {% set input_label = "Time"  %}
-        {% set input_id = "inputTimeSmall" %}
-        {% include "partials/textbox.html" %}
-    {% endwith %}
-
-    <br>
-    <br>
-
 
 
     {% with %}
@@ -232,13 +209,37 @@
         {% include "partials/button.html" %}
     {% endwith %}
 
+    <br>
+    <br>
+
     {% with %}
         {% set button_type = "radio_button_sm" %}
+        {% set radio_button_id = "radioButtonSmall" %}
+        {% set radio_button_label = "" %}
+        {% set radio_button_orientation_class = "" %}
         {% include "partials/button.html" %}
     {% endwith %}
 
+    <br>
+    <br>
 
+    {% with %}
+        {% set datepicker_id = "inputDateReg" %}
+        {% set datepicker_label = "Date:" %}
+        {% include "partials/datepicker.html" %}
+    {% endwith %}
 
+        <br>
+    <br>
+
+    {% with %}
+        {% set timepicker_id = "inputTimeReg" %}
+        {% set timepicker_label = "Time:" %}
+        {% include "partials/timepicker.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
 
 
     {% with %}
@@ -258,6 +259,9 @@
         {% include "partials/info-display.html" %}
     {% endwith %}
 
+        <br>
+    <br>
+
     {% with %}
         {% set display_type = "display_card" %}
         {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
@@ -268,9 +272,31 @@
         {% include "partials/info-display.html" %}
     {% endwith %}
 
+
+        <br>
+    <br>
+
+    <div>
+        <button id="openRecurrenceModalButton" type="button">Recurrence modal</button>
+    </div>
+
+    {% with %}
+        {% include "partials/modal-recurrence.html" %}
+    {% endwith %}
+
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "dropdown_time_frame" %}
+        {% set dropdown_label_text = "Select Time Frame" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+
         <script src="js/sample.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
-        <script src="js/script.js"></script>
-        <script src="js/toggle.js"></script>
+        <script src="js/modal.js"></script>
 
 {% endblock %}
