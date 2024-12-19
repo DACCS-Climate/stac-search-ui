@@ -70,6 +70,20 @@
             "chevron_class": "dropdown-medium-chevron",
             "list_class": "dropdown-medium-list",
             "list_item_class": "dropdown-medium-item"
+        },
+        "dropdown_time_frame": {
+            "container_class": "dropdown-timeframe-container",
+            "content_container_class": "timeframe-content-container",
+            "label_text_class": "button",
+            "timeframe_start_class": "timeframe-start",
+            "timeframe_end_class": "timeframe-end",
+            "datepicker_start_id": "inputDateStart",
+            "timepicker_start_id": "inputTimeStart",
+            "datepicker_end_id": "inputDateEnd",
+            "timepicker_end_id": "inputTimeEnd",
+            "datepicker_end_on_id": "inputDateEndOn",
+            "menu_class": "dropdown-timeframe-menu",
+            "menu_title_class": "subtitle-1"
         }
     }
 %}
@@ -241,16 +255,138 @@
 
 {% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
     <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <div  class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
-            <a class="btn btn-secondary dropdown-toggle caption {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div id="{{ dropdown_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
+            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle caption {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ dropdown_label_text }}
             </a>
 
-            <ul class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
+            <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
                 {% for item in list_items %}
-                    <li><a class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
+                    {% set list_item_id = dropdown_id ~ loop.index|string %}
+                    <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 {% endif %}
+
+
+
+
+
+
+
+
+{% if dropdown_type ==  "dropdown_time_frame" %}
+
+    <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+        <div id="{{ dropdown_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
+
+            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle timeframe-chevron {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ dropdown_label_text }}
+                <div class="dropdown-chevron-container">
+                    <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>
+                </div>
+            </a>
+
+            <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
+                <li>
+                    <div class="{{ dropdown_library[dropdown_type]["content_container_class"] }}">
+                        <div class="{{ dropdown_library[dropdown_type]["timeframe_start_class"] }}">
+                            {% with %}
+                                {% set datepicker_id = dropdown_library[dropdown_type]['datepicker_start_id'] %}
+                                {% set datepicker_label = "Start Date" %}
+                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
+                                {% include "partials/datepicker.html" %}
+                            {% endwith %}
+
+                            {% with %}
+                                {% set timepicker_id = dropdown_library[dropdown_type]['timepicker_start_id'] %}
+                                {% set timepicker_label = "Start Time" %}
+                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
+                                {% include "partials/timepicker.html" %}
+                            {% endwith %}
+                        </div>
+
+                        <div class="{{ dropdown_library[dropdown_type]["timeframe_end_class"] }}">
+                            {% with %}
+                                {% set datepicker_id = dropdown_library[dropdown_type]['datepicker_end_id'] %}
+                                {% set datepicker_label = "End Date" %}
+                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
+                                {% include "partials/datepicker.html" %}
+                            {% endwith %}
+
+                            {% with %}
+                                {% set timepicker_id = dropdown_library[dropdown_type]['timepicker_end_id'] %}
+                                {% set timepicker_label = "End Time" %}
+                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
+                                {% include "partials/timepicker.html" %}
+                            {% endwith %}
+                        </div>
+                        <div>
+                            {% with %}
+                                {% set checkbox_id = "checkboxAllDay" %}
+                                {% set direction_right = true %}
+                                {% set checkbox_label_text = "All Day" %}
+                                {% include "partials/checkbox.html" %}
+                            {% endwith %}
+                        </div>
+                        <div class="div-timeframe-norepeat">
+                            <p class="button margin-label-time-range">Selected Time Range</p>
+
+                            {% with %}
+                                {% set dropdown_type = "medium_dropdown_list" %}
+                                {% set container_id = "dropdownMediumContainer" %}
+                                {% set label_id = "dropdownMediumLabel" %}
+                                {% set chevron_id = "dropdownMediumChevron" %}
+                                {% set checkbox_id = "touchMediumList" %}
+                                {% set dropdown_label_text = "Does Not Repeat" %}
+                                {% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade", "Custom"] %}
+                                {% include "partials/dropdown.html" %}
+                            {% endwith %}
+
+                        </div>
+                        <div>
+                           {% with %}
+                                {% set button_type = "radio_button_sm" %}
+                                {% set radio_button_id = "radioButtonNever" %}
+                                {% set radio_button_label_text = "Never" %}
+                                {% set radio_label_right = true %}
+                                {% set radio_button_orientation_class = "radio-button-container-row" %}
+                                {% include "partials/button.html" %}
+                            {% endwith %}
+                        </div>
+                        <div class="div-timerange-ends-on">
+                            {% with %}
+                                {% set button_type = "radio_button_sm" %}
+                                {% set radio_button_id = "radioButtonEndsOn" %}
+                                {% set radio_button_label_text = "Ends On" %}
+                                {% set radio_label_right = true %}
+                                {% set radio_button_orientation_class = "radio-button-container-row" %}
+                                {% include "partials/button.html" %}
+                            {% endwith %}
+
+                            {% with %}
+                                {% set datepicker_id = "{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}" %}
+                                {% set datepicker_label = "" %}
+                                {% include "partials/datepicker.html" %}
+                            {% endwith %}
+
+                        </div>
+
+                    <div class="div-timeframe-button">
+                        {% with %}
+                            {% set button_type = "button_sm_default_open" %}
+                            {% set button_label = "Review" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+{% endif %}
+
