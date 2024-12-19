@@ -1,0 +1,31 @@
+{% if accordion_button_label  == "Ascending"%}
+    {% set accordion_icon_class = 'accordion-icon-ascending' %}
+        {% set accordion_icon = '<i class="bi bi-sort-up-alt subtitle-2"></i>' %}
+
+{% elif accordion_button_label  == "Descending"%}
+    {% set accordion_icon_class = 'accordion-icon-descending' %}
+    {% set accordion_icon = '<i class="bi bi-sort-down-alt subtitle-2"></i>' %}
+{% else %}
+    {% set accordion_icon_class = "" %}
+    {% set accordion_icon = "" %}
+{% endif %}
+
+<div class="accordion dropdown-accordion" id="accordion{{ accordion_index }}">
+  <div class="accordion-item">
+    <div class="accordion-header" id="heading{{ accordion_index }}">
+      <button class="accordion-button dropdown-accordion-button subtitle-2 {{ accordion_icon_class }} collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ accordion_index }}" aria-expanded="false" aria-controls="collapse{{ accordion_index }}">
+        {{ accordion_button_label }} {{ accordion_icon|safe }}
+      </button>
+    </div>
+    <div id="collapse{{ accordion_index }}" class="accordion-collapse collapse " aria-labelledby="heading{{ accordion_index }}" data-bs-parent="#accordion{{ accordion_index }}">
+      <div class="accordion-body">
+        <ul>
+            {% for item in accordion_body_items %}
+                {% set accordion_item_label  = item["accordion_item_label"]%}
+                <li>{{ accordion_item_label }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
