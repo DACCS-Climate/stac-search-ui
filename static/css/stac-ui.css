@@ -46,6 +46,7 @@
     --dropdown-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     --button-close-shadow: 0px 5px 15px rgba(37, 44, 97, 0.25), 0px 3px 4px rgba(136, 144, 194, 0.25);
     --popup-metadata-shadow: 4px 4px 17px 0px rgba(0, 0, 0, 0.25);
+    --timeframe-shadow: 0px 4px 7px 0px rgba(0, 0, 0, 0.25);
 
     /*Backgrounds*/
     --background: #FFFFFF;
@@ -1248,6 +1249,80 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*End Dropdown Small List and Dropdown Medium List*/
 
+/*Dropdown Time Frame*/
+.dropdown-timeframe-menu{
+    width: 422px;
+    height: 70px;
+    background-color: var(--indigo250-opacity-light);
+}
+
+.timeframe-chevron{
+    width: 300px;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--indigo-700);
+}
+
+.timeframe-chevron:hover{
+    color: var(--indigo-700);
+}
+
+.timeframe-chevron::after{
+    display: none;
+}
+
+.dropdown-timeframe-container{
+    width: 422px;
+    background: var(--white);
+    box-shadow: var(--timeframe-shadow);
+}
+
+.timeframe-content-container{
+    margin-top: 27px;
+    margin-bottom: 18px;
+    margin-left: 58px;
+    margin-right: 43px;
+}
+
+.timeframe-content-container div:not(:last-child){
+    margin-bottom: 38px;
+}
+
+.timeframe-start, .timeframe-end{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+.div-timeframe-norepeat{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+.div-timerange-ends-on{
+    display: flex;
+    flex-direction: row;
+}
+
+.div-timerange-ends-on div:not(:last-child){
+    margin-right: 48px;
+}
+
+.margin-label-time-range{
+    margin-right: 36px;
+}
+
+.div-timeframe-button{
+    display: flex;
+    justify-content: center;
+}
+/*End Dropdown Time Frame*/
 
 /*Popup*/
 /*Metadata Popup*/
@@ -1463,6 +1538,16 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 /*Radio button*/
+.radio-button-container-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.radio-button-container-column{
+    display: flex;
+    flex-direction: column;
+}
+
 .radio-button-small{
     appearance: none;
     display: grid;
@@ -1487,11 +1572,37 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     transform: scale(1);
     background-color: var(--primary);
 }
+
+.margin-radio-left{
+    margin-right: 7px;
+}
+
+.margin-radio-right{
+    margin-left: 7px;
+}
 /*End Radio button*/
 
 
 /*Input date*/
-.date-container{
+.datepicker-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.input-date-reg{
+    width: 123px;
+    height: 46px;
+    padding: 12px 14px;
+    color: var(--gray-500);
+    background-color: var(--white);
+    border-radius: 9px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--gray-400);
+    text-align: center;
+}
+
+.timepicker-container{
     display: flex;
     flex-direction: column;
 }
@@ -1507,11 +1618,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-width: 1px;
     border-color: var(--gray-400);
     text-align: center;
-}
-
-input[type="time"]:invalid:before{
-    content: 'HH:MM AM';
-
 }
 
 /*Result Display*/
@@ -1592,7 +1698,50 @@ input[type="time"]:invalid:before{
 
 
 /*Date Picker*/
+/*Override Flatpickr CSS*/
+.flatpickr-day{
+    border: solid;
+    border-width: 1px;
+    border-color: var(--background-transparent);
+    border-radius: 9px;
+}
 
+.flatpickr-day:hover{
+    background-color: var(--indigo250-opacity-light);
+    border: solid;
+    border-width: 1px;
+    border-color: var(--indigo250-opacity-light);
+    border-radius: 9px;
+}
+/*
+.flatpickr-months{
+    position: relative;
+    left: unset;
+    right: unset;
+}
+
+.flatpickr-prev-month{
+    position: relative;
+    left: unset;
+}
+
+.flatpickr-current-month{
+    width: 60%;
+
+}
+
+.flatpickr-next-month{
+    position: relative;
+    right: unset;
+}*/
+
+
+/*
+.flatpickr-months{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}*/
 
 /*End Date Picker CSS*/
 
