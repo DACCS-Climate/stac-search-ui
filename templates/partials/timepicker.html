@@ -1,10 +1,11 @@
 {% set timepicker = {
     "placeholder_text": "HH:MM",
-    "class": "input-time-sm caption"
+    "class": "input-time-sm",
+    "label_text_class": "caption"
 } %}
 
 <div class="timepicker-container">
-    <label for="{{ timepicker_id }}">{{ timepicker_label }}</label>
+    <label for="{{ timepicker_id }}" class="{{ label_text_class|default(timepicker["label_text_class"]) }}">{{ timepicker_label }}</label>
     <input type="text" id="{{ timepicker_id }}" class="{{ timepicker["class"] }}"  placeholder="{{ timepicker["placeholder_text"] }}">
 </div>
 
