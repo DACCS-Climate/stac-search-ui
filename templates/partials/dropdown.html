@@ -262,18 +262,13 @@
 
             <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
                 {% for item in list_items %}
-                    {% set list_item_id = dropdown_id ~ loop.index|string %}
+                    {% set list_item_id = dropdown_id ~ loop.index %}
                     <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 {% endif %}
-
-
-
-
-
 
 
 
@@ -374,18 +369,24 @@
 
                         </div>
 
-                    <div class="div-timeframe-button">
-                        {% with %}
-                            {% set button_type = "button_sm_default_open" %}
-                            {% set button_label = "Review" %}
-                            {% include "partials/button.html" %}
-                        {% endwith %}
-                    </div>
+                        <div class="div-timeframe-button">
+                            {% with %}
+                                {% set button_type = "button_sm_default_open" %}
+                                {% set button_label = "Review" %}
+                                {% include "partials/button.html" %}
+                            {% endwith %}
+                        </div>
 
                     </div>
                 </li>
             </ul>
         </div>
+    <script type="text/javascript">
+        $('.dropdown-menu input, .dropdown-menu label').click(function(e) {
+            e.stopPropagation();
+        });
+    </script>
+
     </div>
 
 {% endif %}
