@@ -2,8 +2,13 @@
 
 <div class="checkbox-buffer">
     <label class="checkbox-container" for="{{ checkbox_id }}">
-        <p>{{ checkbox_label }}</p>
+        {% if direction_left %}
+            <p>{{ checkbox_label_text }}</p>
+        {% endif %}
         <input id="{{ checkbox_id }}" type="checkbox">
         <span class="checkmark"></span>
+        {% if direction_right %}
+            <p>{{ checkbox_label_text }}</p>
+        {% endif %}
     </label>
 </div>
