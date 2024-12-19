@@ -17,11 +17,6 @@ spinButtonDown.addEventListener("click", function(){
 
 
 //For Recurrence dropdown
-function resetRecurrenceFirstItem(labelID){
-    var recurrenceDropdownFirstItem = document.getElementById(labelID);
-    recurrenceDropdownFirstItem.innerText = "Day";
-}
-
 
 function setRecurrenceListItems(labelID, listID){
     var recurrenceDropdown = document.getElementById("recurrenceModalDay");
