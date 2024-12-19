@@ -33,27 +33,10 @@ function setTextboxBackground(element){
     }
 }
 
-function convertDate(elementID){
-    var domElement = document.getElementById(elementID);
-    if(typeof domElement.value != "date") {
-        var dateParse = Date.parse(domElement.value);
-        var newDate = new Date(dateParse).toUTCString();
-        var dateArray = newDate.split(" ");
-
-        domElement.value = dateArray[2] + " - " + dateArray[1] + " - " + dateArray[3];
-    }
-}
-
-
-
-
-
-
 
 function toggleChevronRotate(){
     var dropdownChevron = document.getElementById("dropdownChevron")
     dropdownChevron.classList.toggle("dropdown-chevron-rotate");
-    //dropdownChevron.classList.toggle("fa-rotate-180");
 }
 
 function removeAllDropdownStyles(){
@@ -62,7 +45,6 @@ function removeAllDropdownStyles(){
 
     dropdownLink.classList.remove("dropdown-transition-styles");
     dropdownChevron.classList.remove("dropdown-chevron-rotate");
-    //dropdownChevron.classList.remove("fa-rotate-180");
 }
 
 function setDropdownItemRemoveChevron(){
