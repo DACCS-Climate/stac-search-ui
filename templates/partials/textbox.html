@@ -2,38 +2,10 @@
     "input_number_sm": {
         "type": "text",
         "class": "input-number-small caption"
-        },
-    "input_date_reg": {
-        "type": "date",
-        "class": "input-date-reg caption"
-        },
-    "input_time_sm": {
-        "type": "time",
-        "class": "input-time-sm caption"
         }
-
     }
 %}
 
 {% if input_type == "input_number_sm" %}
     <input id="{{ input_id }}" type="{{ input[input_type]["type"] }}" inputmode="numeric" class="{{ input[input_type]["class"] }}">
-{% endif %}
-
-{% if input_type == "input_date_reg" %}
-    <!-- TODO NOTE: start and end date values can be set by passing them in as min and max in the input tag-->
-
-    <!-- TODO: Add something to handle case when nothing is entered and user clicks outside of box -->
-    <div class="date-container">
-        <label for="{{ input_id }}">{{ input_label }}</label>
-        <input id="{{ input_id }}" type="{{ input[input_type]["type"] }}" onfocus="(this.type='date')" onblur="(this.type='text')" class="{{ input[input_type]["class"] }}">
-    </div>
-{% endif %}
-
-
-{% if input_type == "input_time_sm" %}
-    <!-- TODO: Add something to handle case when nothing is entered and user clicks outside of box -->
-    <div class="date-container">
-        <label for="{{ input_id }}">{{ input_label }}</label>
-        <input id="{{ input_id }}" type="{{ input[input_type]["type"] }}" onfocus="(this.type='time')" onblur="(this.type='text')" class="{{ input[input_type]["class"] }}">
-    </div>
 {% endif %}
