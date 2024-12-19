@@ -339,10 +339,14 @@ h6{
 .button-close-x{
     width: 28px;
     height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: var(--primary);
     background-color: var(--background-transparent);
     border: none;
     outline: none;
+    padding: unset;
 }
 
 .button-close-x svg{
@@ -666,6 +670,11 @@ h6{
     display: flex;
 }
 
+.search-form{
+    display: flex;
+    flex-direction: row;
+}
+
 .search-input{
     width: 622px;
     height: 64px;
@@ -692,11 +701,25 @@ h6{
 }
 
 .search-icon{
-    position: relative;
     width: 15px;
     height: 15px;
-    color: var(--gray-500);
-    right: 30px;
+    color: var(--primary);
+}
+
+.search-icon-background{
+    width: 35px;
+    height: 35px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border: solid;
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: var(--white);
+    right: 60.5px;
+    top: 14.5px;
     z-index: 25;
 }
 
@@ -1713,6 +1736,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-color: var(--indigo250-opacity-light);
     border-radius: 9px;
 }
+/*TODO: Keep for adjusting spacing for arrows in month menu*/
 /*
 .flatpickr-months{
     position: relative;
