@@ -217,7 +217,7 @@
         {% set radio_button_id = "radioButtonSmall" %}
         {% set radio_button_label = "" %}
         {% set radio_button_orientation_class = "" %}
-        {% include "partials/button.html" %}
+        {% include "partials/radio.html" %}
     {% endwith %}
 
     <br>
@@ -294,6 +294,24 @@
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
+        <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "default_dropdown_list" %}
+        {% set dropdown_label_text = "Test Dropdown" %}
+        {% include "partials/dropdown2.html" %}
+    {% endwith %}
+
+            <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_share" %}
+        {% set dropdown_share_id = "dropdownShareRegular" %}
+        {% set dropdown_label_text = "Share" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
 
         <script src="js/sample.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
