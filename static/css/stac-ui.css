@@ -698,6 +698,7 @@ h6{
 .search-input:focus{
     background: var(--gray-50);
     border: 1px solid var(--indigo-200);
+    color: var(--text-on-surface);
 }
 
 .search-icon{
@@ -823,8 +824,8 @@ h6{
 }
 
 .dropdown-chevron-rotate{
-    transform: rotate(180deg);
-    transition: all 0.4s ease-in-out;
+    transform: rotate(-180deg);
+    /*transition: all 0.4s ease-in-out;*/
 }
 
 .dropdown-chevron-dark{
@@ -1347,8 +1348,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 /*End Dropdown Time Frame*/
 
-/*Popup*/
-/*Metadata Popup*/
+/*Modal/Popup*/
+/*General modal styles/classes */
+.stop-scroll{
+    overflow: hidden;
+}
+
+/*Metadata Popup/Modal*/
 
 .dialog-metadata{
     overflow-x: hidden;
@@ -1419,7 +1425,59 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: end;
     margin-right: 13px;
 }
-/*End Popup*/
+/*End Modal/Popup*/
+
+/*Recurrence Modal*/
+.recurrence-dialog{
+    border-radius: 5px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--gray-400);
+    padding: 26px;
+}
+
+.recurrence-container{
+    width: 250px;
+    height: 227px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.recurrence-title{
+    width: 100%;
+    text-align: start;
+    margin-bottom: 45px;
+}
+
+.recurrence-interval-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 62px;
+}
+
+.recurrence-interval-text{
+    margin-right: 6px;
+    margin-bottom: unset;
+}
+
+.recurrence-interval-container div{
+    margin-left: 3px;
+}
+
+.recurrence-buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.recurrence-buttons-container a:not(:last-child){
+    margin-right: 32px;
+}
+/*End Recurrence Modal*/
+/*End Modal/Popup*/
 
 
 /*Tags*/
@@ -1769,52 +1827,59 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*End Date Picker CSS*/
 
-/*Recurrence Modal*/
-.recurrence-dialog{
-    border-radius: 5px;
+/*Dropdown Panel CSS*/
+
+.dropdown-panel-container{
+    width:290px;
+}
+
+.dropdown-panel-title{
+    width: 290px;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
+    border: 0px;
+    border-radius: 0px;
+}
+
+.dropdown-panel-title-white{
+    background-color: var(--white);
+}
+
+.dropdown-panel-title div svg{
+    margin-left: 4px;
+}
+
+
+/*Style chevron icon*/
+.dropdown-panel-title::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    right: 26px;
     border: solid;
     border-width: 1px;
-    border-color: var(--gray-400);
-    padding: 26px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
 }
 
-.recurrence-container{
-    width: 250px;
-    height: 227px;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
+/*Rotates chevron*/
+.dropdown-panel-icon::after{
+    transition: all 0.5s ease-in-out;
 }
 
-.recurrence-title{
-    width: 100%;
-    text-align: start;
-    margin-bottom: 45px;
+.dropdown-panel-icon:focus::after{
+    transform: rotate(-180deg);
 }
 
-.recurrence-interval-container{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 62px;
-}
-
-.recurrence-interval-text{
-    margin-right: 6px;
-    margin-bottom: unset;
-}
-
-.recurrence-interval-container div{
-    margin-left: 3px;
-}
-
-.recurrence-buttons-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-}
-
-.recurrence-buttons-container a:not(:last-child){
-    margin-right: 32px;
-}
