@@ -1,3 +1,14 @@
+function toggleChevronRotate(elementID){
+    var dropdownChevron = document.getElementById(elementID)
+    //dropdownChevron.classList.toggle("dropdown-chevron-rotate");
+    dropdownChevron.classList.toggle("dropdown-panel-icon");
+}
+
+function toggleDropdownPanelBackground(elementID){
+    var dropdownChevron = document.getElementById(elementID)
+    dropdownChevron.classList.toggle("dropdown-panel-title-white");
+}
+
 function setPlaceholderText(element, text){
     element.setAttribute("placeholder", text);
 }
@@ -31,12 +42,6 @@ function setTextboxBackground(element){
     if(element.value.length > 0){
         element.classList.add("input-number-small-background");
     }
-}
-
-
-function toggleChevronRotate(){
-    var dropdownChevron = document.getElementById("dropdownChevron")
-    dropdownChevron.classList.toggle("dropdown-chevron-rotate");
 }
 
 function removeAllDropdownStyles(){
