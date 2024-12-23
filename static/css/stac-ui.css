@@ -1120,6 +1120,11 @@ h6{
 
 /*Dropdown Small List and Dropdown Medium List*/
 /*Override Bootstrap*/
+
+.dropdown{
+    height: auto !important;
+}
+
 .dropdown-toggle::after{
     font-family: Bootstrap-icons;
     content: "\F282";
@@ -1136,6 +1141,7 @@ h6{
     --bs-dropdown-border-width:0px;
     --bs-dropdown-bg: var(--background-transparent);
     z-index:var(--bs-dropdown-zindex);
+    position: relative !important;
 }
 
 .btn{
@@ -1276,26 +1282,15 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 /*Dropdown Time Frame*/
 .dropdown-timeframe-menu{
     width: 422px;
-    height: 70px;
-    background-color: var(--indigo250-opacity-light);
 }
 
-.timeframe-chevron{
-    width: 300px;
+.dropdown-timeframe-title{
+    width: 100%;
     height: 70px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    color: var(--indigo-700);
-}
-
-.timeframe-chevron:hover{
-    color: var(--indigo-700);
-}
-
-.timeframe-chevron::after{
-    display: none;
+    border-radius: unset;
+    background-color: var(--indigo250-opacity-light);
 }
 
 .dropdown-timeframe-container{
@@ -1831,6 +1826,8 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .dropdown-panel-container{
     width:290px;
+    display: flex;
+    flex-direction: column;
 }
 
 .dropdown-panel-title{
@@ -1846,6 +1843,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: 0px;
 }
 
+.dropdown-panel-title:hover{
+    color: var(--indigo-700);
+}
+
 .dropdown-panel-title-white{
     background-color: var(--white);
 }
@@ -1856,7 +1857,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 
 /*Style chevron icon*/
-.dropdown-panel-title::after{
+/*Styles for Regular Share Panel, Timeframe Panel*/
+.dropdown-timeframe-title::after{
+    margin-left: 60px;
+}
+
+.dropdown-panel-title::after, .dropdown-timeframe-title::after{
     width: 29px;
     height: 29px;
     display: inline-flex;
@@ -1875,11 +1881,15 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 /*Rotates chevron*/
-.dropdown-panel-icon::after{
+/*Used in ui-styles-scripts.js*/
+.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
     transition: all 0.5s ease-in-out;
 }
 
-.dropdown-panel-icon:focus::after{
+.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
     transform: rotate(-180deg);
 }
 
+.dropdown-panel-list{
+    width:290px;
+}
