@@ -1,12 +1,37 @@
 function toggleChevronRotate(elementID){
-    var dropdownChevron = document.getElementById(elementID)
-    //dropdownChevron.classList.toggle("dropdown-chevron-rotate");
-    dropdownChevron.classList.toggle("dropdown-panel-icon");
+    var dropdownTitle = document.getElementById(elementID)
+
+    if(dropdownTitle.classList.contains("dropdown-panel-icon")){
+        dropdownTitle.classList.remove("dropdown-panel-icon");
+    }
+    else{
+        dropdownTitle.classList.add("dropdown-panel-icon");
+    }
+
+}
+
+function removeChevronRotate(elementID){
+    var dropdownTitle = document.getElementById(elementID)
+
+    dropdownTitle.classList.remove("dropdown-panel-icon");
+
 }
 
 function toggleDropdownPanelBackground(elementID){
-    var dropdownChevron = document.getElementById(elementID)
-    dropdownChevron.classList.toggle("dropdown-panel-title-white");
+    var dropdownTitle = document.getElementById(elementID)
+
+    if(dropdownTitle.classList.contains("dropdown-panel-title-white")){
+        dropdownTitle.classList.remove("dropdown-panel-title-white");
+    }
+    else{
+        dropdownTitle.classList.add("dropdown-panel-title-white");
+    }
+}
+
+function removeDropdownPanelBackground(elementID){
+    var dropdownTitle = document.getElementById(elementID)
+
+    dropdownTitle.classList.remove("dropdown-panel-title-white");
 }
 
 function setPlaceholderText(element, text){
