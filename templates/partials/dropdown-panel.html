@@ -1,26 +1,7 @@
 {% set dropdown_library = {
-        "default_dropdown_list": {
-            "container_class":"dropdown-list-container",
-            "list_items":[
-                {
-                    "item_type": "link",
-                    "item_id": "catalogsCheckbox",
-                    "item_label": "Catalogs"
-                },
-                {
-                    "item_type":"link",
-                    "item_id": "collectionsCheckbox",
-                    "item_label": "Collections"
-                },
-                {
-                    "item_type":"link",
-                    "item_id": "datasetsCheckbox",
-                    "item_label": "Data Sets"
-                }
-            ],
-        },
          "regular_dropdown_source": {
-            "dropdown_icon": "<i id='dropdownSourceIcon' class='fa-solid fa-link dropdown-regular-icon'></i>"
+         "container_id": "dropdownSourceContainer",
+            "title_icon": "<i class='fa-solid fa-link dropdown-regular-icon'></i>"
         },
         "regular_dropdown_share": {
         "container_id": "dropdownShareContainer",
@@ -50,54 +31,50 @@
 %}
 
 
-
-<!--<div class="dropdown-chevron-container">
-                <i id="{#  #} chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>
-            </div>-->
-
-{% if dropdown_type == "default_dropdown_list" %}
-    <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle test-dropdown-title" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ dropdown_label_text }}
-
-        </a>
-
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            {% for item in dropdown_library[dropdown_type]["list_items"] %}
-                <li><hr class='dropdown-custom-divider'></li>
-                <li>
-                    {% with %}
-                        {% set checkbox_label = item["item_label"]|safe %}
-                        {% set checkbox_id = item["item_id"] %}
-                        {% include "partials/checkbox.html" %}
-                    {% endwith %}
-                </li>
-            {% endfor %}
-
-        </ul>
-    </div>
-
-{% endif %}
-
-{% if dropdown_type == "regular_dropdown_share" %}
+{% if dropdown_type == "regular_dropdown_share" or dropdown_type == "regular_dropdown_source"%}
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="dropdown-panel-container" tabindex="0">
         <div class="dropdown">
-            <a id="{{ dropdown_share_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
-                <div>
-                    {{ dropdown_label_text }} {{ dropdown_library[dropdown_type]["title_icon"]|safe }}
-                </div>
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+                {%  if dropdown_type == "regular_dropdown_source" %}
+                    <div id="dropdownTitleText">
+                        {{ dropdown_label_text }} {{ dropdown_library[dropdown_type]["title_icon"]|safe }}
+                    </div>
+
+                    <div id="dropdownStacTitle" class="display-none">
+                        STAC Version: <div id="dropdownStacVersion"></div>
+                    </div>
+                {% else %}
+                    <div>
+                        {{ dropdown_label_text }} {{ dropdown_library[dropdown_type]["title_icon"]|safe }}
+                    </div>
+                {% endif %}
             </a>
 
-            <ul class="dropdown-menu dropdown-panel-list" aria-labelledby="{{ dropdown_share_id }}">
+            <ul class="dropdown-menu dropdown-panel-list" aria-labelledby="{{ dropdown_button_id }}">
                 <li>
                     <div class="dropdown-panel">
                         <div class="dropdown-panel-content">
-                            {%  for icon in dropdown_library["regular_dropdown_share"]["panel_icons"] %}
-                                {% set buttonPanelID = dropdown_share_id ~ loop.index %}
-                                <a id="{{ buttonPanelID }}" class="icon-share-panel"> {{ icon["share_icon"]|safe }}  </a>
-                            {% endfor %}
+                            {% if dropdown_type == "regular_dropdown_share" %}
+                                {%  for icon in dropdown_library["regular_dropdown_share"]["panel_icons"] %}
+                                    {% set buttonPanelID = dropdown_share_id ~ loop.index %}
+                                    <a id="{{ buttonPanelID }}" class="icon-share-panel"> {{ icon["share_icon"]|safe }}  </a>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if dropdown_type == "regular_dropdown_source" %}
+                                {% with %}
+                                    {% set button_type = "button_sm_default_copy" %}
+                                    {% set button_label = "Copy" %}
+                                    {% include "partials/button.html" %}
+                                {% endwith %}
 
 
+                                {% with %}
+                                    {% set button_type = "button_sm_default_open" %}
+                                    {% set button_label = "Open" %}
+                                    {% include "partials/button.html" %}
+                                {% endwith %}
+                            {% endif %}
                         </div>
                     </div>
                 </li>
@@ -105,23 +82,37 @@
         </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var dropdownPanelShareLink = document.getElementById("{{ dropdown_share_id }}");
-            var dropdownContainerShare = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
+            var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
 
 
-            dropdownContainerShare.addEventListener('click', function (event) {
-                toggleChevronRotate("{{ dropdown_share_id }}");
-                toggleDropdownPanelBackground("{{ dropdown_share_id }}");
-
+            dropdownContainer.addEventListener('click', function (event) {
+                toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                toggleDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
             });
 
-            dropdownContainerShare.addEventListener('blur', function(){
-                removeChevronRotate("{{ dropdown_share_id }}");
-                removeDropdownPanelBackground("{{ dropdown_share_id }}");
+            dropdownContainer.addEventListener('blur', function(){
+                removeChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                removeDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
             });
-
         })
     </script>
+    {% if dropdown_type == "regular_dropdown_source" %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
+
+                populateStacVersion("dropdownStacVersion");
+
+                dropdownContainer.addEventListener('click', function (event) {
+                    toggleTitleText();
+                });
+
+                dropdownContainer.addEventListener('blur', function(){
+                    toggleTitleText();
+                });
+            })
+        </script>
+    {% endif %}
 
     </div>
 {% endif %}
@@ -235,15 +226,15 @@
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             var dropdownPanelShareLink = document.getElementById("{{ dropdown_timeframe_link_id }}");
-            var dropdownContainerShare = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
+            var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
 
 
-            dropdownContainerShare.addEventListener('click', function (event) {
+            dropdownContainer.addEventListener('click', function (event) {
                 toggleChevronRotate("{{ dropdown_timeframe_link_id }}");
                 toggleDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
             });
 
-            dropdownContainerShare.addEventListener('blur', function(){
+            dropdownContainer.addEventListener('blur', function(){
                 removeChevronRotate("{{ dropdown_timeframe_link_id }}");
                 removeDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
             });
