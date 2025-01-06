@@ -290,26 +290,28 @@
 
     {% with %}
         {% set dropdown_type = "dropdown_time_frame" %}
+        {% set dropdown_timeframe_id = "dropdownTimeframe" %}
+        {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
         {% set dropdown_label_text = "Select Time Frame" %}
-        {% include "partials/dropdown.html" %}
+        {% include "partials/dropdown-panel.html" %}
     {% endwith %}
 
         <br>
     <br>
 
-    {% with %}
-        {% set dropdown_type = "default_dropdown_list" %}
-        {% set dropdown_label_text = "Test Dropdown" %}
-        {% include "partials/dropdown2.html" %}
-    {% endwith %}
 
-            <br>
-    <br>
 
     {% with %}
         {% set dropdown_type = "regular_dropdown_share" %}
-        {% set dropdown_share_id = "dropdownShareRegular" %}
+        {% set dropdown_button_id = "dropdownShareRegular" %}
         {% set dropdown_label_text = "Share" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_source" %}
+        {% set dropdown_button_id = "dropdownSourceRegular" %}
+        {% set dropdown_label_text = "Source" %}
         {% include "partials/dropdown-panel.html" %}
     {% endwith %}
 
