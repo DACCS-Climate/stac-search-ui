@@ -1,3 +1,21 @@
+function toggleTextColour(elementID, className){
+    var dropdownTitle = document.getElementById(elementID)
+
+    if(dropdownTitle.classList.contains(className)){
+        dropdownTitle.classList.remove(className);
+    }
+    else{
+        dropdownTitle.classList.add(className);
+    }
+}
+
+function removeTextColour(elementID, className){
+    var dropdownTitle = document.getElementById(elementID)
+
+    dropdownTitle.classList.remove(className);
+
+}
+
 function toggleChevronRotate(elementID, className){
     var dropdownTitle = document.getElementById(elementID)
 
@@ -10,7 +28,7 @@ function toggleChevronRotate(elementID, className){
 
 }
 
-function removeChevronRotate(elementID){
+function removeChevronRotate(elementID, className){
     var dropdownTitle = document.getElementById(elementID)
 
     dropdownTitle.classList.remove(className);
@@ -20,15 +38,22 @@ function removeChevronRotate(elementID){
 function toggleDropdownPanelBackground(elementID){
     var dropdownTitle = document.getElementById(elementID)
 
-    if(dropdownTitle.classList.contains("dropdown-panel-title-white")){
-        dropdownTitle.classList.remove("dropdown-panel-title-white");
+    if(dropdownTitle.classList.contains("dropdown-panel-background-white")){
+        dropdownTitle.classList.remove("dropdown-panel-background-white");
     }
     else{
-        dropdownTitle.classList.add("dropdown-panel-title-white");
+        dropdownTitle.classList.add("dropdown-panel-background-white");
     }
 }
 
-function toggleTitleText(){
+function removeDropdownPanelBackground(elementID){
+    var dropdownTitle = document.getElementById(elementID)
+
+    dropdownTitle.classList.remove("dropdown-panel-background-white");
+}
+
+//Toggles text in Source dropdown to show STAC version
+function toggleDropdownPanelTitleText(){
     var titleText = document.getElementById("dropdownTitleText");
     var titleStacVersionDiv = document.getElementById("dropdownStacTitle");
 
@@ -48,21 +73,18 @@ function toggleTitleText(){
 
 }
 
+
 function populateStacVersion(elementID){
     var titleStacVersionDiv = document.getElementById(elementID);
 
-    getNodeServices().then(json => {
-        Object.entries(json.services).forEach( ([index, service]) => {
-            if(service.name == "stac"){
-                titleStacVersionDiv.innerHTML = service.version;
-            }
-         })
+    getStacVersion().then(json => {
+        titleStacVersionDiv.innerHTML = json.stac_version;
 
      });
 }
 
-async function getNodeServices(){
-    const servicesURLFragment = "/services";
+async function getStacVersion(){
+    const servicesURLFragment = "/stac";
 
     const response = await fetch(servicesURLFragment, {
         method: "GET",
@@ -74,11 +96,7 @@ async function getNodeServices(){
     return await response.json();
 }
 
-function removeDropdownPanelBackground(elementID){
-    var dropdownTitle = document.getElementById(elementID)
 
-    dropdownTitle.classList.remove("dropdown-panel-title-white");
-}
 
 function setPlaceholderText(element, text){
     element.setAttribute("placeholder", text);
