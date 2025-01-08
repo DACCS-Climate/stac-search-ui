@@ -2,8 +2,12 @@
 
 {% set dropdown_library = {
         "default_dropdown_list": {
-            "container_id":"dropdownDefaultList",
             "container_class":"dropdown-list-container",
+            "title_text_class":"dropdown-list-title",
+            "title_chevron_class":"dropdown-list-icon",
+            "list_item_text_class":"dropdown-list-item-text",
+            "dropdown_button_class":"dropdown-default-list-button",
+            "list_class":"",
             "list_items":[
                 {
                     "item_type": "link",
@@ -23,6 +27,10 @@
             ],
         },
         "regular_dropdown_list_metadata": {
+            "container_class": "dropdown-regular-list-container",
+            "title_chevron_class": "dropdown-panel-title",
+            "title_text_class":"dropdown-regular-list-label",
+            "list_class":"dropdown-regular-list",
             "checkbox_id": "touchRegularMetadata",
         },
         "regular_dropdown_list_license": {
@@ -68,45 +76,79 @@
 
 
 
-{% if dropdown_type == "default_dropdown_list" %}
+{% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata"%}
 
 
     <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}" tabindex="0">
         <div class="dropdown">
-          <button id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-checkbox-list-title" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
-            <label  id={{ label_id }} class="dropdown-default-list-label" for="touchDefaultList">
-            <h6>{{ dropdown_label_text|safe }}</h6>
-            <!--<i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>-->
-            </label>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="{{ dropdown_button_id }}">
-            {% for item in dropdown_library[dropdown_type]["list_items"] %}
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle  {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+              <h6 id="{{ dropdown_title_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
+            </a>
+            <ul class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
+                {% if dropdown_type == "default_dropdown_list" %}
+                    {% for item in dropdown_library[dropdown_type]["list_items"] %}
+                        <li><hr class='dropdown-custom-divider'></li>
+                            {% with %}
+                                {% set checkbox_label_text = item["item_label"]|safe %}
+                                {% set checkbox_id = item["item_id"] %}
+                                {% set checkbox_text_class = "dropdown-default-list-item-text" %}
+                                {% set direction_right = true %}
+                                {% include "partials/checkbox.html" %}
+                            {% endwith %}
+                    {% endfor %}
+                {% endif %}
 
-                <li><hr class='dropdown-custom-divider'></li>
-                {% with %}
-                    {% set checkbox_label = item["item_label"]|safe %}
-                    {% set checkbox_id = item["item_id"] %}
-                    {% include "partials/checkbox.html" %}
-                {% endwith %}
-            {% endfor %}
-          </ul>
+            {% if dropdown_type == "regular_dropdown_list_metadata" %}
+                {% for item in dropdown_list %}
+                    <li id="{{ [item["item_label"]|replace("-", "")|replace("_", "")|replace(" ", "")|lower, "ModalLink"]|join }}" class="dropdown-regular-list-item">
+                            <p class="dropdown-regular-list-link subtitle-1 margin-unset" href="#">
+                                {{ item["item_label"]|safe }}
+                            </p>
+                            <span class="dropdown-chevron-container">
+                                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
+                            </span>
+                    </li>
+                {% endfor %}
+            {% endif %}
+            </ul>
         </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
+    {% if dropdown_type == "default_dropdown_list" %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var dropdownContainer = document.getElementById("{{ container_id }}");
+
+                dropdownContainer.addEventListener('click', function (event) {
+                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-list-icon-rotate");
+                    toggleTextColour("{{ dropdown_title_text_id }}", "dropdown-list-title-text");
+                    toggleDropdownPanelBackground("{{ container_id }}");
+                });
+
+                dropdownContainer.addEventListener('blur', function(){
+                    removeChevronRotate("{{ dropdown_button_id }} ", "dropdown-list-icon-rotate");
+                    removeTextColour("{{ dropdown_title_text_id }}", "dropdown-list-title-text");
+                    removeDropdownPanelBackground("{{ container_id }}");
+                });
+            })
+        </script>
+    {% else %}
+         <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
 
 
-            dropdownContainer.addEventListener('click', function (event) {
-                toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                toggleDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
-            });
+                dropdownContainer.addEventListener('click', function (event) {
+                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                    toggleDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                });
 
-            dropdownContainer.addEventListener('blur', function(){
-                removeChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                removeDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
-            });
-        })
-    </script>
+                dropdownContainer.addEventListener('blur', function(){
+                    removeChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                    removeDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                });
+            })
+        </script>
+    {% endif %}
+
     </div>
 
 {% endif %}
@@ -115,13 +157,14 @@
 
 
 
-{% if dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
+{% if dropdown_type == "regular_dropdown_list_metadata_old" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
     <div  id="{{ container_id }}" class="dropdown-regular-list-container">
         <label  id="{{ label_id }}" class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
             <span class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</span>
             <span class="dropdown-chevron-container">
-                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i></label>
+                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>
             </span>
+        </label>
         <input type="checkbox" id="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
 
         <ul class="dropdown-regular-list margin-unset">
