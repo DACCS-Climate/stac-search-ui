@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", function (){
     var dropdownDefaultList = document.getElementById("dropdownListDefaultLabel");
     dropdownDefaultList.addEventListener("click", function() {
         toggleDropdownStyles("dropdownListDefaultContainer", "dropdown-transition-styles");
-        toggleDropdownStyles("dropdownListDefaultLabel", "dropdown-default-list-label-toggle");
-        toggleDropdownStyles("dropdownListDefaultChevron", "dropdown-chevron-rotate");
+        //toggleDropdownStyles("dropdownListDefaultLabel", "dropdown-default-list-label-toggle");
+        //toggleDropdownStyles("dropdownListDefaultChevron", "dropdown-chevron-rotate");
     });
 
     var dropdownRegularListMetadata = document.getElementById("dropdownListRegularMetadataLabel");
@@ -69,16 +69,10 @@ document.addEventListener("DOMContentLoaded", function (){
         toggleDropdownStyles("dropdownListRegularLicenseChevron", "dropdown-chevron-rotate");
     });
 
-    var dropdownRegularSource = document.getElementById("dropdownRegularSourceLabel");
-    dropdownRegularSource.addEventListener("click", function() {
-        toggleDropdownStyles("dropdownRegularSourceContainer", "dropdown-regular-container-transition");
-        toggleDropdownStyles("dropdownRegularSourceChevron", "dropdown-chevron-rotate");
-        toggleDropdownTitleText("dropdownRegularSourceTitle", "STAC Version: 1.0.0");
-    });
-
+/*
     var dropdownRegularShare = document.getElementById("dropdownRegularShareLabel");
     dropdownRegularShare.addEventListener("click", function() {
         toggleDropdownStyles("dropdownRegularShareContainer", "dropdown-regular-container-transition");
         toggleDropdownStyles("dropdownRegularShareChevron", "dropdown-chevron-rotate");
-    });
+    });*/
 })
