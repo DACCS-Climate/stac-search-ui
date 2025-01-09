@@ -28,26 +28,30 @@
         },
         "regular_dropdown_list_metadata": {
             "container_class": "dropdown-regular-list-container",
-            "title_chevron_class": "dropdown-panel-title",
-            "title_text_class":"dropdown-regular-list-label",
+            "title_chevron_class": "dropdown-regular-list-chevron-icon",
+            "title_text_class":"",
+            "dropdown_button_class":"dropdown-regular-list-button",
             "list_class":"dropdown-regular-list",
-            "checkbox_id": "touchRegularMetadata",
+            "list_item_text_class":"",
+            "list_item_icon_class":"dropdown-regular-list-item-icon"
         },
         "regular_dropdown_list_license": {
-            "checkbox_id": "touchRegularLicense",
-            "list_items": [
-                {
-                    "item_label": "CC-BY-4.0"
-                }
-            ]
+        "container_class": "dropdown-regular-list-container",
+        "dropdown_button_class":"dropdown-regular-list-button",
+        "title_text_class":"",
+        "title_chevron_class": "dropdown-regular-list-chevron-icon",
+        "list_class":"dropdown-regular-list",
+        "list_item_text_class":"",
+        "list_item_icon_class":"",
         },
         "regular_dropdown_list_frequency": {
-            "checkbox_id": "touchRegularFrequency",
-            "list_items": [
-                {
-                    "item_label": "Monthly"
-                }
-            ]
+        "container_class": "dropdown-regular-list-container",
+        "dropdown_button_class":"dropdown-regular-list-button",
+        "title_text_class":"",
+        "title_chevron_class": "dropdown-regular-list-chevron-icon",
+        "list_class":"dropdown-regular-list",
+        "list_item_text_class":"",
+        "list_item_icon_class":""
         },
 
         "small_dropdown_list": {
@@ -76,15 +80,15 @@
 
 
 
-{% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata"%}
+{% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
 
 
     <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}" tabindex="0">
         <div class="dropdown">
-            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle  {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
               <h6 id="{{ dropdown_title_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
             </a>
-            <ul class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
+            <ul class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
                 {% if dropdown_type == "default_dropdown_list" %}
                     {% for item in dropdown_library[dropdown_type]["list_items"] %}
                         <li><hr class='dropdown-custom-divider'></li>
@@ -101,15 +105,25 @@
             {% if dropdown_type == "regular_dropdown_list_metadata" %}
                 {% for item in dropdown_list %}
                     <li id="{{ [item["item_label"]|replace("-", "")|replace("_", "")|replace(" ", "")|lower, "ModalLink"]|join }}" class="dropdown-regular-list-item">
-                            <p class="dropdown-regular-list-link subtitle-1 margin-unset" href="#">
+                            <p class="dropdown-regular-list-link subtitle-1 dropdown-regular-list-item-content margin-unset {{ dropdown_library[dropdown_type]["list_item_icon_class"] }}" href="#">
                                 {{ item["item_label"]|safe }}
                             </p>
-                            <span class="dropdown-chevron-container">
-                                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
-                            </span>
                     </li>
                 {% endfor %}
             {% endif %}
+
+            {%  if dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
+                {% for item in dropdown_list %}
+                    <li class="dropdown-regular-list-item">
+                        <a class="dropdown-regular-list-link subtitle-1" href="#">
+                            {{ item["item_label"]|safe }}
+                        </a>
+
+                    </li>
+                {% endfor %}
+            {% endif %}
+
+
             </ul>
         </div>
     {% if dropdown_type == "default_dropdown_list" %}
@@ -133,17 +147,16 @@
     {% else %}
          <script>
             document.addEventListener("DOMContentLoaded", function () {
-                var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
-
+                var dropdownContainer = document.getElementById("{{ container_id }}");
 
                 dropdownContainer.addEventListener('click', function (event) {
-                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                    toggleDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
+                    toggleDropdownPanelBackground("{{ dropdown_button_id }}", "");
                 });
 
                 dropdownContainer.addEventListener('blur', function(){
-                    removeChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                    removeDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
+                    removeChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
+                    removeDropdownPanelBackground("{{ dropdown_button_id }}", "");
                 });
             })
         </script>
@@ -151,54 +164,6 @@
 
     </div>
 
-{% endif %}
-
-
-
-
-
-{% if dropdown_type == "regular_dropdown_list_metadata_old" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
-    <div  id="{{ container_id }}" class="dropdown-regular-list-container">
-        <label  id="{{ label_id }}" class="dropdown-regular-list-label" for="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
-            <span class="margin-unset subtitle-1">{{ dropdown_label_text|safe }}</span>
-            <span class="dropdown-chevron-container">
-                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down dropdown-chevron"></i>
-            </span>
-        </label>
-        <input type="checkbox" id="{{ dropdown_library[dropdown_type]["checkbox_id"] }}">
-
-        <ul class="dropdown-regular-list margin-unset">
-            {%  if dropdown_type == "regular_dropdown_list_metadata" %}
-                {% for item in dropdown_list %}
-                    <li id="{{ [item["item_label"]|replace("-", "")|replace("_", "")|replace(" ", "")|lower, "ModalLink"]|join }}" class="dropdown-regular-list-item">
-                            <p class="dropdown-regular-list-link subtitle-1 margin-unset" href="#">
-                                {{ item["item_label"]|safe }}
-                            </p>
-                            <span class="dropdown-chevron-container">
-                                <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
-                            </span>
-                    </li>
-                {% endfor %}
-        {% endif %}
-
-        {%  if dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
-            {% for item in dropdown_library[dropdown_type]["list_items"] %}
-                <li class="dropdown-regular-list-item">
-                    <a class="dropdown-regular-list-link subtitle-1" href="#">
-                        {{ item["item_label"]|safe }}
-                    </a>
-                    {% if dropdown_type != "regular_dropdown_list_frequency" %}
-                        <span class="dropdown-chevron-container">
-                            <i id="{{ chevron_id }}" class="fa-solid fa-chevron-right dropdown-chevron"></i>
-                        </span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        {% endif %}
-
-
-        </ul>
-    </div>
 {% endif %}
 
 
