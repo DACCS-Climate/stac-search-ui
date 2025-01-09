@@ -811,18 +811,6 @@ h6{
     color: var(--text-on-surface);
 }
 
-.dropdown-chevron{
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--text-on-dark);
-    transform: rotate(0deg);
-    transition: all 0.4s ease-in-out;
-}
-
-.dropdown-chevron-rotate{
-    transform: rotate(-180deg);
-}
-
 .dropdown-chevron-dark{
     color: var(--primary);
 }
@@ -839,7 +827,6 @@ h6{
     padding-right: 24px;
     padding-bottom: 16px;
 }
-
 
 /*Default dropdown list*/
 .dropdown-default-list{
@@ -870,19 +857,6 @@ h6{
     margin-bottom: 7px;
 }
 
-/*Checkbox style for default dropdown*/
-/*
-#touchDefaultList{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchDefaultList:checked + .dropdown-default-list{
-    height: auto;
-}*/
-
-
 /*Dropdown regular list*/
 .dropdown-regular-list-container{
     width: 290px;
@@ -892,15 +866,21 @@ h6{
     justify-content: center;
 }
 
-.dropdown-regular-list-label{
+.dropdown-regular-list-button{
     height: 70px;
-    display:flex;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     color: var(--indigo-700);
     padding-left: 32px;
     padding-right: 32px;
     cursor: pointer;
+}
+
+/*Overrides override of Bootstrap .btn class*/
+.dropdown-regular-list-button:hover{
+    color: var(--indigo-700);
 }
 
 .dropdown-regular-list-link{
@@ -908,37 +888,77 @@ h6{
     color: var(--indigo-700);
 }
 
-#touchRegularList{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegularList:checked + .dropdown-regular-list{
-    height: auto;
-}
-
 .dropdown-regular-list{
     background-color: var(--white);
     clear:both;
     width:100%;
-    /*height:0px;*/
     overflow: hidden;
     text-align: start;
     list-style-type:none;
     transition: height .4s ease;
     padding-left: 0px;
+    border-radius: 0px;
+}
+
+.dropdown-regular-list-chevron-icon::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+/*Rotates chevron*/
+/*Used in ui-styles-scripts.js*/
+.dropdown-regular-list-chevron-rotate::after{
+    transition: all 0.5s ease-in-out;
+}
+
+.dropdown-regular-list-chevron-rotate::after{
+    transform: rotate(-180deg);
 }
 
 .dropdown-regular-list-item{
     width: 100%;
     height: 70px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding-left: 32px;
     padding-right: 32px;
     cursor: pointer;
+}
+
+.dropdown-regular-list-item-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+/*Right chevron for list items*/
+.dropdown-regular-list-item-icon::after{
+    font-family: Bootstrap-icons;
+    content: "\F285";
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
 }
 
 .dropdown-regular-list-item:hover{
@@ -1073,40 +1093,7 @@ h6{
 /*End Dropdown Regular Share*/
 
 
-/*Dropdown Regular Metadata */
-#touchRegularMetadata{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
 
-#touchRegularMetadata:checked + .dropdown-regular-list{
-    height: auto;
-}
-
-
-/*Dropdown Regular License */
-#touchRegularLicense{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegularLicense:checked + .dropdown-regular-list{
-    height: auto;
-}
-
-
-/*Dropdown Regular Frequency*/
-#touchRegularFrequency{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegularFrequency:checked + .dropdown-regular-list{
-    height: auto;
-}
 
 /*Dropdown transitions for all dropdowns styles when dropdown is clicked*/
 .dropdown-transition-styles{
@@ -1908,6 +1895,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     right: 26px;
     border: solid;
     border-width: 1px;
