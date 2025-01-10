@@ -38,22 +38,17 @@
 
     {% if display_type == "display_card" %}
         <div class="result-format result-text subtitle-1">
-        {% with %}
-            {% set tag_input_custom ={
-            "container_class": "tag-info-card-container",
-            "class": "tag-info-card",
-            "tag_array": ["XML", "HTML", "NetCDF"]
-            }%}
-            {% include "partials/tag.html" %}
-        {% endwith %}
+            {% with %}
+                {% set tag_input_custom ={
+                "container_class": "tag-info-card-container",
+                "row_container_class": "tag-info-panel-row-container",
+                "class": "tag-info-card",
+                "tag_array": ["XML", "HTML", "NetCDF"]
+                }%}
+                {% include "partials/tag.html" %}
+            {% endwith %}
 
-    </div>
-    {% else %}
-        <div class="result-format-row result-text subtitle-1">
-        <div>XML</div>
-        <div>HTML</div>
-        <div>NetCDF</div>
-    </div>
+        </div>
     {% endif %}
 
 </div>
