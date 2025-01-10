@@ -1112,8 +1112,10 @@ h6{
 .dropdown-toggle::after{
     font-family: Bootstrap-icons;
     content: "\F282";
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: 10px;
-    vertical-align: 0px;
     border-top: none;
     border-right: none;
     border-bottom: none;
@@ -1195,6 +1197,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .dropdown-default-list-button{
+    height: 56px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -1256,6 +1259,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .dropdown-small-title, .dropdown-medium-title{
     display: flex;
     justify-content: center;
+}
+
+.dropdown-small-title::after, .dropdown-medium-title::after{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dropdown-small-list, .dropdown-medium-list{
@@ -1504,35 +1513,62 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 
 /*Tags*/
+.tag-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--gray-400);
+}
+
+.tag-info-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--gray-400);
+}
+
+.tag-info-panel-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--background-transparent);
+}
+
 .tag-container{
-    width: 1050px;
     display: flex;
     flex-direction: row;
     background-color: var(--gray-400);
-    padding: 10px;
 }
 
 .tag-container:hover{
     background-color: var(--gray-500);
 }
 
-.tag-container .tag:not(:first-child){
-    margin-left: 26px;
-}
-
-.tag-container .tag:not(:last-child){
-    margin-right: 26px;
-}
-
 .tag{
     display: flex;
     height: 26px;
     padding: 3px 16px;
+    margin-top: 10px;
+    margin-left: 26px;
+    margin-right: 26px;
+    margin-bottom: 10px;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     background-color: var(--indigo-800);
     color: var(--text-on-dark);
+    cursor:pointer;
+}
+
+.tag > a{
+    color: var(--text-on-dark);
+    text-decoration: none;
 }
 
 .tag-divider{
@@ -1541,10 +1577,14 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .tag-info-card{
     border-radius: 4px;
-    color: var(--text-on-dark);
-    background-color: var(--gray-800);
+    background-color: var(--gray-600);
     text-align: center;
     padding: 3px 5px;
+}
+
+.tag-info-card a{
+    color: var(--text-on-dark);
+    text-decoration: none;
 }
 
 .tag-info-card-container{
@@ -1553,8 +1593,8 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     background-color: var(--background-transparent);
 }
 
-.tag-info-card-container div:not(:last-child){
-    margin-right: 6px;
+.tag-info-panel-row-container div:not(:last-child){
+    margin-right: 4px;
 }
 /*End Tags*/
 
