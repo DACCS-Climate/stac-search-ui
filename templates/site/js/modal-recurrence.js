@@ -1,20 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    setModal("modalRecurrence", ["openRecurrenceModalButton"], ["closePasswordResetModal"]);
+    setModal("modalRecurrence", ["openRecurrenceModalButton"], ["closeRecurrenceCloseModal"]);
 
     setRecurrenceListItems("dropdownSmallRecurrenceLabel", "recurrenceModalDayList");
 })
-
-//For Spin button
-var spinButtonUp = document.getElementById("spinButtonUpRecurrence");
-spinButtonUp.addEventListener("click", function(){
-    increment("inputNumberRecurrence");
-});
-
-var spinButtonDown = document.getElementById("spinButtonDownRecurrence");
-spinButtonDown.addEventListener("click", function(){
-    decrement("inputNumberRecurrence");
-});
-
 
 //For Recurrence dropdown
 
