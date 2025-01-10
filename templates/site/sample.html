@@ -6,8 +6,9 @@
     {% with %}
         {% set dropdown_type = "default_dropdown_list" %}
         {% set container_id = "dropdownListDefaultContainer" %}
+        {% set dropdown_button_id = "dropdownListDefaultButton" %}
+        {% set dropdown_title_text_id = "dropdownListTitleText" %}
         {% set label_id = "dropdownListDefaultLabel" %}
-        {% set chevron_id = "dropdownListDefaultChevron" %}
         {% set dropdown_label_text = "All Catalogs" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
@@ -15,40 +16,11 @@
        <br>
     <br>
 
-    {% with %}
-        {% set dropdown_type = "regular_dropdown_source" %}
-        {% set container_id = "dropdownRegularSourceContainer" %}
-        {% set title_id = "dropdownRegularSourceTitle" %}
-        {% set label_id = "dropdownRegularSourceLabel" %}
-        {% set chevron_id = "dropdownRegularSourceChevron" %}
-        {% set checkbox_id = "touchRegularSource" %}
-        {% set dropdown_label_text = "Source" %}
-        {% include "partials/dropdown.html" %}
-    {% endwith %}
-
-
-       <br>
-    <br>
-
-
-    {% with %}
-        {% set dropdown_type = "regular_dropdown_share" %}
-        {% set container_id = "dropdownRegularShareContainer" %}
-        {% set label_id = "dropdownRegularShareLabel" %}
-        {% set chevron_id = "dropdownRegularShareChevron" %}
-        {% set checkbox_id = "touchRegularShare" %}
-        {% set dropdown_label_text = "Share" %}
-        {% include "partials/dropdown.html" %}
-    {% endwith %}
-
-
-    <br>
-    <br>
-
 
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_metadata" %}
         {% set container_id = "dropdownListRegularMetadataContainer" %}
+        {% set dropdown_button_id = "dropdownListMetadataButton" %}
         {% set label_id = "dropdownListRegularMetadataLabel" %}
         {% set list_items =
             [
@@ -60,7 +32,6 @@
                 }
             ]
         %}
-        {% set chevron_id = "dropdownListRegularMetadataChevron" %}
         {% set dropdown_label_text = "Metadata" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
@@ -71,8 +42,15 @@
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_license" %}
         {% set container_id = "dropdownListRegularLicenseContainer" %}
+        {% set dropdown_button_id = "dropdownListLicenseButton" %}
         {% set label_id = "dropdownListRegularLicenseLabel" %}
-        {% set chevron_id = "dropdownListRegularLicenseChevron" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "CC-BY-4.0"
+                }
+            ]
+        %}
         {% set dropdown_label_text = "License" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
@@ -83,8 +61,15 @@
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_frequency" %}
         {% set container_id = "dropdownListRegularFrequencyContainer" %}
+        {% set dropdown_button_id = "dropdownListFrequencyButton" %}
         {% set label_id = "dropdownListRegularFrequencyLabel" %}
-        {% set chevron_id = "dropdownListRegularFrequencyChevron" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "Monthly"
+                }
+            ]
+        %}
         {% set dropdown_label_text = "Frequency" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
@@ -95,9 +80,7 @@
     {% with %}
         {% set dropdown_type = "medium_dropdown_list" %}
         {% set container_id = "dropdownMediumContainer" %}
-        {% set label_id = "dropdownMediumLabel" %}
-        {% set chevron_id = "dropdownMediumChevron" %}
-        {% set checkbox_id = "touchMediumList" %}
+        {% set dropdown_button_id = "dropdownMediumLabel" %}
         {% set dropdown_label_text = "Does Not Repeat" %}
         {% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade", "Custom"] %}
         {% include "partials/dropdown.html" %}
@@ -109,9 +92,7 @@
     {% with %}
         {% set dropdown_type = "small_dropdown_list" %}
         {% set container_id = "dropdownSmallContainer" %}
-        {% set label_id = "dropdownSmallLabel" %}
-        {% set chevron_id = "dropdownSmallChevron" %}
-        {% set checkbox_id = "touchSmallList" %}
+        {% set dropdown_button_id = "dropdownSmallLabel" %}
         {% set first_item  = "Day"%}
         {% set list_items = ["Week", "Month", "Year", "Decade"] %}
         {% set dropdown_label_text = "Day" %}
@@ -145,7 +126,7 @@
         {% set spin_button_up_id = "spinButtonUp" %}
         {% set spin_button_down_id = "spinButtonDown" %}
         {% set target_id = "inputNumberSmall" %}
-        {% include "partials/button.html" %}
+        {% include "partials/button-spin.html" %}
     {% endwith %}
 
     <br>
@@ -217,7 +198,7 @@
         {% set radio_button_id = "radioButtonSmall" %}
         {% set radio_button_label = "" %}
         {% set radio_button_orientation_class = "" %}
-        {% include "partials/radio.html" %}
+        {% include "partials/button-radio.html" %}
     {% endwith %}
 
     <br>
