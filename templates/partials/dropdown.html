@@ -179,18 +179,44 @@
     <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div id="{{ dropdown_id }}" class="dropdown caption {{ dropdown_library[dropdown_type]["menu_class"] }}">
 
-            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle padding-unset caption {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle padding-unset caption {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 {{ dropdown_label_text }}
             </a>
 
             <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
                 {% for item in list_items %}
                     {% set list_item_id = dropdown_id ~ loop.index %}
-                    <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
+                    <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" role="button">{{ item }}</a></li>
+                    {% if dropdown_type == "small_dropdown_list" %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var listItem = document.getElementById("{{ list_item_id }}");
+
+                                listItem.addEventListener('click', function() {
+                                    swapListItems("{{ label_id }}", "{{ list_item_id }}");
+                                })
+                            });
+                        </script>
+                    {% endif %}
+
+                    {% if dropdown_type == "medium_dropdown_list" %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var listItem = document.getElementById("{{ list_item_id }}");
+
+                                listItem.addEventListener('click', function() {
+                                    replaceListItem("{{ dropdown_label_text }}", "{{ label_id }}", "{{ list_item_id }}");
+                                })
+                            });
+                        </script>
+                    {% endif %}
+
                 {% endfor %}
             </ul>
         </div>
     </div>
+    <script src="js/dropdown-list.js"></script>
+    <script src="js/ui-function-scripts.js"></script>
 {% endif %}
 
 
