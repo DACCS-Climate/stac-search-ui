@@ -1,6 +1,12 @@
 {% set recurrence_title = "Custom recurrence" %}
 <dialog id="modalRecurrence" class="recurrence-dialog">
     <div class="recurrence-container">
+        <div class="popup-button-close">
+            {% with button_type = "close_button_x"%}
+                {% set button_id = "closeRecurrenceCloseModal" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+        </div>
         <div class="recurrence-title button">{{ recurrence_title }}</div>
         <div class="recurrence-interval-container">
             <p class="recurrence-interval-text">Repeat Every</p>
@@ -17,7 +23,7 @@
                 {% set spin_button_up_id = "spinButtonUpRecurrence" %}
                 {% set spin_button_down_id = "spinButtonDownRecurrence" %}
                 {% set target_id = "inputNumberRecurrence" %}
-                {% include "partials/button.html" %}
+                {% include "partials/button-spin.html" %}
             {% endwith %}
 
             {% with %}
@@ -51,4 +57,4 @@
     </div>
 </dialog>
 
-        <script src="js/modal-recurrence.js"></script>
+<script src="js/modal-recurrence.js"></script>
