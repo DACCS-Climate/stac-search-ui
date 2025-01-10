@@ -190,7 +190,7 @@
                                 {% set radio_button_label_text = "Never" %}
                                 {% set radio_label_right = true %}
                                 {% set radio_button_orientation_class = "radio-button-container-row" %}
-                                {% include "partials/button.html" %}
+                                {% include "partials/button-radio.html" %}
                             {% endwith %}
                         </div>
                         <div class="div-timerange-ends-on">
@@ -200,7 +200,7 @@
                                 {% set radio_button_label_text = "Ends On" %}
                                 {% set radio_label_right = true %}
                                 {% set radio_button_orientation_class = "radio-button-container-row" %}
-                                {% include "partials/button.html" %}
+                                {% include "partials/button-radio.html" %}
                             {% endwith %}
 
                             {% with %}
@@ -230,12 +230,12 @@
 
 
             dropdownContainer.addEventListener('click', function (event) {
-                toggleChevronRotate("{{ dropdown_timeframe_link_id }}");
+                toggleChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
                 toggleDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
             });
 
             dropdownContainer.addEventListener('blur', function(){
-                removeChevronRotate("{{ dropdown_timeframe_link_id }}");
+                removeChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
                 removeDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
             });
 
