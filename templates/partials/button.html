@@ -43,22 +43,15 @@
         "close_button_x": {
             "class":"button-close-x" ,
             "content": '<i class="fa-solid fa-xmark"></i>'
-        },
-        "spin_button_sm": {
-            "class": "spin-button-small"
-        },
-        "radio_button_sm": {
-            "class": "radio-button-small"
         }
     }
 %}
 
 {% set button = button_library[button_type] %}
 
-{% if button_type != "dropdown" and button_type != "spin_button_sm" and button_type != "radio_button_sm"%}
-    <a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
-{% endif %}
-{% if button_type != "spin_button_sm" and button_type != "radio_button_sm" %}
+
+<a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
+
     <button id="{{ button_id|default(button['id']) }}" 
             class="{{ button['class'] }} {{ extra_button_class }} {{ disabled }}" 
             type="button"
@@ -77,31 +70,5 @@
             {{ button['content']|safe }}
         {% endif %}
     </button>
-{% endif %}
-{% if button_type != "dropdown" and button_type != "spin_button_sm" and button_type != "radio_button_sm" %}
-    </a>
-{% endif %}
 
-{% if button_type == "spin_button_sm" %}
-    <div class="spin-button-small">
-        <div id="{{ spin_button_up_id }}" class="spin-button-sm-up">
-            <i class="fa-solid fa-play spin-button-sm-up-icon"></i>
-        </div>
-        <div id="{{ spin_button_down_id }}" class="spin-button-sm-dn">
-            <i class="fa-solid fa-play spin-button-sm-dn-icon"></i>
-        </div>
-
-    </div>
-{% endif %}
-
-{% if button_type == "radio_button_sm" %}
-    <div class="{{ radio_button_orientation_class }}">
-        {% if radio_label_left %}
-            <label for="{{ radio_button_id }}" class="margin-radio-left">{{ radio_button_label_text }}</label>
-        {% endif %}
-        <input id="" type="radio" class="{{ button_library[button_type]["class"] }}"/>
-        {% if radio_label_right %}
-            <label for="{{ radio_button_id }}" class="margin-radio-right">{{ radio_button_label_text }}</label>
-        {% endif %}
-    </div>
-{% endif %}
+</a>
