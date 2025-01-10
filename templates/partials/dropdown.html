@@ -45,31 +45,31 @@
         "list_item_icon_class":"",
         },
         "regular_dropdown_list_frequency": {
-        "container_class": "dropdown-regular-list-container",
-        "dropdown_button_class":"dropdown-regular-list-button",
-        "title_text_class":"",
-        "title_chevron_class": "dropdown-regular-list-chevron-icon",
-        "list_class":"dropdown-regular-list",
-        "list_item_text_class":"",
-        "list_item_icon_class":""
+            "container_class": "dropdown-regular-list-container",
+            "dropdown_button_class":"dropdown-regular-list-button",
+            "title_text_class":"",
+            "title_chevron_class": "dropdown-regular-list-chevron-icon",
+            "list_class":"dropdown-regular-list",
+            "list_item_text_class":"",
+            "list_item_icon_class":""
         },
 
         "small_dropdown_list": {
             "menu_class": "dropdown-small-menu",
-            "menu_title_class": "dropdown-small-title",
+            "dropdown_button_class": "dropdown-small-title",
             "container_class":"dropdown-container dropdown-small-container",
             "label_container_class": "dropdown-small-label-container",
-            "label_class": "dropdown-small-list-label",
+            "title_text_class": "caption",
             "chevron_class": "dropdown-small-chevron",
             "list_class": "dropdown-small-list",
             "list_item_class": "dropdown-small-item"
         },
         "medium_dropdown_list": {
             "menu_class": "dropdown-medium-menu",
-            "menu_title_class": "dropdown-medium-title",
+            "dropdown_button_class": "dropdown-medium-title",
             "container_class":"dropdown-container dropdown-medium-container",
             "label_container_class": "dropdown-medium-label-container",
-            "label_class": "dropdown-medium-list-label",
+            "title_text_class": "caption",
             "chevron_class": "dropdown-medium-chevron",
             "list_class": "dropdown-medium-list",
             "list_item_class": "dropdown-medium-item"
@@ -80,14 +80,15 @@
 
 
 
-{% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency"%}
+{% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
 
+    <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
 
-    <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}" tabindex="0">
         <div class="dropdown">
             <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
-              <h6 id="{{ dropdown_title_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
+                <h6 id="{{ dropdown_title_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
             </a>
+
             <ul class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
                 {% if dropdown_type == "default_dropdown_list" %}
                     {% for item in dropdown_library[dropdown_type]["list_items"] %}
@@ -118,8 +119,14 @@
                         <a class="dropdown-regular-list-link subtitle-1" href="#">
                             {{ item["item_label"]|safe }}
                         </a>
-
                     </li>
+                {% endfor %}
+            {% endif %}
+
+            {% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
+                {% for item in list_items %}
+                    {% set list_item_id = dropdown_id ~ loop.index %}
+                    <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
                 {% endfor %}
             {% endif %}
 
@@ -167,33 +174,12 @@
 {% endif %}
 
 
-{% if dropdown_type == "large_dropdown_list" %}
-    <div  id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <div class="{{ dropdown_library[dropdown_type]["label_container_class"] }}">
-            <label  id="{{ label_id }}" class="{{ dropdown_library[dropdown_type]["label_class"] }}" for="{{ checkbox_id }}">
-                <span class="caption">{{ dropdown_label_text|safe }}</span>
-
-                    <i id="{{ chevron_id }}" class="fa-solid fa-chevron-down {{ dropdown_library[dropdown_type]["chevron_class"] }}"></i>
-
-            </label>
-        </div>
-
-        <input type="checkbox" id="{{ checkbox_id }}">
-
-        <ul class="{{ dropdown_library[dropdown_type]["list_class"] }}">
-            {% for item in list_items %}
-                <li><div class="dropdown-medium-item caption">{{ item }}</div></li>
-
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
-
 
 {% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
     <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
-        <div id="{{ dropdown_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
-            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle caption {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div id="{{ dropdown_id }}" class="dropdown caption {{ dropdown_library[dropdown_type]["menu_class"] }}">
+
+            <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle padding-unset caption {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
                 {{ dropdown_label_text }}
             </a>
 
