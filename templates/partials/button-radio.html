@@ -1,11 +1,13 @@
 {% if button_type == "radio_button_sm" %}
     <div class="{{ radio_button_orientation_class }}">
-        {% if radio_label_left %}
-            <label for="{{ radio_button_id }}" class="margin-radio-left">{{ radio_button_label_text }}</label>
-        {% endif %}
-        <input id="{{ radio_button_id }}" type="radio" class="radio-button-small"/>
-        {% if radio_label_right %}
-            <label for="{{ radio_button_id }}" class="margin-radio-right">{{ radio_button_label_text }}</label>
-        {% endif %}
+        <div class="radio-button-content-alignment">
+            {% if radio_label_left %}
+                <label for="{{ radio_button_id }}" class="margin-radio-left">{{ radio_button_label_text }}</label>
+            {% endif %}
+            <input id="{{ radio_button_id }}" type="radio" name="{{ radio_group_name }}" class="radio-button-small"/>
+            {% if radio_label_right %}
+                <label for="{{ radio_button_id }}" class="margin-radio-right">{{ radio_button_label_text }}</label>
+            {% endif %}
+        </div>
     </div>
 {% endif %}
