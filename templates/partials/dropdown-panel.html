@@ -119,6 +119,18 @@
 
 {% if dropdown_type ==  "dropdown_time_frame" %}
 
+    {% set radioButtonNeverDetails = {
+        "radio_id": "radioButtonNever",
+        "group_name": "endOnDateGroup",
+        "label_text": "Never"
+    } %}
+
+    {% set radioButtonEndsOnDetails = {
+        "radio_id": "radioButtonEndsOn",
+        "group_name": "endOnDateGroup",
+        "label_text": "Ends On"
+    } %}
+
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div id="{{ dropdown_timeframe_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
 
@@ -186,8 +198,9 @@
                         <div>
                            {% with %}
                                 {% set button_type = "radio_button_sm" %}
-                                {% set radio_button_id = "radioButtonNever" %}
-                                {% set radio_button_label_text = "Never" %}
+                                {% set radio_button_id = radioButtonNeverDetails["radio_id"] %}
+                                {% set radio_group_name = radioButtonNeverDetails["group_name"] %}
+                                {% set radio_button_label_text = radioButtonNeverDetails["label_text"] %}
                                 {% set radio_label_right = true %}
                                 {% set radio_button_orientation_class = "radio-button-container-row" %}
                                 {% include "partials/button-radio.html" %}
@@ -196,8 +209,9 @@
                         <div class="div-timerange-ends-on">
                             {% with %}
                                 {% set button_type = "radio_button_sm" %}
-                                {% set radio_button_id = "radioButtonEndsOn" %}
-                                {% set radio_button_label_text = "Ends On" %}
+                                {% set radio_button_id = radioButtonEndsOnDetails["radio_id"] %}
+                                {% set radio_group_name = radioButtonEndsOnDetails["group_name"] %}
+                                {% set radio_button_label_text = radioButtonEndsOnDetails["label_text"] %}
                                 {% set radio_label_right = true %}
                                 {% set radio_button_orientation_class = "radio-button-container-row" %}
                                 {% include "partials/button-radio.html" %}
@@ -223,11 +237,15 @@
                 </li>
             </ul>
         </div>
+    <script src="js/dropdown-timeframe-scripts.js"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             var dropdownPanelShareLink = document.getElementById("{{ dropdown_timeframe_link_id }}");
             var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
+            var radioNever = document.getElementById('{{ radioButtonNeverDetails["radio_id"] }}');
+            var radioEndsOn = document.getElementById('{{ radioButtonEndsOnDetails["radio_id"] }}');
 
+            defaultRadioState('{{ radioButtonNeverDetails["radio_id"] }}', '{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}');
 
             dropdownContainer.addEventListener('click', function (event) {
                 toggleChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
@@ -237,6 +255,14 @@
             dropdownContainer.addEventListener('blur', function(){
                 removeChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
                 removeDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
+            });
+
+            radioEndsOn.addEventListener('change', function (){
+               enableEndsOnDateInput('{{ radioButtonEndsOnDetails["radio_id"] }}', '{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}');
+            });
+
+            radioNever.addEventListener('change', function (){
+               disableEndsOnDateInput('{{ radioButtonNeverDetails["radio_id"] }}', '{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}');
             });
 
         })
