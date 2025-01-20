@@ -11,18 +11,13 @@
             "list_items":[
                 {
                     "item_type": "link",
-                    "item_id": "catalogsCheckbox",
-                    "item_label": "Catalogs"
+                    "item_id": "nexgddpCheckbox",
+                    "item_label": "NEX-GDDP"
                 },
                 {
                     "item_type":"link",
-                    "item_id": "collectionsCheckbox",
-                    "item_label": "Collections"
-                },
-                {
-                    "item_type":"link",
-                    "item_id": "datasetsCheckbox",
-                    "item_label": "Data Sets"
+                    "item_id": "cmip6Checkbox",
+                    "item_label": "CMIP6s"
                 }
             ],
         },
@@ -36,13 +31,13 @@
             "list_item_icon_class":"dropdown-regular-list-item-icon"
         },
         "regular_dropdown_list_license": {
-        "container_class": "dropdown-regular-list-container",
-        "dropdown_button_class":"dropdown-regular-list-button",
-        "title_text_class":"",
-        "title_chevron_class": "dropdown-regular-list-chevron-icon",
-        "list_class":"dropdown-regular-list",
-        "list_item_text_class":"",
-        "list_item_icon_class":"",
+            "container_class": "dropdown-regular-list-container",
+            "dropdown_button_class":"dropdown-regular-list-button",
+            "title_text_class":"",
+            "title_chevron_class": "dropdown-regular-list-chevron-icon",
+            "list_class":"dropdown-regular-list",
+            "list_item_text_class":"",
+            "list_item_icon_class":""
         },
         "regular_dropdown_list_frequency": {
             "container_class": "dropdown-regular-list-container",
@@ -84,15 +79,16 @@
 
     <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
 
-        <div class="dropdown">
-            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
-                <h6 id="{{ dropdown_title_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
+        <div id="{{ dropdown_id }}" class="dropdown">
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }} " role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
             </a>
 
             <ul class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
                 {% if dropdown_type == "default_dropdown_list" %}
                     {% for item in dropdown_library[dropdown_type]["list_items"] %}
                         <li><hr class='dropdown-custom-divider'></li>
+                        <li class="default-dropdown-list-item">
                             {% with %}
                                 {% set checkbox_label_text = item["item_label"]|safe %}
                                 {% set checkbox_id = item["item_id"] %}
@@ -100,73 +96,63 @@
                                 {% set direction_right = true %}
                                 {% include "partials/checkbox.html" %}
                             {% endwith %}
+                        </li>
                     {% endfor %}
                 {% endif %}
 
             {% if dropdown_type == "regular_dropdown_list_metadata" %}
                 {% for item in dropdown_list %}
                     <li id="{{ [item["item_label"]|replace("-", "")|replace("_", "")|replace(" ", "")|lower, "ModalLink"]|join }}" class="dropdown-regular-list-item">
-                            <p class="dropdown-regular-list-link subtitle-1 dropdown-regular-list-item-content margin-unset {{ dropdown_library[dropdown_type]["list_item_icon_class"] }}" href="#">
-                                {{ item["item_label"]|safe }}
-                            </p>
+                        <p class="dropdown-regular-list-link subtitle-1 dropdown-regular-list-item-content margin-unset {{ dropdown_library[dropdown_type]["list_item_icon_class"] }}" href="#">
+                            {{ item["item_label"]|safe }}
+                        </p>
                     </li>
                 {% endfor %}
             {% endif %}
 
             {%  if dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
+
                 {% for item in dropdown_list %}
+                    {% set list_item_id = dropdown_id ~ loop.index %}
                     <li class="dropdown-regular-list-item">
-                        <a class="dropdown-regular-list-link subtitle-1" href="#">
+                        <a id="{{ list_item_id }}" class="dropdown-regular-list-link subtitle-1" role="button" href="#">
                             {{ item["item_label"]|safe }}
                         </a>
                     </li>
+
+                    <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var listItem = document.getElementById("{{ list_item_id }}");
+
+                                listItem.addEventListener('click', function() {
+                                    replaceListItem("{{ dropdown_label_text }}", "{{ dropdown_button_text_id }}", "{{ list_item_id }}");
+                                })
+                            });
+                        </script>
                 {% endfor %}
             {% endif %}
-
-            {% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
-                {% for item in list_items %}
-                    {% set list_item_id = dropdown_id ~ loop.index %}
-                    <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" href="#">{{ item }}</a></li>
-                {% endfor %}
-            {% endif %}
-
 
             </ul>
         </div>
     {% if dropdown_type == "default_dropdown_list" %}
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var dropdownContainer = document.getElementById("{{ container_id }}");
-
-                dropdownContainer.addEventListener('click', function (event) {
-                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-list-icon-rotate");
-                    toggleTextColour("{{ dropdown_title_text_id }}", "dropdown-list-title-text");
-                    toggleDropdownPanelBackground("{{ container_id }}");
-                });
-
-                dropdownContainer.addEventListener('blur', function(){
-                    removeChevronRotate("{{ dropdown_button_id }} ", "dropdown-list-icon-rotate");
-                    removeTextColour("{{ dropdown_title_text_id }}", "dropdown-list-title-text");
-                    removeDropdownPanelBackground("{{ container_id }}");
-                });
-            })
-        </script>
+        <script src="js/dropdown-default-scripts.js"></script>
     {% else %}
          <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var dropdownContainer = document.getElementById("{{ container_id }}");
+             document.addEventListener("DOMContentLoaded", function () {
+                 //Rotate chevrons and swap background to white on click on dropdown container
+             var dropdownContainer = document.getElementById("{{ container_id }}");
 
-                dropdownContainer.addEventListener('click', function (event) {
-                    toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
-                    toggleDropdownPanelBackground("{{ dropdown_button_id }}", "");
-                });
+             dropdownContainer.addEventListener('click', function (event) {
+                 toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
+                 toggleDropdownPanelBackground("{{ dropdown_button_id }}");
+             });
 
-                dropdownContainer.addEventListener('blur', function(){
-                    removeChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
-                    removeDropdownPanelBackground("{{ dropdown_button_id }}", "");
-                });
-            })
-        </script>
+             dropdownContainer.addEventListener('blur', function(){
+                 removeChevronRotate("{{ dropdown_button_id }}", "dropdown-regular-list-chevron-rotate");
+                 removeDropdownPanelBackground("{{ dropdown_button_id }}");
+             });
+         })
+         </script>
     {% endif %}
 
     </div>
@@ -176,14 +162,14 @@
 
 
 {% if dropdown_type == "small_dropdown_list" or dropdown_type == "medium_dropdown_list" %}
-    <div class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+    <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div id="{{ dropdown_id }}" class="dropdown caption {{ dropdown_library[dropdown_type]["menu_class"] }}">
 
             <a id="{{ label_id }}" class="btn btn-secondary dropdown-toggle padding-unset caption {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                 {{ dropdown_label_text }}
             </a>
 
-            <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
+            <ul id="{{ dropdown_list_id }}" class="dropdown-menu margin-unset {{ dropdown_library[dropdown_type]["list_class"] }}">
                 {% for item in list_items %}
                     {% set list_item_id = dropdown_id ~ loop.index %}
                     <li><a id="{{ list_item_id }}" class="dropdown-item {{ dropdown_library[dropdown_type]["list_item_class"] }} caption" role="button">{{ item }}</a></li>
@@ -202,7 +188,9 @@
                     {% if dropdown_type == "medium_dropdown_list" %}
                         <script>
                             document.addEventListener("DOMContentLoaded", function () {
+                                var dropdownFirstListItem = document.getElementById("{{ label_id }}");
                                 var listItem = document.getElementById("{{ list_item_id }}");
+
 
                                 listItem.addEventListener('click', function() {
                                     replaceListItem("{{ dropdown_label_text }}", "{{ label_id }}", "{{ list_item_id }}");
@@ -214,10 +202,22 @@
                 {% endfor %}
             </ul>
         </div>
+
     </div>
-    <script src="js/dropdown-list.js"></script>
-    <script src="js/ui-function-scripts.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var dropdownFirstListItem = document.getElementById("{{ label_id }}");
+
+            dropdownFirstListItem.addEventListener('click', function() {
+                swapBorderRadius("{{ label_id }}");
+            })
+        });
+    </script>
+
+
 {% endif %}
+<script src="js/dropdown-list.js"></script>
+<script src="js/ui-function-scripts.js"></script>
 
 
 
