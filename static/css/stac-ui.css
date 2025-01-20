@@ -52,6 +52,7 @@
     --background: #FFFFFF;
     --background-black: #000000;
     --background-transparent: transparent;
+    --background-none: none;
     --background-blur: blur(15px);
     --background-blur-mobile: blur(15px);
     --backdrop-filter-provider: blur(7.5px);
@@ -273,7 +274,7 @@ h6{
     font-weight: var(--med-font-weight);
     line-height: var(--line-height-normal);
     letter-spacing: 0.15px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 
 .caption{
@@ -354,7 +355,7 @@ h6{
     height: 28px;
 }
 
-.button-close-x:focus, .button-close-x:active{
+.button-close-x:hover, .button-close-x:focus, .button-close-x:active{
     color: var(--text-on-dark);
     background-color: var(--primary);
     border: none;
@@ -474,6 +475,14 @@ h6{
 }
 
 /*Used in button template partial*/
+.icon-nav-previous{
+    margin-right: 5px;
+}
+
+.icon-nav-next{
+    margin-left: 5px;
+}
+
 .button-lg-nav .icon-nav-previous, .button-lg-nav .icon-nav-next{
     color: var(--primary);
 }
@@ -629,7 +638,6 @@ h6{
 
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input ~ .checkmark {
-    background-color: inherit;
     box-shadow: var(--d-elevation-2);
 }
 
@@ -777,6 +785,17 @@ h6{
     margin-bottom: 12px;
 }
 
+.default-dropdown-list-item{
+    width: 132px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.default-dropdown-list-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
 .dropdown-default-list-item-text{
     color: var(--primary);
     /*H6 font without line-height*/
@@ -860,11 +879,11 @@ h6{
 /*Dropdown regular list*/
 .dropdown-regular-list-container{
     width: 290px;
-    background: var(--indigo250-opacity-light);
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 
 .dropdown-regular-list-button{
     height: 70px;
@@ -872,10 +891,12 @@ h6{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: var(--indigo-700);
     padding-left: 32px;
     padding-right: 32px;
+    background-color: var(--indigo250-opacity-light);
+    color: var(--indigo-700);
     cursor: pointer;
+
 }
 
 /*Overrides override of Bootstrap .btn class*/
@@ -884,6 +905,11 @@ h6{
 }
 
 .dropdown-regular-list-link{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
     text-decoration: none;
     color: var(--indigo-700);
 }
@@ -1128,22 +1154,23 @@ h6{
     --bs-dropdown-bg: var(--background-transparent);
     z-index:var(--bs-dropdown-zindex);
     position: relative !important;
+    margin-top: 0px !important;
 }
 
 .btn{
     --bs-body-color: var(--background-transparent);
     --bs-btn-border-width: 1px;
     --bs-btn-border-color: var(--background-transparent);
-    background-color: var(--background-transparent);
+    --bs-btn-border-radius: 0px;
     border: solid;
     border-width: var(--bs-btn-border-width);
     border-color: var(--background-transparent);
 }
 
 .btn-secondary{
-    --bs-btn-bg: var(--background-transparent);
+    --bs-btn-bg: unset;
     --bs-btn-color: var(--text-on-surface);
-    --bs-btn-active-bg: var(--background-transparent);
+    --bs-btn-active-bg: unset;
     --bs-btn-active-color: var(--text-on-surface);
     --bs-btn-active-border-color: var(--background-transparent);
 }
@@ -1197,11 +1224,17 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .dropdown-default-list-button{
-    height: 56px;
+    width: 132px;
+    height: 40px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    border-radius: 0px;
+}
+
+.dropdown-default-list-button-hover:hover{
+    background-color: var(--indigo250-opacity-light);
 }
 
 /*Chevron for list type dropdown*/
@@ -1234,7 +1267,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .dropdown-small-container{
     width: 67px;
-    height: 28px;
+    min-height: 28px;
     border-radius: 4px;
 }
 
@@ -1246,8 +1279,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .dropdown-medium-menu{
     width: 100%;
-    border-radius: 15px;
     background-color: var(--white);
+    border-radius: 15px;
+}
+
+.dropdown-medium-menu-hover:hover{
+    border-radius: 15px;
+    background-color: var(--indigo250-opacity-light);
 }
 
 .dropdown-small-menu{
@@ -1256,9 +1294,36 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-bottom-right-radius: 4px;
 }
 
-.dropdown-small-title, .dropdown-medium-title{
+.dropdown-small-title{
+    height: 28px;
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.dropdown-medium-title{
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.bottom-no-border-radius{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.dropdown-medium-title:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-medium-title-hover:hover{
+    background-color: var(--indigo250-opacity-light);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .dropdown-small-title::after, .dropdown-medium-title::after{
@@ -1276,7 +1341,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-bottom-right-radius: 4px;
 }
 
-.dropdown-medium-list li:last-child a{
+.dropdown-medium-list li:last-child{
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }
@@ -1487,16 +1552,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: start;
+    align-items: center;
     margin-bottom: 62px;
 }
 
 .recurrence-interval-text{
-    margin-right: 6px;
+    margin-right: 8px;
     margin-bottom: unset;
 }
 
-.recurrence-interval-container div{
+.recurrence-interval-container .spin-button-small{
     margin-left: 3px;
+    margin-right: 3px;
 }
 
 .recurrence-buttons-container{
@@ -1625,6 +1693,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .spin-button-small{
     width: 12px;
     height: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: var(--gray-500);
     border-radius: 4px;
 }
@@ -1633,6 +1705,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 12px;
     height: 14px;
     display: flex;
+    justify-content: center;
     align-items: end;
     background-color: var(--gray-500);
     border-top-left-radius: 4px;
@@ -1640,10 +1713,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .spin-button-sm-up-icon{
-    width: 10px;
-    height: 10px;
-    color: var(--primary);
-    transform: rotate(-90deg);
+    width: 6px;
+    height: 6px;
+    margin-bottom: 1px;
+    fill: var(--primary);
 }
 
 .spin-button-sm-up:hover{
@@ -1652,13 +1725,14 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .spin-button-sm-up:hover .spin-button-sm-up-icon{
-    color: var(--white);
+    fill: var(--white);
 }
 
 .spin-button-sm-dn{
     width: 12px;
     height: 14px;
     display: flex;
+    justify-content: center;
     align-items: start;
     background-color: var(--gray-500);
     border-bottom-left-radius: 4px;
@@ -1666,10 +1740,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .spin-button-sm-dn-icon{
-    width: 10px;
-    height: 10px;
-    color: var(--primary);
-    transform: rotate(90deg);
+    width: 6px;
+    height: 6px;
+    margin-top: 1px;
+    fill: var(--primary);
 }
 
 .spin-button-sm-dn:hover{
@@ -1678,7 +1752,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .spin-button-sm-dn:hover .spin-button-sm-dn-icon{
-    color: var(--white);
+    fill: var(--white);
 }
 
 /*Radio button*/
@@ -1690,6 +1764,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .radio-button-container-column{
     display: flex;
     flex-direction: column;
+}
+
+.radio-button-content-alignment{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .radio-button-small{
@@ -1733,10 +1814,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: column;
 }
 
+.datepicker-container label{
+    margin-bottom: 16px;
+}
+
 .input-date-reg{
     width: 123px;
     height: 46px;
-    padding: 12px 14px;
     color: var(--gray-500);
     background-color: var(--white);
     border-radius: 9px;
@@ -1749,6 +1833,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .timepicker-container{
     display: flex;
     flex-direction: column;
+}
+
+.timepicker-container label{
+    margin-bottom: 16px;
 }
 
 .input-time-sm{
@@ -1766,13 +1854,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Result Display*/
 /*Display as row*/
-.result-display-row{
-    display: flex;
-    flex-direction: row;
+.result-display-row:hover{
+    background: var(--indigo250-opacity-light);
+    box-shadow: var(--d-elevation-1);
 }
 
-.result-display-row div:not(:last-child){
-    margin-right: 20px;
+.result-display-row td{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    vertical-align: top;
+}
+
+.result-display-row td:not(:last-child){
+    padding-right: 22px;
 }
 
 .result-link-container{
@@ -1816,6 +1910,22 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 /*Display as card*/
+.display-card-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.display-card-row div:not(:last-child){
+    margin-right: 12px;
+}
+
+.display-card-container{
+    display: flex;
+    flex: auto;
+}
+
 .result-display-card{
     width: 453px;
     height: 167px;
@@ -1827,6 +1937,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border: solid ;
     border-width: 1px;
     border-color: var(--display-card-border);
+    margin-bottom: 12px;
 }
 
 .display-card-time-range{
