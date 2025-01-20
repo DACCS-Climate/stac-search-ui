@@ -7,7 +7,7 @@
         {% set dropdown_type = "default_dropdown_list" %}
         {% set container_id = "dropdownListDefaultContainer" %}
         {% set dropdown_button_id = "dropdownListDefaultButton" %}
-        {% set dropdown_title_text_id = "dropdownListTitleText" %}
+        {% set dropdown_button_text_id = "dropdownListTitleText" %}
         {% set label_id = "dropdownListDefaultLabel" %}
         {% set dropdown_label_text = "All Catalogs" %}
         {% include "partials/dropdown.html" %}
@@ -19,6 +19,7 @@
 
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_metadata" %}
+        {% set dropdown_id = "dropdownListRegularMetadata" %}
         {% set container_id = "dropdownListRegularMetadataContainer" %}
         {% set dropdown_button_id = "dropdownListMetadataButton" %}
         {% set label_id = "dropdownListRegularMetadataLabel" %}
@@ -32,7 +33,8 @@
                 }
             ]
         %}
-        {% set dropdown_label_text = "Metadata" %}
+        {% set dropdown_label_text = "Select Metadata" %}
+        {% set dropdown_button_text_id = "dropdownListMetadataButtonText" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
@@ -41,9 +43,12 @@
 
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_license" %}
+        {% set dropdown_id = "dropdownListRegularLicense" %}
         {% set container_id = "dropdownListRegularLicenseContainer" %}
         {% set dropdown_button_id = "dropdownListLicenseButton" %}
         {% set label_id = "dropdownListRegularLicenseLabel" %}
+        {% set dropdown_label_text = "Select License" %}
+        {% set dropdown_button_text_id = "dropdownListLicenseButtonText" %}
         {% set list_items =
             [
                 {
@@ -51,7 +56,6 @@
                 }
             ]
         %}
-        {% set dropdown_label_text = "License" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
@@ -60,17 +64,22 @@
 
     {% with %}
         {% set dropdown_type = "regular_dropdown_list_frequency" %}
+        {% set dropdown_id = "dropdownListRegularFrequency" %}
         {% set container_id = "dropdownListRegularFrequencyContainer" %}
         {% set dropdown_button_id = "dropdownListFrequencyButton" %}
+        {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
         {% set label_id = "dropdownListRegularFrequencyLabel" %}
         {% set list_items =
             [
                 {
                     "item_label": "Monthly"
+                },
+                {
+                    "item_label": "Yearly"
                 }
             ]
         %}
-        {% set dropdown_label_text = "Frequency" %}
+        {% set dropdown_label_text = "Select Frequency" %}
         {% include "partials/dropdown.html" %}
     {% endwith %}
 
@@ -80,6 +89,7 @@
     {% with %}
         {% set dropdown_type = "medium_dropdown_list" %}
         {% set dropdown_id = "mediumDropdownList" %}
+        {% set dropdown_list_id = "mediumDropdownListUL" %}
         {% set container_id = "dropdownMediumContainer" %}
         {% set label_id = "mediumDropdownList0" %}
         {% set dropdown_button_id = "dropdownMediumLabel" %}
@@ -200,6 +210,7 @@
     {% with %}
         {% set button_type = "radio_button_sm" %}
         {% set radio_button_id = "radioButtonSmall" %}
+        {% set radio_group_name = "sampleRadioGroup" %}
         {% set radio_button_label = "" %}
         {% set radio_button_orientation_class = "" %}
         {% include "partials/button-radio.html" %}
@@ -233,19 +244,50 @@
 
     <br>
     <br>
+<table>
 
-    {% with %}
-        {% set display_type = "display_row" %}
-        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
-        {% set start_date = "1/1/2100" %}
-        {% set end_date  = "12/30/2100" %}
-        {% set start_time = "12:0:0 PM" %}
-        {% set end_time = "12:0:0 PM" %}
-        {% include "partials/info-display.html" %}
-    {% endwith %}
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+</table>
+
 
         <br>
     <br>
+
+
+<div class="display-card-row">
 
     {% with %}
         {% set display_type = "display_card" %}
@@ -256,6 +298,31 @@
         {% set end_time = "12:0:0 PM" %}
         {% include "partials/info-display.html" %}
     {% endwith %}
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+</div>
+
+
+
 
 
         <br>
