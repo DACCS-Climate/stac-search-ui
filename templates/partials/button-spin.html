@@ -1,20 +1,26 @@
 <div class="spin-button-small">
     <div id="{{ spin_button_up_id }}" class="spin-button-sm-up">
-        <i class="fa-solid fa-play spin-button-sm-up-icon"></i>
+        <svg class="spin-button-sm-up-icon" width="6" height="5" viewBox="0 0 6 5"  xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.00042 0.25L5.5985 4.75H0.402344L3.00042 0.25Z" />
+        </svg>
     </div>
     <div id="{{ spin_button_down_id }}" class="spin-button-sm-dn">
-        <i class="fa-solid fa-play spin-button-sm-dn-icon"></i>
+         <svg class="spin-button-sm-dn-icon" width="6" height="5" viewBox="0 0 6 5"  xmlns="http://www.w3.org/2000/svg">
+             <path d="M3 4.75L0.401925 0.25L5.59808 0.25L3 4.75Z" />
+        </svg>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var spinButtonUp = document.getElementById("{{ spin_button_up_id }}");
             spinButtonUp.addEventListener("click", function () {
                 increment("{{ target_id }}");
+                changeInputBGColour("{{ target_id }}");
             });
 
             var spinButtonDown = document.getElementById("{{ spin_button_down_id }}");
             spinButtonDown.addEventListener("click", function () {
                 decrement("{{ target_id }}");
+                changeInputBGColour("{{ target_id }}");
             });
         });
     </script>
