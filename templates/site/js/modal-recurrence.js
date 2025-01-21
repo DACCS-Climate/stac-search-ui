@@ -1,14 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var inputNumber = document.getElementById("inputNumberRecurrence");
-
     setModal("modalRecurrence", ["openRecurrenceModalButton"], ["closeRecurrenceCloseModal"]);
 
     setRecurrenceListItems("dropdownSmallRecurrenceLabel", "recurrenceModalDayList");
-
-    inputNumber.addEventListener('blur', function (){
-        changeInputBGColour("inputNumberRecurrence");
-    });
-
 })
 
 //For Recurrence dropdown
