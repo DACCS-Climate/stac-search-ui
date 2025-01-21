@@ -14,13 +14,11 @@
             var spinButtonUp = document.getElementById("{{ spin_button_up_id }}");
             spinButtonUp.addEventListener("click", function () {
                 increment("{{ target_id }}");
-                changeInputBGColour("{{ target_id }}");
             });
 
             var spinButtonDown = document.getElementById("{{ spin_button_down_id }}");
             spinButtonDown.addEventListener("click", function () {
                 decrement("{{ target_id }}");
-                changeInputBGColour("{{ target_id }}");
             });
         });
     </script>
