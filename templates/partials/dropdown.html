@@ -81,10 +81,14 @@
 
         <div id="{{ dropdown_id }}" class="dropdown">
             <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }} " role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">{{ dropdown_label_text|safe }}</h6>
+
+                <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">
+                    {{ dropdown_label_text|safe }}
+                </h6>
+
             </a>
 
-            <ul class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
+            <ul id="{{ dropdown_default_UL_id }}" class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }} {{ dropdown_library[dropdown_type]["list_item_text_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
                 {% if dropdown_type == "default_dropdown_list" %}
                     {% for item in dropdown_library[dropdown_type]["list_items"] %}
                         <li><hr class='dropdown-custom-divider'></li>
@@ -97,6 +101,15 @@
                                 {% include "partials/checkbox.html" %}
                             {% endwith %}
                         </li>
+                        <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var checkbox = document.getElementById('{{ item["item_id"] }}');
+                            checkbox.addEventListener('click', function(){
+                                checkCheckboxCount('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
+                            })
+                        })
+
+                        </script>
                     {% endfor %}
                 {% endif %}
 
@@ -193,7 +206,7 @@
 
 
                                 listItem.addEventListener('click', function() {
-                                    replaceListItem("{{ dropdown_label_text }}", "{{ label_id }}", "{{ list_item_id }}");
+                                    swapListItems("{{ label_id }}", "{{ list_item_id }}");
                                 })
                             });
                         </script>
