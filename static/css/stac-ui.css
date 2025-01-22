@@ -1817,13 +1817,17 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .input-date-reg{
     width: 123px;
     height: 46px;
-    color: var(--gray-500);
     background-color: var(--white);
     border-radius: 9px;
     border: solid;
     border-width: 1px;
     border-color: var(--gray-400);
     text-align: center;
+}
+
+/*Override default placeholder text in all input elements*/
+::placeholder{
+    color: var(--gray-500);
 }
 
 .timepicker-container{
@@ -1839,7 +1843,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 100px;
     height: 46px;
     padding: 12px 14px;
-    color: var(--gray-500);
     background-color: var(--white);
     border-radius: 9px;
     border: solid;
