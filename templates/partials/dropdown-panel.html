@@ -101,7 +101,8 @@
             document.addEventListener("DOMContentLoaded", function () {
                 var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
 
-                populateStacVersion("dropdownStacVersion");
+                //TODO uncomment for production use
+                //populateStacVersion("dropdownStacVersion");
 
                 dropdownContainer.addEventListener('click', function (event) {
                     toggleDropdownPanelTitleText();
