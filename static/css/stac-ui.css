@@ -355,7 +355,7 @@ h6{
     height: 28px;
 }
 
-.button-close-x:hover, .button-close-x:focus, .button-close-x:active{
+.button-close-x:hover, .button-close-x:active{
     color: var(--text-on-dark);
     background-color: var(--primary);
     border: none;
@@ -1458,6 +1458,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     overflow-y: auto;
     border: none;
     box-shadow: var(--popup-metadata-shadow);
+    padding-bottom: 46px;
 }
 
 .dialog-metadata::backdrop{
@@ -1472,7 +1473,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 1065px;
     height: 690px;
     background-color: var(--white);
-    margin-bottom: 30px;
 }
 
 .popup-metadata-heading-container{
