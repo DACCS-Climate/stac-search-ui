@@ -1472,6 +1472,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 1065px;
     height: 690px;
     background-color: var(--white);
+    margin-bottom: 30px;
 }
 
 .popup-metadata-heading-container{
