@@ -756,7 +756,7 @@ h6{
 /*Dropdown*/
 
 .dropdown-list-container{
-    width: 172px;
+    width: max-content;
     border-radius: 30px;
     border: 1px solid var(--indigo-200);
     background-color: var(--primary);
@@ -1224,7 +1224,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .dropdown-default-list-button{
-    width: 132px;
+    width: 100%;
     height: 40px;
     display: flex;
     flex-direction: row;
