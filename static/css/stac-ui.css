@@ -875,6 +875,16 @@ h6{
     margin-top: 7px;
     margin-bottom: 7px;
 }
+/*Test pure css method of changing default list container background color */
+/*
+.dropdown-default-list[aria-expanded="true"]{
+    background-color: var(--white);
+}
+
+.dropdown-default-list[aria-expanded="true"]{
+    background-color: var(--primary);
+}*/
+
 
 /*Dropdown regular list*/
 .dropdown-regular-list-container{
@@ -1233,8 +1243,33 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: 0px;
 }
 
-.dropdown-default-list-button-hover:hover{
-    background-color: var(--indigo250-opacity-light);
+/*TODO Test pure css method for changing dropdown button background color on click*/
+/*TODO This does not work on parent elements*/
+/*TODO Need to test for sibling elements*/
+/*Styles for when dropdown expanded*/
+.dropdown-default-list-button[aria-expanded="true"]{
+   /*background-color: var(--white);*/
+}
+
+.dropdown-default-list-button[aria-expanded="true"]:has(+ .dropdown-list-container){
+    background-color: var(--white);
+}
+
+.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-title{
+    color: var(--primary);
+}
+
+/*Styles for when dropdown collapsed*/
+.dropdown-default-list-button[aria-expanded="false"]{
+    background-color: var(--primary);
+}
+
+.dropdown-default-list-button[aria-expanded="false"]:has(+ .dropdown-list-container){
+    background-color: var(--primary);
+}
+
+.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-title{
+    color: var(--text-on-dark);
 }
 
 /*Chevron for list type dropdown*/
@@ -1247,7 +1282,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     color: var(--white);
     font-size: 14.5px;
     transition: all 0.5s ease-in-out;
-    transform: rotate(0deg);
 }
 
 .dropdown-list-title-text{
@@ -1257,9 +1291,24 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Rotates chevron*/
 /*Used in ui-styles-scripts.js*/
-.dropdown-list-icon-rotate::after{
+/*Test pure css method for rotating chevron icon*/
+/*
+.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-icon::after{
+    color: var(--white);
+
+    transform: rotate(0deg);
+}
+
+.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-icon::after{
     color: var(--primary);
-    transition: all 0.5s ease-in-out;
+
+    transform: rotate(-180deg);
+}
+*/
+
+.dropdown-list-icon-rotate{
+    color: var(--primary);
+
     transform: rotate(-180deg);
 }
 
