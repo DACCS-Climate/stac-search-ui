@@ -1,0 +1,22 @@
+
+{% set default_tag = {
+    "container_class": "tag-container",
+    "row_container_class": "tag-info-row-container",
+    "class": "tag",
+    "tag_array":[ "NASA", "CMIP6","Climate","Humidity","Temperature","Precipitation","Radiation"]
+    }
+
+%}
+
+{% set tag_input = tag_input_custom | default(default_tag) %}
+
+<div class="{{ tag_input["row_container_class"] }}">
+    {% for tag in tag_input["tag_array"] %}
+        <div class="{{ tag_input["container_class"] }}">
+            <div class="{{ tag_input["class"] }}"><a href="#{{ tag }}">{{ tag }}</a></div>
+        </div>
+        {% if tag_input["class"] == "tag" and loop.index != tag_input["tag_array"]|length %}
+            <div class="tag-divider">|</div>
+        {% endif %}
+    {% endfor %}
+</div>

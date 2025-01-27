@@ -1,0 +1,25 @@
+{% set datepicker = {
+    "placeholder_text": "YYYY MM DD",
+    "class": "input-date-reg",
+    "label_text_class": "caption"
+} %}
+
+<div class="datepicker-container">
+    <label for="{{ datepicker_id }}" class="{{ label_text_class|default(datepicker["label_text_class"]) }}">{{ datepicker_label }}</label>
+    <input type="text" id="{{ datepicker_id }}" class="{{ datepicker["class"] }}"  placeholder="{{ datepicker["placeholder_text"] }}">
+</div>
+
+<script>
+    initializeCalendar("01 01 1950", "12 31 2023");
+
+    function initializeCalendar(startDate, endDate){
+        flatpickr("#{{ datepicker_id }}", {
+            dateFormat: "Y M d",
+            shorthandCurrentMonth: true,
+            allowInput: true,
+            monthSelectorType: "dropdown",
+            minDate: startDate,
+            maxDate: endDate
+        });
+    }
+</script>

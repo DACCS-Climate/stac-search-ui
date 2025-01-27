@@ -1,0 +1,14 @@
+{% set checkbox_id = checkbox_id | default("attributeCheckbox") %}
+
+<div class="checkbox-buffer">
+    <label class="checkbox-container margin-unset" for="{{ checkbox_id }}">
+        {% if direction_left %}
+            <p>{{ checkbox_label_text }}</p>
+        {% endif %}
+        <input id="{{ checkbox_id }}" type="checkbox">
+        <span class="checkmark"></span>
+        {% if direction_right %}
+            <p class="{{ checkbox_text_class }} margin-unset">{{ checkbox_label_text }}</p>
+        {% endif %}
+    </label>
+</div>

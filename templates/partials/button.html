@@ -1,0 +1,74 @@
+{% set disabled = 'disabled' if disabled else '' %}
+
+{% set button_library = {
+        "button_lg_nav_previous": {
+            "class":"button-lg-nav subtitle-2 padding-unset",
+            "content": '<i class="fa-solid fa-angles-left icon-nav-previous"></i>',
+            "content_position": "start",
+            "button_label": "Previous"
+        },
+        "button_lg_nav_next": {
+            "class":"button-lg-nav subtitle-2 padding-unset",
+            "content": '<i class="fa-solid fa-angles-right icon-nav-next"></i>',
+            "content_position": "end",
+            "button_label": "Next"
+        },
+        "button_med_select_ascending": {
+            "class":"button-med-select subtitle-2" ,
+            "content": '<i class="bi bi-sort-alpha-up subtitle-2 icon-select-ascending"></i>',
+            "content_position": "end",
+            "button_label": "Ascending"
+        },
+        "button_med_select_descending": {
+            "class":"button-med-select subtitle-2" ,
+            "content": '<i class="bi bi-sort-alpha-down subtitle-2 icon-select-descending"></i>',
+            "content_position": "end",
+            "button_label": "Descending"
+        },
+        "button_sm_nav": {
+            "class":"button-sm-nav subtitle-2"
+        },
+        "button_reg_default": {
+            "class": "button-reg d-button-text"
+        },
+        "button_reg_default-alt": {
+            "class": "button-reg-alt d-button-text"
+        },
+        "button_sm_default_open": {
+            "class":"button-sm-default button-sm-default-open subtitle-2"
+        },
+        "button_sm_default_copy": {
+            "class":"button-sm-default button-sm-default-copy subtitle-2"
+        },
+        "close_button_x": {
+            "class":"button-close-x" ,
+            "content": '<i class="fa-solid fa-xmark"></i>'
+        }
+    }
+%}
+
+{% set button = button_library[button_type] %}
+
+
+<a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
+
+    <button id="{{ button_id|default(button['id']) }}" 
+            class="{{ button['class'] }} {{ extra_button_class }} {{ disabled }}" 
+            type="button"
+            {% if button_value %} value="{{ button_value }}" {% endif %}
+            {{ button["additional_attributes"] }}>
+        {% if button['content_position']|default("start") == "start" %}
+            {{ button['content']|safe }}
+        {% endif %}
+        {% if button_image %}
+            <img class="button-med-action-alt-image" src="{{ button_image|safe }}"/>
+        {% endif %}
+        <span id="{{ button['label_id'] }}">
+            {{ button_label | default(button['button_label']) | safe }}
+        </span>
+        {% if button['content_position']|default("start") == "end" %}
+            {{ button['content']|safe }}
+        {% endif %}
+    </button>
+
+</a>

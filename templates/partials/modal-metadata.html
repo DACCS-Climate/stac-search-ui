@@ -1,0 +1,93 @@
+{% set popup_content = {
+    "version": {
+        "content_title": "Version",
+        "value": "1.0"
+    },
+    "calendar":{
+        "content_title": "Calendar",
+        "value": [ "360_day", "365_day", "Proleptic_Gregorian", "Standard"]
+        },
+    "frequency": {
+        "content_title": "Frequency",
+        "value": "Day"
+    },
+    "conventions": {
+        "content_title": "Frequency",
+        "value": "CF-1.7"
+    },
+    "variable_id":{
+     "content_title": "Variable ID",
+     "value":
+        ["hurs", "huss", "pr","rlds","rsds","sfcWind","tas", "tasmax","tasmin"]
+    },
+    "cmip_version": {
+    "content_title": "Variable ID",
+    "value": "CMIP6"
+    },
+    "experiment_ID":{
+    "content_title": "Experiment ID",
+    "value":["historical", "ssp126","ssp245","ssp370","ssp585"]
+    },
+    "variant_label":{
+    "content_title": "Experiment ID",
+    "value":["r1i1p1f1","r1i1p1f2","r1i1p1f3","r3i1p1f1", "r4i1p1f1"]
+    },
+    "institution_id":
+    {
+    "content_title": "Experiment ID",
+    "value":["AS-RCEC","BCC","CAS", "CCCR-IITM","CCC-ma","CMCC","CNRM-CERFACS","CSIRO","CSIRO-ARCCSS","EC-Earth-Consortium"
+            ,"INM","IPSL", "KIOST","MIROC","MOHC","MPI-M","MRI","NASA-GISS","NCAR","NCC", "NIMS-KMA","NOAA-GFDL",
+            "NUIST"]
+    }
+
+}
+%}
+
+
+
+
+<dialog id="metadataModal" class="dialog-metadata">
+    <div class="popup-metadata-container">
+        <div class="popup-button-close">
+            {% with button_type = "close_button_x"%}
+                {% set button_id = "popupMetadataCloseModal" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+        </div>
+
+
+        <div>
+            <div class="popup-metadata-heading-container">
+                <div class="popup-metadata-title-container">
+                    <h4 class="popup-metadata-main-title margin-unset">Metadata</h4>
+                    <h5 class="popup-metadata-subtitle margin-unset">{{ dataset_type_title }}</h5>
+                </div>
+            </div>
+
+            <div class="popup-metadata-content">
+                <table >
+                    <tbody class="popup-metadata-table">
+                    {% for content in popup_content %}
+                        <tr>
+                            <td class="metadata-content-title">{{ popup_content[content]["content_title"] }}</td>
+                            <td class="metadata-content-value">
+                                {% if popup_content[content]["value"] is iterable and popup_content[content]["value"] is not string %}
+                                    {% for index in range(popup_content[content]["value"]|length) %}
+                                        <span>{{ popup_content[content]["value"][index] }}</span>
+                                    {% endfor %}
+                                {% else %}
+                                    {{ popup_content[content]["value"] }}
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<script src="js/modal-metadata.js"></script>

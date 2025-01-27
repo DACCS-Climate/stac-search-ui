@@ -1,0 +1,2122 @@
+/*Legacy styles from design*/
+:root {
+    /*Override Bootstrap*/
+    --bs-dropdown-spacer: 0px;
+    --bs-accordion-btn-icon-transition: 0;
+
+    /*Fonts*/
+    --main-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --secondary-font-family: Helvetica, Arial, sans-serif;
+    --tag-info-card-font-family: Roboto, sans-serif;
+    --light-font-weight: 300;
+    --h3-reg-font-weight: 300;
+    --reg-font-weight: 400;
+    --h4-bold-font-weight: 500;
+    --med-font-weight: 500;
+    --h6-bold-font-weight: 700;
+    --line-height-normal: normal;
+    --line-height-body1: 25px;
+
+    /*Custom fonts*/
+    --bs-icon-font-family: "Bootstrap-icons", Helvetica, Arial, sans-serif;
+
+    /*Borders*/
+    --elevation-1: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 1px 2px 0px rgba(0, 0, 0, 0.30), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    --elevation-2: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 1px 2px 0px rgba(0, 0, 0, 0.30), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    --elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
+    --elevation-4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.30);
+
+    --d-elevation-1: 0px 3px 4px 0px rgba(136, 144, 194, 0.25), 0px 5px 15px 0px rgba(37, 44, 97, 0.25);
+    --d-elevation-2: 0px 3px 8px 0px rgba(136, 144, 194, 0.25), 0px 7px 21px 0px rgba(37, 44, 97, 0.20);
+    --d-elevation-3: 0px 3px 8px 0px rgba(178, 0, 2, 0.12), 0px 7px 21px 0px rgba(178, 0, 2, 0.12);
+
+    --account-overview-elevation: 0px 9px 12px 0px rgba(0, 0, 0, 0.20);
+    --login-elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.30), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    --password-elevation: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    --border-black: 1px solid #000000;
+    --textbox-border-radius: 5px;
+
+    --corner: 1em;
+
+    --display-card-border: rgba(0, 0, 0, 0.13);
+
+    /*Shadows*/
+    --text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    --dropdown-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    --button-close-shadow: 0px 5px 15px rgba(37, 44, 97, 0.25), 0px 3px 4px rgba(136, 144, 194, 0.25);
+    --popup-metadata-shadow: 4px 4px 17px 0px rgba(0, 0, 0, 0.25);
+    --timeframe-shadow: 0px 4px 7px 0px rgba(0, 0, 0, 0.25);
+
+    /*Backgrounds*/
+    --background: #FFFFFF;
+    --background-black: #000000;
+    --background-transparent: transparent;
+    --background-none: none;
+    --background-blur: blur(15px);
+    --background-blur-mobile: blur(15px);
+    --backdrop-filter-provider: blur(7.5px);
+    --backdrop-filter-attention: blur(2px);
+    --backdrop-filter-feedback: blur(2px);
+    --backdrop-filter-password: blur(12.5px);
+    --backdrop-filter-network: blur(7.5px);
+
+    /*Colours*/
+
+    /*General Use*/
+    --alert-background: #F6DC3D;
+    --black: #000000;
+    --white: #FFFFFF;
+
+    /*Opacity Swatches*/
+    --black-opacity-lighter: rgba(0, 0, 0, 0.18);
+    --black-opacity-light: rgba(0,0,0,0.25);
+    --black-opacity-mid-light: rgba(0,0,0,0.30);
+    --black-opacity-mid: rgba(0, 0, 0, 0.50);
+    --black-opacity-mid-dark: rgba(0, 0, 0, 0.75);
+    --black-opacity-darker: rgba(0, 0, 0, 0.8);
+    --opaque-light-grey: rgba(255,255,255, 0.3);
+    --white-opacity-light: rgba(255, 255, 255, 0.18);
+    --white-opacity-darker: rgba(255, 255, 255, 0.85);
+    --red-opacity-mid: rgba(178, 0, 2, 0.50);
+    --primary-opacity-light: rgba(48, 79, 254, 0.12);
+    --primary-opacity-midlight: rgba(48, 79,245, 0.35);
+    --indigo250-opacity-light: rgba(136, 144, 194, 0.25);
+    /*Gradient Swatches*/
+    --linear-gradient-black: linear-gradient(90deg,transparent, #000000, transparent);
+    --linear-gradient-marble: linear-gradient(90deg, #3F6BAE 3%, #6DA39F 33.33%, #D89E37 66.67%, #823628 100%);
+
+
+    /*Colours for Elements*/
+    --surface: #FFFFFF;
+    --error: #B20002;
+    --text-on-primary: #FFFFFF;
+    --text-on-primary-alt: #536DFE;
+    --text-on-secondary: #000000;
+    --text-on-background: #000000;
+    --text-on-surface: #000000;
+    --text-on-error: #FFFFFF;
+    --text-on-dark: #FFFFFF;
+    --primary: #304FFE;
+    --primary-alt: #C5CAE9;
+    --primary-variant: #283593;
+    --secondary: #03DAC6;
+    --secondary-variant: #018786;
+
+    /*Colour Swatches*/
+    --indigo-50: #E8EAF6;
+    --indigo-100: #C5CAE9;
+    --indigo-200: #9FA8DA;
+    --indigo-250: #8890C2;
+    --indigo-300: #7886CB;
+    --indigo-400: #5C6BC0;
+    --indigo-500: #4050B5;
+    --indigo-600: #3949AB;
+    --indigo-700: #303F9F;
+    --indigo-800: #283593;
+    --indigo-900: #1A237E;
+    --indigo-A100: #8C9EFF;
+    --indigo-A200: #536DFE;
+    --indigo-A400: #3D5AFE;
+    --indigo-A700: #304FFE;
+
+    --teal-50: #E0F2F1;
+    --teal-100: #B2DFDB;
+    --teal-200: #80CBC4;
+    --teal-300: #4DB6AC;
+    --teal-400: #26A69A;
+    --teal-500: #009688;
+    --teal-600: #00897B;
+    --teal-700: #00796B;
+    --teal-800: #00695C;
+    --teal-900: #004D3F;
+    --teal-A100: #A7FFEB;
+    --teal-A200: #64FFDA;
+    --teal-A400: #1DE9B6;
+    --teal-A700: #00BFA5;
+
+    --deep-orange-50: #FBE9E6;
+    --deep-orange-100: #FFCCBC;
+    --deep-orange-200: #FFAB91;
+    --deep-orange-300: #FF8A65;
+    --deep-orange-400: #FF7043;
+    --deep-orange-500:  #FF5722;
+    --deep-orange-600: #F4511E;
+    --deep-orange-700: #E64A19;
+    --deep-orange-800: #D94214;
+    --deep-orange-900: #BF360D;
+    --deep-orange-A100: #FF9E80;
+    --deep-orange-A200: #FF6E40;
+    --deep-orange-A400: #FF3D00;
+    --deep-orange-A700: #DD2C00;
+
+    --gray-50: #FAFAFA;
+    --gray-100: #F5F5F5;
+    --gray-200: #EEEEEE;
+    --gray-300: #E0E0E0;
+    --gray-400: #BDBDBD;
+    --gray-500: #9E9E9E;
+    --gray-600: #757575;
+    --gray-700: #757575;
+    --gray-800: #424242;
+    --gray-900: #212121;
+
+}
+
+
+p{
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 16px;
+    letter-spacing: 0.024px;
+    line-height: var(--line-height-body1);
+}
+
+.body-1{
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 16px;
+    letter-spacing: 0.024px;
+    line-height: var(--line-height-body1);
+}
+
+.body-2{
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 14px;
+    letter-spacing: 0.014px;
+    line-height: var(--line-height-normal);
+}
+
+h1{
+    font-family: var(--secondary-font-family);
+    font-weight: var(--light-font-weight);
+    font-size: 96px;
+    letter-spacing: -1.44px;
+    line-height: var(--line-height-normal);
+}
+
+h2{
+    font-family: var(--main-font-family);
+    font-weight: var(--light-font-weight);
+    font-size: 60px;
+    letter-spacing: -0.3px;
+    line-height: var(--line-height-normal);
+}
+
+h3{
+    font-family: var(--main-font-family);
+    font-weight: var(--h3-reg-font-weight);
+    font-size: 48px;
+    line-height: var(--line-height-normal);
+}
+
+h4{
+    font-family: var(--main-font-family);
+    font-weight: var(--h4-bold-font-weight);
+    font-size: 34px;
+    letter-spacing: 0.085px;
+    line-height: var(--line-height-normal);
+}
+
+h5{
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 24px;
+    line-height: var(--line-height-normal);
+}
+
+h6{
+    font-family: var(--secondary-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 20px;
+    letter-spacing: 0.03px;
+    line-height: var(--line-height-normal);
+}
+
+.subtitle-1, .leading-text-1{
+    font-family: var(--main-font-family);
+    font-weight: var(--med-font-weight);
+    font-size: 16px;
+    letter-spacing: 0.03px;
+    line-height: var(--line-height-normal);
+}
+
+.subtitle-2, .leading-text-2{
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 14px;
+    letter-spacing: 0.014px;
+    line-height: var(--line-height-normal);
+}
+
+.d-button-text{
+    font-family: var(--main-font-family);
+    font-weight: var(--med-font-weight);
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0px;
+}
+
+.d-button-alt-text{
+    font-family: var(--main-font-family);
+    font-weight: var(--h6-bold-font-weight);
+    font-size: 11px;
+    line-height: 100%;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.button{
+    font-family: var(--main-font-family);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: var(--med-font-weight);
+    line-height: var(--line-height-normal);
+    letter-spacing: 0.15px;
+    text-transform: capitalize;
+}
+
+.caption{
+    font-family: var(--main-font-family);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: var(--reg-font-weight);
+    line-height: var(--line-height-normal);
+    letter-spacing: 0.048px;
+    text-transform: capitalize;
+}
+
+.overline{
+    font-family: var(--main-font-family);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: var(--reg-font-weight);
+    line-height: var(--line-height-normal);
+    letter-spacing: 0.15px;
+}
+
+.tag-info-card-title-font{
+    font-family: var(--tag-info-card-font-family);
+    font-size: 19px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.tag-info-card-font{
+    font-family: var(--tag-info-card-font-family);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 12px;
+}
+
+/*Global Styles*/
+/*Spacing*/
+.margin-unset{
+    margin: unset;
+}
+
+.padding-unset{
+    padding: unset;
+}
+/*Display*/
+.display-none{
+    display: none;
+}
+
+/* Custom default button */
+.btn-light,
+.btn-light:hover,
+.btn-light:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+}
+/*End legacy styles from design*/
+
+/*Buttons*/
+/*Used in button template partial*/
+.button-close-x{
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    background-color: var(--background-transparent);
+    border: none;
+    outline: none;
+    padding: unset;
+}
+
+.button-close-x svg{
+    width: 28px;
+    height: 28px;
+}
+
+.button-close-x:hover, .button-close-x:active{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+    border: none;
+    outline: none;
+    box-shadow: var(--button-close-shadow);
+}
+
+.popup-button-close{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: end;
+}
+
+/*Used in button template partial*/
+.button-anchor-tag{
+    align-self: flex-start;
+}
+
+/*Used in button template partial*/
+.undecorated-link{
+    text-decoration: none
+}
+
+/*Used in button template partial*/
+.button-reg{
+    width: 158px;
+    height: 60px;
+    color: var(--primary);
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    box-shadow: var(--d-elevation-1);
+    flex-shrink: 0;
+}
+
+.button-reg-alt{
+    width: 158px;
+    height: 60px;
+    color: var(--text-on-surface);
+    background-color: var(--gray-100);
+    border: none;
+    box-shadow: var(--d-elevation-1);
+    flex-shrink: 0;
+}
+
+/*Legacy style from design, Used in button template partial*/
+.button-reg-alt:hover{
+    color: var(--text-on-dark);
+    background-color: var(--gray-500);
+    box-shadow: var(--d-elevation-1);
+}
+
+
+/*Buttons for Search Mechanism*/
+.button-sm-default{
+    width: 77px;
+    height: 33px;
+    border: none;
+}
+
+.button-sm-default-open{
+    color: var(--primary);
+    background-color: var(--white);
+    border-width: 1px;
+    border-style: solid;
+    border-color:var(--primary);
+    box-shadow: var(--d-elevation-1);
+}
+
+.button-sm-default-open:focus, .button-sm-default-open:hover{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+}
+
+.button-sm-default-copy{
+    background-color: var(--gray-100);
+    box-shadow: var(--d-elevation-1);
+}
+
+.button-sm-default-copy:hover{
+    background-color: var(--gray-400);
+}
+
+.button-sm-nav{
+    width: 110px;
+    height: 65px;
+    background-color: var(--gray-100);
+    border: none;
+}
+
+.button-sm-nav span{
+    color: var(--text-on-surface);
+}
+
+.button-sm-nav:focus span, .button-sm-nav:hover span, .button-sm-nav:active span{
+    color: var(--text-on-dark);
+}
+
+.button-sm-nav:focus, .button-sm-nav:hover, .button-sm-nav:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-lg-nav{
+    width: 142px;
+    height: 65px;
+    background-color: var(--gray-100);
+    border: none;
+}
+
+/*Used in button template partial*/
+.button-lg-nav span{
+    color: var(--text-on-surface);
+}
+
+/*Used in button template partial*/
+.icon-nav-previous{
+    margin-right: 5px;
+}
+
+.icon-nav-next{
+    margin-left: 5px;
+}
+
+.button-lg-nav .icon-nav-previous, .button-lg-nav .icon-nav-next{
+    color: var(--primary);
+}
+
+/*Used in button template partial*/
+.button-lg-nav:focus, .button-lg-nav:hover, .button-lg-nav:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+.button-lg-nav:focus span, .button-lg-nav:hover span, .button-lg-nav:active span{
+    color: var(--text-on-dark);
+}
+
+.button-lg-nav:focus .icon-nav-previous, .button-lg-nav:hover .icon-nav-previous, .button-lg-nav:active .icon-nav-previous,
+.button-lg-nav:focus .icon-nav-next, .button-lg-nav:hover .icon-nav-next, .button-lg-nav:active .icon-nav-next {
+    color: var(--white);
+}
+
+/*Used in button template partial*/
+.button-med-select{
+    width: 116px;
+    height: 65px;
+    color: var(--primary);
+    background-color: var(--gray-100);
+    border: none;
+}
+
+/*Used in button template partial*/
+.button-med-select span{
+    color: var(--text-on-surface);
+}
+
+/*Used in button template partial*/
+.button-med-select .icon-select-ascending, .button-med-select .icon-select-descending{
+    color: var(--primary);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus, .button-med-select:hover, .button-med-select:active{
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus span, .button-med-select:hover span, .button-med-select:active span{
+    color: var(--text-on-dark);
+}
+
+/*Used in button template partial*/
+.button-med-select:focus .icon-select-ascending, .button-med-select:hover .icon-select-ascending,
+.button-med-select:active .icon-select-ascending,.button-med-select:focus .icon-select-descending,
+.button-med-select:hover .icon-select-descending, .button-med-select:active .icon-select-descending{
+    color: var(--white);
+}
+
+
+/*Used in button template partial*/
+.button-reg:hover, .button-med:hover{
+    color: var(--white);
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+/*Used in button template partial*/
+.button-reg:focus, .button-med:focus{
+    color: var(--white);
+    background-color: var(--primary);
+    box-shadow: var(--d-elevation-2);
+}
+
+
+/*Used in button template partial*/
+.button-med-round{
+    width: 79px;
+    height: 79px;
+    background-color: var(--indigo-50);
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--elevation-1);
+}
+
+/*Used in button template partial*/
+.button-med-round-icon{
+    width: 46px;
+    height: 49px;
+    color: var(--primary);
+}
+
+.button-med-action-alt-image{
+    margin-right: 12px;
+}
+
+/*Used in button template partial*/
+.button-med-alt:hover{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
+}
+
+.disabled{
+    color: var(--gray-600);
+    background-color: var(--gray-500);
+    pointer-events: none;
+}
+
+/*End Button*/
+
+
+/*Checkbox*/
+.checkbox-buffer{
+    width: 25px;
+    height: 25px;
+}
+
+/* The container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 3px;
+    border-color: var(--primary);
+    box-shadow: var(--d-elevation-1);
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+    box-shadow: var(--d-elevation-2);
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    left: 3px;
+    bottom: 3px;
+    width: 8px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 0.15em 0.15em 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+/*Search box*/
+
+.search-container{
+    display: flex;
+}
+
+.search-form{
+    display: flex;
+    flex-direction: row;
+}
+
+.search-input{
+    width: 622px;
+    height: 64px;
+    text-align: center;
+    border-radius: 30px;
+    border: 1px solid var(--indigo-200);
+    background: var(--indigo-50);
+    box-shadow: var(--text-shadow);
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 24px;
+    line-height: var(--line-height-normal);
+    color: var(--gray-500);
+}
+
+.search-input:hover{
+    background: var(--indigo-100);
+    border: 1px solid var(--indigo-300);
+}
+
+.search-input:focus{
+    background: var(--gray-50);
+    border: 1px solid var(--indigo-200);
+    color: var(--text-on-surface);
+}
+
+.search-icon{
+    width: 15px;
+    height: 15px;
+    color: var(--primary);
+}
+
+.search-icon-background{
+    width: 35px;
+    height: 35px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border: solid;
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: var(--white);
+    right: 60.5px;
+    top: 14.5px;
+    z-index: 25;
+}
+
+
+/*Select Box*/
+
+.select-default-option{
+    background-color: var(--primary);
+    color: var(--text-on-dark);
+    font-family: var(--main-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 24px;
+    line-height: var(--line-height-normal);
+    border: none;
+}
+
+.select-option{
+    color: var(--text-on-surface);
+    background-color: var(--white);
+    padding-bottom: 0px;
+    border: none;
+}
+
+
+/*Dropdown*/
+
+.dropdown-list-container{
+    width: max-content;
+    border-radius: 30px;
+    border: 1px solid var(--indigo-200);
+    background-color: var(--primary);
+    box-shadow: var(--dropdown-shadow);
+    padding: 4px 24px;
+    margin-bottom: 0px;
+}
+
+.dropdown-list-container ul{
+    padding-left:unset;
+    margin-bottom: unset;
+}
+
+.dropdown-list{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: center;
+    list-style-type:none;
+    transition: height .4s ease;
+}
+
+.dropdown-list li:not(:last-child){
+    margin-bottom: 12px;
+}
+
+.default-dropdown-list-item{
+    width: 132px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.default-dropdown-list-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-default-list-item-text{
+    color: var(--primary);
+    /*H6 font without line-height*/
+    font-family: var(--secondary-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 20px;
+    letter-spacing: 0.03px;
+}
+
+.dropdown-item{
+    padding-top: unset;
+    padding-bottom: unset;
+}
+
+.dropdown-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-default-list-label{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.dropdown-default-list-label h6{
+    margin-bottom: unset;
+}
+
+.dropdown-default-list-label-toggle{
+    color: var(--text-on-surface);
+}
+
+.dropdown-chevron-dark{
+    color: var(--primary);
+}
+
+.dropdown-body{
+    width: 172px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: var(--text-shadow);
+    padding-left: 24px;
+    padding-top: 0px;
+    padding-right: 24px;
+    padding-bottom: 16px;
+}
+
+/*Default dropdown list*/
+.dropdown-default-list{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: center;
+    list-style-type:none;
+    transition: height .4s ease;
+}
+
+.dropdown-default-list li{
+    text-align: center;
+}
+
+.dropdown-default-list li a{
+    color: var(--text-on-surface);
+    text-decoration: none;
+}
+
+.dropdown-custom-divider{
+    width: 130px;
+    height: 1px;
+    color: var(--gray-500);
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+/*Test pure css method of changing default list container background color */
+/*
+.dropdown-default-list[aria-expanded="true"]{
+    background-color: var(--white);
+}
+
+.dropdown-default-list[aria-expanded="true"]{
+    background-color: var(--primary);
+}*/
+
+
+/*Dropdown regular list*/
+.dropdown-regular-list-container{
+    width: 290px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.dropdown-regular-list-button{
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    background-color: var(--indigo250-opacity-light);
+    color: var(--indigo-700);
+    cursor: pointer;
+
+}
+
+/*Overrides override of Bootstrap .btn class*/
+.dropdown-regular-list-button:hover{
+    color: var(--indigo-700);
+}
+
+.dropdown-regular-list-link{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    text-decoration: none;
+    color: var(--indigo-700);
+}
+
+.dropdown-regular-list{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    overflow: hidden;
+    text-align: start;
+    list-style-type:none;
+    transition: height .4s ease;
+    padding-left: 0px;
+    border-radius: 0px;
+}
+
+.dropdown-regular-list-chevron-icon::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+/*Rotates chevron*/
+/*Used in ui-styles-scripts.js*/
+.dropdown-regular-list-chevron-rotate::after{
+    transition: all 0.5s ease-in-out;
+}
+
+.dropdown-regular-list-chevron-rotate::after{
+    transform: rotate(-180deg);
+}
+
+.dropdown-regular-list-item{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+.dropdown-regular-list-item-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+/*Right chevron for list items*/
+.dropdown-regular-list-item-icon::after{
+    font-family: Bootstrap-icons;
+    content: "\F285";
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
+}
+
+.dropdown-regular-list-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+/*End Dropdown Regular List*/
+
+/*Dropdown Regular*/
+.dropdown-regular-container{
+    width: 290px;
+    background: var(--indigo250-opacity-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.dropdown-regular-container h6{
+    padding-right: 4px;
+}
+
+.dropdown-regular-container-transition{
+    background-color: var(--white);
+}
+
+.dropdown-regular{
+    background-color: var(--white);
+    clear:both;
+    width:100%;
+    height:0px;
+    overflow: hidden;
+    text-align: center;
+    list-style-type:none;
+    transition: height .4s ease;
+}
+
+.dropdown-regular-title{
+    color: var(--indigo-700);
+}
+
+.dropdown-regular-icon{
+    color: var(--indigo-700);
+}
+
+.dropdown-regular li{
+    text-align: center;
+}
+
+.dropdown-regular-label-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-regular-label{
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown-chevron-container{
+    width: 29px;
+    height: 29px;
+    background-color: var(--primary);
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-panel{
+    width: 100%;
+    height: 89px;
+    background-color: var(--white);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dropdown-panel-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*Regular Panel*/
+#touchRegular{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegular:checked + .dropdown-regular{
+    height: auto;
+}
+
+/*Regular Source ul Panel*/
+#touchRegularSource{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularSource:checked + .dropdown-regular{
+    height: auto;
+}
+
+/*Regular Share ul Panel*/
+#touchRegularShare{
+    position: absolute;
+    opacity: 0;
+    height: 0px;
+}
+
+#touchRegularShare:checked + .dropdown-regular{
+    height: auto;
+}
+
+.icon-share-panel{
+    cursor: pointer;
+}
+
+.icon-share-panel svg{
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: space-evenly;
+    color: var(--primary);
+}
+/*End Dropdown Regular Share*/
+
+
+
+
+/*Dropdown transitions for all dropdowns styles when dropdown is clicked*/
+.dropdown-transition-styles{
+    color: var(--text-on-surface);
+    background-color: var(--white);
+    border: none;
+}
+
+/*Dropdown Small List and Dropdown Medium List*/
+/*Override Bootstrap*/
+
+.dropdown{
+    height: auto !important;
+}
+
+.dropdown-toggle::after{
+    font-family: Bootstrap-icons;
+    content: "\F282";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+}
+
+.dropdown-menu{
+    --bs-dropdown-zindex: 0;
+    --bs-dropdown-border-width:0px;
+    --bs-dropdown-bg: var(--background-transparent);
+    z-index:var(--bs-dropdown-zindex);
+    position: relative !important;
+    margin-top: 0px !important;
+}
+
+.btn{
+    --bs-body-color: var(--background-transparent);
+    --bs-btn-border-width: 1px;
+    --bs-btn-border-color: var(--background-transparent);
+    --bs-btn-border-radius: 0px;
+    border: solid;
+    border-width: var(--bs-btn-border-width);
+    border-color: var(--background-transparent);
+}
+
+.btn-secondary{
+    --bs-btn-bg: unset;
+    --bs-btn-color: var(--text-on-surface);
+    --bs-btn-active-bg: unset;
+    --bs-btn-active-color: var(--text-on-surface);
+    --bs-btn-active-border-color: var(--background-transparent);
+}
+
+.btn:hover{
+    --bs-btn-hover-color: var(--text-on-surface);
+    --bs-btn-hover-bg: var(--background-transparent);
+    --bs-btn-hover-border-color: var(--background-transparent);
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}
+
+ul.dropdown-small-list, ul.dropdown-medium-list{
+    position: relative !important;
+    transform: translate(0px, 0px) !important;
+    --bs-dropdown-padding-x: 0px;
+    --bs-dropdown-padding-y: 0px;
+    --bs-dropdown-min-width: 0px;
+    padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+    --bs-dropdown-padding-y: 0px;
+}
+
+.dropdown-small-item, .dropdown-medium-item{
+    display: flex;
+    justify-content: center;
+    --bs-dropdown-item-padding-x: 0px;
+    --bs-dropdown-item-padding-y: 0px;
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+    width: auto;
+    text-align: center;
+}
+
+/*End Override Bootstrap*/
+
+.dropdown-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--gray-500);
+    background-color: var(--white);
+}
+
+.dropdown-timeframe-title::after{
+    margin-left: 60px;
+}
+
+/*Dropdown list*/
+.dropdown-list-title{
+    color: var(--text-on-dark);
+}
+
+.dropdown-default-list-button{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px;
+}
+
+/*TODO Test pure css method for changing dropdown button background color on click*/
+/*TODO This does not work on parent elements*/
+/*TODO Need to test for sibling elements*/
+/*Styles for when dropdown expanded*/
+.dropdown-default-list-button[aria-expanded="true"]{
+   /*background-color: var(--white);*/
+}
+
+.dropdown-default-list-button[aria-expanded="true"]:has(+ .dropdown-list-container){
+    background-color: var(--white);
+}
+
+.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-title{
+    color: var(--primary);
+}
+
+/*Styles for when dropdown collapsed*/
+.dropdown-default-list-button[aria-expanded="false"]{
+    background-color: var(--primary);
+}
+
+.dropdown-default-list-button[aria-expanded="false"]:has(+ .dropdown-list-container){
+    background-color: var(--primary);
+}
+
+.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-title{
+    color: var(--text-on-dark);
+}
+
+/*Chevron for list type dropdown*/
+.dropdown-list-icon::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+}
+
+.dropdown-list-title-text{
+    color: var(--primary);
+}
+
+
+/*Rotates chevron*/
+/*Used in ui-styles-scripts.js*/
+/*Test pure css method for rotating chevron icon*/
+/*
+.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-icon::after{
+    color: var(--white);
+
+    transform: rotate(0deg);
+}
+
+.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-icon::after{
+    color: var(--primary);
+
+    transform: rotate(-180deg);
+}
+*/
+
+.dropdown-list-icon-rotate{
+    color: var(--primary);
+
+    transform: rotate(-180deg);
+}
+
+/*End rotate chevron for dropdown lists*/
+
+.dropdown-small-container{
+    width: 67px;
+    min-height: 28px;
+    border-radius: 4px;
+}
+
+.dropdown-medium-container{
+    width: 164px;
+    min-height: 56px;
+    border-radius: 15px;
+}
+
+.dropdown-medium-menu{
+    width: 100%;
+    background-color: var(--white);
+    border-radius: 15px;
+}
+
+.dropdown-medium-menu-hover:hover{
+    border-radius: 15px;
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-small-menu{
+    width: 100%;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.dropdown-small-title{
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-medium-title{
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.bottom-no-border-radius{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.dropdown-medium-title:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-medium-title-hover:hover{
+    background-color: var(--indigo250-opacity-light);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.dropdown-small-title::after, .dropdown-medium-title::after{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-small-list, .dropdown-medium-list{
+    width: 100%;
+}
+
+.dropdown-small-list li:last-child a{
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.dropdown-medium-list li:last-child a{
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.dropdown-small-item{
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-medium-item{
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-small-chevron{
+    color: var(--black);
+}
+
+.dropdown-small-label-container{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 23px;
+    padding-bottom: 23px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.dropdown-small-label-container:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+/*End Dropdown Small List and Dropdown Medium List*/
+
+/*Dropdown Time Frame*/
+.dropdown-timeframe-menu{
+    width: 422px;
+}
+
+.dropdown-timeframe-title{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-radius: unset;
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-timeframe-container{
+    width: 422px;
+    background: var(--white);
+    box-shadow: var(--timeframe-shadow);
+}
+
+.timeframe-content-container{
+    margin-top: 27px;
+    margin-bottom: 18px;
+    margin-left: 58px;
+    margin-right: 43px;
+}
+
+.timeframe-content-container div:not(:last-child){
+    margin-bottom: 38px;
+}
+
+.timeframe-start, .timeframe-end{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+.div-timeframe-norepeat{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+.div-timerange-ends-on{
+    display: flex;
+    flex-direction: row;
+}
+
+.div-timerange-ends-on div:not(:last-child){
+    margin-right: 48px;
+}
+
+.margin-label-time-range{
+    margin-right: 36px;
+}
+
+.div-timeframe-button{
+    display: flex;
+    justify-content: center;
+}
+/*End Dropdown Time Frame*/
+
+/*Modal/Popup*/
+/*General modal styles/classes */
+.stop-scroll{
+    overflow: hidden;
+}
+
+/*Metadata Popup/Modal*/
+
+.dialog-metadata{
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: none;
+    box-shadow: var(--popup-metadata-shadow);
+    padding-bottom: 46px;
+}
+
+.dialog-metadata::backdrop{
+    background-color: var(--white-opacity-darker);
+}
+
+.popup-metadata-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1065px;
+    height: 690px;
+    background-color: var(--white);
+}
+
+.popup-metadata-heading-container{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.popup-metadata-title-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-metadata-content{
+    width: 876px;
+    height: 542px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--indigo250-opacity-light);
+}
+
+.popup-metadata-table tr:not(:last-child){
+    margin-bottom: 20px;
+}
+
+.metadata-content-title{
+    width: 276px;
+}
+
+.metadata-content-value span:not(:last-child){
+    margin-right: 24px;
+}
+
+.popup-metadata-main-title{
+    color: var(--indigo-700);
+    margin-bottom: 17px;
+}
+
+.popup-metadata-subtitle{
+    color: var(--black);
+    margin-bottom: 17px;
+}
+
+.popup-button-close{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: end;
+    margin-right: 13px;
+}
+/*End Modal/Popup*/
+
+/*Recurrence Modal*/
+.recurrence-dialog{
+    border-radius: 5px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--gray-400);
+    padding: 26px;
+}
+
+.recurrence-container{
+    width: 250px;
+    height: 227px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.recurrence-title{
+    width: 100%;
+    text-align: start;
+    margin-bottom: 45px;
+}
+
+.recurrence-interval-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 62px;
+}
+
+.recurrence-interval-text{
+    margin-right: 8px;
+    margin-bottom: unset;
+}
+
+.recurrence-interval-container .spin-button-small{
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.recurrence-buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.recurrence-buttons-container a:not(:last-child){
+    margin-right: 32px;
+}
+/*End Recurrence Modal*/
+/*End Modal/Popup*/
+
+
+/*Tags*/
+.tag-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--gray-400);
+}
+
+.tag-info-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--gray-400);
+}
+
+.tag-info-panel-row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    background-color: var(--background-transparent);
+}
+
+.tag-container{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--gray-400);
+}
+
+.tag-container:hover{
+    background-color: var(--gray-500);
+}
+
+.tag{
+    display: flex;
+    height: 26px;
+    padding: 3px 16px;
+    margin-top: 10px;
+    margin-left: 26px;
+    margin-right: 26px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: var(--indigo-800);
+    color: var(--text-on-dark);
+    cursor:pointer;
+}
+
+.tag > a{
+    color: var(--text-on-dark);
+    text-decoration: none;
+}
+
+.tag-divider{
+    color: var(--text-on-dark);
+}
+
+.tag-info-card{
+    border-radius: 4px;
+    background-color: var(--gray-600);
+    text-align: center;
+    padding: 3px 5px;
+}
+
+.tag-info-card a{
+    color: var(--text-on-dark);
+    text-decoration: none;
+}
+
+.tag-info-card-container{
+    display: flex;
+    flex-direction: row;
+    background-color: var(--background-transparent);
+}
+
+.tag-info-panel-row-container div:not(:last-child){
+    margin-right: 4px;
+}
+/*End Tags*/
+
+/*Component Library 2*/
+/*Textbox / Input box*/
+
+.input-number-small{
+    width: 31px;
+    height: 28px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-on-surface);
+    background-color: var(--white);
+    outline: none;
+    border: 1px solid var(--gray-400);
+}
+
+.input-number-small:focus, .input-number-small:active{
+    border: 1px solid var(--gray-400);
+}
+
+.spin-button-small{
+    width: 12px;
+    height: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray-500);
+    border-radius: 4px;
+}
+
+.spin-button-sm-up{
+    width: 12px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    background-color: var(--gray-500);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.spin-button-sm-up-icon{
+    width: 6px;
+    height: 6px;
+    margin-bottom: 1px;
+    fill: var(--primary);
+}
+
+.spin-button-sm-up:hover{
+    background-color: var(--primary);
+    cursor: pointer;
+}
+
+.spin-button-sm-up:hover .spin-button-sm-up-icon{
+    fill: var(--white);
+}
+
+.spin-button-sm-dn{
+    width: 12px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background-color: var(--gray-500);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.spin-button-sm-dn-icon{
+    width: 6px;
+    height: 6px;
+    margin-top: 1px;
+    fill: var(--primary);
+}
+
+.spin-button-sm-dn:hover{
+    background-color: var(--primary);
+    cursor: pointer;
+}
+
+.spin-button-sm-dn:hover .spin-button-sm-dn-icon{
+    fill: var(--white);
+}
+
+/*Radio button*/
+.radio-button-container-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.radio-button-container-column{
+    display: flex;
+    flex-direction: column;
+}
+
+.radio-button-content-alignment{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.radio-button-small{
+    appearance: none;
+    display: grid;
+    place-content: center;
+    width:12px;
+    height: 12px;
+    border-radius: 50px;
+    border: solid;
+    border-width: 2px;
+    border-color: var(--primary);
+}
+
+.radio-button-small::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transform: scale(0);
+}
+
+.radio-button-small:checked::before {
+    transform: scale(1);
+    background-color: var(--primary);
+}
+
+.margin-radio-left{
+    margin-right: 7px;
+}
+
+.margin-radio-right{
+    margin-left: 7px;
+}
+/*End Radio button*/
+
+
+/*Input date*/
+.datepicker-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.datepicker-container label{
+    margin-bottom: 16px;
+}
+
+.input-date-reg{
+    width: 123px;
+    height: 46px;
+    background-color: var(--white);
+    border-radius: 9px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--gray-400);
+    text-align: center;
+}
+
+/*Override default placeholder text in all input elements*/
+::placeholder{
+    color: var(--gray-500);
+}
+
+.timepicker-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.timepicker-container label{
+    margin-bottom: 16px;
+}
+
+.input-time-sm{
+    width: 100px;
+    height: 46px;
+    padding: 12px 14px;
+    background-color: var(--white);
+    border-radius: 9px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--gray-400);
+    text-align: center;
+}
+
+/*Result Display*/
+/*Display as row*/
+.result-display-row:hover{
+    background: var(--indigo250-opacity-light);
+    box-shadow: var(--d-elevation-1);
+}
+
+.result-display-row td{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    vertical-align: top;
+}
+
+.result-display-row td:not(:last-child){
+    padding-right: 22px;
+}
+
+.result-link-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.result-link{
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.result-link-title{
+    width: 245px;
+    height: 42px;
+    color: var(--primary);
+    text-decoration: none;
+    text-align: center;
+}
+
+.result-format{
+    display: flex;
+    flex-direction: row;
+}
+
+.result-format-row{
+    display: flex;
+    flex-direction: column;
+}
+
+.result-text{
+    color: var(--gray-700);
+}
+
+.icon-more-information{
+    color: var(--primary);
+}
+
+.margin-icon-more-information{
+    margin-left: 15px;
+}
+
+/*Display as card*/
+.display-card-row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.display-card-row div:not(:last-child){
+    margin-right: 12px;
+}
+
+.display-card-container{
+    display: flex;
+    flex: auto;
+}
+
+.result-display-card{
+    width: 453px;
+    height: 167px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: solid ;
+    border-width: 1px;
+    border-color: var(--display-card-border);
+    margin-bottom: 12px;
+}
+
+.display-card-time-range{
+    display: flex;
+    flex-direction: row;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.display-card-time-range div:not(:last-child){
+    margin-right: 5px;
+}
+
+
+/*Date Picker*/
+/*Override Flatpickr CSS*/
+.flatpickr-day{
+    border: solid;
+    border-width: 1px;
+    border-color: var(--background-transparent);
+    border-radius: 9px;
+}
+
+.flatpickr-day:hover{
+    background-color: var(--indigo250-opacity-light);
+    border: solid;
+    border-width: 1px;
+    border-color: var(--indigo250-opacity-light);
+    border-radius: 9px;
+}
+/*TODO: Keep for adjusting spacing for arrows in month menu*/
+/*
+.flatpickr-months{
+    position: relative;
+    left: unset;
+    right: unset;
+}
+
+.flatpickr-prev-month{
+    position: relative;
+    left: unset;
+}
+
+.flatpickr-current-month{
+    width: 60%;
+
+}
+
+.flatpickr-next-month{
+    position: relative;
+    right: unset;
+}*/
+
+
+/*
+.flatpickr-months{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}*/
+
+/*End Date Picker CSS*/
+
+/*Dropdown Panel CSS*/
+
+.dropdown-panel-container{
+    width:290px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-panel-title{
+    width: 290px;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
+    border: 0px;
+    border-radius: 0px;
+}
+
+.dropdown-panel-title:hover{
+    color: var(--indigo-700);
+}
+
+.dropdown-panel-background-white{
+    background-color: var(--white);
+}
+
+.dropdown-panel-title div svg{
+    margin-left: 4px;
+}
+
+/*Style chevron icon*/
+/*Styles for Regular Share Panel, Timeframe Panel*/
+.dropdown-timeframe-title::after{
+    margin-left: 60px;
+}
+
+.dropdown-panel-title::after, .dropdown-timeframe-title::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: 26px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+/*Rotates chevron*/
+/*Used in ui-styles-scripts.js*/
+.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
+    transition: all 0.5s ease-in-out;
+}
+
+.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
+    transform: rotate(-180deg);
+}
+
+.dropdown-panel-list{
+    width:290px;
+}

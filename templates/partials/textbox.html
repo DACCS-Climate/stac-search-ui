@@ -1,0 +1,11 @@
+{% set input = {
+    "input_number_sm": {
+        "type": "text",
+        "class": "input-number-small caption"
+        }
+    }
+%}
+
+{% if input_type == "input_number_sm" %}
+    <input id="{{ input_id }}" type="{{ input[input_type]["type"] }}" inputmode="numeric" class="{{ input[input_type]["class"] }}">
+{% endif %}

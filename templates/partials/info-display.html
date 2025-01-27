@@ -1,0 +1,89 @@
+{% set display_library = {
+    "display_row":{
+        "display_class": "result-display-row",
+        "link_classes": "result-link subtitle-1"
+    },
+    "display_card":{
+        "display_class": "result-display-card",
+        "link_classes": "result-link-title tag-info-card-title-font"
+    }
+
+
+    }
+%}
+
+{% if display_type == "display_row" %}
+    {# TODO For production make a for loop that will populate the table with rows #}
+    {# Move the table tag here from sample.html  #}
+    {# Put row tag code below in for loop #}
+    <!-- <table> -->
+    {# for #}
+        <tr class="{{ display_library[display_type]["display_class"] }}">
+            <td>
+                <div>
+                    <a tabindex="0" class="{{ display_library[display_type]["link_classes"] }}">
+                        {{ display_link }}
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div class="result-start-time result-text subtitle-1">{{ start_date }}</div>
+            </td>
+            <td>
+                <div class="result-end-date result-text subtitle-1">{{ end_date }}</div>
+            </td>
+            <td>
+                <div class="result-start-time result-text subtitle-1">{{ start_time }}</div>
+            </td>
+            <td>
+                <div class="result-end-time result-text subtitle-1">{{ end_time }}</div>
+
+            </td>
+            <td>
+                {% for tag_item in tag_array %}
+                    <div class="result-end-time result-text subtitle-1">{{ tag_item }}</div>
+                {% endfor %}
+            </td>
+        </tr>
+    {# endfor #}
+    <!-- </table> -->
+
+{% endif %}
+
+{% if display_type == "display_card" %}
+    <div class="display-card-container">
+        <div class="{{ display_library[display_type]["display_class"] }}">
+            <div class="result-link-container">
+                <a class="{{ display_library[display_type]["link_classes"] }}">{{ display_link }}</a>
+
+
+            </div>
+
+                <div class="display-card-time-range">
+
+                <div class="result-start-time result-text subtitle-1">{{ start_date }}</div>
+                <div class="result-end-date result-text subtitle-1">{{ end_date }}</div>
+                <div class="result-start-time result-text subtitle-1">{{ start_time }}</div>
+                <div class="result-end-time result-text subtitle-1">{{ end_time }}</div>
+
+                </div>
+
+
+
+                <div class="result-format result-text subtitle-1">
+                    {% with %}
+                        {% set tag_input_custom ={
+                        "container_class": "tag-info-card-container",
+                        "row_container_class": "tag-info-panel-row-container",
+                        "class": "tag-info-card",
+                        "tag_array": ["XML", "HTML", "NetCDF"]
+                        }%}
+                        {% include "partials/tag.html" %}
+                    {% endwith %}
+
+                </div>
+
+
+        </div>
+    </div>
+{% endif %}

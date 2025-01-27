@@ -1,0 +1,375 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+    {% include "partials/searchbox.html" %}
+
+    {% with %}
+        {% set dropdown_type = "default_dropdown_list" %}
+        {% set container_id = "dropdownListDefaultContainer" %}
+        {% set dropdown_button_id = "dropdownListDefaultButton" %}
+        {% set dropdown_button_text_id = "dropdownListTitleText" %}
+        {% set label_id = "dropdownListDefaultLabel" %}
+        {% set dropdown_label_text = "All Catalogs" %}
+        {% set dropdown_default_UL_id = "dropdownListDefaultUL" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+       <br>
+    <br>
+
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_metadata" %}
+        {% set dropdown_id = "dropdownListRegularMetadata" %}
+        {% set container_id = "dropdownListRegularMetadataContainer" %}
+        {% set dropdown_button_id = "dropdownListMetadataButton" %}
+        {% set label_id = "dropdownListRegularMetadataLabel" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "NEX-GDDP"
+                },
+                {
+                    "item_label": "CMIP6"
+                }
+            ]
+        %}
+        {% set dropdown_label_text = "Select Metadata" %}
+        {% set dropdown_button_text_id = "dropdownListMetadataButtonText" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+       <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_license" %}
+        {% set dropdown_id = "dropdownListRegularLicense" %}
+        {% set container_id = "dropdownListRegularLicenseContainer" %}
+        {% set dropdown_button_id = "dropdownListLicenseButton" %}
+        {% set label_id = "dropdownListRegularLicenseLabel" %}
+        {% set dropdown_label_text = "Select License" %}
+        {% set dropdown_button_text_id = "dropdownListLicenseButtonText" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "CC-BY-4.0"
+                }
+            ]
+        %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_list_frequency" %}
+        {% set dropdown_id = "dropdownListRegularFrequency" %}
+        {% set container_id = "dropdownListRegularFrequencyContainer" %}
+        {% set dropdown_button_id = "dropdownListFrequencyButton" %}
+        {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
+        {% set label_id = "dropdownListRegularFrequencyLabel" %}
+        {% set list_items =
+            [
+                {
+                    "item_label": "Monthly"
+                },
+                {
+                    "item_label": "Yearly"
+                }
+            ]
+        %}
+        {% set dropdown_label_text = "Select Frequency" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "medium_dropdown_list" %}
+        {% set dropdown_id = "mediumDropdownList" %}
+        {% set dropdown_list_id = "mediumDropdownListUL" %}
+        {% set container_id = "dropdownMediumContainer" %}
+        {% set label_id = "mediumDropdownList0" %}
+        {% set dropdown_button_id = "dropdownMediumLabel" %}
+        {% set dropdown_label_text = "Does Not Repeat" %}
+        {% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade", "Custom"] %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "small_dropdown_list" %}
+        {% set dropdown_id = "smallDropdownList" %}
+        {% set container_id = "dropdownSmallContainer" %}
+        {% set label_id = "smallDropdownList0" %}
+        {% set dropdown_button_id = "dropdownSmallLabel" %}
+        {% set first_item  = "Day"%}
+        {% set list_items = ["Week", "Month", "Year", "Decade"] %}
+        {% set dropdown_label_text = "Day" %}
+        {% include "partials/dropdown.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+
+    {% with %}
+        {% set dataset_type_title = "NEX-GDDP" %}
+        {% include "partials/modal-metadata.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set input_type = "input_number_sm" %}
+        {% set input_id = "inputNumberSmall" %}
+        {% include "partials/textbox.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set button_type = "spin_button_sm" %}
+        {% set button_id = "spinButtonSmall" %}
+        {% set spin_button_up_id = "spinButtonUp" %}
+        {% set spin_button_down_id = "spinButtonDown" %}
+        {% set target_id = "inputNumberSmall" %}
+        {% include "partials/button-spin.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+
+    {% with %}
+        {% set button_type = "button_lg_nav_previous" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_med_select_ascending" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_med_select_descending" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_lg_nav_next" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_nav" %}
+        {% set button_label = "First" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_default_open" %}
+        {% set button_label = "Open" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_sm_default_copy" %}
+        {% set button_label = "Copy" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_reg_default" %}
+        {% set button_label = "Apply" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set button_type = "button_reg_default-alt" %}
+        {% set button_label = "Clear" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+
+
+    {% with %}
+        {% set button_type = "close_button_x" %}
+        {% include "partials/button.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set button_type = "radio_button_sm" %}
+        {% set radio_button_id = "radioButtonSmall" %}
+        {% set radio_group_name = "sampleRadioGroup" %}
+        {% set radio_button_label = "" %}
+        {% set radio_button_orientation_class = "" %}
+        {% include "partials/button-radio.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set datepicker_id = "inputDateReg" %}
+        {% set datepicker_label = "Date:" %}
+        {% include "partials/datepicker.html" %}
+    {% endwith %}
+
+        <br>
+    <br>
+
+    {% with %}
+        {% set timepicker_id = "inputTimeReg" %}
+        {% set timepicker_label = "Time:" %}
+        {% include "partials/timepicker.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+
+
+    {% with %}
+        {% include "partials/tag.html" %}
+    {% endwith %}
+
+    <br>
+    <br>
+<table>
+
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set display_type = "display_row" %}
+                {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100" %}
+                {% set start_date = "1/1/2100" %}
+                {% set end_date  = "12/30/2100" %}
+                {% set start_time = "12:0:0 PM" %}
+                {% set end_time = "12:0:0 PM" %}
+                {% set tag_array = ["XML", "HTML", "NetCDF"] %}
+                {% include "partials/info-display.html" %}
+            {% endwith %}
+
+</table>
+
+
+        <br>
+    <br>
+
+
+<div class="display-card-row">
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100111" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100222" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set display_type = "display_card" %}
+        {% set display_link = "tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100333" %}
+        {% set start_date = "1/1/2100" %}
+        {% set end_date  = "12/30/2100" %}
+        {% set start_time = "12:0:0 PM" %}
+        {% set end_time = "12:0:0 PM" %}
+        {% include "partials/info-display.html" %}
+    {% endwith %}
+
+</div>
+
+
+
+
+
+        <br>
+    <br>
+
+    <div>
+        <button id="openRecurrenceModalButton" type="button">Recurrence modal</button>
+    </div>
+
+    {% with %}
+        {% include "partials/modal-recurrence.html" %}
+    {% endwith %}
+
+
+    <br>
+    <br>
+
+    {% with %}
+        {% set dropdown_type = "dropdown_time_frame" %}
+        {% set dropdown_timeframe_id = "dropdownTimeframe" %}
+        {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
+        {% set dropdown_label_text = "Select Time Frame" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
+
+        <br>
+    <br>
+
+
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_share" %}
+        {% set dropdown_button_id = "dropdownShareRegular" %}
+        {% set dropdown_label_text = "Share" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
+
+    {% with %}
+        {% set dropdown_type = "regular_dropdown_source" %}
+        {% set dropdown_button_id = "dropdownSourceRegular" %}
+        {% set dropdown_label_text = "Source" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
+
+        <script src="js/sample.js"></script>
+        <script src="js/ui-styles-scripts.js"></script>
+        <script src="js/modal.js"></script>
+
+{% endblock %}
