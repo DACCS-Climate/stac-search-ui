@@ -1,10 +1,20 @@
 {% extends "layouts/main.html" %}
 
 {% block content %}
- <div id="map"></div>
+    <div id="leafletContainer" class="map-search-container">
+        <div id="leftMenu" class="map-left-menu">
+            <p>Current Shape Lat Long</p>
+            <div id="currentShapeLatLng"></div>
+        </div>
+        <div class="leaflet-container">
+        <div id="map" class="map-custom"></div>
+            </div>
+    </div>
+
 
 
 <button id="layerButton">Get Layers</button>
+
 <!--
 <button id="buttonRemoveLayers">Remove Layers</button>
 -->
@@ -12,6 +22,9 @@
 
         {% include 'partials/textarea.html' %}
 <button id="uploadGeoJSON">Upload GeoJSON</button>
+
+
+
 
 
 <script src="js/leaflet-ui-functions.js"></script>
