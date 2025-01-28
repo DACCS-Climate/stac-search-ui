@@ -62,6 +62,31 @@ function createDrawMenu(map){
         position: "topleft"
     },
     onAdd: function(map) {
+
+        //Create tooltip to show latitude and longitude next to cursor
+        var tooltip = L.tooltip();
+        map.on('mouseover', function(event){
+
+            tooltip.setLatLng(event.latlng)
+            .setContent(event.latlng.toString());
+
+            map.openTooltip(tooltip);
+
+        });
+
+        map.on('mousemove', function (event){
+            tooltip.setLatLng(event.latlng)
+                .setContent(event.latlng.toString());
+
+            tooltip.update();
+        });
+
+        map.on('mouseout', function (event){
+            map.closeTooltip(tooltip);
+        });
+
+        //Create buttons for map menu
+        //Allows drawing shapes, erasing shapes
         let selectArea;
         let selected_features;
         let shapeDict ={}  ;
@@ -79,6 +104,8 @@ function createDrawMenu(map){
             if(Object.keys(shapeDict).length > 0){
                 shapeDict["shape"].remove();
                 delete shapeDict.shape;
+
+                clearText("currentShapeLatLng");
             }
 
             // Start drawing rectangle
@@ -90,8 +117,6 @@ function createDrawMenu(map){
 */
             //Store drawn shape
             shapeDict["shape"] = newShape;
-            console.log(shapeDict["shape"].getLatLngs());
-            console.log(shapeDict["shape"].getBounds());
         })
 
 
@@ -106,6 +131,8 @@ function createDrawMenu(map){
             if(Object.keys(shapeDict).length > 0){
                 shapeDict["shape"].remove();
                 delete shapeDict.shape;
+
+                clearText("currentShapeLatLng");
             }
 
             // Start drawing circle
@@ -127,6 +154,8 @@ function createDrawMenu(map){
             if(Object.keys(shapeDict).length > 0){
                 shapeDict["shape"].remove();
                 delete shapeDict.shape;
+
+                clearText("currentShapeLatLng");
             }
 
             // Click to add points to map that will be automatically joined into a polygon
@@ -148,6 +177,8 @@ function createDrawMenu(map){
             if(Object.keys(shapeDict).length > 0){
                 shapeDict["shape"].remove();
                 delete shapeDict.shape;
+
+                clearText("currentShapeLatLng");
             }
 
             // Add location marker to map
@@ -168,6 +199,8 @@ function createDrawMenu(map){
             if(Object.keys(shapeDict).length > 0){
                 shapeDict["shape"].remove();
                 delete shapeDict.shape;
+
+                clearText("currentShapeLatLng");
             }
         })
 
@@ -217,6 +250,43 @@ function createDrawMenu(map){
         buttonNewRectangle.innerText = 'Rect';
 
 
+
+        var buttonCopy = L.DomUtil.create("a", "leaflet-control-button", container);
+        var divLatLng = document.getElementById("currentShapeLatLng");
+        let polygonLatLngArray;
+        let circleRadius;
+        let circleCentre;
+        let circleBounds;
+        let circleBoundsCornerNE;
+        let circleBoundsCornerSW;
+        L.DomEvent.disableClickPropagation(buttonCopy);
+
+        L.DomEvent.on(buttonCopy, "click", function () {
+
+            if(Object.keys(shapeDict).length > 0){
+                console.log(shapeDict);
+                if("_radius" in shapeDict["shape"]){
+
+                    circleRadius = shapeDict["shape"].getRadius();
+                    circleCentre = shapeDict["shape"].getLatLng();
+
+                    //Keep in case this information is needed
+                    /*
+                    circleBounds = shapeDict["shape"].getBounds();
+                    circleBoundsCornerNE = circleBounds.getNorthEast();
+                    circleBoundsCornerSW = circleBounds.getSouthWest();
+                    */
+
+                    divLatLng.innerText = "Centre = " + circleCentre + "\n" +  "Radius = " + circleRadius;
+                }
+                else{
+                    polygonLatLngArray = shapeDict["shape"].getLatLngs();
+                    divLatLng.innerText = polygonLatLngArray;
+                }
+            }
+
+        });
+        buttonCopy.innerText = "Get LatLong";
 
 
         return container;
@@ -342,6 +412,13 @@ async function getGeoJSON(map){
 
 return geojsonInput;
 }
+
+function clearText(elementID){
+    var divLatLng = document.getElementById(elementID);
+    divLatLng.innerText = "";
+}
+
+
 
 function enableSelectArea(){
 
