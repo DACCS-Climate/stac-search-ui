@@ -51,6 +51,28 @@ function createMap(city){
             zoom: 13
         });
 
+    //Create tooltip to show latitude and longitude next to cursor
+    var tooltip = L.tooltip();
+    map.on('mouseover', function(event){
+
+        tooltip.setLatLng(event.latlng)
+        .setContent(event.latlng.toString());
+
+        map.openTooltip(tooltip);
+
+    });
+
+    map.on('mousemove', function (event){
+        tooltip.setLatLng(event.latlng)
+            .setContent(event.latlng.toString());
+
+        tooltip.update();
+    });
+
+    map.on('mouseout', function (event){
+        map.closeTooltip(tooltip);
+    });
+
     return map;
 }
 
@@ -63,27 +85,7 @@ function createDrawMenu(map){
     },
     onAdd: function(map) {
 
-        //Create tooltip to show latitude and longitude next to cursor
-        var tooltip = L.tooltip();
-        map.on('mouseover', function(event){
 
-            tooltip.setLatLng(event.latlng)
-            .setContent(event.latlng.toString());
-
-            map.openTooltip(tooltip);
-
-        });
-
-        map.on('mousemove', function (event){
-            tooltip.setLatLng(event.latlng)
-                .setContent(event.latlng.toString());
-
-            tooltip.update();
-        });
-
-        map.on('mouseout', function (event){
-            map.closeTooltip(tooltip);
-        });
 
         //Create buttons for map menu
         //Allows drawing shapes, erasing shapes
@@ -203,52 +205,6 @@ function createDrawMenu(map){
                 clearText("currentShapeLatLng");
             }
         })
-
-
-        var buttonSelectRectangleArea = L.DomUtil.create("a", "leaflet-control-button", container);
-        L.DomEvent.disableClickPropagation(buttonSelectRectangleArea);
-        L.DomEvent.on(buttonSelectRectangleArea, "click", function () {
-            //Enable select area plugin
-            selectArea = map.selectAreaFeature.enable();
-            selectArea.options.color = '#663399';
-            selectArea.options.weight = 3;
-            //enableSelectArea();
-        })
-        buttonSelectRectangleArea.innerText = 'Enable';
-
-
-        var buttonDisableSelectArea = L.DomUtil.create("a", "leaflet-control-button", container);
-        L.DomEvent.disableClickPropagation(buttonDisableSelectArea);
-        L.DomEvent.on(buttonDisableSelectArea, "click", function () {
-            // Disable select area plugin
-            selectArea.disable();
-            //disableSelectArea();
-        })
-        buttonDisableSelectArea.innerText = 'Disable';
-
-        var buttonSelectFeatures = L.DomUtil.create("a", "leaflet-control-button", container);
-        L.DomEvent.disableClickPropagation(buttonSelectFeatures);
-        L.DomEvent.on(buttonSelectFeatures, "click", function () {
-            // Disable select area plugin
-            selected_features = selectArea.getFeaturesSelected('rectangle');
-            console.log(selected_features);
-            //disableSelectArea();
-        })
-        buttonSelectFeatures.innerText = 'Select';
-
-        var buttonNewRectangle = L.DomUtil.create("a", "leaflet-control-button", container);
-        L.DomEvent.disableClickPropagation(buttonNewRectangle);
-        L.DomEvent.on(buttonNewRectangle, "click", function () {
-            // Disable select area plugin
-            //selected_features = selectArea.getFeaturesSelected( 'rectangle' );
-            //console.log(selected_features);
-            //disableSelectArea();
-            var bounds = [[0, 0], [0, 0]]
-            L.rectangle()
-            L.Draw.Rectangle.initialize()
-        })
-        buttonNewRectangle.innerText = 'Rect';
-
 
 
         var buttonCopy = L.DomUtil.create("a", "leaflet-control-button", container);
