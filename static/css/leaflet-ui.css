@@ -1,7 +1,10 @@
 @import url("stac-ui.css");
 
 #map{
-    height: 400px;
+    position: relative;
+    width: 100%;
+    height: inherit;
+
 }
 
 .leaflet-control-button{
@@ -24,6 +27,24 @@
     color: var(--black);
 }
 
+/*Map page general styles*/
+.map-search-container{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.map-left-menu{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.leaflet-container{
+    position: relative;
+    width: 80%;
+    height: 400px;
+}
 
 /*Search panel styles*/
 .button-search-result{
