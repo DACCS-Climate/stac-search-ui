@@ -51,6 +51,24 @@ function createMap(city){
             zoom: 13
         });
 
+    //Adds map image
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    var mapControlDrawMenu = createDrawMenu(map);
+    mapControlDrawMenu.addTo(map);
+    addSearch(map);
+    /*
+    var baseLayers = {
+        "drawMenu": mapControlDrawMenu
+    };
+    */
+
+
+    //var mapBaseLayer = new L.control.layers(baseLayers);
+
+    //mapBaseLayer.addTo(map);
+
+
     //Create tooltip to show latitude and longitude next to cursor
     var tooltip = L.tooltip();
     map.on('mouseover', function(event){
@@ -59,7 +77,6 @@ function createMap(city){
         .setContent(event.latlng.toString());
 
         map.openTooltip(tooltip);
-
     });
 
     map.on('mousemove', function (event){
@@ -76,6 +93,16 @@ function createMap(city){
     return map;
 }
 
+function clearMap(mapItemDict){
+
+}
+
+function clearShape(shapeDict){
+    if(Object.keys(shapeDict).length > 0) {
+        shapeDict["shape"].remove();
+        delete shapeDict.shape;
+    }
+}
 
 
 function createDrawMenu(map){
@@ -84,8 +111,6 @@ function createDrawMenu(map){
         position: "topleft"
     },
     onAdd: function(map) {
-
-
 
         //Create buttons for map menu
         //Allows drawing shapes, erasing shapes
@@ -103,12 +128,10 @@ function createDrawMenu(map){
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
-            if(Object.keys(shapeDict).length > 0){
-                shapeDict["shape"].remove();
-                delete shapeDict.shape;
+            //Clear text from div displaying the point coordinates of the shape
+            clearShape(shapeDict);
+            clearText("currentShapeLatLng");
 
-                clearText("currentShapeLatLng");
-            }
 
             // Start drawing rectangle
             newShape = map.editTools.startRectangle();
@@ -130,12 +153,10 @@ function createDrawMenu(map){
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
-            if(Object.keys(shapeDict).length > 0){
-                shapeDict["shape"].remove();
-                delete shapeDict.shape;
+            //Clear text from div displaying the point coordinates of the shape
+            clearShape(shapeDict);
+            clearText("currentShapeLatLng");
 
-                clearText("currentShapeLatLng");
-            }
 
             // Start drawing circle
             newShape = map.editTools.startCircle();
@@ -153,12 +174,10 @@ function createDrawMenu(map){
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
-            if(Object.keys(shapeDict).length > 0){
-                shapeDict["shape"].remove();
-                delete shapeDict.shape;
+            //Clear text from div displaying the point coordinates of the shape
+            clearShape(shapeDict);
+            clearText("currentShapeLatLng");
 
-                clearText("currentShapeLatLng");
-            }
 
             // Click to add points to map that will be automatically joined into a polygon
             newShape = map.editTools.startPolygon();
@@ -176,12 +195,10 @@ function createDrawMenu(map){
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
-            if(Object.keys(shapeDict).length > 0){
-                shapeDict["shape"].remove();
-                delete shapeDict.shape;
+            //Clear text from div displaying the point coordinates of the shape
+            clearShape(shapeDict);
+            clearText("currentShapeLatLng");
 
-                clearText("currentShapeLatLng");
-            }
 
             // Add location marker to map
             newShape = map.editTools.startMarker();
@@ -198,18 +215,17 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonClearFeatures, "click", function () {
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
-            if(Object.keys(shapeDict).length > 0){
-                shapeDict["shape"].remove();
-                delete shapeDict.shape;
+            //Clear text from div displaying the point coordinates of the shape
+            clearShape(shapeDict);
+            clearText("currentShapeLatLng");
 
-                clearText("currentShapeLatLng");
-            }
         })
 
 
         var buttonCopy = L.DomUtil.create("a", "leaflet-control-button", container);
         var divLatLng = document.getElementById("currentShapeLatLng");
         let polygonLatLngArray;
+        let markerCentre;
         let circleRadius;
         let circleCentre;
         let circleBounds;
@@ -235,6 +251,10 @@ function createDrawMenu(map){
 
                     divLatLng.innerText = "Centre = " + circleCentre + "\n" +  "Radius = " + circleRadius;
                 }
+                else if("_icon" in shapeDict["shape"]){
+                    markerCentre = shapeDict["shape"].getLatLng();
+                    divLatLng.innerText = markerCentre;
+                }
                 else{
                     polygonLatLngArray = shapeDict["shape"].getLatLngs();
                     divLatLng.innerText = polygonLatLngArray;
@@ -250,12 +270,17 @@ function createDrawMenu(map){
         onRemove: function (map) {
         },
     })
+
     var control = new L.Control.Button();
-    control.addTo(map);
+    //var menuLayer = L.layerGroup([control]);
+
+    //control.addTo(map);
+    return control;
 }
 
 function addSearch(map){
     var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
+    let searchControl;
     let options;
 
     fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
@@ -295,18 +320,19 @@ function addSearch(map){
 
 
         //Leaflet-fuse-search plugin
-        var searchCtrl = L.control.fuseSearch(options);
-        searchCtrl.addTo(map);
+        searchControl = L.control.fuseSearch(options);
+        searchControl.addTo(map);
 
-        searchCtrl.indexFeatures(jsonData.features, ["NAME"]);
+        searchControl.indexFeatures(jsonData.features, ["NAME"]);
 
          L.geoJson(jsonData, {
              //style:stylePolygons, //Optionally customize how geoJSON polygons  are coloured
              onEachFeature: function (feature, layer) {
                  feature.layer = layer;
              }
-        })
-    })
+        });
+
+    });
 }
 
 function stylePolygons() {
@@ -344,7 +370,23 @@ function uploadGeoJSON(map){
     }).addTo(map);
 }
 
+function addPoint(elementID, map){
+    var inputElement = document.getElementById(elementID);
+    var inputArray = inputElement.value.split(',');
+    var latitude = inputArray[0];
+    var longitude = inputArray[1];
+    let shapeDict = {};
 
+    var pointMarker = L.marker([latitude, longitude]);
+    pointMarker.addTo(map)
+    shapeDict["shape"] = pointMarker;
+    map.panTo([latitude, longitude]);
+}
+
+function clearText(elementID){
+    var divLatLng = document.getElementById(elementID);
+    divLatLng.innerText = "";
+}
 
 
 async function getGeoJSON(map){
@@ -368,13 +410,6 @@ async function getGeoJSON(map){
 
 return geojsonInput;
 }
-
-function clearText(elementID){
-    var divLatLng = document.getElementById(elementID);
-    divLatLng.innerText = "";
-}
-
-
 
 function enableSelectArea(){
 
