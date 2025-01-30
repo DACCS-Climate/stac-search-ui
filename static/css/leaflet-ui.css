@@ -58,8 +58,48 @@
     background-color: var(--gray-400);
 }
 
-
 /*GeoJSON Input Styles*/
 .geojson-error{
     color: var(--error);
+}
+
+/*Coordinate input styles*/
+.bottom-right-panel{
+    width: 135px;
+    height: 60px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: var(--leaflet-shadow);
+}
+
+.coordinate-input-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: inherit;
+}
+
+.coordinate-input-label{
+    width: 127px;
+    height: 15px;
+    color: var(--text-on-surface);
+    margin-bottom: 2px;
+}
+
+.coordinate-input-field{
+    width: 127px;
+    height: 35px;
+    border-radius: 9px;
+    border: 1px solid var(--gray-300);
+    background-color: var(--white);
+    text-align: center;
+}
+
+.coordinate-input-field::placeholder{
+    color: var(--gray-500);
 }
