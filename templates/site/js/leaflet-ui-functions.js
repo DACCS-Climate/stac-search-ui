@@ -1,10 +1,4 @@
-function mouseLatLng(){
-    map.on("mousedown", function(event){
-        //var latlng = map.mouseEventToLatLng(event.originalEvent);
-        var latlng = event.latlng;
-        console.log(latlng.lat + ", " + latlng.lng);
-    })
-}
+var shapeDict = {};
 
 function getLayers(map){
     map.eachLayer(function(layer){
@@ -57,24 +51,12 @@ function createMap(city){
     var mapControlDrawMenu = createDrawMenu(map);
     mapControlDrawMenu.addTo(map);
     addSearch(map);
-    /*
-    var baseLayers = {
-        "drawMenu": mapControlDrawMenu
-    };
-    */
-
-
-    //var mapBaseLayer = new L.control.layers(baseLayers);
-
-    //mapBaseLayer.addTo(map);
-
 
     //Create tooltip to show latitude and longitude next to cursor
     var tooltip = L.tooltip();
     map.on('mouseover', function(event){
-
         tooltip.setLatLng(event.latlng)
-        .setContent(event.latlng.toString());
+            .setContent(event.latlng.toString());
 
         map.openTooltip(tooltip);
     });
@@ -91,10 +73,6 @@ function createMap(city){
     });
 
     return map;
-}
-
-function clearMap(mapItemDict){
-
 }
 
 function clearShape(shapeDict){
@@ -116,7 +94,7 @@ function createDrawMenu(map){
         //Allows drawing shapes, erasing shapes
         let selectArea;
         let selected_features;
-        let shapeDict ={}  ;
+
         let newShape;
         var container = L.DomUtil.create("div", "leaflet-control leaflet-bar");
 
@@ -200,7 +178,7 @@ function createDrawMenu(map){
             clearText("currentShapeLatLng");
 
 
-            // Add location marker to map
+            //Add location marker to map
             newShape = map.editTools.startMarker();
 
             //Store drawn shape
@@ -236,7 +214,6 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonCopy, "click", function () {
 
             if(Object.keys(shapeDict).length > 0){
-                console.log(shapeDict);
                 if("_radius" in shapeDict["shape"]){
 
                     circleRadius = shapeDict["shape"].getRadius();
@@ -284,7 +261,7 @@ function addSearch(map){
     let options;
 
     fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
-        let locationMarkerList = {};
+        //let locationMarkerList = {};
 
         options = {
             maxResultLength: 15,
@@ -304,13 +281,14 @@ function addSearch(map){
                     var coordinates = name.value.split(',');
                     var locationMarker = L.marker([coordinates[1], coordinates[0]]);
 
-                    if(Object.keys(locationMarkerList).length > 0){
-                        locationMarkerList["marker"].remove();
-                        delete locationMarkerList.marker;
-                    }
+
+                    //Clear previously drawn shape/layer from map
+                    //Remove previously drawn shape/layer from dictionary
+                    clearShape(shapeDict);
 
                     locationMarker.addTo(map);
-                    locationMarkerList["marker"] = locationMarker;
+
+                    shapeDict["shape"] = locationMarker;
 
                     map.panTo([coordinates[1], coordinates[0]]);
                 })
@@ -335,6 +313,7 @@ function addSearch(map){
     });
 }
 
+//Optionally customize how geoJSON polygons  are coloured
 function stylePolygons() {
     return {
         fillColor: '#bab6e7',
@@ -375,10 +354,14 @@ function addPoint(elementID, map){
     var inputArray = inputElement.value.split(',');
     var latitude = inputArray[0];
     var longitude = inputArray[1];
-    let shapeDict = {};
-
     var pointMarker = L.marker([latitude, longitude]);
-    pointMarker.addTo(map)
+
+    //Clear previously drawn shape/layer from map
+    //Remove previously drawn shape/layer from dictionary
+    clearShape(shapeDict);
+
+    pointMarker.addTo(map);
+    //Store point marker
     shapeDict["shape"] = pointMarker;
     map.panTo([latitude, longitude]);
 }
