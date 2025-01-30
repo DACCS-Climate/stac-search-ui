@@ -6,20 +6,6 @@ function getLayers(map){
     })
 }
 
-function checkControlExists(customControl){
-    L.Map.include({
-    hasCustomControl: function (customControl) {
-        if(this.customControl){
-            return true;
-        }
-        else{
-            return false;
-        }
-
-    }
-});
-}
-
 function getTextareaGeoJSON(){
     var geojsonTextarea = document.getElementById("geojsonInput");
 
@@ -39,6 +25,7 @@ function createMap(city){
         "startPoint" : [43.1249, 1.254]
     };
 
+    //Creates map with the map centre at the given city
     var map = L.map('map',{
             editable: true,
             center: location[city],
@@ -48,9 +35,14 @@ function createMap(city){
     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    var mapControlDrawMenu = createDrawMenu(map);
-    mapControlDrawMenu.addTo(map);
-    addSearch(map);
+    //Adds menu of buttons to draw shapes
+    createDrawMenu(map);
+
+    //Adds search box
+    createSearchTool(map);
+
+    //Adds textbox to input single coordinate
+    createCoordinateInputField(map)
 
     //Create tooltip to show latitude and longitude next to cursor
     var tooltip = L.tooltip();
@@ -92,9 +84,6 @@ function createDrawMenu(map){
 
         //Create buttons for map menu
         //Allows drawing shapes, erasing shapes
-        let selectArea;
-        let selected_features;
-
         let newShape;
         var container = L.DomUtil.create("div", "leaflet-control leaflet-bar");
 
@@ -110,14 +99,9 @@ function createDrawMenu(map){
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
 
-
             // Start drawing rectangle
             newShape = map.editTools.startRectangle();
-/*
-            newShape.on("dragend", function(){
-                console.log(newShape);
-            })
-*/
+
             //Store drawn shape
             shapeDict["shape"] = newShape;
         })
@@ -134,7 +118,6 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
-
 
             // Start drawing circle
             newShape = map.editTools.startCircle();
@@ -156,7 +139,6 @@ function createDrawMenu(map){
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
 
-
             // Click to add points to map that will be automatically joined into a polygon
             newShape = map.editTools.startPolygon();
 
@@ -177,7 +159,6 @@ function createDrawMenu(map){
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
 
-
             //Add location marker to map
             newShape = map.editTools.startMarker();
 
@@ -196,7 +177,6 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
-
         })
 
 
@@ -244,24 +224,53 @@ function createDrawMenu(map){
 
         return container;
     },
-        onRemove: function (map) {
+    onRemove: function (map) {
         },
     })
 
     var control = new L.Control.Button();
-    //var menuLayer = L.layerGroup([control]);
-
-    //control.addTo(map);
-    return control;
+    control.addTo(map);
 }
 
-function addSearch(map){
+function createCoordinateInputField(map){
+    L.Control.CoordinateInput = L.Control.extend({
+        options:{
+            position: "bottomleft"
+        },
+        onAdd: function(map){
+            var bottomRightPanel = L.DomUtil.create("div", "bottom-right-panel");
+            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomRightPanel);
+            var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
+            var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
+
+            coordinateLabel.for = "inputCoordinateLatLng";
+            coordinateLabel.innerHTML = "Point";
+            coordinateInputField.id = "inputCoordinateLatLng";
+            coordinateInputField.type = "text";
+            coordinateInputField.placeholder = "Lat, Lng";
+
+            L.DomEvent.on(coordinateInputField, 'keydown', function(event){
+                if(event.key == "Enter"){
+                    addCoordinate(coordinateInputField.value, map);
+                }
+            });
+
+            return bottomRightPanel;
+        },
+        onRemove: function (map) {
+        },
+    })
+
+    var coordinateInput = new L.Control.CoordinateInput();
+    coordinateInput.addTo(map);
+}
+
+function createSearchTool(map){
     var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
     let searchControl;
     let options;
 
     fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
-        //let locationMarkerList = {};
 
         options = {
             maxResultLength: 15,
@@ -281,15 +290,13 @@ function addSearch(map){
                     var coordinates = name.value.split(',');
                     var locationMarker = L.marker([coordinates[1], coordinates[0]]);
 
-
                     //Clear previously drawn shape/layer from map
                     //Remove previously drawn shape/layer from dictionary
                     clearShape(shapeDict);
 
-                    locationMarker.addTo(map);
-
                     shapeDict["shape"] = locationMarker;
 
+                    locationMarker.addTo(map);
                     map.panTo([coordinates[1], coordinates[0]]);
                 })
                 container.appendChild(L.DomUtil.create('br', null, container));
@@ -309,7 +316,6 @@ function addSearch(map){
                  feature.layer = layer;
              }
         });
-
     });
 }
 
@@ -321,7 +327,6 @@ function stylePolygons() {
         weight: 2,
         opacity: 1,
         color: '#9999ff' //Outline color
-
     };
 }
 
@@ -349,20 +354,22 @@ function uploadGeoJSON(map){
     }).addTo(map);
 }
 
-function addPoint(elementID, map){
-    var inputElement = document.getElementById(elementID);
-    var inputArray = inputElement.value.split(',');
+function addCoordinate(coordinateValue, map){
+    //TODO Uncomment if add coordinate input field is kept outside of map
+    //var inputElement = document.getElementById(elementID);
+    //var inputArray = inputElement.value.split(',');
+    var inputArray = coordinateValue.split(',');
     var latitude = inputArray[0];
     var longitude = inputArray[1];
-    var pointMarker = L.marker([latitude, longitude]);
+    var coordinateMarker = L.marker([latitude, longitude]);
 
     //Clear previously drawn shape/layer from map
     //Remove previously drawn shape/layer from dictionary
     clearShape(shapeDict);
 
-    pointMarker.addTo(map);
+    coordinateMarker.addTo(map);
     //Store point marker
-    shapeDict["shape"] = pointMarker;
+    shapeDict["shape"] = coordinateMarker;
     map.panTo([latitude, longitude]);
 }
 
@@ -380,7 +387,6 @@ async function getGeoJSON(map){
 
     if(geojsonTextarea.value != ''){
         geojsonInput = geojsonTextarea.value.json();
-        //addSearch(map, geojsonInput);
     }
     else{
         urlResponse = await fetch(geojsonDefaultURL);
@@ -388,7 +394,6 @@ async function getGeoJSON(map){
         //geojsonInput = urlResponse;
         console.log("else");
         console.log(geojsonInput);
-        //addSearch(map, geojsonInput);
     }
 
 return geojsonInput;
