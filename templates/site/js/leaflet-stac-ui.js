@@ -1,17 +1,14 @@
-
 document.addEventListener("DOMContentLoaded", function (){
     var newMap = createMap("Toronto");
-
+/*
     var pointTextInput = document.getElementById("inputPointLatLng");
 
     pointTextInput.addEventListener('keydown', function(event){
         if(event.key == "Enter"){
-            addPoint("inputPointLatLng", newMap);
+            addCoordinate("inputPointLatLng", newMap);
         }
-    });
+    });*/
 
-    //Adds drawing menu
-    //createDrawMenu(newMap);
 
     //Uploads geoJSON pasted into textarea
     var uploadGeoJSONButton = document.getElementById("uploadGeoJSON");
@@ -20,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function (){
     });
 
 
-    //Adds search box to map
-    //addSearch(newMap);
 /*
     var getLayersButton = document.getElementById("layerButton");
     getLayersButton.addEventListener("click", function(){
