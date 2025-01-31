@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function (){
     var newMap = createMap("Toronto");
+
+    //Keep in case coordinate point input field gets put back outside of map
 /*
     var pointTextInput = document.getElementById("inputPointLatLng");
 
