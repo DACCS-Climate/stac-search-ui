@@ -17,14 +17,6 @@ document.addEventListener("DOMContentLoaded", function (){
     uploadGeoJSONButton.addEventListener("click", function(){
         uploadGeoJSON(newMap);
     });
-
-
-/*
-    var getLayersButton = document.getElementById("layerButton");
-    getLayersButton.addEventListener("click", function(){
-        getLayers(newMap);
-    });*/
-
 })
 
 
