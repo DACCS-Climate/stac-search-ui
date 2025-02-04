@@ -1,22 +1,5 @@
 var shapeDict = {};
 
-function getLayers(map){
-    map.eachLayer(function(layer){
-        console.log(layer._leaflet_id);
-    })
-}
-
-function getTextareaGeoJSON(){
-    var geojsonTextarea = document.getElementById("geojsonInput");
-
-    if(geojsonTextarea.value != ''){
-        return geojsonTextarea.value;
-    }
-    else {
-        return false;
-    }
-}
-
 function createMap(city){
     var location={
         "Toronto":[43.6532, -79.3832],
@@ -25,7 +8,7 @@ function createMap(city){
         "startPoint" : [43.1249, 1.254]
     };
 
-    //Creates map with the map centre at the given city
+    //Creates map with the map centre at the passed city
     var map = L.map('map',{
             editable: true,
             center: location[city],
@@ -42,7 +25,9 @@ function createMap(city){
     createSearchTool(map);
 
     //Adds textbox to input single coordinate
-    createCoordinateInputField(map)
+    createCoordinateInputField(map);
+
+    createGeoJSONPanel(map);
 
     //Create tooltip to show latitude and longitude next to cursor
     var tooltip = L.tooltip();
@@ -106,6 +91,7 @@ function createDrawMenu(map){
 
             // Start drawing rectangle
             newShape = map.editTools.startRectangle();
+            newShape["shapeType"] = "Rectangle";
 
             //Store drawn shape
             shapeDict["shape"] = newShape;
@@ -126,6 +112,7 @@ function createDrawMenu(map){
 
             // Start drawing circle
             newShape = map.editTools.startCircle();
+            newShape["shapeType"] = "Circle";
 
             //Store drawn shape
             shapeDict["shape"] = newShape;
@@ -146,6 +133,7 @@ function createDrawMenu(map){
 
             // Click to add points to map that will be automatically joined into a polygon
             newShape = map.editTools.startPolygon();
+            newShape["shapeType"] = "Polygon";
 
             //Store drawn shape
             shapeDict["shape"] = newShape;
@@ -166,6 +154,7 @@ function createDrawMenu(map){
 
             //Add location marker to map
             newShape = map.editTools.startMarker();
+            newShape["shapeType"] = "Marker";
 
             //Store drawn shape
             shapeDict["shape"] = newShape;
@@ -182,6 +171,7 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
         })
 
 
@@ -299,8 +289,9 @@ function createCoordinateInputField(map){
             position: "bottomleft"
         },
         onAdd: function(map){
-            var bottomRightPanel = L.DomUtil.create("div", "bottom-right-panel");
-            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomRightPanel);
+
+            var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
+            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomLeftPanel);
             var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
             var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
 
@@ -316,15 +307,32 @@ function createCoordinateInputField(map){
                 }
             });
 
-            return bottomRightPanel;
+            return bottomLeftPanel;
         },
         onRemove: function (map) {
-        },
+        }
     })
+
+    var inputField = new L.Control.CoordinateInput(map);
+    inputField.addTo(map);
+}
+/*
+function createCoordinateInputField(map){
+
+    var options = {
+            position: "bottomleft"
+        }
 
     var coordinateInput = new L.Control.CoordinateInput();
     coordinateInput.addTo(map);
+    return coordinateInput;
+    //var inputCoordinateControl = L.control.CoordinateInput(options);
+    //inputCoordinateControl.addTo(map);
+
+    //return inputCoordinateControl;
 }
+*/
+
 
 function addCoordinate(coordinateValue, map){
     //TODO Uncomment if add coordinate input field is kept outside of map
@@ -344,6 +352,167 @@ function addCoordinate(coordinateValue, map){
     shapeDict["shape"] = coordinateMarker;
     map.panTo([latitude, longitude]);
 }
+
+
+/*
+     L.Control.CoordinateInput = L.Control.extend({
+        options:{
+            position: "bottomleft"
+        },
+        initialize: function(options) {
+            L.setOptions(this, options);
+        },
+        onAdd: function(map){
+            var newCoordinateInput = this.createControl(map);
+            return newCoordinateInput;
+
+        },
+        createControl: function(map){
+            var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
+            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomLeftPanel);
+            var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
+            var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
+
+            coordinateLabel.for = "inputCoordinateLatLng";
+            coordinateLabel.innerHTML = "Point";
+            coordinateInputField.id = "inputCoordinateLatLng";
+            coordinateInputField.type = "text";
+            coordinateInputField.placeholder = "Lat, Lng";
+
+            L.DomEvent.on(coordinateInputField, 'keydown', function(event){
+                if(event.key == "Enter"){
+                    this.addCoordinate(coordinateInputField.value, map);
+                }
+            });
+
+            return bottomLeftPanel;
+        },
+        addCoordinate: function(coordinateValue, map){
+            //TODO Uncomment if add coordinate input field is kept outside of map
+            //var inputElement = document.getElementById(elementID);
+            //var inputArray = inputElement.value.split(',');
+            var inputArray = coordinateValue.split(',');
+            var latitude = inputArray[0];
+            var longitude = inputArray[1];
+            var coordinateMarker = L.marker([latitude, longitude]);
+
+            //Clear previously drawn shape/layer from map
+            //Remove previously drawn shape/layer from dictionary
+            clearShape(shapeDict);
+
+            coordinateMarker.addTo(map);
+            //Store point marker
+            shapeDict["shape"] = coordinateMarker;
+            map.panTo([latitude, longitude]);
+        },
+        onRemove: function (map) {
+        }
+    })*/
+function createGeoJSONPanel(map){
+    L.Control.GeoJSONInput = L.Control.extend({
+        includes: L.Evented.prototype,
+
+        options:{
+            position: "bottomright"
+        },
+
+        initialize: function(options) {
+            L.setOptions(this, options);
+            this._panelOnLeftSide = (this.options.position.indexOf("left") !== -1);
+        },
+
+        onAdd: function(map){
+            var panelButton = this.createButton(map);
+            this.createPanel(map);
+            //createPanel(map);
+
+            return panelButton;
+
+        },
+        createButton: function(){
+            var geoJSONPanelButton = L.DomUtil.create('button', 'geojson-panel-button');
+            geoJSONPanelButton.innerText = "Paste GeoJSON";
+
+            L.DomEvent.on(geoJSONPanelButton, 'click', this.showPanel, this)
+                //
+            return geoJSONPanelButton;
+            //geoJSONPanelButton.addTo(map);
+        },
+        createPanel: function(map){
+            var mapContainer = map.getContainer();
+            var bottomRightPanel = this._panel = L.DomUtil.create('div', 'bottom-right-panel', mapContainer);
+            var geoSONPanelContainer = L.DomUtil.create('div', 'geojson-panel-container', bottomRightPanel);
+            var geoJSONTextArea = L.DomUtil.create('textarea', 'geojson-textarea', geoSONPanelContainer);
+            var geoJSONUploadButton = L.DomUtil.create('button', 'geojson-upload-button', geoSONPanelContainer);
+            geoJSONUploadButton.innerText = "Upload GeoJSON";
+            var geoJSONCloseButton = L.DomUtil.create('button', 'geojson-close-button', geoSONPanelContainer);
+            geoJSONCloseButton.innerText = "Close";
+
+            L.DomEvent.on(geoJSONCloseButton, 'click', this.hidePanel, this);
+
+
+
+            if (this._panelOnLeftSide) {
+                L.DomUtil.addClass(bottomRightPanel, 'left');
+            } else {
+                L.DomUtil.addClass(bottomRightPanel, 'right');
+            }
+
+            //geoJSONCloseButton.on('click', this.hidePanel)
+
+            //container.addTo(map)
+
+            return bottomRightPanel;
+
+        },
+
+
+        isPanelVisible: function () {
+            return L.DomUtil.hasClass(this._panel, 'visible');
+        },
+        showPanel: function () {
+            console.log(this);
+            if (! this.isPanelVisible()) {
+                L.DomUtil.addClass(this._panel, 'visible');
+                // Preserve map centre
+                this._map.panBy([this.getOffset() * 0.5, 0], {duration: 0.5});
+
+                // Search again as visibility of features might have changed
+                //this.searchFeatures(this._input.value);
+            }
+        },
+
+        hidePanel: function (e) {
+            if (this.isPanelVisible()) {
+                L.DomUtil.removeClass(this._panel, 'visible');
+                // Move back the map centre - only if we still hold this._map
+                // as this might already have been cleared up by removeFrom()
+                if (null !== this._map) {
+                    this._map.panBy([this.getOffset() * -0.5, 0], {duration: 0.5});
+                };
+                //this.fire('hide');
+                if(e) {
+                    L.DomEvent.stopPropagation(e);
+                }
+            }
+        },
+        getOffset: function() {
+            if (this._panelOnLeftSide) {
+                return - this._panel.offsetWidth;
+            } else {
+                return this._panel.offsetWidth;
+            }
+        },
+        onRemove: function (map) {
+        }
+    })
+
+    var geoJSONPanel = new L.Control.GeoJSONInput(map);
+    geoJSONPanel.addTo(map);
+
+}
+
+
 
 function uploadGeoJSON(map){
     var geojsonTextarea = document.getElementById("geojsonInput");
@@ -386,21 +555,35 @@ function stylePolygons() {
 
 
 function formatGeoJSON(shape){
-    console.log(shape);
-    console.log(shape.toGeoJSON());
-    console.log(shape.getBounds());
+
     var currentShapeGeoJSONDiv = document.getElementById("currentShapeGeoJSON");
-    var shapeGeoJSON = shape.toGeoJSON();
-    var bounds = shape.getBounds();
-    var bbox = [bounds._northEast["lat"], bounds._northEast["lng"], bounds._southWest["lat"], bounds._southWest["lng"]]
+    var shapeGeoJSON;
+    var bounds;
+    var bbox
+    var stacGeoJSON;
 
-    shapeGeoJSON["bbox"] = bbox;
+    //console.log(shape);
+    //console.log(shape.toGeoJSON());
 
-    console.log(shapeGeoJSON);
+
+    if(shape["shapeType"] == "Marker"){
+        shapeGeoJSON = shape.toGeoJSON();
+
+    }else{
+        //console.log(shape.getBounds());
+        shapeGeoJSON = shape.toGeoJSON();
+        bounds = shape.getBounds();
+        bbox = [bounds._northEast["lat"], bounds._northEast["lng"], bounds._southWest["lat"], bounds._southWest["lng"]]
+        shapeGeoJSON["bbox"] = bbox;
+    }
 
 
-    var stacGeoJSON = JSON.parse('{"type": "FeatureCollection", "features": [{}]}'
-    )
+
+
+    //console.log(shapeGeoJSON);
+
+
+    stacGeoJSON = JSON.parse('{"type": "FeatureCollection", "features": [{}]}')
 
     stacGeoJSON["features"] = shapeGeoJSON;
 
@@ -411,7 +594,16 @@ function formatGeoJSON(shape){
 
 
 
+function getTextareaGeoJSON(){
+    var geojsonTextarea = document.getElementById("geojsonInput");
 
+    if(geojsonTextarea.value != ''){
+        return geojsonTextarea.value;
+    }
+    else {
+        return false;
+    }
+}
 
 
 async function getGeoJSON(map){
