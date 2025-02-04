@@ -64,7 +64,7 @@
 }
 
 /*Coordinate input styles*/
-.bottom-right-panel{
+.bottom-left-panel{
     width: 135px;
     height: 60px;
     border-style: solid;
@@ -102,4 +102,63 @@
 
 .coordinate-input-field::placeholder{
     color: var(--gray-500);
+}
+
+.bottom-right-panel{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s linear;
+    -moz-transition: opacity 0.3s linear;
+    -o-transition: opacity 0.3s linear;
+    transition: opacity 0.3s linear;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: var(--leaflet-shadow);
+}
+
+.bottom-right-panel.visible{
+    opacity: 1;
+    z-index: 2000;
+}
+
+.bottom-right-panel.left {
+    left: 0;
+}
+
+.bottom-right-panel.right {
+    right: 0;
+}
+
+
+
+.geojson-panel-container{
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+}
+
+.geojson-textarea{
+    width: 190px;
+}
+
+.geojson-upload-button{
+
+}
+
+.geojson-panel-button{
+
 }
