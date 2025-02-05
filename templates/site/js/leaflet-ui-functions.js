@@ -183,9 +183,13 @@ function createDrawMenu(map){
         let markerCentre;
         let circleRadius;
         let circleCentre;
+
+        //Keep in case this information is needed
+        /*
         let circleBounds;
         let circleBoundsCornerNE;
         let circleBoundsCornerSW;
+        */
 
         buttonCopy.innerText = "Get LatLong";
         buttonGeoJSON.innerText = "GeoJSON";
@@ -224,8 +228,6 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonGeoJSON, "click", function () {
             formatGeoJSON(shapeDict["shape"]);
         })
-
-
         return container;
     },
     onRemove: function (map) {
@@ -265,7 +267,9 @@ function createSearchTool(map){
                     //Remove previously drawn shape/layer from dictionary
                     clearShape(shapeDict);
 
+                    locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
+
 
                     locationMarker.addTo(map);
                     map.panTo([coordinates[1], coordinates[0]]);
@@ -292,11 +296,14 @@ function createCoordinateInputField(map){
 
             var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
             var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomLeftPanel);
-            var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
-            var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
 
+            var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
+            L.DomUtil.addClass(coordinateLabel, "button");
             coordinateLabel.for = "inputCoordinateLatLng";
             coordinateLabel.innerHTML = "Point";
+
+            var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
+            L.DomUtil.addClass(coordinateInputField, "caption");
             coordinateInputField.id = "inputCoordinateLatLng";
             coordinateInputField.type = "text";
             coordinateInputField.placeholder = "Lat, Lng";
@@ -410,7 +417,6 @@ function addCoordinate(coordinateValue, map){
     })*/
 function createGeoJSONPanel(map){
     L.Control.GeoJSONInput = L.Control.extend({
-        includes: L.Evented.prototype,
 
         options:{
             position: "bottomright"
@@ -434,22 +440,31 @@ function createGeoJSONPanel(map){
             geoJSONPanelButton.innerText = "Paste GeoJSON";
 
             L.DomEvent.on(geoJSONPanelButton, 'click', this.showPanel, this)
-                //
+
             return geoJSONPanelButton;
-            //geoJSONPanelButton.addTo(map);
+
         },
         createPanel: function(map){
             var mapContainer = map.getContainer();
             var bottomRightPanel = this._panel = L.DomUtil.create('div', 'bottom-right-panel', mapContainer);
-            var geoSONPanelContainer = L.DomUtil.create('div', 'geojson-panel-container', bottomRightPanel);
-            var geoJSONTextArea = L.DomUtil.create('textarea', 'geojson-textarea', geoSONPanelContainer);
-            var geoJSONUploadButton = L.DomUtil.create('button', 'geojson-upload-button', geoSONPanelContainer);
-            geoJSONUploadButton.innerText = "Upload GeoJSON";
-            var geoJSONCloseButton = L.DomUtil.create('button', 'geojson-close-button', geoSONPanelContainer);
+            var geoJSONPanelContainer = L.DomUtil.create('div', 'geojson-panel-container', bottomRightPanel);
+            var geoJSONButtonContainer = L.DomUtil.create('div', 'geojson-button-container', geoJSONPanelContainer);
+            var geoJSONCloseButton = L.DomUtil.create('button', 'geojson-close-button', geoJSONButtonContainer);
             geoJSONCloseButton.innerText = "Close";
-
             L.DomEvent.on(geoJSONCloseButton, 'click', this.hidePanel, this);
 
+            var geoJSONContentContainer = L.DomUtil.create('div', 'geojson-content-container', geoJSONPanelContainer);
+
+            var geoJSONTextArea = L.DomUtil.create('textarea', 'geojson-textarea', geoJSONContentContainer);
+            geoJSONTextArea.id = "geojsonInput";
+            geoJSONTextArea.rows = "12";
+            geoJSONTextArea.cols = "30";
+
+            var geoJSONUploadButton = L.DomUtil.create('button', 'geojson-upload-button', geoJSONContentContainer);
+            geoJSONUploadButton.innerText = "Upload GeoJSON";
+            L.DomEvent.on(geoJSONUploadButton, 'click', function() {
+                uploadGeoJSON(map)
+            });
 
 
             if (this._panelOnLeftSide) {
@@ -458,18 +473,13 @@ function createGeoJSONPanel(map){
                 L.DomUtil.addClass(bottomRightPanel, 'right');
             }
 
-            //geoJSONCloseButton.on('click', this.hidePanel)
-
-            //container.addTo(map)
-
             return bottomRightPanel;
-
         },
-
 
         isPanelVisible: function () {
             return L.DomUtil.hasClass(this._panel, 'visible');
         },
+
         showPanel: function () {
             console.log(this);
             if (! this.isPanelVisible()) {
@@ -496,6 +506,7 @@ function createGeoJSONPanel(map){
                 }
             }
         },
+
         getOffset: function() {
             if (this._panelOnLeftSide) {
                 return - this._panel.offsetWidth;
