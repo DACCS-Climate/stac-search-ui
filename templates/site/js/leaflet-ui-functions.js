@@ -528,10 +528,12 @@ function createGeoJSONPanel(map){
 function uploadGeoJSON(map){
     var geojsonTextarea = document.getElementById("geojsonInput");
     let geoJSONData;
+    var firstPoint;
 
     try{
         JSON.parse(geojsonTextarea.value)
         geoJSONData = JSON.parse(geojsonTextarea.value);
+        console.log(geoJSONData);
     }
     catch (error){
         var errorDiv = document.getElementById("geoJSONError");
@@ -546,7 +548,11 @@ function uploadGeoJSON(map){
             feature.properties;
 
         }
+
     }).addTo(map);
+
+    firstPoint = geoJSONData["features"]["0"]["geometry"]["coordinates"]["0"]["0"];
+    map.panTo([firstPoint[1], firstPoint[0]]);
 }
 
 //Optionally customize how geoJSON polygons  are coloured
