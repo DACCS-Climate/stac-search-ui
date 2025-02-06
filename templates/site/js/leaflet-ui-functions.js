@@ -84,7 +84,10 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonDrawSquare, "click", function () {
 
             //Clear anything in coordinate input field
-            clearCoordinate()
+            clearCoordinate();
+
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -108,7 +111,10 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonDrawCircle, "click", function () {
 
             //Clear anything in coordinate input field
-            clearCoordinate()
+            clearCoordinate();
+
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -132,7 +138,10 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonDrawPolygon, "click", function () {
 
             //Clear anything in coordinate input field
-            clearCoordinate()
+            clearCoordinate();
+
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -156,7 +165,10 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonLocationMarker, "click", function () {
 
             //Clear anything in coordinate input field
-            clearCoordinate()
+            clearCoordinate();
+
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -180,7 +192,10 @@ function createDrawMenu(map){
         L.DomEvent.on(buttonClearFeatures, "click", function () {
 
             //Clear anything in coordinate input field
-            clearCoordinate()
+            clearCoordinate();
+
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -214,6 +229,9 @@ function createDrawMenu(map){
 
         L.DomEvent.on(buttonCopy, "click", function () {
 
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
+
             if(Object.keys(shapeDict).length > 0){
                 if("_radius" in shapeDict["shape"]){
 
@@ -242,6 +260,9 @@ function createDrawMenu(map){
         })
 
         L.DomEvent.on(buttonGeoJSON, "click", function () {
+            //Hide coordinate input error message if visible
+            hideCoordinateErrorPanel();
+
             formatGeoJSON(shapeDict);
         })
         return container;
@@ -282,6 +303,9 @@ function createSearchTool(map){
                     //Clear anything in coordinate input field
                     clearCoordinate()
 
+                    //Hide coordinate input error message if visible
+                    hideCoordinateErrorPanel();
+
                     //Clear previously drawn shape/layer from map
                     //Remove previously drawn shape/layer from dictionary
                     clearShape(shapeDict);
@@ -306,6 +330,7 @@ function createSearchTool(map){
     });
 }
 
+/*Single coordinate input field*/
 function createCoordinateInputField(map){
     L.Control.CoordinateInput = L.Control.extend({
         options:{
@@ -377,6 +402,18 @@ function checkCoordinate(latitude, longitude){
     }
 }
 
+function showCoordinateErrorPanel(){
+    var coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
+    L.DomUtil.addClass(coordinateErrorPanel, "visible");
+}
+
+function hideCoordinateErrorPanel(){
+    var coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
+
+    if(L.DomUtil.hasClass(coordinateErrorPanel, "visible")){
+        L.DomUtil.removeClass(coordinateErrorPanel, "visible");
+    }
+}
 
 function addCoordinate(coordinateValue, map){
 
@@ -384,11 +421,8 @@ function addCoordinate(coordinateValue, map){
     var latitude = inputArray[0];
     var longitude = inputArray[1];
     var coordinateMarker;
-    var coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
 
-    if(L.DomUtil.hasClass(coordinateErrorPanel, "visible")){
-            L.DomUtil.removeClass(coordinateErrorPanel, "visible")
-        }
+    hideCoordinateErrorPanel();
 
     if(checkCoordinate(latitude, longitude)){
         coordinateMarker = L.marker([latitude, longitude]);
@@ -405,8 +439,7 @@ function addCoordinate(coordinateValue, map){
         map.panTo([latitude, longitude]);
     }
     else{
-        coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
-        L.DomUtil.addClass(coordinateErrorPanel, "visible");
+        showCoordinateErrorPanel();
 
     }
 
@@ -475,6 +508,8 @@ function clearCoordinate(){
         onRemove: function (map) {
         }
     })*/
+
+/*geojson panel*/
 function createGeoJSONPanel(map){
     L.Control.GeoJSONInput = L.Control.extend({
 
@@ -497,6 +532,11 @@ function createGeoJSONPanel(map){
         createButton: function(){
             var geoJSONPanelButton = L.DomUtil.create('button', 'geojson-panel-button');
             geoJSONPanelButton.innerText = "Paste GeoJSON";
+
+            L.DomEvent.on(geoJSONPanelButton, 'click', function(){
+                //Hide coordinate input error message if visible
+                hideCoordinateErrorPanel();
+            });
 
             L.DomEvent.on(geoJSONPanelButton, 'click', this.showPanel, this)
 
