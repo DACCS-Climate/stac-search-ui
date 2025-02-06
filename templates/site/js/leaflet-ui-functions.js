@@ -226,7 +226,7 @@ function createDrawMenu(map){
         })
 
         L.DomEvent.on(buttonGeoJSON, "click", function () {
-            formatGeoJSON(shapeDict["shape"]);
+            formatGeoJSON(shapeDict);
         })
         return container;
     },
@@ -295,7 +295,11 @@ function createCoordinateInputField(map){
         onAdd: function(map){
 
             var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
-            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomLeftPanel);
+            var inputPanel = L.DomUtil.create("div", "bottom-left-input-panel", bottomLeftPanel);
+            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", inputPanel);
+            var errorPanel = L.DomUtil.create("div", "bottom-left-error-panel", bottomLeftPanel);
+            var coordinateErrorContainer = L.DomUtil.create("div", "coordinate-error-container", errorPanel);
+            errorPanel.id = "coordinateErrorPanel";
 
             var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
             L.DomUtil.addClass(coordinateLabel, "button");
@@ -313,6 +317,10 @@ function createCoordinateInputField(map){
                     addCoordinate(coordinateInputField.value, map);
                 }
             });
+
+            var coordinateError = L.DomUtil.create("p", "coordinate-error-message", coordinateErrorContainer);
+            coordinateError.innerHTML = "Coordinate outside of range.  Latitude (-90 to 90), longitude (-180 to 180)";
+            L.DomUtil.addClass(coordinateError, 'content');
 
             return bottomLeftPanel;
         },
@@ -341,23 +349,49 @@ function createCoordinateInputField(map){
 */
 
 
+function checkCoordinate(latitude, longitude){
+    if(  (latitude >= -90 && latitude <= 90) && (longitude >= -180 && longitude <= 180) ){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
 function addCoordinate(coordinateValue, map){
-    //TODO Uncomment if add coordinate input field is kept outside of map
-    //var inputElement = document.getElementById(elementID);
-    //var inputArray = inputElement.value.split(',');
+
     var inputArray = coordinateValue.split(',');
     var latitude = inputArray[0];
     var longitude = inputArray[1];
-    var coordinateMarker = L.marker([latitude, longitude]);
+    var coordinateMarker;
+    var coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
 
-    //Clear previously drawn shape/layer from map
-    //Remove previously drawn shape/layer from dictionary
-    clearShape(shapeDict);
+    if(L.DomUtil.hasClass(coordinateErrorPanel, "visible")){
+            L.DomUtil.removeClass(coordinateErrorPanel, "visible")
+        }
 
-    coordinateMarker.addTo(map);
-    //Store point marker
-    shapeDict["shape"] = coordinateMarker;
-    map.panTo([latitude, longitude]);
+    if(checkCoordinate(latitude, longitude)){
+        coordinateMarker = L.marker([latitude, longitude]);
+
+        //Clear previously drawn shape/layer from map
+        //Remove previously drawn shape/layer from dictionary
+        clearShape(shapeDict);
+
+        coordinateMarker.addTo(map);
+
+        coordinateMarker['shapeType'] = "Marker";
+        //Store point marker
+        shapeDict["shape"] = coordinateMarker;
+        map.panTo([latitude, longitude]);
+    }
+    else{
+        coordinateErrorPanel = L.DomUtil.get("coordinateErrorPanel");
+        L.DomUtil.addClass(coordinateErrorPanel, "visible");
+
+    }
+
+
 }
 
 
@@ -430,7 +464,6 @@ function createGeoJSONPanel(map){
         onAdd: function(map){
             var panelButton = this.createButton(map);
             this.createPanel(map);
-            //createPanel(map);
 
             return panelButton;
 
@@ -524,85 +557,64 @@ function createGeoJSONPanel(map){
 }
 
 
-
 function uploadGeoJSON(map){
+    //TODO Add map to shapeDict
+    // OR make another way to clear map
+    // Make way to get map geojson into search geojson for api
     var geojsonTextarea = document.getElementById("geojsonInput");
     let geoJSONData;
+    var geoJSONLayer = L.geoJson();
     var firstPoint;
+
+    //Clear previously drawn shape/layer from map
+    //Remove previously drawn shape/layer from dictionary
+    clearShape(shapeDict);
 
     try{
         JSON.parse(geojsonTextarea.value)
         geoJSONData = JSON.parse(geojsonTextarea.value);
-        console.log(geoJSONData);
     }
     catch (error){
         var errorDiv = document.getElementById("geoJSONError");
         errorDiv.innerText = error;
     }
 
-    L.geoJson(geoJSONData, {
-        //style:stylePolygons, //Optionally customize how geoJSON items are coloured
-        onEachFeature: function (feature, layer) {
+    geoJSONLayer.addData(geoJSONData);
+    geoJSONLayer.addTo(map);
 
-            feature.layer = layer;
-            feature.properties;
+    //Add geojson layer instead of the individual polygons or entire geojson object to the shapeDict
+    geoJSONLayer["shapeType"] = "Map";
+    shapeDict["shape"] = geoJSONLayer;
+    shapeDict['shapeData'] = geoJSONData;
 
-        }
-
-    }).addTo(map);
 
     firstPoint = geoJSONData["features"]["0"]["geometry"]["coordinates"]["0"]["0"];
-    map.panTo([firstPoint[1], firstPoint[0]]);
+    map.flyTo([firstPoint[1], firstPoint[0]], 13);
 }
 
-//Optionally customize how geoJSON polygons  are coloured
-/*
-function stylePolygons() {
-    return {
-        fillColor: '#bab6e7',
-        fillOpacity: 0.7,
-        weight: 2,
-        opacity: 1,
-        color: '#9999ff' //Outline color
-    };
-}
-*/
 
-
-
-
-function formatGeoJSON(shape){
-
+function formatGeoJSON(shapeDict){
+    var shapeType = shapeDict['shape']['shapeType'];
+    var shape = shapeDict['shape'];
     var currentShapeGeoJSONDiv = document.getElementById("currentShapeGeoJSON");
     var shapeGeoJSON;
     var bounds;
     var bbox
-    var stacGeoJSON;
+    var stacGeoJSON  = JSON.parse('{"type": "FeatureCollection", "features": [{}]}');
 
-    //console.log(shape);
-    //console.log(shape.toGeoJSON());
-
-
-    if(shape["shapeType"] == "Marker"){
+    if(shapeType == "Marker"){
         shapeGeoJSON = shape.toGeoJSON();
-
-    }else{
-        //console.log(shape.getBounds());
+        stacGeoJSON["features"] = shapeGeoJSON;
+    }else if(shapeType == "Map"){
+        stacGeoJSON = shapeDict['shapeData'];
+    }
+    else{
         shapeGeoJSON = shape.toGeoJSON();
         bounds = shape.getBounds();
         bbox = [bounds._northEast["lat"], bounds._northEast["lng"], bounds._southWest["lat"], bounds._southWest["lng"]]
         shapeGeoJSON["bbox"] = bbox;
+        stacGeoJSON["features"] = shapeGeoJSON;
     }
-
-
-
-
-    //console.log(shapeGeoJSON);
-
-
-    stacGeoJSON = JSON.parse('{"type": "FeatureCollection", "features": [{}]}')
-
-    stacGeoJSON["features"] = shapeGeoJSON;
 
     console.log(stacGeoJSON);
     currentShapeGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
