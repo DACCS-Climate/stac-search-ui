@@ -83,6 +83,9 @@ function createDrawMenu(map){
         L.DomEvent.disableClickPropagation(buttonDrawSquare);
         L.DomEvent.on(buttonDrawSquare, "click", function () {
 
+            //Clear anything in coordinate input field
+            clearCoordinate()
+
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
             //Clear text from div displaying the point coordinates of the shape
@@ -103,6 +106,9 @@ function createDrawMenu(map){
         buttonDrawCircle.innerHTML = '<i class="fa-solid fa-circle"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawCircle);
         L.DomEvent.on(buttonDrawCircle, "click", function () {
+
+            //Clear anything in coordinate input field
+            clearCoordinate()
 
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
@@ -125,6 +131,9 @@ function createDrawMenu(map){
         L.DomEvent.disableClickPropagation(buttonDrawPolygon);
         L.DomEvent.on(buttonDrawPolygon, "click", function () {
 
+            //Clear anything in coordinate input field
+            clearCoordinate()
+
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
             //Clear text from div displaying the point coordinates of the shape
@@ -146,6 +155,9 @@ function createDrawMenu(map){
         L.DomEvent.disableClickPropagation(buttonLocationMarker);
         L.DomEvent.on(buttonLocationMarker, "click", function () {
 
+            //Clear anything in coordinate input field
+            clearCoordinate()
+
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
             //Clear text from div displaying the point coordinates of the shape
@@ -166,6 +178,10 @@ function createDrawMenu(map){
         buttonClearFeatures.innerHTML = '<i class="fa-solid fa-eraser"></i>';
         L.DomEvent.disableClickPropagation(buttonClearFeatures);
         L.DomEvent.on(buttonClearFeatures, "click", function () {
+
+            //Clear anything in coordinate input field
+            clearCoordinate()
+
             //Clear previously drawn shape/layer from map
             //Remove previously drawn shape/layer from dictionary
             //Clear text from div displaying the point coordinates of the shape
@@ -262,6 +278,9 @@ function createSearchTool(map){
                 name.addEventListener('click', function(){
                     var coordinates = name.value.split(',');
                     var locationMarker = L.marker([coordinates[1], coordinates[0]]);
+
+                    //Clear anything in coordinate input field
+                    clearCoordinate()
 
                     //Clear previously drawn shape/layer from map
                     //Remove previously drawn shape/layer from dictionary
@@ -394,6 +413,13 @@ function addCoordinate(coordinateValue, map){
 
 }
 
+function clearCoordinate(){
+    var coordinateInputField = L.DomUtil.get("inputCoordinateLatLng");
+
+    if(coordinateInputField.value != ""){
+        coordinateInputField.value = "";
+    }
+}
 
 /*
      L.Control.CoordinateInput = L.Control.extend({
@@ -496,6 +522,9 @@ function createGeoJSONPanel(map){
             var geoJSONUploadButton = L.DomUtil.create('button', 'geojson-upload-button', geoJSONContentContainer);
             geoJSONUploadButton.innerText = "Upload GeoJSON";
             L.DomEvent.on(geoJSONUploadButton, 'click', function() {
+                //Clear anything in coordinate input field
+                clearCoordinate()
+
                 uploadGeoJSON(map)
             });
 
