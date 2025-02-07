@@ -27,10 +27,32 @@ function createMap(city){
     //Adds textbox to input single coordinate
     createCoordinateInputField(map);
 
+    //Adds panel to paste geojson
     createGeoJSONPanel(map);
 
+    //Adds tooltip on cursor that shows latitude and longitude of cursor position
+    createCursorTooltip(map);
+
+    return map;
+}
+
+function clearShape(shapeDict){
+    if(Object.keys(shapeDict).length > 0) {
+        shapeDict["shape"].remove();
+        delete shapeDict.shape;
+    }
+}
+
+function clearText(elementID){
+    var divLatLng = document.getElementById(elementID);
+    divLatLng.innerText = "";
+}
+
+function createCursorTooltip(map){
     //Create tooltip to show latitude and longitude next to cursor
     var tooltip = L.tooltip();
+
+    //Create tooltip for main map
     map.on('mouseover', function(event){
         tooltip.setLatLng(event.latlng)
             .setContent(event.latlng.toString());
@@ -49,20 +71,39 @@ function createMap(city){
         map.closeTooltip(tooltip);
     });
 
-    return map;
+
+    //Set listeners on UI elements for Tooltip actions
+    //Close tooltip when moving mouse over any UI element
+    //Open tooltip when moving mouse out of any UI element
+
+    manageToolTipDomElement(map, tooltip, "drawMenuContainer");
+    manageToolTipDomElement(map, tooltip, "coordinateContainer");
+    manageToolTipDomElement(map, tooltip, "geoJSONPanelButton");
+    manageToolTipDomElement(map, tooltip, "geoJSONPanelContainer");
+    manageToolTipDomElement(map, tooltip, "fuseSearchControlContainer");
+
 }
 
-function clearShape(shapeDict){
-    if(Object.keys(shapeDict).length > 0) {
-        shapeDict["shape"].remove();
-        delete shapeDict.shape;
-    }
+function manageToolTipDomElement(map, tooltip, elementID){
+    var element = L.DomUtil.get(elementID);
+
+    //Close tooltip when hovering over UI element
+    L.DomEvent.on(element, 'mouseover', function(event){
+        map.closeTooltip(tooltip);
+    });
+
+    //Create tooltip when moving mouse out of UI element
+    L.DomEvent.on(element, 'mouseout', function(event){
+
+        var mapLocation = map.mouseEventToLatLng(event);
+
+        tooltip.setLatLng(mapLocation)
+                .setContent(mapLocation.toString());
+
+        map.openTooltip(tooltip);
+    });
 }
 
-function clearText(elementID){
-    var divLatLng = document.getElementById(elementID);
-    divLatLng.innerText = "";
-}
 
 /*Map controls*/
 function createDrawMenu(map){
@@ -76,6 +117,7 @@ function createDrawMenu(map){
         //Allows drawing shapes, erasing shapes
         let newShape;
         var container = L.DomUtil.create("div", "leaflet-control leaflet-bar");
+        container.id = "drawMenuContainer";
 
         var buttonDrawSquare = L.DomUtil.create("a", "leaflet-control-button", container);
         buttonDrawSquare.title = "Click and drag to draw a square";
@@ -277,10 +319,10 @@ function createDrawMenu(map){
 
 function createSearchTool(map){
     var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
+    var searchControlContainer;
     let searchControl;
+    var locationButtonContainer;
     let options;
-
-    fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
 
         options = {
             maxResultLength: 15,
@@ -321,13 +363,16 @@ function createSearchTool(map){
             }
         }
 
-
         //Leaflet-fuse-search plugin
         searchControl = L.control.fuseSearch(options);
         searchControl.addTo(map);
 
-        searchControl.indexFeatures(jsonData.features, ["NAME"]);
-    });
+        fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
+            searchControl.indexFeatures(jsonData.features, ["NAME"]);
+        });
+
+        searchControlContainer = searchControl.getContainer();
+        searchControlContainer.id = "fuseSearchControlContainer";
 }
 
 /*Single coordinate input field*/
@@ -341,6 +386,8 @@ function createCoordinateInputField(map){
             var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
             var inputPanel = L.DomUtil.create("div", "bottom-left-input-panel", bottomLeftPanel);
             var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", inputPanel);
+            coordinateContainer.id="coordinateContainer";
+
             var errorPanel = L.DomUtil.create("div", "bottom-left-error-panel", bottomLeftPanel);
             var coordinateErrorContainer = L.DomUtil.create("div", "coordinate-error-container", errorPanel);
             errorPanel.id = "coordinateErrorPanel";
@@ -531,6 +578,7 @@ function createGeoJSONPanel(map){
         },
         createButton: function(){
             var geoJSONPanelButton = L.DomUtil.create('button', 'geojson-panel-button');
+            geoJSONPanelButton.id = "geoJSONPanelButton";
             geoJSONPanelButton.innerText = "Paste GeoJSON";
 
             L.DomEvent.on(geoJSONPanelButton, 'click', function(){
@@ -546,7 +594,11 @@ function createGeoJSONPanel(map){
         createPanel: function(map){
             var mapContainer = map.getContainer();
             var bottomRightPanel = this._panel = L.DomUtil.create('div', 'bottom-right-panel', mapContainer);
+            bottomRightPanel.id = "bottomRightPanel";
+
             var geoJSONPanelContainer = L.DomUtil.create('div', 'geojson-panel-container', bottomRightPanel);
+            geoJSONPanelContainer.id = "geoJSONPanelContainer";
+
             var geoJSONButtonContainer = L.DomUtil.create('div', 'geojson-button-container', geoJSONPanelContainer);
             var geoJSONCloseButton = L.DomUtil.create('button', 'geojson-close-button', geoJSONButtonContainer);
             geoJSONCloseButton.innerText = "Close";
