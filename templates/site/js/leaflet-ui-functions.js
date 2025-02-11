@@ -33,6 +33,10 @@ function createMap(city){
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
     createCursorTooltip(map);
 
+    map.on('mouseup', function(event){
+        getShapeLatLng();
+    });
+
     return map;
 }
 
@@ -48,11 +52,12 @@ function clearText(elementID){
     divLatLng.innerText = "";
 }
 
+
+//Create tooltip to show latitude and longitude next to cursor
 function createCursorTooltip(map){
-    //Create tooltip to show latitude and longitude next to cursor
+
     var tooltip = L.tooltip();
 
-    //Create tooltip for main map
     map.on('mouseover', function(event){
         tooltip.setLatLng(event.latlng)
             .setContent(event.latlng.toString());
@@ -104,6 +109,52 @@ function manageToolTipDomElement(map, tooltip, elementID){
     });
 }
 
+//Gets latitude and longitude of shapes added to the map and prints them out in the "Current Shape Lat Long" div
+//For the Marker it also outputs the latitude and longitude of the added Marker to the coordinate input text field
+//For Polygons it prints out an updated list of added polygon points as points are added.
+function getShapeLatLng(){
+    var circleRadius;
+    var circleCentre;
+    var markerCentre;
+    var polygonLatLngArray;
+    var divLatLng = document.getElementById("currentShapeLatLng");
+    var coordinateInput = document.getElementById("inputCoordinateLatLng");
+    //Keep in case this information is needed
+    /*
+    let circleBounds;
+    let circleBoundsCornerNE;
+    let circleBoundsCornerSW;
+    */
+
+
+    //Hide coordinate input error message if visible
+    hideCoordinateErrorPanel();
+
+    if (Object.keys(shapeDict).length > 0) {
+        console.log(shapeDict["shape"]);
+        if (shapeDict["shape"]["shapeType"] == "Circle") {
+
+            circleRadius = shapeDict["shape"].getRadius();
+            circleCentre = shapeDict["shape"].getLatLng();
+
+            //Keep in case this information is needed
+            /*
+            circleBounds = shapeDict["shape"].getBounds();
+            circleBoundsCornerNE = circleBounds.getNorthEast();
+            circleBoundsCornerSW = circleBounds.getSouthWest();
+            */
+
+            divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
+        } else if (shapeDict["shape"]["shapeType"] == "Marker") {
+            markerCentre = shapeDict["shape"].getLatLng();
+            coordinateInput.value = markerCentre.lat.toFixed(6) + "," + markerCentre.lng.toFixed(6);
+            divLatLng.innerText = markerCentre;
+        } else {
+            polygonLatLngArray = shapeDict["shape"].getLatLngs();
+            divLatLng.innerText = polygonLatLngArray;
+        }
+    }
+}
 
 /*Map controls*/
 function createDrawMenu(map){
@@ -201,6 +252,7 @@ function createDrawMenu(map){
 
 
         var buttonLocationMarker = L.DomUtil.create("a", "leaflet-control-button", container);
+        var markerLatLng;
         buttonLocationMarker.title = "Click to add a location marker";
         buttonLocationMarker.innerHTML = '<i class="fa-solid fa-location-dot button-location-icon"></i>';
         L.DomEvent.disableClickPropagation(buttonLocationMarker);
@@ -220,6 +272,8 @@ function createDrawMenu(map){
 
             //Add location marker to map
             newShape = map.editTools.startMarker();
+            markerLatLng = newShape.getLatLng();
+            
             newShape["shapeType"] = "Marker";
 
             //Store drawn shape
@@ -248,58 +302,8 @@ function createDrawMenu(map){
         })
 
 
-        var buttonCopy = L.DomUtil.create("a", "leaflet-control-button", container);
-        var divLatLng = document.getElementById("currentShapeLatLng");
         var buttonGeoJSON = L.DomUtil.create("a", "leaflet-control-button", container);
-        var divCurrentGeoJSON = document.getElementById("currentShapeGeoJSON");
-        let polygonLatLngArray;
-        let markerCentre;
-        let circleRadius;
-        let circleCentre;
-
-        //Keep in case this information is needed
-        /*
-        let circleBounds;
-        let circleBoundsCornerNE;
-        let circleBoundsCornerSW;
-        */
-
-        buttonCopy.innerText = "Get LatLong";
         buttonGeoJSON.innerText = "GeoJSON";
-
-        L.DomEvent.disableClickPropagation(buttonCopy);
-
-        L.DomEvent.on(buttonCopy, "click", function () {
-
-            //Hide coordinate input error message if visible
-            hideCoordinateErrorPanel();
-
-            if(Object.keys(shapeDict).length > 0){
-                if("_radius" in shapeDict["shape"]){
-
-                    circleRadius = shapeDict["shape"].getRadius();
-                    circleCentre = shapeDict["shape"].getLatLng();
-
-                    //Keep in case this information is needed
-                    /*
-                    circleBounds = shapeDict["shape"].getBounds();
-                    circleBoundsCornerNE = circleBounds.getNorthEast();
-                    circleBoundsCornerSW = circleBounds.getSouthWest();
-                    */
-
-                    divLatLng.innerText = "Centre = " + circleCentre + "\n" +  "Radius = " + circleRadius;
-                }
-                else if("_icon" in shapeDict["shape"]){
-                    markerCentre = shapeDict["shape"].getLatLng();
-                    divLatLng.innerText = markerCentre;
-                }
-                else{
-                    polygonLatLngArray = shapeDict["shape"].getLatLngs();
-                    divLatLng.innerText = polygonLatLngArray;
-                }
-            }
-
-        })
 
         L.DomEvent.on(buttonGeoJSON, "click", function () {
             //Hide coordinate input error message if visible
@@ -321,7 +325,6 @@ function createSearchTool(map){
     var defaultMapURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places.geojson";
     var searchControlContainer;
     let searchControl;
-    var locationButtonContainer;
     let options;
 
         options = {
@@ -367,10 +370,12 @@ function createSearchTool(map){
         searchControl = L.control.fuseSearch(options);
         searchControl.addTo(map);
 
+        //Gets 'name' value from geojson and populates list used for search results
         fetch(defaultMapURL).then( response => response.json()).then(jsonData => {
             searchControl.indexFeatures(jsonData.features, ["NAME"]);
         });
 
+        //Element ID used to hide and show cursor tooltip when moving cursor over magnifying glass button only
         searchControlContainer = searchControl.getContainer();
         searchControlContainer.id = "fuseSearchControlContainer";
 }
@@ -422,22 +427,6 @@ function createCoordinateInputField(map){
     var inputField = new L.Control.CoordinateInput(map);
     inputField.addTo(map);
 }
-/*
-function createCoordinateInputField(map){
-
-    var options = {
-            position: "bottomleft"
-        }
-
-    var coordinateInput = new L.Control.CoordinateInput();
-    coordinateInput.addTo(map);
-    return coordinateInput;
-    //var inputCoordinateControl = L.control.CoordinateInput(options);
-    //inputCoordinateControl.addTo(map);
-
-    //return inputCoordinateControl;
-}
-*/
 
 
 function checkCoordinate(latitude, longitude){
@@ -481,16 +470,14 @@ function addCoordinate(coordinateValue, map){
         coordinateMarker.addTo(map);
 
         coordinateMarker['shapeType'] = "Marker";
+
         //Store point marker
         shapeDict["shape"] = coordinateMarker;
         map.panTo([latitude, longitude]);
     }
     else{
         showCoordinateErrorPanel();
-
     }
-
-
 }
 
 function clearCoordinate(){
@@ -501,60 +488,6 @@ function clearCoordinate(){
     }
 }
 
-/*
-     L.Control.CoordinateInput = L.Control.extend({
-        options:{
-            position: "bottomleft"
-        },
-        initialize: function(options) {
-            L.setOptions(this, options);
-        },
-        onAdd: function(map){
-            var newCoordinateInput = this.createControl(map);
-            return newCoordinateInput;
-
-        },
-        createControl: function(map){
-            var bottomLeftPanel = L.DomUtil.create("div", "bottom-left-panel");
-            var coordinateContainer = L.DomUtil.create("div", "coordinate-input-container", bottomLeftPanel);
-            var coordinateLabel = L.DomUtil.create("label", "coordinate-input-label", coordinateContainer);
-            var coordinateInputField = L.DomUtil.create("input", "coordinate-input-field", coordinateContainer);
-
-            coordinateLabel.for = "inputCoordinateLatLng";
-            coordinateLabel.innerHTML = "Point";
-            coordinateInputField.id = "inputCoordinateLatLng";
-            coordinateInputField.type = "text";
-            coordinateInputField.placeholder = "Lat, Lng";
-
-            L.DomEvent.on(coordinateInputField, 'keydown', function(event){
-                if(event.key == "Enter"){
-                    this.addCoordinate(coordinateInputField.value, map);
-                }
-            });
-
-            return bottomLeftPanel;
-        },
-        addCoordinate: function(coordinateValue, map){
-            //TODO Uncomment if add coordinate input field is kept outside of map
-            //var inputElement = document.getElementById(elementID);
-            //var inputArray = inputElement.value.split(',');
-            var inputArray = coordinateValue.split(',');
-            var latitude = inputArray[0];
-            var longitude = inputArray[1];
-            var coordinateMarker = L.marker([latitude, longitude]);
-
-            //Clear previously drawn shape/layer from map
-            //Remove previously drawn shape/layer from dictionary
-            clearShape(shapeDict);
-
-            coordinateMarker.addTo(map);
-            //Store point marker
-            shapeDict["shape"] = coordinateMarker;
-            map.panTo([latitude, longitude]);
-        },
-        onRemove: function (map) {
-        }
-    })*/
 
 /*geojson panel*/
 function createGeoJSONPanel(map){
@@ -640,9 +573,6 @@ function createGeoJSONPanel(map){
                 L.DomUtil.addClass(this._panel, 'visible');
                 // Preserve map centre
                 this._map.panBy([this.getOffset() * 0.5, 0], {duration: 0.5});
-
-                // Search again as visibility of features might have changed
-                //this.searchFeatures(this._input.value);
             }
         },
 
@@ -653,8 +583,8 @@ function createGeoJSONPanel(map){
                 // as this might already have been cleared up by removeFrom()
                 if (null !== this._map) {
                     this._map.panBy([this.getOffset() * -0.5, 0], {duration: 0.5});
-                };
-                //this.fire('hide');
+                }
+
                 if(e) {
                     L.DomEvent.stopPropagation(e);
                 }
@@ -679,9 +609,7 @@ function createGeoJSONPanel(map){
 
 
 function uploadGeoJSON(map){
-    //TODO Add map to shapeDict
-    // OR make another way to clear map
-    // Make way to get map geojson into search geojson for api
+
     var geojsonTextarea = document.getElementById("geojsonInput");
     let geoJSONData;
     var geoJSONLayer = L.geoJson();
@@ -709,11 +637,13 @@ function uploadGeoJSON(map){
     shapeDict['shapeData'] = geoJSONData;
 
 
+    //Get first coordinate from the first shape defined in the geojson to use as location to move the map view to
+    // the added area
     firstPoint = geoJSONData["features"]["0"]["geometry"]["coordinates"]["0"]["0"];
     map.flyTo([firstPoint[1], firstPoint[0]], 13);
 }
 
-
+//Formats drawn shape or added geojson map area into geojson as expected by STAC API
 function formatGeoJSON(shapeDict){
     var shapeType = shapeDict['shape']['shapeType'];
     var shape = shapeDict['shape'];
@@ -740,41 +670,3 @@ function formatGeoJSON(shapeDict){
     console.log(stacGeoJSON);
     currentShapeGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
 }
-
-
-
-
-function getTextareaGeoJSON(){
-    var geojsonTextarea = document.getElementById("geojsonInput");
-
-    if(geojsonTextarea.value != ''){
-        return geojsonTextarea.value;
-    }
-    else {
-        return false;
-    }
-}
-
-
-async function getGeoJSON(map){
-    let geojsonInput;
-    let urlResponse;
-    let geojsonDefaultURL = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_populated_places_simple.geojson";
-    var geojsonTextarea = document.getElementById("geojsonInput");
-
-    if(geojsonTextarea.value != ''){
-        geojsonInput = geojsonTextarea.value.json();
-    }
-    else{
-        urlResponse = await fetch(geojsonDefaultURL);
-        geojsonInput = await urlResponse.json();
-        //geojsonInput = urlResponse;
-        console.log("else");
-        console.log(geojsonInput);
-    }
-
-return geojsonInput;
-}
-
-
-
