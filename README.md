@@ -1,12 +1,15 @@
 # stac-ui-tools
 Tools to build the dictionary files, client-side functionality, and basic search UI for the STAC search component
 
+Map UI added using Leaflet map that will allow an intuitive interface for the user.
+
 # Requirements
 - [Typo.js](https://github.com/cfinke/Typo.js)
 *(Typo.js is already included in the main.html file via CDN link)*
 - [Python](https://www.python.org/)
 - [Pandas](https://pypi.org/project/pandas/)
 - [Jinja2](https://pypi.org/project/Jinja2/)
+- [LeafletJS](https://leafletjs.com/)
 
 # Build the dictionary
 The STAC Search UI dictionary comes with a default dictionary of words and terms currently used in the STAC catalog. 
@@ -43,6 +46,29 @@ python3 -m http.server
 3. Type in the search field and see the suggested words below it 
 
 
+# Running the Leaflet Map
+Leaflet is browser based and dependencies are loaded from the web page.
+
+## Building the Leaflet Map
+
+The Leaflet map is built with the project. 
+
+1. If needed, go to the root folder of the project and build the project with 
+the following command:
+```
+python3 build.py
+```
+
+2. Start a  localhost:
+```
+python3 -m http.server
+```
+
+3.  Go to the Leaflet map page:
+```
+http://localhost:8000/leaflet.html
+```
+
 
 # Development notes
 ## Creating Custom Dictionaries
@@ -58,3 +84,4 @@ The affix file at least needs the encoding set for Typo.js to read it.  This is 
 The word list file starts with the number of words in the file, followed by a list of words separated by a newline character.
 
 [Hunspell dictionary file documentation](https://manpages.ubuntu.com/manpages/focal/man5/hunspell.5.html)
+
