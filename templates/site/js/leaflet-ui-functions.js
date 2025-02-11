@@ -36,12 +36,14 @@ function createMap(city){
     map.on('mouseup', function(event){
         getShapeLatLng();
     });
-
-    return map;
 }
 
 function clearShape(shapeDict){
     if(Object.keys(shapeDict).length > 0) {
+        if("shapeData" in shapeDict){
+            delete shapeDict.shapeData;
+        }
+
         shapeDict["shape"].remove();
         delete shapeDict.shape;
     }
@@ -131,7 +133,6 @@ function getShapeLatLng(){
     hideCoordinateErrorPanel();
 
     if (Object.keys(shapeDict).length > 0) {
-        console.log(shapeDict["shape"]);
         if (shapeDict["shape"]["shapeType"] == "Circle") {
 
             circleRadius = shapeDict["shape"].getRadius();
@@ -150,8 +151,10 @@ function getShapeLatLng(){
             coordinateInput.value = markerCentre.lat.toFixed(6) + "," + markerCentre.lng.toFixed(6);
             divLatLng.innerText = markerCentre;
         } else {
-            polygonLatLngArray = shapeDict["shape"].getLatLngs();
-            divLatLng.innerText = polygonLatLngArray;
+            if(shapeDict["shape"]["shapeType"] != "Map") {
+                polygonLatLngArray = shapeDict["shape"].getLatLngs();
+                divLatLng.innerText = polygonLatLngArray;
+            }
         }
     }
 }
@@ -298,7 +301,6 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
-            clearText("currentShapeGeoJSON");
         })
 
 
@@ -568,7 +570,6 @@ function createGeoJSONPanel(map){
         },
 
         showPanel: function () {
-            console.log(this);
             if (! this.isPanelVisible()) {
                 L.DomUtil.addClass(this._panel, 'visible');
                 // Preserve map centre
@@ -610,7 +611,7 @@ function createGeoJSONPanel(map){
 
 function uploadGeoJSON(map){
 
-    var geojsonTextarea = document.getElementById("geojsonInput");
+    var geojsonTextarea = L.DomUtil.get("geojsonInput");
     let geoJSONData;
     var geoJSONLayer = L.geoJson();
     var firstPoint;
@@ -647,7 +648,6 @@ function uploadGeoJSON(map){
 function formatGeoJSON(shapeDict){
     var shapeType = shapeDict['shape']['shapeType'];
     var shape = shapeDict['shape'];
-    var currentShapeGeoJSONDiv = document.getElementById("currentShapeGeoJSON");
     var shapeGeoJSON;
     var bounds;
     var bbox
@@ -667,6 +667,6 @@ function formatGeoJSON(shapeDict){
         stacGeoJSON["features"] = shapeGeoJSON;
     }
 
+    //Keep console for the formatted geojson for now
     console.log(stacGeoJSON);
-    currentShapeGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
 }
