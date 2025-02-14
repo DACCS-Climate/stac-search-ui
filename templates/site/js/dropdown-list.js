@@ -1,6 +1,3 @@
-
-
-
 function swapListItems(firstItemID, secondItemID){
     var firstItem = document.getElementById(firstItemID);
     var secondItem = document.getElementById(secondItemID);
