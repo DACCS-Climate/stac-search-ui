@@ -1,1 +1,0 @@
-toggleDropdownPanelBackground("dropdownListRegularMetadataContainer");
