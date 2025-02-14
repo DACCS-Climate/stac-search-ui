@@ -1,16 +1,17 @@
 {% set dropdown_library = {
          "regular_dropdown_source": {
          "container_id": "dropdownSourceContainer",
-            "title_icon": "<i class='fa-solid fa-link dropdown-regular-icon'></i>"
+         "title_icon": "<i class='fa-solid fa-link dropdown-regular-icon'></i>",
+         "title_swap_class": "dropdown-panel-source"
         },
         "regular_dropdown_share": {
         "container_id": "dropdownShareContainer",
-            "title_icon": "<i class='fa-solid fa-share-nodes dropdown-regular-icon'></i>",
-            "panel_icons":[
+        "title_icon": "<i class='fa-solid fa-share-nodes dropdown-regular-icon'></i>",
+        "panel_icons":[
                 {"share_icon": "<i class='fa-brands fa-square-x-twitter'></i>"},
                 {"share_icon": "<i class='fa-solid fa-square-envelope'></i>"}
             ],
-
+        "title_swap_class": ""
         },
         "dropdown_time_frame": {
             "container_id": "dropdownTimeframeContainer",
@@ -34,7 +35,7 @@
 {% if dropdown_type == "regular_dropdown_share" or dropdown_type == "regular_dropdown_source"%}
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="dropdown-panel-container" tabindex="0">
         <div class="dropdown">
-            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title {{ dropdown_library[dropdown_type]["title_swap_class"] }}" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
                 {%  if dropdown_type == "regular_dropdown_source" %}
                     <div id="dropdownTitleText">
                         {{ dropdown_label_text }} {{ dropdown_library[dropdown_type]["title_icon"]|safe }}
@@ -80,37 +81,12 @@
                 </li>
             </ul>
         </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
 
-
-            dropdownContainer.addEventListener('click', function (event) {
-                toggleChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                toggleDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
-            });
-
-            dropdownContainer.addEventListener('blur', function(){
-                removeChevronRotate("{{ dropdown_button_id }}", "dropdown-panel-icon");
-                removeDropdownPanelBackground("{{ dropdown_button_id }}", "dropdown-panel-icon");
-            });
-        })
-    </script>
     {% if dropdown_type == "regular_dropdown_source" %}
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
-
                 //TODO uncomment for production use
                 //populateStacVersion("dropdownStacVersion");
-
-                dropdownContainer.addEventListener('click', function (event) {
-                    toggleDropdownPanelTitleText();
-                });
-
-                dropdownContainer.addEventListener('blur', function(){
-                    toggleDropdownPanelTitleText();
-                });
             })
         </script>
     {% endif %}
@@ -241,22 +217,10 @@
     <script src="js/dropdown-timeframe-scripts.js"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var dropdownPanelShareLink = document.getElementById("{{ dropdown_timeframe_link_id }}");
-            var dropdownContainer = document.getElementById("{{ dropdown_library[dropdown_type]["container_id"] }}");
             var radioNever = document.getElementById('{{ radioButtonNeverDetails["radio_id"] }}');
             var radioEndsOn = document.getElementById('{{ radioButtonEndsOnDetails["radio_id"] }}');
 
             defaultRadioState('{{ radioButtonNeverDetails["radio_id"] }}', '{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}');
-
-            dropdownContainer.addEventListener('click', function (event) {
-                toggleChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
-                toggleDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
-            });
-
-            dropdownContainer.addEventListener('blur', function(){
-                removeChevronRotate("{{ dropdown_timeframe_link_id }}", "dropdown-timeframe-chevron");
-                removeDropdownPanelBackground("{{ dropdown_timeframe_link_id }}");
-            });
 
             radioEndsOn.addEventListener('change', function (){
                enableEndsOnDateInput('{{ radioButtonEndsOnDetails["radio_id"] }}', '{{ dropdown_library[dropdown_type]['datepicker_end_on_id'] }}');
