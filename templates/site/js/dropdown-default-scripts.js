@@ -35,3 +35,31 @@ function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropd
         dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
     }
 }
+
+function selectAllCheckbox(listULID, defaultDropdownButtonTextID, allCheckboxID, defaultDropdownLabelText){
+    var checkboxCount = 0;
+    var dropdownButtonTextElement = document.getElementById(defaultDropdownButtonTextID);
+    var allCheckbox = document.getElementById(allCheckboxID);
+    var list = document.getElementById(listULID);
+    var checkboxArray = list.querySelectorAll('input[type=checkbox]')
+
+        console.log(checkboxArray);
+
+    //var checkboxResultArray = checkboxArray.splice(0,1);
+
+    for(checkbox of checkboxArray){
+        checkbox.checked = true
+
+        checkboxCount = (checkboxCount + 1) - 1;
+    }
+
+    if(checkboxCount == 0){
+        dropdownButtonTextElement.innerText = defaultDropdownLabelText ;
+    }
+    else{
+        dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
+    }
+
+
+
+}
