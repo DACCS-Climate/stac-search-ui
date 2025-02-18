@@ -36,30 +36,33 @@ function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropd
     }
 }
 
-function selectAllCheckbox(listULID, defaultDropdownButtonTextID, allCheckboxID, defaultDropdownLabelText){
+function selectAllCheckbox(listULID, defaultDropdownButtonTextID, defaultDropdownLabelText){
     var checkboxCount = 0;
     var dropdownButtonTextElement = document.getElementById(defaultDropdownButtonTextID);
-    var allCheckbox = document.getElementById(allCheckboxID);
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]')
 
-        console.log(checkboxArray);
+    if(checkboxArray[0].checked == true){
+        for(checkbox of checkboxArray){
+            checkbox.checked = true
+            if(checkbox.checked){
+                checkboxCount = checkboxCount + 1;
+            }
+        }
 
-    //var checkboxResultArray = checkboxArray.splice(0,1);
+        checkboxCount = checkboxCount - 1;
 
-    for(checkbox of checkboxArray){
-        checkbox.checked = true
-
-        checkboxCount = (checkboxCount + 1) - 1;
-    }
-
-    if(checkboxCount == 0){
-        dropdownButtonTextElement.innerText = defaultDropdownLabelText ;
+        if(checkboxCount == 0){
+            dropdownButtonTextElement.innerText = defaultDropdownLabelText ;
+        }
+        else{
+            dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
+        }
     }
     else{
-        dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
+        for(checkbox of checkboxArray){
+            checkbox.checked = false;
+        }
+        dropdownButtonTextElement.innerText = defaultDropdownLabelText ;
     }
-
-
-
 }
