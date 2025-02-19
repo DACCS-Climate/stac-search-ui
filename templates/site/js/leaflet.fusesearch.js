@@ -97,6 +97,7 @@ L.Control.FuseSearch = L.Control.extend({
                   .off(butt, 'mousedown', stop)
                   .off(butt, 'touchstart', stop)
                   .off(butt, 'mousewheel', stop)
+                  .off(butt, 'wheel', stop)
                   .off(butt, 'MozMousePixelScroll', stop);
         L.DomEvent.off(butt, 'click', L.DomEvent.preventDefault);
         L.DomEvent.off(butt, 'click', this.showPanel);
