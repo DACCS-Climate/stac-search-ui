@@ -1,3 +1,4 @@
+//Used for overriding the Typo.js dictionary definition
 //var dictionary = new Typo(`{{ custom_typojs_dictionary }}`, false, false, { dictionaryPath: "dictionary" })
 
 
