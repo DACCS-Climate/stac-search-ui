@@ -111,6 +111,19 @@ function manageToolTipDomElement(map, tooltip, elementID){
     });
 }
 
+//Display passed latitude and longitude in the point coordinate field
+//Round passed latitude and longitude to 6 decimal places
+function displayCoordinate(lat, lng){
+    var coordinateInputField = document.getElementById("inputCoordinateLatLng");
+
+    if(typeof(lat) == "string"){
+        coordinateInputField.value = Number(lat).toFixed(6) + "," + Number(lng).toFixed(6);
+    }
+    else{
+        coordinateInputField.value = lat.toFixed(6) + "," + lng.toFixed(6);
+    }
+}
+
 //Gets latitude and longitude of shapes added to the map and prints them out in the "Current Shape Lat Long" div
 //For the Marker it also outputs the latitude and longitude of the added Marker to the coordinate input text field
 //For Polygons it prints out an updated list of added polygon points as points are added.
@@ -120,7 +133,6 @@ function getShapeLatLng(){
     var markerCentre;
     var polygonLatLngArray;
     var divLatLng = document.getElementById("currentShapeLatLng");
-    var coordinateInput = document.getElementById("inputCoordinateLatLng");
     //Keep in case this information is needed
     /*
     let circleBounds;
@@ -148,7 +160,10 @@ function getShapeLatLng(){
             divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
         } else if (shapeDict["shape"]["shapeType"] == "Marker") {
             markerCentre = shapeDict["shape"].getLatLng();
-            coordinateInput.value = markerCentre.lat.toFixed(6) + "," + markerCentre.lng.toFixed(6);
+
+            //Display coordinate in point coordinate field
+            displayCoordinate(markerCentre.lat, markerCentre.lng)
+
             divLatLng.innerText = markerCentre;
         } else {
             if(shapeDict["shape"]["shapeType"] != "Map") {
@@ -360,9 +375,13 @@ function createSearchTool(map){
                     locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
 
+                    //Display coordinate of selected city in point coordinate field
+                    displayCoordinate(coordinates[1], coordinates[0]);
 
+                    //Add marker to map and move map to the location
                     locationMarker.addTo(map);
                     map.panTo([coordinates[1], coordinates[0]]);
+
                 })
                 container.appendChild(L.DomUtil.create('br', null, container));
             }
