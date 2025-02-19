@@ -555,7 +555,7 @@ function createGeoJSONPanel(map){
 
             var geoJSONButtonContainer = L.DomUtil.create('div', 'geojson-button-container', geoJSONPanelContainer);
             var geoJSONCloseButton = L.DomUtil.create('button', 'geojson-close-button', geoJSONButtonContainer);
-            geoJSONCloseButton.innerText = "Close";
+            geoJSONCloseButton.innerHTML = '<i class="fa-solid fa-xmark"></i>';
             L.DomEvent.on(geoJSONCloseButton, 'click', this.hidePanel, this);
 
             var geoJSONContentContainer = L.DomUtil.create('div', 'geojson-content-container', geoJSONPanelContainer);
