@@ -1,3 +1,10 @@
+//Leaflet Fuse Search plugin
+//Used for adding a search tool to the leaflet map
+//Update by getting the latest version from their github and copy the leaflet.fusesearch.js file and
+//leaflet.fusesearch.css from the 'src' directory
+//Paste the leaflet.fusesearch.js into the project's 'templates/site/js' directory.
+//Paste the leaflet.fusesearch.css into the project's 'static/css' directory.
+//https://github.com/naomap/leaflet-fusesearch
 
 // From http://www.tutorialspoint.com/javascript/array_map.htm
 if (!Array.prototype.map)
