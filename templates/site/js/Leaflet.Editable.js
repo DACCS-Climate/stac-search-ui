@@ -1,3 +1,8 @@
+//Leaflet.Editable plugin used for drawing shapes and adding markers to the map
+//Version 1.2 as noted in their github's CHANGELOG.md
+//Update by getting the latest version from their github and copy the Leaflet.Editable.js file from the 'src'
+//directory into the project's 'templates/site/js' directory
+// https://github.com/Leaflet/Leaflet.Editable
 ;((factory, window) => {
   /*globals define, module, require*/
 
