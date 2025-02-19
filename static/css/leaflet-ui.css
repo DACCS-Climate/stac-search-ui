@@ -206,11 +206,9 @@
 }
 
 .geojson-close-button{
-
-}
-
-.geojson-textarea{
-
+    background-color: var(--white);
+    border: none;
+    font-size: 16px;
 }
 
 .geojson-upload-button{
