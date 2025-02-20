@@ -6,7 +6,6 @@ Map UI added using Leaflet map that will allow an intuitive interface for the us
 # Requirements
 - [Fuse.js](https://github.com/krisk/Fuse)
 - [Python](https://www.python.org/)
-- [Pandas](https://pypi.org/project/pandas/)
 - [Jinja2](https://pypi.org/project/Jinja2/)
 - [LeafletJS](https://leafletjs.com/)
 
