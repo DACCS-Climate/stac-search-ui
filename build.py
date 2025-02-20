@@ -53,7 +53,7 @@ if __name__ == "__main__":
         "-lat",
         "--map-default-latitude",
         type = float,
-        default=43.6532,
+        default=43.1249,
         help="default latitude on leaflet map.",
     )
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         "-lng",
         "--map-default-longitude",
         type=float,
-        default=-79.3832,
+        default=1.254,
         help="default longitude on leaflet map.",
     )
 
