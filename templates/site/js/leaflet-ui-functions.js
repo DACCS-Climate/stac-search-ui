@@ -1,18 +1,11 @@
 var shapeDict = {};
 
-function createMap(city){
-    var location={
-        "Toronto":[43.6532, -79.3832],
-        "London":[51.509865, -0.118092],
-        "Hong Kong":[22.302711, 114.177216],
-        "startPoint" : [43.1249, 1.254]
-    };
-
-    //Creates map with the map centre at the passed city
+function createMap(){
+    //Creates map with the map centre at the given latitude. longitude, and zoom level
     var map = L.map('map',{
             editable: true,
-            center: location[city],
-            zoom: 13
+            center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
+            zoom: `{{ map_default_zoom }}`
         });
 
     //Adds map image
@@ -506,7 +499,7 @@ function addCoordinate(coordinateValue, map){
 
         //Store point marker
         shapeDict["shape"] = coordinateMarker;
-        map.panTo([latitude, longitude]);
+        map.flyTo([latitude, longitude], 13);
     }
     else{
         showCoordinateErrorPanel();
