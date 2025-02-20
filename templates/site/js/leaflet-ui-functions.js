@@ -185,10 +185,13 @@ function createDrawMenu(map){
         //Create buttons for map menu
         //Allows drawing shapes, erasing shapes
         let newShape;
-        var container = L.DomUtil.create("div", "leaflet-control leaflet-bar");
+        var container = L.DomUtil.create("div", "container-left-menu");
+        var drawMenuContainer = L.DomUtil.create("div", "leaflet-bar container-draw-menu", container);
+        var geoJSONConvertContainer = L.DomUtil.create("div", "container-geojson-convert", container);
         container.id = "drawMenuContainer";
 
-        var buttonDrawSquare = L.DomUtil.create("a", "leaflet-control-button", container);
+
+        var buttonDrawSquare = L.DomUtil.create("a", "leaflet-control-button", drawMenuContainer);
         buttonDrawSquare.title = "Click and drag to draw a square";
         buttonDrawSquare.innerHTML = '<i class="fa-solid fa-square-full button-square-icon"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawSquare);
@@ -205,6 +208,7 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
 
             // Start drawing rectangle
             newShape = map.editTools.startRectangle();
@@ -215,7 +219,7 @@ function createDrawMenu(map){
         })
 
 
-        var buttonDrawCircle = L.DomUtil.create("a", "leaflet-control-button", container);
+        var buttonDrawCircle = L.DomUtil.create("a", "leaflet-control-button", drawMenuContainer);
         buttonDrawCircle.title = "Click and drag to draw a circle";
         buttonDrawCircle.innerHTML = '<i class="fa-solid fa-circle"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawCircle);
@@ -232,6 +236,7 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
 
             // Start drawing circle
             newShape = map.editTools.startCircle();
@@ -242,7 +247,7 @@ function createDrawMenu(map){
         })
 
 
-        var buttonDrawPolygon = L.DomUtil.create("a", "leaflet-control-button", container);
+        var buttonDrawPolygon = L.DomUtil.create("a", "leaflet-control-button", drawMenuContainer);
         buttonDrawPolygon.title = "Click to add polygon vertexes";
         buttonDrawPolygon.innerHTML = '<i class="fa-solid fa-draw-polygon"></i>';
         L.DomEvent.disableClickPropagation(buttonDrawPolygon);
@@ -259,6 +264,7 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
 
             // Click to add points to map that will be automatically joined into a polygon
             newShape = map.editTools.startPolygon();
@@ -269,7 +275,7 @@ function createDrawMenu(map){
         })
 
 
-        var buttonLocationMarker = L.DomUtil.create("a", "leaflet-control-button", container);
+        var buttonLocationMarker = L.DomUtil.create("a", "leaflet-control-button", drawMenuContainer);
         var markerLatLng;
         buttonLocationMarker.title = "Click to add a location marker";
         buttonLocationMarker.innerHTML = '<i class="fa-solid fa-location-dot button-location-icon"></i>';
@@ -287,6 +293,7 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
 
             //Add location marker to map
             newShape = map.editTools.startMarker();
@@ -299,7 +306,7 @@ function createDrawMenu(map){
         })
 
 
-        var buttonClearFeatures = L.DomUtil.create("a", "leaflet-control-button", container);
+        var buttonClearFeatures = L.DomUtil.create("a", "leaflet-control-button", drawMenuContainer);
         buttonClearFeatures.title = "Clear";
         buttonClearFeatures.innerHTML = '<i class="fa-solid fa-eraser"></i>';
         L.DomEvent.disableClickPropagation(buttonClearFeatures);
@@ -316,11 +323,14 @@ function createDrawMenu(map){
             //Clear text from div displaying the point coordinates of the shape
             clearShape(shapeDict);
             clearText("currentShapeLatLng");
+            clearText("currentShapeGeoJSON");
         })
 
 
-        var buttonGeoJSON = L.DomUtil.create("a", "leaflet-control-button", container);
-        buttonGeoJSON.innerText = "GeoJSON";
+        var buttonGeoJSON = L.DomUtil.create("a", "button-convert-geojson", geoJSONConvertContainer);
+        var buttonGeoJSONIconDiv = L.DomUtil.create("div", "div-geojson-icons", buttonGeoJSON);
+        buttonGeoJSON.title = "Convert shape into GeoJSON";
+        buttonGeoJSONIconDiv.innerHTML = '<i class="bi bi-hexagon-fill button-geojson-hexagon"></i> <i class="fa-solid fa-arrow-right button-geojson-arrow"></i> <img class="button-geojson-icon" src="images/geojson-file.svg">';
 
         L.DomEvent.on(buttonGeoJSON, "click", function () {
             //Hide coordinate input error message if visible
@@ -374,6 +384,9 @@ function createSearchTool(map){
 
                     locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
+
+                    clearText("currentShapeLatLng");
+                    clearText("currentShapeGeoJSON");
 
                     //Display coordinate of selected city in point coordinate field
                     displayCoordinate(coordinates[1], coordinates[0]);
@@ -488,6 +501,9 @@ function addCoordinate(coordinateValue, map){
         //Remove previously drawn shape/layer from dictionary
         clearShape(shapeDict);
 
+        clearText("currentShapeLatLng");
+        clearText("currentShapeGeoJSON");
+
         coordinateMarker.addTo(map);
 
         coordinateMarker['shapeType'] = "Marker";
@@ -569,7 +585,10 @@ function createGeoJSONPanel(map){
             geoJSONUploadButton.innerText = "Upload GeoJSON";
             L.DomEvent.on(geoJSONUploadButton, 'click', function() {
                 //Clear anything in coordinate input field
-                clearCoordinate()
+                clearCoordinate();
+
+                clearText("currentShapeLatLng");
+                clearText("currentShapeGeoJSON");
 
                 uploadGeoJSON(map)
             });
@@ -665,6 +684,7 @@ function uploadGeoJSON(map){
 
 //Formats drawn shape or added geojson map area into geojson as expected by STAC API
 function formatGeoJSON(shapeDict){
+    var currentGeoJSONDiv = L.DomUtil.get("currentShapeGeoJSON");
     var shapeType = shapeDict['shape']['shapeType'];
     var shape = shapeDict['shape'];
     var shapeGeoJSON;
@@ -688,4 +708,5 @@ function formatGeoJSON(shapeDict){
 
     //Keep console for the formatted geojson for now
     console.log(stacGeoJSON);
+    currentGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
 }
