@@ -1,0 +1,23 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+    <div id="leafletContainer" class="map-search-container">
+        <div id="leftMenu" class="map-left-menu">
+            <div class="container-current-latlng">
+                <p>Current Shape Lat Long</p>
+                <div id="currentShapeLatLng"></div>
+            </div>
+            <div class="container-current-geojson">
+                <p>Current Shape GeoJSON</p>
+                <div id="currentShapeGeoJSON"></div>
+            </div>
+        </div>
+        <div class="leaflet-container">
+            <div id="map" class="map-custom"></div>
+        </div>
+    </div>
+
+<script src="js/leaflet-ui-functions.js"></script>
+<script src="js/leaflet-stac-ui.js" type="module"></script>
+
+{% endblock %}

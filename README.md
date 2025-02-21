@@ -1,12 +1,33 @@
 # stac-ui-tools
 Tools to build the dictionary files, client-side functionality, and basic search UI for the STAC search component
 
+Map UI added using Leaflet map that will allow an intuitive interface for the user.
+
 # Requirements
-- [Typo.js](https://github.com/cfinke/Typo.js)
-*(Typo.js is already included in the main.html file via CDN link)*
+- [Fuse.js](https://github.com/krisk/Fuse)
 - [Python](https://www.python.org/)
-- [Pandas](https://pypi.org/project/pandas/)
 - [Jinja2](https://pypi.org/project/Jinja2/)
+- [LeafletJS](https://leafletjs.com/)
+
+## Leaflet Plugins
+### Leaflet Fuse Search
+Adds a search box to the Leaflet map and uses Fuse.js fuzzy search to match entered terms to city names.
+- [Leaflet Fuse Search](https://github.com/naomap/leaflet-fusesearch)
+
+There is no CDN for this so the main files are copied directly into the project.
+
+To update this, get the latest files from the Leaflet Fuse Search GitHub and copy the `leaflet.fusesearch.js` 
+into the project's 'templates/site/js' directory. Copy the `leaflet.fusesearch.css` into the project's 'static/css' 
+directory.
+
+### Leaflet Editable
+Allows the user to draw shapes onto the map by clicking and dragging.
+- [Leaflet Editable](https://github.com/Leaflet/Leaflet.Editable)
+
+There is no CDN for this so the main files are copied directly into the project.
+
+To update this, get the latest files from the Leaflet.Editable GitHub and copy the `Leaflet.Editable.js` 
+into the project's 'templates/site/js' directory.
 
 # Build the dictionary
 The STAC Search UI dictionary comes with a default dictionary of words and terms currently used in the STAC catalog. 
@@ -43,6 +64,29 @@ python3 -m http.server
 3. Type in the search field and see the suggested words below it 
 
 
+# Running the Leaflet Map
+Leaflet is browser based and dependencies are loaded from the web page.
+
+## Building the Leaflet Map
+
+The Leaflet map is built with the project. 
+
+1. If needed, go to the root folder of the project and build the project with 
+the following command:
+```
+python3 build.py
+```
+
+2. Start a  localhost:
+```
+python3 -m http.server
+```
+
+3.  Go to the Leaflet map page:
+```
+http://localhost:8000/leaflet.html
+```
+
 
 # Development notes
 ## Creating Custom Dictionaries
@@ -58,3 +102,4 @@ The affix file at least needs the encoding set for Typo.js to read it.  This is 
 The word list file starts with the number of words in the file, followed by a list of words separated by a newline character.
 
 [Hunspell dictionary file documentation](https://manpages.ubuntu.com/manpages/focal/man5/hunspell.5.html)
+

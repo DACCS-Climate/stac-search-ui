@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function (){
     });
 
     searchInputElement.addEventListener("keyup", function(){
-        getWord("searchInput");
+        //Placeholder for running fuse search function
     })
 
 
