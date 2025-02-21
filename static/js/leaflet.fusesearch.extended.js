@@ -1,3 +1,4 @@
+// TODO: remove this once https://github.com/naomap/leaflet-fusesearch/pull/26 has been merged
 L.Control.FuseSearchExtended = L.Control.FuseSearch.extend({
     _createControl: function() {
         var ctrl = L.Control.FuseSearch.prototype._createControl.call(this);
