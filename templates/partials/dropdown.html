@@ -82,18 +82,39 @@
         <div id="{{ dropdown_id }}" class="dropdown">
         {% if dropdown_type == "default_dropdown_list" %}
             <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }} " role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+
         {% else %}
             <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }} " role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+
+
         {% endif %}
-
-                <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">
-                    {{ dropdown_label_text|safe }}
+         <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">
+                        {{ dropdown_label_text|safe }}
                 </h6>
+        </a>
 
-            </a>
 
             <ul id="{{ dropdown_default_UL_id }}" class="dropdown-menu margin-unset padding-unset {{ dropdown_library[dropdown_type]["list_class"] }}" aria-labelledby="{{ dropdown_button_id }}">
                 {% if dropdown_type == "default_dropdown_list" %}
+
+                    <li class="dropdown-default-list-item">
+                        {% with %}
+                                {% set checkbox_label_text = "All Catalogs" %}
+                                {% set checkbox_id = "allCheckbox" %}
+                                {% set checkbox_text_class = "dropdown-default-list-item-text" %}
+                                {% set direction_right = true %}
+                                {% include "partials/checkbox.html" %}
+                            {% endwith %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                             var allCheckbox = document.getElementById("allCheckbox");
+                                        allCheckbox.addEventListener('change', function(){
+                                            selectAllCheckbox('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
+                                        })
+                                })
+                        </script>
+                    </li>
+
                     {% for item in dropdown_library[dropdown_type]["list_items"] %}
                         <li><hr class='dropdown-custom-divider'></li>
                         <li class="dropdown-default-list-item">
