@@ -1393,14 +1393,9 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-bottom-right-radius: 4px;
 }
 
-.dropdown-medium-list li:last-child a:hover{
-    border: solid;
-    border-width: 5px;
-    border-color: red;
-    /*
+.dropdown-medium-list li:last-child a{
     border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;*/
-
+    border-bottom-right-radius: 15px;
 }
 
 .dropdown-small-item{
