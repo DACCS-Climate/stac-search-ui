@@ -1110,75 +1110,6 @@ h6{
     color: var(--text-on-surface);
 }
 
-/*TODO check if dropdown-regular type classes are used*/
-/*Dropdown Regular*/
-/*
-.dropdown-regular-container{
-    width: 290px;
-    background: var(--indigo250-opacity-light);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.dropdown-regular-container h6{
-    padding-right: 4px;
-}
-
-.dropdown-regular-container-transition{
-    background-color: var(--white);
-}
-
-.dropdown-regular{
-    background-color: var(--white);
-    clear:both;
-    width:100%;
-    height:0px;
-    overflow: hidden;
-    text-align: center;
-    list-style-type:none;
-    transition: height .4s ease;
-}
-
-.dropdown-regular-title{
-    color: var(--indigo-700);
-}
-
-.dropdown-regular-icon{
-    color: var(--indigo-700);
-}
-
-.dropdown-regular li{
-    text-align: center;
-}
-
-.dropdown-regular-label-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dropdown-regular-label{
-    display: flex;
-    justify-content: space-between;
-}
-
-.dropdown-chevron-container{
-    width: 29px;
-    height: 29px;
-    background-color: var(--primary);
-    border-radius: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
- */
-
 .dropdown-panel{
     width: 100%;
     height: 89px;
@@ -1207,18 +1138,6 @@ h6{
 }
 /*End Dropdown Regular Share*/
 
-
-
-
-/*Dropdown transitions for all dropdowns styles when dropdown is clicked*/
-/*
-.dropdown-transition-styles{
-    color: var(--text-on-surface);
-    background-color: var(--white);
-    border: none;
-}
-
- */
 
 /*Dropdown Small List and Dropdown Medium List*/
 /*Override Bootstrap*/
@@ -2082,7 +2001,11 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: 0px;
 }
 
-.dropdown-panel-title:hover{
+.dropdown-panel-title div{
+    color: var(--indigo-700);
+}
+
+.dropdown-panel-title:hover div, .dropdown-panel-title:active div{
     color: var(--indigo-700);
 }
 
