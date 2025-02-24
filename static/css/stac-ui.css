@@ -1004,7 +1004,6 @@ h6{
 }
 
 /*Styles for dropdown-regular-list type dropdowns when expanded and collapsed*/
-
 .dropdown-regular-list-button[aria-expanded="false"]{
     background-color: var(--indigo250-opacity-light);
 }
@@ -1049,7 +1048,6 @@ h6{
     transform: rotate(-180deg);
     transition: all 0.5s ease-in-out;
 }
-
 
 .dropdown-regular-list-item{
     width: 100%;
@@ -1432,7 +1430,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 /*Metadata Popup/Modal*/
-
 .dialog-metadata{
     overflow-x: hidden;
     overflow-y: auto;
@@ -1458,7 +1455,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .popup-metadata-heading-container{
     display: flex;
     flex-direction: row;
-
 }
 
 .popup-metadata-title-container{
