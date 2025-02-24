@@ -835,6 +835,7 @@ h6{
     overflow: hidden;
     text-align: center;
     list-style-type:none;
+    border-radius: 0px;
     transition: height .4s ease;
 }
 
@@ -1104,7 +1105,8 @@ h6{
     color: var(--indigo-700);
 }
 
-.dropdown-regular-list-button[aria-expanded="true"].dropdown-regular-list-button:hover .dropdown-frequency-list-title{
+.dropdown-regular-list-button[aria-expanded="true"].dropdown-regular-list-button:hover .dropdown-frequency-list-title,
+.dropdown-regular-list-button[aria-expanded="true"] .dropdown-frequency-list-title{
     color: var(--text-on-surface);
 }
 
