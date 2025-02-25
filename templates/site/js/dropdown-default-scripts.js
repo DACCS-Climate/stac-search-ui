@@ -1,20 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-    //Runs functions from ui-styles-scripts.js
-    var dropdownContainer = document.getElementById("dropdownListDefaultContainer");
-
-    dropdownContainer.addEventListener('click', function (event) {
-        toggleChevronRotate("dropdownListDefaultButton", "dropdown-list-icon-rotate");
-        toggleTextColour("dropdownListTitleText", "dropdown-list-title-text");
-        toggleDropdownPanelBackground("dropdownListDefaultContainer");
-    });
-
-    dropdownContainer.addEventListener('blur', function(){
-        removeChevronRotate("dropdownListDefaultButton", "dropdown-list-icon-rotate");
-        removeTextColour("dropdownListTitleText", "dropdown-list-title-text");
-        removeDropdownPanelBackground("dropdownListDefaultContainer");
-    });
-});
-
 function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropdownButtonText){
     var dropdownButtonTextElement = document.getElementById(defaultDropdownButtonTextID);
     var checkboxCount = 0;

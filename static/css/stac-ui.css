@@ -785,26 +785,6 @@ h6{
     margin-bottom: 12px;
 }
 
-.default-dropdown-list-item{
-    width: 132px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-}
-
-.default-dropdown-list-item:hover{
-    background-color: var(--indigo250-opacity-light);
-}
-
-.dropdown-default-list-item-text{
-    color: var(--primary);
-    /*H6 font without line-height*/
-    font-family: var(--secondary-font-family);
-    font-weight: var(--reg-font-weight);
-    font-size: 20px;
-    letter-spacing: 0.03px;
-}
-
 .dropdown-item{
     padding-top: unset;
     padding-bottom: unset;
@@ -852,10 +832,10 @@ h6{
     background-color: var(--white);
     clear:both;
     width:100%;
-    height:0px;
     overflow: hidden;
     text-align: center;
     list-style-type:none;
+    border-radius: 0px;
     transition: height .4s ease;
 }
 
@@ -875,16 +855,77 @@ h6{
     margin-top: 7px;
     margin-bottom: 7px;
 }
-/*Test pure css method of changing default list container background color */
-/*
-.dropdown-default-list[aria-expanded="true"]{
+
+.dropdown-default-list-item{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-default-list-item:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-default-list-item-text{
+    color: var(--primary);
+    /*H6 font without line-height*/
+    font-family: var(--secondary-font-family);
+    font-weight: var(--reg-font-weight);
+    font-size: 20px;
+    letter-spacing: 0.03px;
+}
+
+.dropdown-default-list-button{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px;
+}
+
+/*Styles for when default dropdown expanded*/
+.dropdown-list-container:has(.dropdown):has(.dropdown-default-list-button[aria-expanded="true"]){
     background-color: var(--white);
 }
 
-.dropdown-default-list[aria-expanded="true"]{
-    background-color: var(--primary);
-}*/
+.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-title{
+    color: var(--primary);
+}
 
+/*Styles for when dropdown collapsed*/
+.dropdown-default-list-button[aria-expanded="false"]{
+    background-color: var(--primary);
+}
+
+.dropdown-list-container:has(.dropdown):has(.dropdown-default-list-button[aria-expanded="false"]){
+    background-color: var(--primary);
+}
+
+.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-title{
+    color: var(--text-on-dark);
+}
+
+/*Chevron rotate for default list type dropdown*/
+.dropdown-default-list-button[aria-expanded="false"].dropdown-default-list-icon::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-size: 14.5px;
+    transform: rotate(0deg);
+    transition: all 0.5s ease-in-out;
+}
+
+.dropdown-default-list-button[aria-expanded="true"].dropdown-default-list-icon::after{
+    color: var(--primary);
+    transform: rotate(-180deg);
+    transition: all 0.5s ease-in-out;
+}
 
 /*Dropdown regular list*/
 .dropdown-regular-list-container{
@@ -894,23 +935,19 @@ h6{
     justify-content: center;
 }
 
-
 .dropdown-regular-list-button{
     height: 70px;
+    color: var(--indigo-700);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-left: 32px;
     padding-right: 32px;
-    background-color: var(--indigo250-opacity-light);
-    color: var(--indigo-700);
     cursor: pointer;
-
 }
 
-/*Overrides override of Bootstrap .btn class*/
-.dropdown-regular-list-button:hover{
+.dropdown-regular-list-button:first-child:active{
     color: var(--indigo-700);
 }
 
@@ -949,18 +986,68 @@ h6{
     color: var(--white);
     background-color: var(--primary);
     font-size: 14.5px;
-    transition: all 0.5s ease-in-out;
-    transform: rotate(0deg);
+}
+
+.dropdown-metadata-list-button{
+    height: 70px;
+    color: var(--indigo-700);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+.dropdown-metadata-list-button:first-child:active{
+    color: var(--indigo-700);
+}
+
+/*Styles for dropdown-regular-list type dropdowns when expanded and collapsed*/
+.dropdown-regular-list-button[aria-expanded="false"]{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-regular-list-button[aria-expanded="true"]{
+    color: var(--indigo-700);
+    background-color: var(--white);
+}
+
+/*Overrides override of Bootstrap .btn class*/
+.dropdown-regular-list-button[aria-expanded="false"].dropdown-regular-list-button:hover{
+    background-color: var(--white);
+}
+
+.dropdown-regular-list-button[aria-expanded="true"].dropdown-regular-list-button:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-metadata-list-button[aria-expanded="true"]{
+    color: var(--indigo-700);
+    background-color: var(--white);
+}
+
+.dropdown-metadata-list-button[aria-expanded="true"].dropdown-metadata-list-button:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-metadata-list-button[aria-expanded="false"]{
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
 }
 
 /*Rotates chevron*/
-/*Used in ui-styles-scripts.js*/
-.dropdown-regular-list-chevron-rotate::after{
+.dropdown-regular-list-button[aria-expanded="false"].dropdown-regular-list-chevron-icon::after,
+.dropdown-metadata-list-button[aria-expanded="false"].dropdown-regular-list-chevron-icon::after{
+    transform: rotate(0deg);
     transition: all 0.5s ease-in-out;
 }
 
-.dropdown-regular-list-chevron-rotate::after{
+.dropdown-regular-list-button[aria-expanded="true"].dropdown-regular-list-chevron-icon::after,
+.dropdown-metadata-list-button[aria-expanded="true"].dropdown-regular-list-chevron-icon::after{
     transform: rotate(-180deg);
+    transition: all 0.5s ease-in-out;
 }
 
 .dropdown-regular-list-item{
@@ -1002,69 +1089,25 @@ h6{
 }
 /*End Dropdown Regular List*/
 
-/*Dropdown Regular*/
-.dropdown-regular-container{
-    width: 290px;
-    background: var(--indigo250-opacity-light);
+/*Dropdown Frequency List*/
+
+.dropdown-frequency-list-link{
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    justify-content: start;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-on-surface);
 }
 
-.dropdown-regular-container h6{
-    padding-right: 4px;
-}
-
-.dropdown-regular-container-transition{
-    background-color: var(--white);
-}
-
-.dropdown-regular{
-    background-color: var(--white);
-    clear:both;
-    width:100%;
-    height:0px;
-    overflow: hidden;
-    text-align: center;
-    list-style-type:none;
-    transition: height .4s ease;
-}
-
-.dropdown-regular-title{
+.dropdown-regular-list-button[aria-expanded="false"].dropdown-regular-list-button:hover .dropdown-frequency-list-title{
     color: var(--indigo-700);
 }
 
-.dropdown-regular-icon{
-    color: var(--indigo-700);
-}
-
-.dropdown-regular li{
-    text-align: center;
-}
-
-.dropdown-regular-label-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dropdown-regular-label{
-    display: flex;
-    justify-content: space-between;
-}
-
-.dropdown-chevron-container{
-    width: 29px;
-    height: 29px;
-    background-color: var(--primary);
-    border-radius: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.dropdown-regular-list-button[aria-expanded="true"].dropdown-regular-list-button:hover .dropdown-frequency-list-title,
+.dropdown-regular-list-button[aria-expanded="true"] .dropdown-frequency-list-title{
+    color: var(--text-on-surface);
 }
 
 .dropdown-panel{
@@ -1082,39 +1125,6 @@ h6{
     justify-content: space-evenly;
 }
 
-/*Regular Panel*/
-#touchRegular{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegular:checked + .dropdown-regular{
-    height: auto;
-}
-
-/*Regular Source ul Panel*/
-#touchRegularSource{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegularSource:checked + .dropdown-regular{
-    height: auto;
-}
-
-/*Regular Share ul Panel*/
-#touchRegularShare{
-    position: absolute;
-    opacity: 0;
-    height: 0px;
-}
-
-#touchRegularShare:checked + .dropdown-regular{
-    height: auto;
-}
-
 .icon-share-panel{
     cursor: pointer;
 }
@@ -1128,15 +1138,6 @@ h6{
 }
 /*End Dropdown Regular Share*/
 
-
-
-
-/*Dropdown transitions for all dropdowns styles when dropdown is clicked*/
-.dropdown-transition-styles{
-    color: var(--text-on-surface);
-    background-color: var(--white);
-    border: none;
-}
 
 /*Dropdown Small List and Dropdown Medium List*/
 /*Override Bootstrap*/
@@ -1186,7 +1187,7 @@ h6{
 }
 
 .btn:hover{
-    --bs-btn-hover-color: var(--text-on-surface);
+    --bs-btn-hover-color: var(--indigo-700);
     --bs-btn-hover-bg: var(--background-transparent);
     --bs-btn-hover-border-color: var(--background-transparent);
     color: var(--bs-btn-hover-color);
@@ -1224,96 +1225,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     background-color: var(--white);
 }
 
-.dropdown-timeframe-title::after{
-    margin-left: 60px;
-}
-
-/*Dropdown list*/
-.dropdown-list-title{
-    color: var(--text-on-dark);
-}
-
-.dropdown-default-list-button{
-    width: 100%;
-    height: 40px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0px;
-}
-
-/*TODO Test pure css method for changing dropdown button background color on click*/
-/*TODO This does not work on parent elements*/
-/*TODO Need to test for sibling elements*/
-/*Styles for when dropdown expanded*/
-.dropdown-default-list-button[aria-expanded="true"]{
-   /*background-color: var(--white);*/
-}
-
-.dropdown-default-list-button[aria-expanded="true"]:has(+ .dropdown-list-container){
-    background-color: var(--white);
-}
-
-.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-title{
-    color: var(--primary);
-}
-
-/*Styles for when dropdown collapsed*/
-.dropdown-default-list-button[aria-expanded="false"]{
-    background-color: var(--primary);
-}
-
-.dropdown-default-list-button[aria-expanded="false"]:has(+ .dropdown-list-container){
-    background-color: var(--primary);
-}
-
-.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-title{
-    color: var(--text-on-dark);
-}
-
-/*Chevron for list type dropdown*/
-.dropdown-list-icon::after{
-    width: 29px;
-    height: 29px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--white);
-    font-size: 14.5px;
-    transition: all 0.5s ease-in-out;
-}
-
-.dropdown-list-title-text{
-    color: var(--primary);
-}
-
-
-/*Rotates chevron*/
-/*Used in ui-styles-scripts.js*/
-/*Test pure css method for rotating chevron icon*/
-/*
-.dropdown-default-list-button[aria-expanded="false"] .dropdown-list-icon::after{
-    color: var(--white);
-
-    transform: rotate(0deg);
-}
-
-.dropdown-default-list-button[aria-expanded="true"] .dropdown-list-icon::after{
-    color: var(--primary);
-
-    transform: rotate(-180deg);
-}
-*/
-
-.dropdown-list-icon-rotate{
-    color: var(--primary);
-
-    transform: rotate(-180deg);
-}
-
-/*End rotate chevron for dropdown lists*/
-
 .dropdown-small-container{
     width: 67px;
     min-height: 28px;
@@ -1350,31 +1261,42 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     align-items: center;
 }
 
+.dropdown-small-title:hover{
+    color: var(--text-on-surface) !important;
+    background-color: var(--indigo250-opacity-light);
+}
+
 .dropdown-medium-title{
     height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
-}
-
-.bottom-no-border-radius{
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
 }
 
 .dropdown-medium-title:hover{
+    color: var(--text-on-surface) !important;
     background-color: var(--indigo250-opacity-light);
 }
 
-.dropdown-medium-title-hover:hover{
-    background-color: var(--indigo250-opacity-light);
+.dropdown-medium-title[aria-expanded="true"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
+.dropdown-medium-title[aria-expanded="false"]{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/*
+.dropdown-medium-title-hover:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+*/
 .dropdown-small-title::after, .dropdown-medium-title::after{
     display: flex;
     justify-content: center;
@@ -1442,6 +1364,15 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     align-items: center;
     border-radius: unset;
     background-color: var(--indigo250-opacity-light);
+    color: var(--indigo-700);
+}
+
+.dropdown-timeframe-title[aria-expanded="true"]:first-child{
+    color: var(--indigo-700);
+}
+
+.dropdown-timeframe-title:first-child:active{
+    color: var(--indigo-700);
 }
 
 .dropdown-timeframe-container{
@@ -1501,7 +1432,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 /*Metadata Popup/Modal*/
-
 .dialog-metadata{
     overflow-x: hidden;
     overflow-y: auto;
@@ -1527,7 +1457,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .popup-metadata-heading-container{
     display: flex;
     flex-direction: row;
-
 }
 
 .popup-metadata-title-container{
@@ -2070,11 +1999,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: 0px;
 }
 
-.dropdown-panel-title:hover{
+.dropdown-panel-title div{
     color: var(--indigo-700);
 }
 
-.dropdown-panel-background-white{
+.dropdown-panel-title:hover div, .dropdown-panel-title:active div{
+    color: var(--indigo-700);
+}
+
+.dropdown-panel-title[aria-expanded="false"]{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-panel-title[aria-expanded="true"]{
     background-color: var(--white);
 }
 
@@ -2088,7 +2025,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-left: 60px;
 }
 
-.dropdown-panel-title::after, .dropdown-timeframe-title::after{
+.dropdown-panel-title::after{
     width: 29px;
     height: 29px;
     display: inline-flex;
@@ -2107,14 +2044,59 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     transform: rotate(0deg);
 }
 
-/*Rotates chevron*/
-/*Used in ui-styles-scripts.js*/
-.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
-    transition: all 0.5s ease-in-out;
+.dropdown-timeframe-title::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    right: 26px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    font-size: 14.5px;
 }
 
-.dropdown-panel-icon::after, .dropdown-timeframe-chevron::after{
+/*Rotates chevron*/
+.dropdown-timeframe-title[aria-expanded="false"]::after{
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+.dropdown-timeframe-title[aria-expanded="true"]::after{
+    transition: all 0.5s ease-in-out;
     transform: rotate(-180deg);
+}
+
+.dropdown-panel-title[aria-expanded="false"]::after{
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+.dropdown-panel-title[aria-expanded="true"]::after{
+    transition: all 0.5s ease-in-out;
+    transform: rotate(-180deg);
+}
+
+/*Used to swap the title text of the Source dropdown panel*/
+.dropdown-panel-source[aria-expanded="true"] #dropdownTitleText{
+    display: none;
+}
+
+.dropdown-panel-source[aria-expanded="true"] #dropdownStacTitle{
+    display: block;
+}
+
+.dropdown-panel-source[aria-expanded="false"] #dropdownTitleText{
+    display: block;
+}
+
+.dropdown-panel-source[aria-expanded="false"] #dropdownStacTitle{
+    display: none;
 }
 
 .dropdown-panel-list{
