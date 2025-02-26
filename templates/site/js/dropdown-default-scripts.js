@@ -5,16 +5,26 @@ function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropd
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]')
 
+    if(checkboxArray[0].checked == true){
+        checkboxCount = -1;
+    }
 
     for(checkbox of checkboxArray){
         if(checkbox.checked){
             checkboxCount = checkboxCount + 1;
         }
     }
+
     if(checkboxCount == 0){
         dropdownButtonTextElement.innerText = defaultDropdownButtonText ;
     }
     else{
+        if(checkboxCount == checkboxArray.length - 1){
+            checkboxArray[0].checked = true;
+        }
+        else{
+            checkboxArray[0].checked = false;
+        }
         dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
     }
 }
