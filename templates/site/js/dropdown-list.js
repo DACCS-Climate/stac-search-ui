@@ -13,5 +13,4 @@ function replaceListItem(placeholderValue, firstItemID, secondItemID){
     var secondItem = document.getElementById(secondItemID);
 
     firstItem.innerHTML = secondItem.innerHTML;
-   // firstItem.classList.remove("bottom-no-border-radius");
 }
