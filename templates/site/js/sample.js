@@ -18,6 +18,11 @@ document.addEventListener("DOMContentLoaded", function (){
         setPlaceholderText(searchInputElement , "Search by keyword");
     });
 
+    searchInputElement.addEventListener("input", function(event){
+        clearListChildren();
+        getWord(event.target);
+    })
+
     //For text input small
     var textInputElement = document.getElementById("inputNumberSmall");
 
