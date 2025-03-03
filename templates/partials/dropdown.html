@@ -119,6 +119,7 @@
                         <li class="dropdown-default-list-item">
                             {% with %}
                                 {% set checkbox_label_text = item["item_label"]|safe %}
+                                {% set checkbox_value = item["item_label"]|safe %}
                                 {% set checkbox_id = item["item_id"] %}
                                 {% set checkbox_text_class = "dropdown-default-list-item-text" %}
                                 {% set direction_right = true %}
