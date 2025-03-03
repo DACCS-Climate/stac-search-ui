@@ -722,11 +722,11 @@ h6{
 }
 
 .search-input[aria-expanded = "true"] + #suggestedWordOutputList{
-    visibility: visible;
+    display: block;
 }
 
 .search-input[aria-expanded = "false"] + #suggestedWordOutputList{
-    visibility: hidden;
+    display: none;
 }
 
 .search-icon{
