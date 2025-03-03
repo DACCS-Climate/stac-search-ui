@@ -47,22 +47,22 @@ function getWord(inputBox){
     if (fuse !== null) {
 
         queryablesArray = fuse.search(inputBox.value).map(obj => obj.matches.map(match => match.value).flat()).flat();
-        for (item of queryablesArray){
+        
+        queryablesArray.forEach((item,key) =>{
             var queryResultListItem = document.createElement("li");
             queryableResultButton = document.createElement('a');
             queryableResultButton.setAttribute('role', 'button');
-            queryableResultButton.id = item.toLowerCase() + queryablesArray.indexOf(item) ;
+            queryableResultButton.id = item.toLowerCase() + key ;
             queryableResultButton.innerText = item;
 
             queryableResultButton.addEventListener('click', function(event){
-                console.log(event.target.id);
                 collapseSearchResults(inputBox, event.target.id);
             })
 
             queryResultListItem.appendChild(queryableResultButton);
             queryResultList.appendChild(queryResultListItem);
 
-        }
+        })
     }
 }
 
@@ -70,6 +70,4 @@ function collapseSearchResults(inputBox, buttonID){
     var listButton = document.getElementById(buttonID);
     inputBox.setAttribute("aria-expanded", "false");
     inputBox.value = listButton.innerText;
-
-
 }
