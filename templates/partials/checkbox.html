@@ -5,7 +5,7 @@
         {% if direction_left %}
             <p>{{ checkbox_label_text }}</p>
         {% endif %}
-        <input id="{{ checkbox_id }}" type="checkbox">
+        <input id="{{ checkbox_id }}" type="checkbox" value="{{ checkbox_value }}">
         <span class="checkmark"></span>
         {% if direction_right %}
             <p class="{{ checkbox_text_class }} margin-unset">{{ checkbox_label_text }}</p>
