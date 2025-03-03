@@ -42,16 +42,16 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-b",
-        "--build_directory",
+        "--build-directory",
         default=os.path.join(THIS_DIR, "build"),
         help="location on disk to write built templates to.",
     )
 
     parser.add_argument(
         "-u",
-        "--stac_catalog_url",
+        "--stac-catalog-url",
         default="https://redoak.cs.toronto.edu/stac", #Keep for now. URL should not be U of T specific
-        help="location on disk to write built templates to.",
+        help="url of stac catalog on the node",
     )
 
     parser.add_argument(
