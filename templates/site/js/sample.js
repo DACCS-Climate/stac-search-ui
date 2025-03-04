@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", function (){
 
     //For search input box
     var searchInputElement = document.getElementById("searchInput");
+    makeFuse(searchInputElement);
     setPlaceholderText(searchInputElement, "Search by keyword");
+    addDefaultSearchAttributes(searchInputElement);
+
 
     searchInputElement.addEventListener("click", function(){
         setPlaceholderText(searchInputElement, "Type to search");
@@ -19,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function (){
     });
 
     searchInputElement.addEventListener("input", function(event){
+        removeReturnedResultStyle(event.target);
         clearListChildren();
         getWord(event.target);
     })
