@@ -729,6 +729,11 @@ h6{
     display: none;
 }
 
+.search-input[aria-expanded = "false"].returned-result{
+    color: black;
+    background-color: var(--white);
+}
+
 .search-icon{
     width: 15px;
     height: 15px;
