@@ -67,7 +67,7 @@ async function getWordlist() {
 
 let fuse = null;
 
-function makeFuse() {
+function makeFuse(inputBox) {
     getWordlist().then(queryables => {
         fuse = new Fuse(queryables, {
             keys: ["title", "key", "enum"],
@@ -75,11 +75,9 @@ function makeFuse() {
             distance: 10,
             includeMatches: true
         });
-        console.log("search is ready") // TODO: replace this with some proper message to the user
+        removeDefaultSearchAttributes(inputBox);
     })
 }
-
-makeFuse()
 
 const wordOutput = document.getElementById("suggestedWordOutput");
 
@@ -97,33 +95,33 @@ function getWord(inputBox){
 
 
 
-    if (fuse !== null) {
+    if(inputBox.value !="") {
         inputBox.setAttribute("aria-expanded", "true");
-        //toggleSearchResultExpand(inputBox);
-        queryablesArray = fuse.search(inputBox.value).map(obj => obj.matches.map(match => match.value).flat()).flat();
 
-        queryablesArray.forEach((item,key) =>{
-            var queryResultListItem = document.createElement("li");
-            var listItemFont = document.createElement("h5");
-            queryableResultButton = document.createElement('a');
-            queryableResultButton.setAttribute('role', 'button');
-            queryableResultButton.id = item.toLowerCase() + key ;
-            queryableResultButton.innerText = item;
+        if (fuse !== null) {
+            queryablesArray = fuse.search(inputBox.value).map(obj => obj.matches.map(match => match.value).flat()).flat();
 
-            queryableResultButton.addEventListener('click', function(event){
-                selectSearchResults(inputBox, event.target.id);
-                //toggleSearchResultExpand(inputBox);
+            queryablesArray.forEach((item, key) => {
+                var queryResultListItem = document.createElement("li");
+                var listItemFont = document.createElement("h5");
+                queryableResultButton = document.createElement('a');
+                queryableResultButton.setAttribute('role', 'button');
+                queryableResultButton.id = item.toLowerCase() + key;
+                queryableResultButton.innerText = item;
+
+                queryableResultButton.addEventListener('click', function (event) {
+                    selectSearchResults(inputBox, event.target.id);
+                })
+
+                listItemFont.appendChild(queryableResultButton);
+                queryResultListItem.appendChild(listItemFont);
+                queryResultList.appendChild(queryResultListItem);
+
             })
-
-            listItemFont.appendChild(queryableResultButton);
-            queryResultListItem.appendChild(listItemFont);
-            queryResultList.appendChild(queryResultListItem);
-
-        })
+        }
     }
     else{
-        //inputBox.setAttribute("aria-expanded", "false");
-        toggleSearchResultExpand(inputBox);
+        inputBox.setAttribute("aria-expanded", "false");
     }
 }
 
@@ -131,15 +129,17 @@ function selectSearchResults(inputBox, buttonID){
     var listButton = document.getElementById(buttonID);
     inputBox.value = listButton.innerText;
     inputBox.setAttribute("aria-expanded", "false");
+    inputBox.classList.add("returned-result")
 }
 
-function toggleSearchResultExpand(inputBox){
-    var inputBoxExpanded = inputBox.getAttribute("aria-expanded");
+function removeReturnedResultStyle(inputBox){
+    inputBox.classList.remove("returned-result");
+}
 
-     if(inputBoxExpanded == "false" && inputBox.value != ""){
-        inputBox.setAttribute("aria-expanded", "true");
-     }
-     else{
-        inputBox.setAttribute("aria-expanded", "false");
-     }
+function addDefaultSearchAttributes(inputBox){
+    inputBox.setAttribute("disabled", "disabled");
+}
+
+function removeDefaultSearchAttributes(inputBox){
+    inputBox.removeAttribute("disabled");
 }
