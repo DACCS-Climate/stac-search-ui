@@ -721,11 +721,13 @@ h6{
     border-bottom: 0px;
 }
 
-.search-input[aria-expanded = "true"] + #suggestedWordOutputList{
-    display: block;
+.search-input[aria-expanded = "true"] + #suggestedWordOutputList,
+.search-input[aria-expanded = "true"] + #suggestedWordOutputListContainer{
+    display: flex;
 }
 
-.search-input[aria-expanded = "false"] + #suggestedWordOutputList{
+.search-input[aria-expanded = "false"] + #suggestedWordOutputList,
+.search-input[aria-expanded = "false"] + #suggestedWordOutputListContainer{
     display: none;
 }
 
@@ -757,20 +759,32 @@ h6{
     z-index: 25;
 }
 
-.search-output{
+.search-output-container{
     width: 622px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-bottom-right-radius: 30px;
     border-bottom-left-radius: 30px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background-color: var(--gray-500);
+}
+
+.search-output{
+    width: 95%;
+    max-height: 200px;
+    text-align: center;
     color: var(--text-on-surface);
     background-color: var(--gray-500);
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 16px;
+    padding-left: unset;
+    margin-bottom: unset;
+    overflow-y: auto;
 }
 
 .search-output li{
     list-style-type: none;
+    margin-right: 11px;
 }
 
 .search-output li:hover{
