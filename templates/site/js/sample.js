@@ -24,12 +24,13 @@ document.addEventListener("DOMContentLoaded", function (){
     searchInputElement.addEventListener("input", function(event){
         removeReturnedResultStyle(event.target);
         clearListChildren();
-        focusOnResults(event.target.key);
         getWord(event.target);
     });
 
     searchInputElement.addEventListener("keyup", function(event){
-        focusOnResults(event.key);
+        if(event.key === "ArrowDown"){
+            focusOnResults();
+        }
     });
 
     //For text input small
