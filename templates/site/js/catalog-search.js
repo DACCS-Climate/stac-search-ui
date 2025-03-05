@@ -100,25 +100,30 @@ function getWord(inputBox){
 
         if (fuse !== null) {
             queryablesArray = fuse.search(inputBox.value).map(obj => obj.matches.map(match => match.value).flat()).flat();
+            if(queryablesArray.length > 0){
+                queryablesArray.forEach((item, key) => {
+                    var queryResultListItem = document.createElement("li");
+                    var listItemFont = document.createElement("h5");
+                    listItemFont.classList.add("margin-unset");
+                    queryableResultButton = document.createElement('a');
+                    queryableResultButton.setAttribute('role', 'button');
+                    queryableResultButton.id = item.toLowerCase() + key;
+                    queryableResultButton.innerText = item;
 
-            queryablesArray.forEach((item, key) => {
-                var queryResultListItem = document.createElement("li");
-                var listItemFont = document.createElement("h5");
-                queryableResultButton = document.createElement('a');
-                queryableResultButton.setAttribute('role', 'button');
-                queryableResultButton.id = item.toLowerCase() + key;
-                queryableResultButton.innerText = item;
+                    queryableResultButton.addEventListener('click', function (event) {
+                        selectSearchResults(inputBox, event.target.id);
+                    })
 
-                queryableResultButton.addEventListener('click', function (event) {
-                    selectSearchResults(inputBox, event.target.id);
+                    listItemFont.appendChild(queryableResultButton);
+                    queryResultListItem.appendChild(listItemFont);
+                    queryResultList.appendChild(queryResultListItem);
                 })
-
-                listItemFont.appendChild(queryableResultButton);
-                queryResultListItem.appendChild(listItemFont);
-                queryResultList.appendChild(queryResultListItem);
-
-            })
+            }
+            else{
+                inputBox.setAttribute("aria-expanded", "false");
+            }
         }
+
     }
     else{
         inputBox.setAttribute("aria-expanded", "false");
@@ -143,3 +148,19 @@ function addDefaultSearchAttributes(inputBox){
 function removeDefaultSearchAttributes(inputBox){
     inputBox.removeAttribute("disabled");
 }
+
+//TODO get the focus onto the first list item when search input box detects arrowdown
+function focusOnResults(keyPressed){
+
+    const resultList = document.getElementById("suggestedWordOutputList");
+
+    var resultLinkArray = resultList.querySelectorAll('li h5 a')
+    console.log(resultLinkArray);
+    if(keyPressed === "ArrowDown"){
+        var firstLink = document.getElementById(resultLinkArray[0].id)
+        console.log(firstLink);
+        firstLink.focus();
+    }
+}
+
+//TODO Switch focus to next list item when list item, or anchor tag, detects arrowdown
