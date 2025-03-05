@@ -24,8 +24,13 @@ document.addEventListener("DOMContentLoaded", function (){
     searchInputElement.addEventListener("input", function(event){
         removeReturnedResultStyle(event.target);
         clearListChildren();
+        focusOnResults(event.target.key);
         getWord(event.target);
-    })
+    });
+
+    searchInputElement.addEventListener("keyup", function(event){
+        focusOnResults(event.key);
+    });
 
     //For text input small
     var textInputElement = document.getElementById("inputNumberSmall");
