@@ -2,8 +2,11 @@
 
     <form role="search" class="search-form">
         <div>
-            <input id="searchInput" type="search" aria-controls="suggestedWordOutputList" aria-expanded="false" role="combobox" class="search-input" />
-            <ul id="suggestedWordOutputList" class="search-output"></ul>
+            <input id="searchInput" type="search" autocomplete="off" aria-controls="suggestedWordOutputListContainer" aria-expanded="false" role="combobox" class="search-input" />
+            <div id="suggestedWordOutputListContainer" class="search-output-container">
+                <ul id="suggestedWordOutputList" class="search-output"></ul>
+            </div>
+
         </div>
 
         <div class="search-icon-background">
