@@ -4,6 +4,34 @@ function getCollection(){
     return checkboxes;
 }
 
+function findNode(currentNode) {
+    var i;
+    var currentChild;
+    var result;
+
+    if (currentNode["type"] == "string") {
+        return currentNode;
+    } else {
+
+        // Use a for loop instead of forEach to avoid nested functions
+        // Otherwise "return" will not work properly
+        for (i = 0; i < currentNode.children.length; i += 1) {
+            currentChild = currentNode.children[i];
+
+            // Search in the current child
+            result = findNode(currentChild);
+
+            // Return the result if the node has been found
+            if (result !== false) {
+                return result;
+            }
+        }
+
+        // The node has not been found and we have no more options
+        return false;
+    }
+}
+
 async function getWordlist() {
 //TODO Keep commented code for now until dropdown is built with collection ID as checkbox value
     /*
@@ -40,11 +68,20 @@ async function getWordlist() {
     //const collection_ids = json.collections.map(collection => collection.id)
 
     return Object.entries(json.properties).map(([key, val]) => {
+
+       // if(json.properties[key].hasOwnProperty("anyOf")){
+            //console.log(key);
+            //var flatAnyOf = json.properties[key]["anyOf"][0].flat();
+            //console.log(flatAnyOf);
+
+       // }
+
+
             val["key"] = key
             return val
         })
 
-
+    //return json;
 
 //TODO Keep as reference
     /*
@@ -72,7 +109,7 @@ function makeFuse(inputBox) {
         fuse = new Fuse(queryables, {
             keys: ["title", "key", "enum"],
             threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
-            distance: 10,
+            distance: 15,
             includeMatches: true
         });
         removeDefaultSearchAttributes(inputBox);
@@ -94,36 +131,55 @@ function getWord(inputBox){
     var queryResultList = document.getElementById("suggestedWordOutputList");
 
 
-
     if(inputBox.value !="") {
         inputBox.setAttribute("aria-expanded", "true");
 
         if (fuse !== null) {
-            queryablesArray = fuse.search(inputBox.value).map(obj => obj.matches.map(match => match.value).flat()).flat();
+            queryablesArray = fuse.search(inputBox.value);
+            //console.log(queryablesArray);
             if(queryablesArray.length > 0){
-                queryablesArray.forEach((item, key) => {
-                    var queryResultListItem = document.createElement("li");
-                    var listItemFont = document.createElement("h5");
-                    listItemFont.classList.add("margin-unset");
-                    queryableResultButton = document.createElement('a');
-                    queryableResultButton.setAttribute('role', 'button');
-                    queryableResultButton.id = item.toLowerCase() + key;
-                    queryableResultButton.innerText = item;
 
-                    queryableResultButton.addEventListener('click', function (event) {
-                        selectSearchResults(inputBox, event.target.id);
-                    })
+                queryablesArray.forEach((queryableItem, queryableKey) => {
+                    console.log(queryableItem);
+                    if(queryableItem.item.length > 0 ){
+                                console.log("title");
+                                queryableResultButton = document.createElement('a');
+                                queryableResultButton.innerText = queryableItem.item.title;
+                            }
 
-                    listItemFont.appendChild(queryableResultButton);
-                    queryResultListItem.appendChild(listItemFont);
-                    queryResultList.appendChild(queryResultListItem);
+                    if(queryableItem.matches.length > 0)
+                    {
+
+                        queryableItem.matches.forEach((matchItem, matchKey) => {
+                            var queryResultListItem = document.createElement("li");
+                            var listItemFont = document.createElement("h5");
+                            listItemFont.classList.add("margin-unset");
+
+
+                                queryableResultButton = document.createElement('a');
+                                queryableResultButton.innerText = matchItem.value;
+
+
+                            queryableResultButton.setAttribute('role', 'button');
+                            queryableResultButton.setAttribute('queryablekeytype', matchItem.key);
+                            queryableResultButton.setAttribute('queryablekeyvalue', queryableItem.item.key);
+                            queryableResultButton.id = "match" + matchKey;
+
+                            queryableResultButton.addEventListener('click', function (event) {
+                                selectSearchResults(inputBox, event.target.id);
+                            })
+
+                            listItemFont.appendChild(queryableResultButton);
+                            queryResultListItem.appendChild(listItemFont);
+                            queryResultList.appendChild(queryResultListItem);
+                        });
+                    }
                 })
             }
             else{
                 inputBox.setAttribute("aria-expanded", "false");
             }
         }
-
     }
     else{
         inputBox.setAttribute("aria-expanded", "false");
@@ -150,17 +206,17 @@ function removeDefaultSearchAttributes(inputBox){
 }
 
 //TODO get the focus onto the first list item when search input box detects arrowdown
-function focusOnResults(keyPressed){
+function focusOnResults(){
 
     const resultList = document.getElementById("suggestedWordOutputList");
 
     var resultLinkArray = resultList.querySelectorAll('li h5 a')
     console.log(resultLinkArray);
-    if(keyPressed === "ArrowDown"){
+    //if(keyPressed === "ArrowDown"){
         var firstLink = document.getElementById(resultLinkArray[0].id)
         console.log(firstLink);
         firstLink.focus();
-    }
+    //}
 }
 
 //TODO Switch focus to next list item when list item, or anchor tag, detects arrowdown
