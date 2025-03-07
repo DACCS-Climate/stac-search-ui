@@ -4,31 +4,28 @@ function getCollection(){
     return checkboxes;
 }
 
-function findNode(currentNode) {
-    var i;
+function findNode(currentNode, nestedNodesArray) {
     var currentChild;
-    var result;
+    var nodeLength;
 
-    if (currentNode["type"] == "string") {
-        return currentNode;
+    if (Object.keys(currentNode).includes("type") && currentNode["type"] != "object") {
+        nestedNodesArray.push(currentNode);
     } else {
 
-        // Use a for loop instead of forEach to avoid nested functions
-        // Otherwise "return" will not work properly
-        for (i = 0; i < currentNode.children.length; i += 1) {
-            currentChild = currentNode.children[i];
-
-            // Search in the current child
-            result = findNode(currentChild);
-
-            // Return the result if the node has been found
-            if (result !== false) {
-                return result;
-            }
+        if (Array.isArray(currentNode)) {
+            nodeLength = currentNode.length;
+        } else {
+            nodeLength = Object.keys(currentNode).length;
         }
 
-        // The node has not been found and we have no more options
-        return false;
+
+        for (var i = 0; i < nodeLength; i += 1) {
+            if (typeof currentNode[Object.keys(currentNode)[i]] != "string") {
+                currentChild = currentNode[Object.keys(currentNode)[i]];
+                findNode(currentChild, nestedNodesArray);
+            }
+        }
+        return nestedNodesArray;
     }
 }
 
@@ -61,7 +58,7 @@ async function getWordlist() {
 
 
 
-
+    var returnedNodeArray;
     const resp = await fetch("{{ stac_catalog_url }}/queryables")
     const json = await resp.json()
 
@@ -69,12 +66,19 @@ async function getWordlist() {
 
     return Object.entries(json.properties).map(([key, val]) => {
 
-       // if(json.properties[key].hasOwnProperty("anyOf")){
-            //console.log(key);
-            //var flatAnyOf = json.properties[key]["anyOf"][0].flat();
-            //console.log(flatAnyOf);
+        if(json.properties[key].hasOwnProperty("anyOf")){
 
-       // }
+           json.properties[key]["anyOf"].forEach( (anyOfObject) => {
+            var nestedNodesArray = [];
+            returnedNodeArray = findNode(anyOfObject, nestedNodesArray);
+
+            val[key] = returnedNodeArray;
+            //TODO Keep these console logs for now
+            console.log(key);
+            console.log(val[key]);
+           })
+
+        }
 
 
             val["key"] = key
@@ -107,10 +111,11 @@ let fuse = null;
 function makeFuse(inputBox) {
     getWordlist().then(queryables => {
         fuse = new Fuse(queryables, {
-            keys: ["title", "key", "enum"],
+            keys: ["title", "key", "enum", "anyOf"],
             threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
-            distance: 15,
-            includeMatches: true
+            distance: 100,
+            includeMatches: true,
+            includeScore: true
         });
         removeDefaultSearchAttributes(inputBox);
     })
@@ -140,26 +145,16 @@ function getWord(inputBox){
             if(queryablesArray.length > 0){
 
                 queryablesArray.forEach((queryableItem, queryableKey) => {
-                    console.log(queryableItem);
-                    if(queryableItem.item.length > 0 ){
-                                console.log("title");
-                                queryableResultButton = document.createElement('a');
-                                queryableResultButton.innerText = queryableItem.item.title;
-                            }
-
+                //console.log(queryableItem);
                     if(queryableItem.matches.length > 0)
                     {
-
                         queryableItem.matches.forEach((matchItem, matchKey) => {
                             var queryResultListItem = document.createElement("li");
                             var listItemFont = document.createElement("h5");
                             listItemFont.classList.add("margin-unset");
 
-
-                                queryableResultButton = document.createElement('a');
-                                queryableResultButton.innerText = matchItem.value;
-
-
+                            queryableResultButton = document.createElement('a');
+                            queryableResultButton.innerText = matchItem.value;
                             queryableResultButton.setAttribute('role', 'button');
                             queryableResultButton.setAttribute('queryablekeytype', matchItem.key);
                             queryableResultButton.setAttribute('queryablekeyvalue', queryableItem.item.key);
@@ -211,10 +206,10 @@ function focusOnResults(){
     const resultList = document.getElementById("suggestedWordOutputList");
 
     var resultLinkArray = resultList.querySelectorAll('li h5 a')
-    console.log(resultLinkArray);
+    //console.log(resultLinkArray);
     //if(keyPressed === "ArrowDown"){
         var firstLink = document.getElementById(resultLinkArray[0].id)
-        console.log(firstLink);
+        //console.log(firstLink);
         firstLink.focus();
     //}
 }
