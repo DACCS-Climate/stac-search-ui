@@ -111,7 +111,7 @@ let fuse = null;
 function makeFuse(inputBox) {
     getWordlist().then(queryables => {
         fuse = new Fuse(queryables, {
-            keys: ["title", "key", "enum", "anyOf.description", "anyOf.description.enum", "anyOf.extent"],
+            keys: ["title", "key", "enum", "anyOf.description", "anyOf.description.enum", "anyOf.extent", "anyOf.extent.items.description"],
             threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
             distance: 100,
             includeMatches: true,
