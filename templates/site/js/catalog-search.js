@@ -71,11 +71,11 @@ async function getWordlist() {
            json.properties[key]["anyOf"].forEach( (anyOfObject) => {
             var nestedNodesArray = [];
             returnedNodeArray = findNode(anyOfObject, nestedNodesArray);
-
-            val[key] = returnedNodeArray;
+            console.log(returnedNodeArray);
+            val["anyOf"] = returnedNodeArray;
             //TODO Keep these console logs for now
             console.log(key);
-            console.log(val[key]);
+            console.log(val);
            })
 
         }
@@ -111,7 +111,7 @@ let fuse = null;
 function makeFuse(inputBox) {
     getWordlist().then(queryables => {
         fuse = new Fuse(queryables, {
-            keys: ["title", "key", "enum", "anyOf"],
+            keys: ["title", "key", "enum", "anyOf", "description"],
             threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
             distance: 100,
             includeMatches: true,
@@ -141,7 +141,7 @@ function getWord(inputBox){
 
         if (fuse !== null) {
             queryablesArray = fuse.search(inputBox.value);
-            //console.log(queryablesArray);
+            console.log(queryablesArray);
             if(queryablesArray.length > 0){
 
                 queryablesArray.forEach((queryableItem, queryableKey) => {
