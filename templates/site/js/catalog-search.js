@@ -4,12 +4,22 @@ function getCollection(){
     return checkboxes;
 }
 
-function findNode(currentNode, nestedNodesArray) {
+function findNode(currentNode, nestedNodesArray, nodePath) {
     var currentChild;
     var nodeLength;
 
     if (Object.keys(currentNode).includes("type") && currentNode["type"] != "object") {
-        nestedNodesArray.push(currentNode);
+        //nestedNodesArray.push(currentNode);
+/*
+        for(var k = 0; k < Object.keys(currentNode).length; k ++){
+            if(Object.keys(currentNode) != "type"){
+                nodePath = nodePath + Object.keys(currentNode)[k] + ".";
+            }
+        }*/
+        console.log(nodePath);
+
+
+        nestedNodesArray.push(nodePath);
     } else {
 
         if (Array.isArray(currentNode)) {
@@ -17,16 +27,104 @@ function findNode(currentNode, nestedNodesArray) {
         } else {
             nodeLength = Object.keys(currentNode).length;
         }
+/*
+        Object.keys(currentNode).forEach( key => {
+            console.log(currentNode);
+            console.log((key));
+            if( Object.keys(currentNode[key]).includes("type") && currentNode["type"] != "string"){
+                currentChild = currentNode[key];
+                console.log(currentChild);
+            console.log((key));
+            nodePath = nodePath + key + ".";
+console.log((nodePath));
+//findNode(currentChild, nestedNodesArray, nodePath);
+            }
+
+            else{
+                currentChild = currentNode[key];
+                findNode(currentChild, nestedNodesArray, nodePath);
+            }
+
+        })*/
+
+        /*
+        *   for (var key in json) {
+
+        if (typeof json[key] === 'object') {
+            path.push(key.toString());
+            // console.log("PAth : " + path)
+            getParentAndGrandParent(path, json[key], value);
+            path.pop();
+        } else {
+            if (json[key] == value) {
+                console.log("Parent : " + path);
+            }
+        }
+    }
+*/
 
 
         for (var i = 0; i < nodeLength; i += 1) {
+
+            if (typeof currentNode[Object.keys(currentNode)[i]] != "string") {
+            //if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
+            //if(Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object"){
+                currentChild = currentNode[Object.keys(currentNode)[i]];
+                //if(Object.keys(currentChild).includes("type") && currentChild["type"] == "string"){
+                //    nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                //}
+
+                //nodePath = nodePath + currentNode;
+                //console.log(currentNode);
+                nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                findNode(currentChild, nestedNodesArray, nodePath);
+
+
+            }
+
+            else{
+                //currentChild = currentNode[Object.keys(currentNode)[i]];
+
+
+                currentChild = currentNode[Object.keys(currentNode)[i]];
+                //findNode(currentChild, nestedNodesArray, nodePath);
+
+                console.log(currentChild);
+                if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
+                    currentChild = currentNode[Object.keys(currentNode)[i]];
+
+
+                    nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+
+                    //for (var k = 0; k < currentChild.length; k += 1) {
+                    //    nodePath = nodePath + Object.keys(currentChild[k]) + ".";
+                    //    nestedNodesArray.push(nodePath);
+                    //}
+                }
+            }
+            /*
+            if(Object.keys(currentNode).includes("type") && currentNode["type"] != "object" && typeof currentNode["type"] == "string"){
+                currentChild = currentNode[Object.keys(currentNode)[i]];
+                findNode(currentChild, nestedNodesArray, nodePath)
+            }
+            else{
+                currentChild = currentNode[Object.keys(currentNode)[i]];
+                nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                findNode(currentChild, nestedNodesArray, nodePath);
+            }*/
+            /*
             if (typeof currentNode[Object.keys(currentNode)[i]] != "string") {
                 currentChild = currentNode[Object.keys(currentNode)[i]];
-                findNode(currentChild, nestedNodesArray);
+
+                findNode(currentChild, nestedNodesArray, nodePath);
             }
+            else{
+                nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+            }*/
         }
-        return nestedNodesArray;
+
     }
+    return nestedNodesArray;
 }
 
 async function getWordlist() {
@@ -65,20 +163,20 @@ async function getWordlist() {
     //const collection_ids = json.collections.map(collection => collection.id)
 
     return Object.entries(json.properties).map(([key, val]) => {
-
+/*
         if(json.properties[key].hasOwnProperty("anyOf")){
 
            json.properties[key]["anyOf"].forEach( (anyOfObject) => {
             var nestedNodesArray = [];
             returnedNodeArray = findNode(anyOfObject, nestedNodesArray);
-            console.log(returnedNodeArray);
+           // console.log(returnedNodeArray);
             val["anyOf"] = returnedNodeArray;
             //TODO Keep these console logs for now
-            console.log(key);
-            console.log(val);
+            //console.log(key);
+            //console.log(val);
            })
 
-        }
+        }*/
 
 
             val["key"] = key
@@ -106,9 +204,52 @@ async function getWordlist() {
     */
 }
 
+
+function getNestedNodePath(){
+    var nodePath = "anyOf.";
+    var returnedNodeArray;
+    var anyOfKeys;
+   // var nestedNodesArray = [];
+    fetch("{{ stac_catalog_url }}/queryables").then(response => response.json()).then(json => {
+        Object.entries(json.properties).map(([key, val]) => {
+
+        if(json.properties[key].hasOwnProperty("anyOf")){
+
+
+           //Object.keys(json.properties[key]["anyOf"]).forEach( (anyOfObject) => {
+            json.properties[key]["anyOf"].forEach( (anyOfObject) => {
+               anyOfKeys = Object.keys(json.properties[key]);
+               //for(var i = 0 ; i < anyOfKeys.length; i ++)
+               //{
+
+               var nestedNodesArray = [];
+               //returnedNodeArray = findNode(json.properties[key][anyOfKeys[i]], nestedNodesArray, nodePath);
+               returnedNodeArray = findNode(anyOfObject, nestedNodesArray, nodePath);
+               console.log("returnedNodeArray");
+               console.log(returnedNodeArray);
+               //val["anyOf"] = returnedNodeArray;
+               //TODO Keep these console logs for now
+               //console.log(key);
+               //console.log(val);
+               //}
+           })
+            //returnedNodeArray = findNode(json.properties[key], nestedNodesArray, nodePath);
+
+        }
+
+
+
+            return returnedNodeArray;
+        })
+    })
+}
+
+
+
 let fuse = null;
 
 function makeFuse(inputBox) {
+    var nestedPath = getNestedNodePath();
     getWordlist().then(queryables => {
         fuse = new Fuse(queryables, {
             keys: ["title", "key", "enum", "anyOf.description", "anyOf.description.enum", "anyOf.extent", "anyOf.extent.items.description"],
