@@ -7,6 +7,9 @@ function getCollection(){
 function findNode(currentNode, nestedNodesArray, nodePath) {
     var currentChild;
     var nodeLength;
+    //nodePath = nodePath + Object.keys(currentNode)[0];
+    //console.log("nodePath");
+    //console.log(nodePath);
 
     if (Object.keys(currentNode).includes("type") && currentNode["type"] != "object") {
         //nestedNodesArray.push(currentNode);
@@ -66,42 +69,68 @@ console.log((nodePath));
 
         for (var i = 0; i < nodeLength; i += 1) {
 
-            if (typeof currentNode[Object.keys(currentNode)[i]] != "string") {
-            //if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
-            //if(Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object"){
+            if(typeof currentNode[Object.keys(currentNode)[i]] == "object"){
                 currentChild = currentNode[Object.keys(currentNode)[i]];
-                //if(Object.keys(currentChild).includes("type") && currentChild["type"] == "string"){
-                //    nodePath = nodePath + Object.keys(currentNode)[i] + ".";
-                //}
-
-                //nodePath = nodePath + currentNode;
-                //console.log(currentNode);
-                nodePath = nodePath + Object.keys(currentNode)[i] + ".";
                 findNode(currentChild, nestedNodesArray, nodePath);
-
-
-            }
-
-            else{
-                //currentChild = currentNode[Object.keys(currentNode)[i]];
-
-
-                currentChild = currentNode[Object.keys(currentNode)[i]];
-                //findNode(currentChild, nestedNodesArray, nodePath);
-
-                console.log(currentChild);
-                if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
-                    currentChild = currentNode[Object.keys(currentNode)[i]];
-
-
+                if (Object.keys(currentChild).includes("type") && Object.keys(currentNode)[i] != "type" &&  typeof currentNode[Object.keys(currentNode)[i]] != "string") {
+                    if(nodePath = ""){
                     nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                    }
+                    else{
+                    nodePath = nodePath + Object.keys(currentNode)[i];
+                    }
 
-                    //for (var k = 0; k < currentChild.length; k += 1) {
-                    //    nodePath = nodePath + Object.keys(currentChild[k]) + ".";
-                    //    nestedNodesArray.push(nodePath);
-                    //}
                 }
+
             }
+            else{
+         `       if ("type" in currentNode[Object.keys(currentNode)[i]] && Object.keys(currentNode)[i] != "type" &&  typeof currentNode[Object.keys(currentNode)[i]] != "string") {
+    
+                //if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
+                //if(Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object"){
+                    currentChild = currentNode[Object.keys(currentNode)[i]];
+                    //if(Object.keys(currentChild).includes("type") && currentChild["type"] == "string"){
+                    //    nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                    //}
+    
+                    //nodePath = nodePath + currentNode;
+                    //console.log(currentNode);
+                    //nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                    //nestedNodesArray.push(nodePath);
+                    findNode(currentChild, nestedNodesArray, nodePath);
+    
+    
+                }
+    
+                else{
+                    //currentChild = currentNode[Object.keys(currentNode)[i]];
+    
+    
+                    currentChild = currentNode[Object.keys(currentNode)[i]];
+                    //findNode(currentChild, nestedNodesArray, nodePath);
+    
+                    console.log(currentChild);
+                    if(Object.keys(currentNode)[i] != "type"){
+                        nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                    }
+    
+                    /*
+                    if (Object.keys(currentNode).includes("type") && typeof currentNode[Object.keys(currentNode)[i]] == "string" && currentNode["type"] != "object") {
+                        currentChild = currentNode[Object.keys(currentNode)[i]];
+    
+    
+                        nodePath = nodePath + Object.keys(currentNode)[i] + ".";
+                        //nestedNodesArray.push(nodePath);
+    
+                        //for (var k = 0; k < currentChild.length; k += 1) {
+                        //    nodePath = nodePath + Object.keys(currentChild[k]) + ".";
+                        //    nestedNodesArray.push(nodePath);
+                        //}
+                    }*/
+                }      `
+            }
+
+
             /*
             if(Object.keys(currentNode).includes("type") && currentNode["type"] != "object" && typeof currentNode["type"] == "string"){
                 currentChild = currentNode[Object.keys(currentNode)[i]];
@@ -126,6 +155,89 @@ console.log((nodePath));
     }
     return nestedNodesArray;
 }
+
+
+function findNode2(currentNode, nestedNodesArray, nodePath){
+    var childNode;
+    console.log("type of currentNode");
+    console.log(typeof currentNode);
+    console.log("currentNode");
+    console.log(Object.entries(currentNode));
+    console.log("nodePath");
+    console.log(nodePath);
+    /*if ("type" in Object.entries(currentNode) && currentNode["type"] != "object") {
+        nestedNodesArray.push(nodePath);
+    }*/
+
+    if(typeof currentNode == "object"){
+        Object.entries(currentNode).forEach(([key, value]) => {
+            console.log("currentNode key");
+            console.log(key)
+            console.log("currentNode value");
+            console.log(value);
+            if("type" in currentNode && currentNode["type"] == "string") {
+
+                if(key != "type") {
+                    console.log("currentNode of type string");
+                    console.log(currentNode);
+                    nodePath = nodePath + key + ".";
+                    nestedNodesArray.push(nodePath);
+                }
+
+
+                /*
+                if(key != "type"){
+                // if("type" in Object.entries(currentNode) && currentNode["type"] == "string") {
+                    childNode = currentNode[key];
+                    //nodePath = nodePath + key + ".";
+                    // nestedNodesArray.push(nodePath);
+
+                    Object.entries(childNode).forEach(([childKey, childValue]) => {
+                        console.log("childNode key");
+                        console.log(childKey)
+                        console.log("childNode value");
+                        console.log(childValue);
+                        if(childKey != "type"){
+                            nodePath = nodePath + childKey + ".";
+                            nestedNodesArray.push(nodePath);
+                        }
+
+                    })
+                }*/
+
+               // }
+
+            }
+            else{
+                if(key != "type"){
+                    childNode = currentNode[key];
+                    findNode2(childNode, nestedNodesArray, nodePath);
+                }
+
+
+            }
+            /*if("type" in Object.entries(currentNode) && currentNode["type"] != "string"){
+
+                findNode2(currentNode, nestedNodesArray, nodePath);
+            }
+            else{
+                nodePath = nodePath + key + ".";
+            }*/
+
+        })
+    }
+
+    if(typeof currentNode == "array"){
+        Object.keys(currentNode).forEach(([arrayKey, arrayValue]) => {
+            console.log("arrayNode Key");
+            console.log(arrayKey)
+        })
+    }
+
+    return nestedNodesArray;
+}
+
+
 
 async function getWordlist() {
 //TODO Keep commented code for now until dropdown is built with collection ID as checkbox value
@@ -206,8 +318,9 @@ async function getWordlist() {
 
 
 function getNestedNodePath(){
-    var nodePath = "anyOf.";
+    var nodePath = "";
     var returnedNodeArray;
+    var nodePathArray = [];
     var anyOfKeys;
    // var nestedNodesArray = [];
     fetch("{{ stac_catalog_url }}/queryables").then(response => response.json()).then(json => {
@@ -217,29 +330,37 @@ function getNestedNodePath(){
 
 
            //Object.keys(json.properties[key]["anyOf"]).forEach( (anyOfObject) => {
-            json.properties[key]["anyOf"].forEach( (anyOfObject) => {
+           // json.properties[key]["anyOf"].forEach( (anyOfObject) => {
                anyOfKeys = Object.keys(json.properties[key]);
+               //nodePath = nodePath + anyOfObjectKey + ".";
                //for(var i = 0 ; i < anyOfKeys.length; i ++)
                //{
 
                var nestedNodesArray = [];
                //returnedNodeArray = findNode(json.properties[key][anyOfKeys[i]], nestedNodesArray, nodePath);
-               returnedNodeArray = findNode(anyOfObject, nestedNodesArray, nodePath);
+                anyOfKeys.forEach((anyOfKey) => {
+                    console.log("json sent");
+                    console.log(json.properties[key][anyOfKey]);
+                    returnedNodeArray = findNode2(json.properties[key][anyOfKey], nestedNodesArray, nodePath);
+                    nodePathArray = nodePathArray.concat(returnedNodeArray);
+                })
+
                console.log("returnedNodeArray");
-               console.log(returnedNodeArray);
+               console.log(nodePathArray);
                //val["anyOf"] = returnedNodeArray;
                //TODO Keep these console logs for now
                //console.log(key);
                //console.log(val);
                //}
-           })
+           //})
             //returnedNodeArray = findNode(json.properties[key], nestedNodesArray, nodePath);
 
         }
 
 
 
-            return returnedNodeArray;
+            //return returnedNodeArray;
+            return nodePathArray;
         })
     })
 }
