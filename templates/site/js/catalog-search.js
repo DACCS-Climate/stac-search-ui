@@ -4,114 +4,63 @@ function getCollection(){
     return checkboxes;
 }
 
-function findNode(currentNode, nestedNodesArray) {
-    var currentChild;
-    var nodeLength;
-
-    if (Object.keys(currentNode).includes("type") && currentNode["type"] != "object") {
-        nestedNodesArray.push(currentNode);
-    } else {
-
-        if (Array.isArray(currentNode)) {
-            nodeLength = currentNode.length;
-        } else {
-            nodeLength = Object.keys(currentNode).length;
-        }
-
-
-        for (var i = 0; i < nodeLength; i += 1) {
-            if (typeof currentNode[Object.keys(currentNode)[i]] != "string") {
-                currentChild = currentNode[Object.keys(currentNode)[i]];
-                findNode(currentChild, nestedNodesArray);
-            }
-        }
-        return nestedNodesArray;
+function fuseDictionary(_queryables, _path) {
+    var found = {};
+    if (_path === undefined) {
+        _path = [];
     }
-}
-
-async function getWordlist() {
-//TODO Keep commented code for now until dropdown is built with collection ID as checkbox value
-    /*
-    var checkboxList = getCollection();
-    var fetchURLArray = [];
-    var fetchURL;
-
-
-    checkboxList.forEach((checkbox) => {
-        console.log(checkbox);
-       if(checkbox.id != "allCheckbox" && checkbox.checked){
-            fetchURLArray.push(`{{ stac_catalog_url }}/collections/${checkbox.value}/queryables`)
-            //.then(queryables => queryables.flat())
-       }
-
-    });
-    fetchURLArray.forEach(url => {
-        console.log(url);
-        fetch(url).then(response => response.json()).then(json => {
-            return Object.entries(json_1.properties).map(([key, val]) => {
-                val["key"] = key
-                return val
-            })
+    if (_queryables === undefined) {
+        return fetch("{{ stac_catalog_url }}/queryables").then(response => response.json())
+                                                         .then(json => Object.entries(fuseDictionary(json.properties))
+                                                                             .map(([key, val]) => { return {"key": key, "values": val} }) )
+    } else if (typeof _queryables === "object") {
+        Object.entries(_queryables).forEach(([q_key, q_value]) => {
+            if (q_key === "properties") {
+                Object.entries(q_value).forEach(([p_key, p_value]) => {
+                    Object.entries(fuseDictionary(p_value, _path.concat(p_key))).forEach(([f_key, f_value]) => {
+                        found[f_key] = found[f_key] || []
+                        f_value.forEach(val => found[f_key].push(val))
+                    });
+                })
+            } else if (q_key === "enum") {
+                q_value.forEach(val => {
+                    found[val] = found[val] || []
+                    found[val].push([_path, "enum"])
+                })
+            } else {
+                other = true;
+                ["const", "title", "description"].forEach(key => {
+                    if (q_key === key) {
+                        found[q_value] = found[q_value] || []
+                        found[q_value].push([_path, key])
+                        other = false;
+                    }
+                })
+                if (other) {
+                    Object.entries(fuseDictionary(q_value, _path)).forEach(([o_key, o_value]) => {
+                        found[o_key] = found[o_key] || []
+                        o_value.forEach(val => found[o_key].push(val))
+                    });
+                }
+            }
         })
-    })
-    */
-
-
-
-    var returnedNodeArray;
-    const resp = await fetch("{{ stac_catalog_url }}/queryables")
-    const json = await resp.json()
-
-    //const collection_ids = json.collections.map(collection => collection.id)
-
-    return Object.entries(json.properties).map(([key, val]) => {
-
-        if(json.properties[key].hasOwnProperty("anyOf")){
-
-           json.properties[key]["anyOf"].forEach( (anyOfObject) => {
-            var nestedNodesArray = [];
-            returnedNodeArray = findNode(anyOfObject, nestedNodesArray);
-            console.log(returnedNodeArray);
-            val["anyOf"] = returnedNodeArray;
-            //TODO Keep these console logs for now
-            console.log(key);
-            console.log(val);
-           })
-
-        }
-
-
-            val["key"] = key
-            return val
+    } else if (typeof _queryables === "array") {
+        _queryables.forEach(value => {
+            fuseDictionary(value, _path).forEach(next_found => {
+                found.push(next_found);
+            });
         })
-
-    //return json;
-
-//TODO Keep as reference
-    /*
-    return await  {
-        //const resp_1 = await fetch(`{{ stac_catalog_url }}/collections/${id}/queryables`)
-        //const json_1 = await resp_1.json()
-        return Object.entries(json.properties).map(([key, val]) => {
-            val["key"] = key
-            return val
-        })
-    }.then(queryables => queryables.flat())
-
-*/
-    /*
-    return await Promise.all(collection_ids.map(async (id) => {
-
-    })).then(queryables => queryables.flat())
-    */
+    }
+    return found
 }
 
 let fuse = null;
 
 function makeFuse(inputBox) {
-    getWordlist().then(queryables => {
+
+    fuseDictionary().then(queryables => {
         fuse = new Fuse(queryables, {
-            keys: ["title", "key", "enum", "anyOf.description", "anyOf.description.enum", "anyOf.extent", "anyOf.extent.items.description"],
+            keys: ["key"],
             threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
             distance: 100,
             includeMatches: true,
