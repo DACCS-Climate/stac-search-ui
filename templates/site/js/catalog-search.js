@@ -90,11 +90,9 @@ function getWord(inputBox){
 
         if (fuse !== null) {
             queryablesArray = fuse.search(inputBox.value);
-            console.log(queryablesArray);
-            if(queryablesArray.length > 0){
 
+            if(queryablesArray.length > 0){
                 queryablesArray.forEach((queryableItem, queryableKey) => {
-                //console.log(queryableItem);
                     if(queryableItem.matches.length > 0)
                     {
                         queryableItem.matches.forEach((matchItem, matchKey) => {
