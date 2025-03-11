@@ -61,8 +61,7 @@ function makeFuse(inputBox) {
     fuseDictionary().then(queryables => {
         fuse = new Fuse(queryables, {
             keys: ["key"],
-            threshold: 0.2, // TODO: experiment with threshold and distance values to get best results
-            distance: 100,
+            threshold: 0.2,
             includeMatches: true,
             includeScore: true
         });
@@ -153,7 +152,6 @@ function focusOnResults(){
     const resultList = document.getElementById("suggestedWordOutputList");
 
     var resultLinkArray = resultList.querySelectorAll('li h5 a')
-    //console.log(resultLinkArray);
     //if(keyPressed === "ArrowDown"){
         var firstLink = document.getElementById(resultLinkArray[0].id)
         //console.log(firstLink);
