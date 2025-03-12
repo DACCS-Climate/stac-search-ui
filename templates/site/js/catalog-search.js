@@ -145,18 +145,3 @@ function addDefaultSearchAttributes(inputBox){
 function removeDefaultSearchAttributes(inputBox){
     inputBox.removeAttribute("disabled");
 }
-
-//TODO get the focus onto the first list item when search input box detects arrowdown
-function focusOnResults(){
-
-    const resultList = document.getElementById("suggestedWordOutputList");
-
-    var resultLinkArray = resultList.querySelectorAll('li h5 a')
-    //if(keyPressed === "ArrowDown"){
-        var firstLink = document.getElementById(resultLinkArray[0].id)
-        //console.log(firstLink);
-        firstLink.focus();
-    //}
-}
-
-//TODO Switch focus to next list item when list item, or anchor tag, detects arrowdown
