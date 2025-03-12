@@ -104,7 +104,7 @@ function getWord(inputBox){
                             queryableResultButton.setAttribute('role', 'button');
                             queryableResultButton.setAttribute('queryablekeytype', matchItem.key);
                             queryableResultButton.setAttribute('queryablekeyvalue', queryableItem.item.key);
-                            queryableResultButton.id = "match" + matchKey;
+                            queryableResultButton.id = "match" + queryablesArray.indexOf(queryableItem);
 
                             queryableResultButton.addEventListener('click', function (event) {
                                 selectSearchResults(inputBox, event.target.id);
