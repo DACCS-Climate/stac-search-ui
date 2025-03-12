@@ -2,12 +2,10 @@ import os
 import shutil
 import argparse
 
-
-from jinja2 import FileSystemLoader, Environment, select_autoescape
-
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(THIS_DIR, "templates")
 SITE_PATH = os.path.join(TEMPLATE_PATH, "site")
+CSV_PATH = os.path.join(THIS_DIR, "csv")
 
 def filter_site_templates(template, extensions=("js", "html")):
     abs_filepath = os.path.join(TEMPLATE_PATH, template)
@@ -17,7 +15,7 @@ def filter_site_templates(template, extensions=("js", "html")):
             basename.rsplit(".", 1)[1] in extensions)
 
 
-def build(build_directory, stac_catalog_url, clean=True):
+def build(build_directory, stac_catalog_url, map_default_latitude, map_default_longitude, map_default_zoom, clean=True):
 
     if clean:
         shutil.rmtree(build_directory, ignore_errors=True)
@@ -33,7 +31,11 @@ def build(build_directory, stac_catalog_url, clean=True):
         )
         os.makedirs(os.path.dirname(build_destination), exist_ok=True)
         with open(build_destination, "w") as f:
-            f.write(env.get_template(template).render(stac_catalog_url = stac_catalog_url))
+
+            f.write(env.get_template(template).render(stac_catalog_url = stac_catalog_url,
+                                                      map_default_lat = map_default_latitude,
+                                                      map_default_lng = map_default_longitude,
+                                                      map_default_zoom = map_default_zoom))
 
 
 
@@ -55,10 +57,35 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "-lat",
+        "--map-default-latitude",
+        type = float,
+        default=43.1249,
+        help="default latitude on leaflet map.",
+    )
+
+    parser.add_argument(
+        "-lng",
+        "--map-default-longitude",
+        type=float,
+        default=1.254,
+        help="default longitude on leaflet map.",
+    )
+
+    parser.add_argument(
+        "-z",
+        "--map-default-zoom",
+        type=int,
+        default=2,
+        help="default zoom level on leaflet map.",
+    )
+
+    parser.add_argument(
         "-c",
         "--clean",
         action="store_true",
         help="clean build directories before building.",
     )
     args = parser.parse_args()
-    build(args.build_directory, args.stac_catalog_url, args.clean)
+
+    build(args.build_directory, args.stac_catalog_url, args.map_default_latitude, args.map_default_longitude, args.map_default_zoom, args.clean)

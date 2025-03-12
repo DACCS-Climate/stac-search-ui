@@ -27,11 +27,6 @@ document.addEventListener("DOMContentLoaded", function (){
         getWord(event.target);
     });
 
-    searchInputElement.addEventListener("keyup", function(event){
-        if(event.key === "ArrowDown"){
-            focusOnResults();
-        }
-    });
 
     //For text input small
     var textInputElement = document.getElementById("inputNumberSmall");
