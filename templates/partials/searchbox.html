@@ -1,7 +1,13 @@
 <div class="search-container">
 
     <form role="search" class="search-form">
-        <input id="searchInput" type="search" class="search-input" />
+        <div>
+            <input id="searchInput" type="search" autocomplete="off" aria-controls="suggestedWordOutputListContainer" aria-expanded="false" role="combobox" class="search-input" />
+            <div id="suggestedWordOutputListContainer" class="search-output-container">
+                <ul id="suggestedWordOutputList" class="search-output"></ul>
+            </div>
+
+        </div>
 
         <div class="search-icon-background">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>

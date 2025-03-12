@@ -17,7 +17,7 @@ def filter_site_templates(template, extensions=("js", "html")):
             basename.rsplit(".", 1)[1] in extensions)
 
 
-def build(build_directory, clean=True):
+def build(build_directory, stac_catalog_url, clean=True):
 
     if clean:
         shutil.rmtree(build_directory, ignore_errors=True)
@@ -33,7 +33,7 @@ def build(build_directory, clean=True):
         )
         os.makedirs(os.path.dirname(build_destination), exist_ok=True)
         with open(build_destination, "w") as f:
-            f.write(env.get_template(template).render())
+            f.write(env.get_template(template).render(stac_catalog_url = stac_catalog_url))
 
 
 
@@ -48,10 +48,17 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
+        "-u",
+        "--stac-catalog-url",
+        default="https://redoak.cs.toronto.edu/stac", #Keep for now. URL should not be U of T specific
+        help="url of stac catalog on the node",
+    )
+
+    parser.add_argument(
         "-c",
         "--clean",
         action="store_true",
         help="clean build directories before building.",
     )
     args = parser.parse_args()
-    build(args.build_directory, args.clean)
+    build(args.build_directory, args.stac_catalog_url, args.clean)
