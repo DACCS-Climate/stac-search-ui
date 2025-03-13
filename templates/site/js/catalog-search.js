@@ -69,8 +69,6 @@ function makeFuse(inputBox) {
     })
 }
 
-const wordOutput = document.getElementById("suggestedWordOutput");
-
 function clearListChildren(){
     const element = document.getElementById("suggestedWordOutputList");
     while (element.firstChild) {

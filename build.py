@@ -2,6 +2,8 @@ import os
 import shutil
 import argparse
 
+from jinja2 import FileSystemLoader, Environment, select_autoescape
+
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(THIS_DIR, "templates")
 SITE_PATH = os.path.join(TEMPLATE_PATH, "site")
@@ -59,7 +61,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-lat",
         "--map-default-latitude",
-        type = float,
+        type=float,
         default=43.1249,
         help="default latitude on leaflet map.",
     )
