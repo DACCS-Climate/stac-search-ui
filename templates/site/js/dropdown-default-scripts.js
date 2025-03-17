@@ -1,3 +1,38 @@
+function setSearchPageTitle(listULID, titleDivID){
+    var titleDiv = document.getElementById(titleDivID);
+    var list = document.getElementById(listULID);
+    var dynamicTitle = "";
+    var checkboxCount = 0;
+    var checkboxArray = list.querySelectorAll('input[type=checkbox]')
+    console.log(checkboxArray);
+
+     if(checkboxArray[0].checked == true){
+        checkboxCount = -1;
+    }
+
+    for(checkbox of checkboxArray){
+        if(checkbox.checked){
+            checkboxCount = checkboxCount + 1;
+        }
+    }
+
+    if(checkboxArray[0].checked == true){
+        titleDiv.innerText = "All Categories";
+    }
+    else{
+        for(checkbox of checkboxArray){
+            if(checkbox.checked == true && checkboxCount == 1){
+                dynamicTitle = dynamicTitle + checkbox.value;
+            }
+
+            if(checkbox.checked == true && checkboxCount > 1){
+                dynamicTitle = dynamicTitle + checkbox.value + ",";
+            }
+        }
+        titleDiv.innerText = dynamicTitle;
+    }
+}
+
 function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropdownButtonText){
     var dropdownButtonTextElement = document.getElementById(defaultDropdownButtonTextID);
     var checkboxCount = 0;
