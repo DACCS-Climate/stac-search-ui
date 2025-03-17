@@ -1,0 +1,38 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+    {% with page = "home"  %}
+        {% set banner_background_class= "banner-image-home" %}
+        {% set banner_title_class = "banner-title-home" %}
+        {% set banner_video = "video/banner-video.mp4" %}
+        {% set page_title = "Data Analytics for Canadian Climate Services, STAC API" %}
+        {% set page_subtitle = "Climate Data Search" %}
+        {% set page_slogan = "Explore this rich repository of information about Earth’s climate—uncovering insights into its past, understanding current trends, and anticipating future changes." %}
+        {% include "partials/banner.html" %}
+    {% endwith %}
+
+<!--Page content area-->
+<div class="row">
+    <div class="container-fluid content-search-main">
+        <div class="content-search-left">
+
+        </div>
+        <div class="content-search-right">
+            <div class="content-search-title">
+                <h5>Search <span id="titleSearchType" class="content-search-title-type"></span></h5>
+            </div>
+            <div class="content-search-description">
+                <p class="body-1">
+                    Filter by date range to focus on specific timeframes,location to narrow down your search area,
+                    and keywords relevant to the type of imagery or dataset. Additional options, like cloud cover and
+                    sensor type, let you further customize your results to meet quality and relevance standards.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
