@@ -28,7 +28,9 @@ document.addEventListener("DOMContentLoaded", function (){
     });
 
 
+    //TODO: Uncomment when spin buttons added to frontend search UI or move to another file
     //For text input small
+    /*
     var textInputElement = document.getElementById("inputNumberSmall");
 
     setPlaceholderText(textInputElement, "1");
@@ -46,4 +48,5 @@ document.addEventListener("DOMContentLoaded", function (){
         setPlaceholderText(textInputElement , "1");
         setTextboxBackground(textInputElement);
     });
+    */
 })
