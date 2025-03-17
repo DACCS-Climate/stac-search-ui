@@ -1,0 +1,83 @@
+<section id="hero" class="banner-section first-section text-white">
+
+    {%  if page == "home" %}
+        <div id="banner-image" class="d-block d-lg-none bg opacity-30 bg-position-center-center bg-attachment-fixed {{ banner_background_class }}"></div>
+        <div id="banner-video" class="d-none d-lg-block embed-responsive embed-responsive-16by9">
+          <video loop autoplay muted>
+            <source class="embed-responsive-item" src="{{ banner_video }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <div class="banner-overlay-container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex flex-column align-items-center justify-content-center banner-overlay-elements">
+                            <h3 class="margin-unset"><span id="banner-title" class="d-none d-md-flex {{ banner_title_class }} margin-banner-title">{{ page_title }}</span></h3>
+                            <h4 class="margin-unset"><span id="banner-title" class="d-flex d-md-flex {{ banner_title_class }} margin-banner-subtitle">{{ page_subtitle }}</span></h4>
+                            <p class="banner-slogan subtitle-1">{{ page_slogan|default("") }}</p>
+                       </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="container-fluid">
+                        <div class="banner-search-container">
+                            <div class="banner-search-dropdown">
+                                {% with %}
+                                    {% set dropdown_type = "default_dropdown_list" %}
+                                    {% set container_id = "dropdownListDefaultContainer" %}
+                                    {% set dropdown_button_id = "dropdownListDefaultButton" %}
+                                    {% set dropdown_button_text_id = "dropdownListTitleText" %}
+                                    {% set label_id = "dropdownListDefaultLabel" %}
+                                    {% set dropdown_label_text = "All Catalogs" %}
+                                    {% set dropdown_default_UL_id = "dropdownListDefaultUL" %}
+                                    {% include "partials/dropdown.html" %}
+                                {% endwith %}
+                            </div>
+                        <!--TODO: Find out why the searchbox div renders outside of the search container div -->
+                            <div class="banner-search-searchbox">
+                                {% include "partials/searchbox.html" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="container-fluid banner-scroll-container">
+                <div class="row">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                         <div>
+                             <i class="fa-solid fa-chevron-down banner-scroll-icon"></i>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {% if page == "node" %}
+            {% set opacity_overlay_class = "banner-overlay-linear-opacity" %}
+        {% else %}
+            {% set opacity_overlay_class = "banner-overlay-opacity" %}
+        {% endif %}
+        <div id="banner-image" class="d-block bg opacity-30 bg-position-center-center bg-attachment-fixed {{ banner_background_class }}"></div>
+        <div class="banner-overlay-container-node {{ opacity_overlay_class }}">
+           <div class="container-fluid">
+               <div class="d-flex flex-column justify-content-center w-100">
+                   <div class="d-flex justify-content-center w-100">
+                       <div class="d-flex justify-content-center">
+                            <h3 id="banner-title" class="d-none d-lg-flex flex-column text-center w-100 {{ banner_title_class }}">{{ page_slogan|safe }}</h3>
+                            <h3 id="banner-title" class="d-flex d-lg-none flex-column text-center banner-width-mobile {{ banner_title_class }}">{{ page_slogan|safe }}</h3>
+                       </div>
+                    </div>
+                    <div class="d-flex justify-content-center w-100">
+                        <p class="value-statement margin-value-statement">{{ value_statement|default("") }}</p>
+                    </div>
+               </div>
+         </div>
+        </div>
+    {% endif %}
+</section>
