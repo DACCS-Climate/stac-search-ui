@@ -100,12 +100,13 @@ function getWord(inputBox){
                             queryableResultButton = document.createElement('a');
                             queryableResultButton.innerText = matchItem.value;
                             queryableResultButton.setAttribute('role', 'button');
-                            queryableResultButton.setAttribute('queryablekeytype', matchItem.key);
+                            queryableResultButton.setAttribute('queryablekeytype', queryableItem.item.values[0][1]);
                             queryableResultButton.setAttribute('queryablekeyvalue', queryableItem.item.key);
                             queryableResultButton.id = "match" + queryablesArray.indexOf(queryableItem);
 
                             queryableResultButton.addEventListener('click', function (event) {
                                 selectSearchResults(inputBox, event.target.id);
+                                formatSearch(queryableItem.item.values[0][1], queryableItem.item.key);
                             })
 
                             listItemFont.appendChild(queryableResultButton);
@@ -142,4 +143,34 @@ function addDefaultSearchAttributes(inputBox){
 
 function removeDefaultSearchAttributes(inputBox){
     inputBox.removeAttribute("disabled");
+}
+
+function formatSearch(queryableItemKeyType, queryableItemKeyValue){
+    var searchJSONDisplay = document.getElementById("searchJSON");
+
+    var searchJSON = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "properties": {
+                    [queryableItemKeyType]: queryableItemKeyValue
+                }
+            }
+        ]
+
+    };
+    var displayJSON = JSON.stringify(searchJSON);
+    searchJSONDisplay.innerText = displayJSON;
+}
+
+function searchSTAC(){
+    var searchJSON = JSON.parse(document.getElementById("searchJSON").innerText);
+    var testSearch = '{"type":"FeatureCollection","features":[{"properties":{"enum":"Surface Air Pressure "}}]}';
+    var testJSON = JSON.parse(testSearch);
+    fetch("{{ stac_catalog_url }}/search", {
+        method: "POST",
+        body: testJSON
+    }).then(response => response.json()).then( json => {
+        console.log(json);
+    })
 }
