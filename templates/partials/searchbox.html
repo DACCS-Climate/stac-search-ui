@@ -11,9 +11,17 @@
         </div>
 
         <div class="search-icon-background">
+            <a id="searchIconAnchor">
             <i id="searchIcon" class="fa-solid fa-magnifying-glass search-icon"></i>
+                </a>
         </div>
     </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var searchButton = document.getElementById("searchIconAnchor");
+            searchButton.addEventListener("click", filterSTACSearchResults);
+        })
+    </script>
     <script src="js/search-ui-functions.js"></script>
     <script src="js/ui-styles-scripts.js"></script>
     <script src="js/catalog-search.js"></script>
