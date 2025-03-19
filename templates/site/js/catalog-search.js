@@ -147,7 +147,7 @@ function removeDefaultSearchAttributes(inputBox){
 
 function formatSearch(queryableItemKeyType, queryableItemKeyValue){
     var searchJSONDisplay = document.getElementById("searchJSON");
-
+/*
     var searchJSON = {
         "type": "FeatureCollection",
         "features": [
@@ -158,19 +158,215 @@ function formatSearch(queryableItemKeyType, queryableItemKeyValue){
             }
         ]
 
-    };
+    };*/
+     var searchJSON = {
+         "properties": {
+             [queryableItemKeyType]: queryableItemKeyValue
+         }
+     };
+
     var displayJSON = JSON.stringify(searchJSON);
     searchJSONDisplay.innerText = displayJSON;
 }
 
-function searchSTAC(){
-    var searchJSON = JSON.parse(document.getElementById("searchJSON").innerText);
+function filterSTACSearchResults(){
+    var productionURL = "{{ stac_catalog_url }}/search";
+    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search";
+    //var searchJSON = JSON.parse(document.getElementById("searchJSON").innerText);
     var testSearch = '{"type":"FeatureCollection","features":[{"properties":{"enum":"Surface Air Pressure "}}]}';
-    var testJSON = JSON.parse(testSearch);
-    fetch("{{ stac_catalog_url }}/search", {
+    var testSearch = '{"properties":{"enum":"Surface Temperature"}}';
+
+    fetch(testingURL, {
+        headers:{
+            "Content-Type":"application/json"
+        },
+
         method: "POST",
-        body: testJSON
+        body: testSearch
     }).then(response => response.json()).then( json => {
         console.log(json);
+    })
+}
+
+function addSearchResultNavigation(json, searchHomeURL){
+
+    var firstButton = document.getElementById("searchResultsFirst");
+    var nextButton = document.getElementById("searchResultsNext");
+    var previousButton = document.getElementById("searchResultsPrevious");
+
+    firstButton.addEventListener("click", function(){
+       defaultSTACSearchResults(searchHomeURL);
+    });
+
+    Object.entries(json.links).forEach(([linkKey, linkValue]) => {
+       if(linkValue.rel == "next"){
+           nextButton.addEventListener("click", function(){
+               defaultSTACSearchResults(linkValue.href);
+           })
+       }
+
+       if(linkValue.rel == "previous"){
+           previousButton.addEventListener("click", function(){
+               defaultSTACSearchResults(linkValue.href);
+           })
+       }
+    });
+}
+
+
+
+function makeSearchResultTitle(jsonProperties, tableHeader){
+
+    var tableTitleFormatCell = document.createElement("td");
+    tableTitleFormatCell.innerText = "Format";
+
+    var tableTitleDatasetCell = document.createElement("td");
+    tableTitleDatasetCell.innerText = "Dataset ID";
+
+    var tableTitleDatatimeCell = document.createElement("td");
+    tableTitleDatatimeCell.innerText = "Datetime";
+
+    tableHeader.appendChild(tableTitleDatasetCell);
+    tableHeader.appendChild(tableTitleDatatimeCell);
+    tableHeader.appendChild(tableTitleFormatCell);
+}
+
+
+function populateSearchResults(json){
+    var searchResultDiv = document.getElementById("searchResults");
+    var searchResultTable = document.createElement("table");
+    var tableHeader = document.createElement("thead");
+    var tableBody = document.createElement("tbody");
+
+    if(searchResultDiv.innerHTML != "")
+    {
+        searchResultDiv.innerHTML = "";
+    }
+
+    makeSearchResultTitle(json.features[0].properties, tableHeader);
+
+    searchResultTable.appendChild(tableHeader);
+    searchResultTable.appendChild(tableBody);
+    searchResultDiv.appendChild(searchResultTable);
+
+
+
+    Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
+        var rowSearchResult = document.createElement("tr");
+        tableBody.appendChild(rowSearchResult);
+
+        var collectionAnchor = document.createElement("a");
+        var cellFormat = document.createElement("td");
+        cellFormat.classList.add("search-results-format");
+
+
+        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
+            var cellDatasetTitle = document.createElement("td");
+            var linkDatasetTitle = document.createElement("a");
+            var datasetTitleArray;
+
+            if(assetKey == "metadata_http"){
+            //linkDatasetTitle.setAttribute("href", assetValue.href);
+            datasetTitleArray = assetValue.title.split(".");
+            linkDatasetTitle.innerText = datasetTitleArray[0];
+
+            cellDatasetTitle.appendChild(linkDatasetTitle);
+
+            rowSearchResult.appendChild(cellDatasetTitle);
+            }
+
+        })
+
+        Object.entries(featureValue.properties).forEach(([propertyKey, propertyValue]) => {
+                        var cellPropertyValue = document.createElement("td");
+
+                        if (propertyKey == "datetime") {
+
+
+                            cellPropertyValue.innerText = propertyValue;
+                            //cellPropertyValue.appendChild(collectionAnchor);
+                        }
+
+                        rowSearchResult.appendChild(cellPropertyValue);
+                    })
+
+
+
+        /*Add Format*/
+        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
+
+            var assetSpan = document.createElement("span");
+            var assetTypeArray = assetValue.type.split('/');
+            var assetType = assetTypeArray[1];
+
+            assetSpan.innerText = assetType;
+            cellFormat.appendChild(assetSpan);
+
+        })
+        rowSearchResult.appendChild(cellFormat);
+
+        console.log(featureKey);
+        console.log(featureValue);
+
+
+    })
+
+}
+
+function makePropertyTitle(jsonProperties){
+
+
+    Object.entries(jsonProperties).forEach( ([featureKey])  => {
+        var resultTitle = "";
+        var tableTitleCell = document.createElement("td");
+        resultTitle = featureKey.replace("_", " ");
+        tableTitleCell.innerText = resultTitle;
+        tableHeader.appendChild(tableTitleCell);
+    })
+
+}
+
+function populateProperties(json){
+                Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
+                    Object.entries(featureValue.properties).forEach(([propertyKey, propertyValue]) => {
+                        var cellPropertyValue = document.createElement("td");
+
+                        if (propertyKey == "collection_id") {
+                            Object.entries(featureValue.links).forEach(([linkKey, linkValue]) => {
+                                if (linkValue.rel == "collection") {
+                                    collectionAnchor.setAttribute("href", linkValue.href);
+                                }
+                            })
+
+                            collectionAnchor.innerText = propertyValue;
+                            cellPropertyValue.appendChild(collectionAnchor);
+                        } else {
+                            cellPropertyValue.innerText = propertyValue;
+                        }
+
+                        rowSearchResult.appendChild(cellPropertyValue);
+                    })
+                })
+}
+
+
+function defaultSTACSearchResults(url){
+    var productionURL = "{{ stac_catalog_url }}/search";
+    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search";
+    var stacSearchURL;
+
+    if(url != ""){
+        stacSearchURL = url;
+    }
+    else{
+        stacSearchURL = testingURL;
+    }
+
+    fetch(stacSearchURL, {
+        method: "GET"
+    }).then(response => response.json()).then( json => {
+        console.log(json);
+        addSearchResultNavigation(json, stacSearchURL);
+        populateSearchResults(json);
     })
 }
