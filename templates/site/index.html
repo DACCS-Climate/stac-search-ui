@@ -16,7 +16,19 @@
 <div class="row">
     <div class="container-fluid content-search-main">
         <div class="content-search-left">
+            {% with %}
+                {% set dropdown_type = "regular_dropdown_share" %}
+                {% set dropdown_button_id = "dropdownShareRegular" %}
+                {% set dropdown_label_text = "Share" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
 
+            {% with %}
+                {% set dropdown_type = "regular_dropdown_source" %}
+                {% set dropdown_button_id = "dropdownSourceRegular" %}
+                {% set dropdown_label_text = "Source" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
         </div>
         <div class="content-search-right">
             <div class="content-search-title">
@@ -29,7 +41,49 @@
                     sensor type, let you further customize your results to meet quality and relevance standards.
                 </p>
             </div>
+            <div id="searchJSON">
 
+            </div>
+            <div id="searchResultsNavigation" class="search-results-nav">
+                <div>
+                    {% with %}
+                        {% set button_type = "button_lg_nav_previous" %}
+                        {% set button_id = "searchResultsPrevious" %}
+                        {% include "partials/button.html" %}
+                    {% endwith %}
+
+                    {% with %}
+                        {% set button_type = "button_sm_nav" %}
+                        {% set button_label = "First" %}
+                        {% set button_id = "searchResultsFirst" %}
+                        {% include "partials/button.html" %}
+                    {% endwith %}
+                </div>
+            <div>
+                {% with %}
+                    {% set button_type = "button_lg_nav_next" %}
+                    {% set button_id = "searchResultsNext" %}
+                    {% include "partials/button.html" %}
+                {% endwith %}
+            </div>
+
+            </div>
+
+            <div>
+                Default Search Results
+            </div>
+
+            <div class="row">
+                <div class="container-fluid">
+                    <div id="searchResults">
+                    </div>
+                </div>
+            </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+        defaultSTACSearchResults("");
+    })
+</script>
         </div>
     </div>
 
