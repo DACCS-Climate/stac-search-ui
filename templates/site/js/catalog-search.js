@@ -194,23 +194,48 @@ function addSearchResultNavigation(json, searchHomeURL){
     var nextButton = document.getElementById("searchResultsNext");
     var previousButton = document.getElementById("searchResultsPrevious");
 
-    firstButton.addEventListener("click", function(){
-       defaultSTACSearchResults(searchHomeURL);
-    });
+
+    if(firstButton.onclick != ""){
+        firstButton.onclick = function () {
+            defaultSTACSearchResults(searchHomeURL);
+        }
+    }
+    else{
+        firstButton.onclick = function () {
+            defaultSTACSearchResults(searchHomeURL);
+        }
+    }
+
 
     Object.entries(json.links).forEach(([linkKey, linkValue]) => {
        if(linkValue.rel == "next"){
-           nextButton.addEventListener("click", function(){
-               defaultSTACSearchResults(linkValue.href);
-           })
+
+           if(nextButton.onclick != ""){
+                nextButton.onclick = function() {
+                    defaultSTACSearchResults(linkValue.href);
+                }
+            }
+           else {
+                nextButton.onclick = function() {
+                    defaultSTACSearchResults(linkValue.href);
+                }
+           }
        }
 
        if(linkValue.rel == "previous"){
-           previousButton.addEventListener("click", function(){
-               defaultSTACSearchResults(linkValue.href);
-           })
+
+           if(previousButton.onclick != ""){
+               previousButton.onclick = function() {
+                   defaultSTACSearchResults(linkValue.href);
+               }
+           }
+           else {
+               previousButton.onclick = function() {
+                   defaultSTACSearchResults(linkValue.href);
+               }
+           }
        }
-    });
+    })
 }
 
 
@@ -259,7 +284,24 @@ function populateSearchResults(json){
         var cellFormat = document.createElement("td");
         cellFormat.classList.add("search-results-format");
 
+        if(featureValue.assets.metadata_http){
+            console.log(featureValue.assets.metadata_http)
+            var cellDatasetTitle = document.createElement("td");
+            var linkDatasetTitle = document.createElement("a");
+            var datasetTitleArray;
 
+            //if(assetKey == "metadata_http"){
+            //linkDatasetTitle.setAttribute("href", assetValue.href);
+            datasetTitleArray = featureValue.assets.metadata_http.title.split(".");
+            linkDatasetTitle.innerText = datasetTitleArray[0];
+
+            cellDatasetTitle.appendChild(linkDatasetTitle);
+
+            rowSearchResult.appendChild(cellDatasetTitle);
+            //}
+        }
+
+        /*
         Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
             var cellDatasetTitle = document.createElement("td");
             var linkDatasetTitle = document.createElement("a");
@@ -275,20 +317,30 @@ function populateSearchResults(json){
             rowSearchResult.appendChild(cellDatasetTitle);
             }
 
-        })
+        })*/
 
+
+        if(featureValue.properties.datetime){
+              var cellPropertyValue = document.createElement("td");
+
+
+                cellPropertyValue.innerText = featureValue.properties.datetime;
+                rowSearchResult.appendChild(cellPropertyValue);
+                //cellPropertyValue.appendChild(collectionAnchor);
+        }
+        /*
         Object.entries(featureValue.properties).forEach(([propertyKey, propertyValue]) => {
-                        var cellPropertyValue = document.createElement("td");
-
-                        if (propertyKey == "datetime") {
 
 
-                            cellPropertyValue.innerText = propertyValue;
-                            //cellPropertyValue.appendChild(collectionAnchor);
-                        }
+            if (propertyKey == "datetime") {
+                var cellPropertyValue = document.createElement("td");
 
-                        rowSearchResult.appendChild(cellPropertyValue);
-                    })
+
+                cellPropertyValue.innerText = propertyValue;
+                rowSearchResult.appendChild(cellPropertyValue);
+                //cellPropertyValue.appendChild(collectionAnchor);
+            }
+        })*/
 
 
 
@@ -351,9 +403,10 @@ function populateProperties(json){
 
 
 function defaultSTACSearchResults(url){
-    var productionURL = "{{ stac_catalog_url }}/search";
-    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search";
+    var productionURL = "{{ stac_catalog_url }}/search?";
+    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
     var stacSearchURL;
+    var queryParams = "";
 
     if(url != ""){
         stacSearchURL = url;
@@ -362,8 +415,17 @@ function defaultSTACSearchResults(url){
         stacSearchURL = testingURL;
     }
 
+    if(!(stacSearchURL.includes("sortby"))){
+        queryParams = new URLSearchParams({sortby: "+id"}).toString();
+        stacSearchURL = stacSearchURL + decodeURIComponent(queryParams);
+    }
+
+    console.log(stacSearchURL);
+
     fetch(stacSearchURL, {
         method: "GET"
+
+
     }).then(response => response.json()).then( json => {
         console.log(json);
         addSearchResultNavigation(json, stacSearchURL);
