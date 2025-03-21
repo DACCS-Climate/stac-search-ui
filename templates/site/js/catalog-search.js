@@ -197,12 +197,12 @@ function addSearchResultNavigation(json, searchHomeURL){
 
     if(firstButton.onclick != ""){
         firstButton.onclick = function () {
-            defaultSTACSearchResults(searchHomeURL);
+            getSTACSearchResults(searchHomeURL);
         }
     }
     else{
         firstButton.onclick = function () {
-            defaultSTACSearchResults(searchHomeURL);
+            getSTACSearchResults(searchHomeURL);
         }
     }
 
@@ -212,12 +212,12 @@ function addSearchResultNavigation(json, searchHomeURL){
 
            if(nextButton.onclick != ""){
                 nextButton.onclick = function() {
-                    defaultSTACSearchResults(linkValue.href);
+                    getSTACSearchResults(linkValue.href);
                 }
             }
            else {
                 nextButton.onclick = function() {
-                    defaultSTACSearchResults(linkValue.href);
+                    getSTACSearchResults(linkValue.href);
                 }
            }
        }
@@ -226,12 +226,12 @@ function addSearchResultNavigation(json, searchHomeURL){
 
            if(previousButton.onclick != ""){
                previousButton.onclick = function() {
-                   defaultSTACSearchResults(linkValue.href);
+                   getSTACSearchResults(linkValue.href);
                }
            }
            else {
                previousButton.onclick = function() {
-                   defaultSTACSearchResults(linkValue.href);
+                   getSTACSearchResults(linkValue.href);
                }
            }
        }
@@ -285,10 +285,14 @@ function populateSearchResults(json){
         cellFormat.classList.add("search-results-format");
 
         if(featureValue.assets.metadata_http){
-            console.log(featureValue.assets.metadata_http)
             var cellDatasetTitle = document.createElement("td");
             var linkDatasetTitle = document.createElement("a");
             var datasetTitleArray;
+            linkDatasetTitle.setAttribute("role", "button");
+            linkDatasetTitle.onclick = function(){
+                swapDatasetDetails();
+                populateDatasetDetails(featureValue);
+            };
 
             //if(assetKey == "metadata_http"){
             //linkDatasetTitle.setAttribute("href", assetValue.href);
@@ -365,18 +369,82 @@ function populateSearchResults(json){
 
 }
 
-function makePropertyTitle(jsonProperties){
 
-
-    Object.entries(jsonProperties).forEach( ([featureKey])  => {
-        var resultTitle = "";
-        var tableTitleCell = document.createElement("td");
-        resultTitle = featureKey.replace("_", " ");
-        tableTitleCell.innerText = resultTitle;
-        tableHeader.appendChild(tableTitleCell);
-    })
-
+function hideDetails(){
+    var datasetDetailsContainer = document.getElementById("datasetDetails");
+    datasetDetailsContainer.classList.add("display-none");
 }
+
+function swapDatasetDetails(){
+    var searchResultContainer = document.getElementById("searchResults");
+    var datasetDetailsContainer = document.getElementById("datasetDetails");
+
+    if(searchResultContainer.classList.contains("display-none")){
+        searchResultContainer.classList.remove("display-none");
+    }
+    else{
+        searchResultContainer.classList.add("display-none")
+    }
+
+    if(datasetDetailsContainer.classList.contains("display-none")){
+        datasetDetailsContainer.classList.remove("display-none");
+    }
+    else{
+        datasetDetailsContainer.classList.add("display-none");
+    }
+}
+
+
+function populateDatasetDetails(features){
+    var datasetName = document.getElementById("datasetName");
+    var metadataDetails = document.getElementById("datasetMetadataContainer");
+    console.log("dataset features");
+    console.log(features);
+    Object.entries(features).forEach(([featureKey, featureValue]) => {
+        if(featureKey == "assets"){
+            Object.entries(featureValue).forEach(([assetKey, assetValue]) => {
+                if(assetKey == "metadata_http") {
+                    var datasetTitle = document.createElement("h4");
+                    var titleArray = assetValue.title.split(".");
+                    datasetTitle.innerText = titleArray[0];
+                    datasetName.appendChild(datasetTitle);
+                }
+            })
+        }
+
+
+        if(featureKey == "properties"){
+            var metadataTable = document.createElement("table");
+
+            Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
+                var metadataTableRow = document.createElement("tr");
+                if(propertyKey == "variable_id") {
+                    var metadataTitleCell = document.createElement("td");
+                    var metadataNameCell = document.createElement("td");
+                    var metadataTitle = document.createElement("p");
+                    var metadataName = document.createElement("p");
+
+                    metadataTitle.classList.add("subtitle-1");
+                    metadataName.classList.add("body-1");
+
+                    metadataTitle.innerText = propertyKey;
+                    metadataName.innerText = propertyValue;
+
+                    metadataTitleCell.appendChild(metadataTitle);
+                    metadataNameCell.appendChild(metadataName);
+                    metadataTableRow.appendChild(metadataTitleCell);
+                    metadataTableRow.appendChild(metadataNameCell);
+                }
+                metadataTable.appendChild(metadataTableRow);
+
+            })
+            metadataDetails.appendChild(metadataTable);
+        }
+
+
+    })
+}
+
 
 function populateProperties(json){
                 Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
@@ -402,7 +470,10 @@ function populateProperties(json){
 }
 
 
-function defaultSTACSearchResults(url){
+
+
+
+function getSTACSearchResults(url){
     var productionURL = "{{ stac_catalog_url }}/search?";
     var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
     var stacSearchURL;
