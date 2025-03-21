@@ -42,9 +42,10 @@
                 </p>
             </div>
             <div id="searchJSON">
-
+                My Search
             </div>
             <div id="searchResultsNavigation" class="search-results-nav">
+            <a id="backButton" role="button">Back</a>
                 <div>
                     {% with %}
                         {% set button_type = "button_lg_nav_previous" %}
@@ -70,18 +71,44 @@
             </div>
 
             <div>
-                Default Search Results
+                Datasets Found
             </div>
 
             <div class="row">
                 <div class="container-fluid">
-                    <div id="searchResults">
+                    <div id="searchResults"></div>
+                    <div id="datasetDetails">
+                        <div id="titleContainer">
+                            <div id="collectionTitle"></div>
+                            <div id="collectionName"></div>
+                        </div>
+                        <div id="datasetContainer">
+                            <div id="datasetTitleContainer">
+                                <div id="datasetTitle"><h4>Dataset</h4></div>
+                                <div id="datasetName"></div>
+                            </div>
+
+
+                            <div id="datasetAssetsContainer">
+
+                            </div>
+                            <div id="datasetGeneralContainer">
+
+                            </div>
+                            <div id="datasetVariableContainer"></div>
+                            <div id="datasetDimensionsContainer"></div>
+                            <div id="datasetMetadataContainer"></div>
+                            <div id="datasetNodeContainer"></div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
 <script>
     document.addEventListener("DOMContentLoaded", function(){
-        defaultSTACSearchResults("");
+        hideDetails();
+        getSTACSearchResults("");
     })
 </script>
         </div>
