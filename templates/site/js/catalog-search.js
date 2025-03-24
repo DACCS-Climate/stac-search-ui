@@ -397,6 +397,8 @@ function swapDatasetDetails(){
 
 function populateDatasetDetails(features){
     var datasetName = document.getElementById("datasetName");
+    var assetDetails = document.getElementById("datasetAssetsContainer");
+    var assetDetailsList = document.getElementById("datasetAssetsList")
     var metadataDetails = document.getElementById("datasetMetadataContainer");
     console.log("dataset features");
     console.log(features);
@@ -441,7 +443,61 @@ function populateDatasetDetails(features){
             metadataDetails.appendChild(metadataTable);
         }
 
+        if(featureKey == "assets"){
 
+            var filesIconDiv =  document.createElement("div");
+            var downloadIconDiv = document.createElement("div");
+
+            filesIconDiv.innerHTML = '<i class="fa-regular fa-copy"></i>';
+            filesIconDiv.classList.add("icon-asset-file");
+
+            downloadIconDiv.innerHTML = '<i class="bi bi-download"></i>';
+            downloadIconDiv.classList.add("icon-asset-download");
+
+
+            Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+                var assetListItem = document.createElement("li");
+                var assetDiv = document.createElement("div");
+                var assetTitle = document.createElement("p");
+                var assetLink = document.createElement("a");
+
+                assetDiv.classList.add("div-asset-list-entry");
+                assetTitle.classList.add("p-asset-title");
+                assetLink.classList.add("a-asset-link");
+
+                console.log("assetKey");
+                console.log(assetKey);
+                if(assetKey.includes("http")){
+                    assetTitle.innerText = "HTTPServer"
+                    assetDiv.appendChild(assetTitle);
+                }
+                else{
+
+                    console.log("assetValue");
+                    console.log(assetValue);
+                    assetTitle.innerText = assetValue.title;
+                    assetDiv.appendChild(assetTitle);
+                }
+
+                    assetLink.innerText = assetValue.href;
+                    assetLink.href = assetValue.href;
+                    assetDiv.appendChild(assetLink);
+
+                if(assetKey.includes("http")){
+                    assetDiv.appendChild(downloadIconDiv);
+                }
+                else{
+                    assetDiv.appendChild(filesIconDiv);
+                }
+
+
+
+                assetListItem.appendChild(assetDiv);
+
+                assetDetailsList.appendChild(assetListItem);
+
+            })
+        }
     })
 }
 
