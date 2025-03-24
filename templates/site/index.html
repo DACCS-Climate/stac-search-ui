@@ -16,6 +16,7 @@
 <div class="row">
     <div class="container-fluid content-search-main">
         <div class="content-search-left">
+        <a id="backButton" role="button">Back</a>
             {% with %}
                 {% set dropdown_type = "regular_dropdown_share" %}
                 {% set dropdown_button_id = "dropdownShareRegular" %}
@@ -45,7 +46,6 @@
                 My Search
             </div>
             <div id="searchResultsNavigation" class="search-results-nav">
-            <a id="backButton" role="button">Back</a>
                 <div>
                     {% with %}
                         {% set button_type = "button_lg_nav_previous" %}
@@ -90,6 +90,14 @@
 
 
                             <div id="datasetAssetsContainer">
+                                {% with %}
+                                    {% set dropdown_type = "dropdown_list_panel" %}
+                                    {% set dropdown_button_id = "datasetAssetsButton" %}
+                                    {% set dropdown_list_panel_link_id = "datasetAssetsLabel" %}
+                                    {% set dropdown_list_id  = "datasetAssetsList"%}
+                                    {% set dropdown_label_text = "Assets" %}
+                                    {% include "partials/dropdown-panel.html" %}
+                                {% endwith %}
 
                             </div>
                             <div id="datasetGeneralContainer">
@@ -97,7 +105,8 @@
                             </div>
                             <div id="datasetVariableContainer"></div>
                             <div id="datasetDimensionsContainer"></div>
-                            <div id="datasetMetadataContainer"></div>
+                            <div id="datasetMetadataContainer">
+                            </div>
                             <div id="datasetNodeContainer"></div>
 
                         </div>
