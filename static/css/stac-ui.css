@@ -2397,6 +2397,110 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-bottom: 7px;
 }
 
+/*Dropdown List Panel*/
+.dropdown-list-panel-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-list-panel-title{
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-radius: unset;
+    background-color: var(--indigo250-opacity-light);
+    color: var(--indigo-700);
+}
+
+.dropdown-list-panel-title:hover{
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-list-panel-title:first-child:active{
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
+}
+
+.dropdown-list-panel-search-icon{
+    width: 15px;
+    height: 15px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: var(--primary);
+    background-color: var(--white);
+    font-size: 14.5px;
+}
+
+.dropdown-list-panel-search-icon-background{
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border: solid;
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: var(--white);
+    top: 14.5px;
+    margin-right: 50px;
+    z-index: 25;
+}
+
+.dropdown-list-panel-title::after{
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary);
+    border-radius: 50%;
+    color: var(--white);
+    background-color: var(--primary);
+    margin-left: 50px;
+    font-size: 14.5px;
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+.dropdown-list-panel-title[aria-expanded="false"]::after{
+    transition: all 0.5s ease-in-out;
+    transform: rotate(0deg);
+}
+
+.dropdown-list-panel-title[aria-expanded="true"]::after{
+    transition: all 0.5s ease-in-out;
+    transform: rotate(-180deg);
+}
+
+.div-asset-list-entry{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.p-asset-title{
+    width: 10%;
+}
+
+.a-asset-link{
+    width: 70%;
+}
+
+.icon-asset-download{
+    width: 20%;
+}
+
+.icon-asset-files{
+    width: 20%;
+}
+
 /*Search page content*/
 .content-search-main{
     display: flex;
