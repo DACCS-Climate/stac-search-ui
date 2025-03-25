@@ -444,56 +444,62 @@ function populateDatasetDetails(features){
         }
 
         if(featureKey == "assets"){
-
-            var filesIconDiv =  document.createElement("div");
-            var downloadIconDiv = document.createElement("div");
-
-            filesIconDiv.innerHTML = '<i class="fa-regular fa-copy"></i>';
-            filesIconDiv.classList.add("icon-asset-file");
-
-            downloadIconDiv.innerHTML = '<i class="bi bi-download"></i>';
-            downloadIconDiv.classList.add("icon-asset-download");
-
-
             Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
                 var assetListItem = document.createElement("li");
                 var assetDiv = document.createElement("div");
                 var assetTitle = document.createElement("p");
                 var assetLink = document.createElement("a");
+                var filesIconCellDiv = document.createElement("div");
+                var filesIconContainer =  document.createElement("div");
+                var filesIcon = document.createElement("img");
+                var downloadIconCellDiv = document.createElement("div");
+                var downloadIconContainer = document.createElement("div");
+                var downloadIcon = document.createElement("img");
+
+                filesIconCellDiv.appendChild(filesIconContainer);
+                downloadIconCellDiv.appendChild(downloadIconContainer);
+
+                filesIcon.setAttribute("src", "images/files-icon.svg");
+                filesIcon.classList.add("image-files-icon");
+                filesIconContainer.classList.add("div-icon-file");
+                filesIconContainer.appendChild(filesIcon);
+
+
+                downloadIcon.setAttribute("src", "images/download-icon.svg");
+                downloadIcon.classList.add("image-download-icon")
+                downloadIconContainer.classList.add("div-icon-download");
+                downloadIconContainer.appendChild(downloadIcon);
 
                 assetDiv.classList.add("div-asset-list-entry");
                 assetTitle.classList.add("p-asset-title");
                 assetLink.classList.add("a-asset-link");
 
-                console.log("assetKey");
-                console.log(assetKey);
+
+                /*Add asset title entry*/
                 if(assetKey.includes("http")){
                     assetTitle.innerText = "HTTPServer"
                     assetDiv.appendChild(assetTitle);
                 }
                 else{
-
-                    console.log("assetValue");
-                    console.log(assetValue);
                     assetTitle.innerText = assetValue.title;
                     assetDiv.appendChild(assetTitle);
                 }
 
-                    assetLink.innerText = assetValue.href;
-                    assetLink.href = assetValue.href;
-                    assetDiv.appendChild(assetLink);
+                /*Add link entry*/
+                assetLink.innerText = assetValue.href;
+                assetLink.href = assetValue.href;
+                assetLink.classList.add("body-1");
+                assetDiv.appendChild(assetLink);
 
+                /*Add icon entry*/
                 if(assetKey.includes("http")){
-                    assetDiv.appendChild(downloadIconDiv);
+                    assetDiv.appendChild(downloadIconContainer);
                 }
                 else{
-                    assetDiv.appendChild(filesIconDiv);
+                    assetDiv.appendChild(filesIconContainer);
                 }
 
-
-
                 assetListItem.appendChild(assetDiv);
-
                 assetDetailsList.appendChild(assetListItem);
 
             })
@@ -525,10 +531,6 @@ function populateProperties(json){
                 })
 }
 
-
-
-
-
 function getSTACSearchResults(url){
     var productionURL = "{{ stac_catalog_url }}/search?";
     var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
@@ -559,3 +561,4 @@ function getSTACSearchResults(url){
         populateSearchResults(json);
     })
 }
+
