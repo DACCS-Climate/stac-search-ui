@@ -2483,6 +2483,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: row;
     justify-content: start;
     align-items: center;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--indigo250-opacity-light);
+    margin-left: 26px;
+    margin-right: 5px;
+    padding-top: 19px;
+    padding-bottom: 19px;
 }
 
 .p-asset-title{
@@ -2490,15 +2497,28 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .a-asset-link{
-    width: 70%;
+    width: 85%;
 }
 
-.icon-asset-download{
+.div-icon-download{
     width: 20%;
 }
 
-.icon-asset-files{
-    width: 20%;
+.image-download-icon{
+    width: 22px;
+    height: 27px;
+}
+
+.div-icon-file{
+    width: 5%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.image-files-icon{
+    width: 35px;
+    height: 35px;
 }
 
 /*Search page content*/
@@ -2523,4 +2543,14 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+/*Search details page*/
+.row-dataset-details{
+    margin-left: unset;
+    margin-right: unset;
+}
+.container-asset-details{
+    padding-left: 20px;
+    padding-right: 20px;
 }
