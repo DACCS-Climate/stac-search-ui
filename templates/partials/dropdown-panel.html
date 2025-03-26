@@ -31,6 +31,7 @@
         "dropdown_list_panel":{
             "container_id": "dropdownListPanelContainer",
             "container_class": "dropdown-list-panel-container",
+            "list_class": "ul-asset",
             "menu_class": ""
         }
 
@@ -245,7 +246,7 @@
 {% if dropdown_type == "dropdown_list_panel" %}
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div id="{{ dropdown_timeframe_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
-            <a id="{{ dropdown_list_panel_link_id }}" class="btn btn-secondary dropdown-toggle dropdown-list-panel-title {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            <a id="{{ dropdown_list_panel_link_id }}" class="btn btn-secondary dropdown-toggle dropdown-list-panel-title {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-display="static" aria-expanded="false">
                 <div class="dropdown-list-panel-search-icon-background">
                     <i id="" class="fa-solid fa-magnifying-glass dropdown-list-panel-search-icon"></i>
                 </div>
