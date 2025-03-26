@@ -616,10 +616,9 @@ async function setClipboard(elementID, tooltip) {
     const clipboardItem = new ClipboardItem(clipboardItemData);
     await navigator.clipboard.write([clipboardItem]);
 
-    setTimeout(() => hideTooltip(elementID, tooltip), "2000");
+    setTimeout(() => hideTooltip(tooltip), "2000");
 }
 
-function hideTooltip(elementID, tooltip){
-    var assetLinkElement = document.getElementById(elementID);
+function hideTooltip(tooltip){
     tooltip.hide();
 }
