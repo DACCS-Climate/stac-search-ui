@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    /*Initialize Popper.js and Tooltips.js*/
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
+})
+
 function getCollection(){
     var dropdownDefault = document.getElementById("dropdownListDefaultContainer");
     var checkboxes = dropdownDefault.querySelectorAll('li.dropdown-default-list-item label.checkbox-container input');
@@ -400,20 +406,118 @@ function populateDatasetDetails(features){
     var assetDetails = document.getElementById("datasetAssetsContainer");
     var assetDetailsList = document.getElementById("datasetAssetsList")
     var metadataDetails = document.getElementById("datasetMetadataContainer");
+    var datasetID;
     console.log("dataset features");
     console.log(features);
     Object.entries(features).forEach(([featureKey, featureValue]) => {
+
+        if(featureKey == "id"){
+
+            datasetID = featureValue;
+        }
+
         if(featureKey == "assets"){
-            Object.entries(featureValue).forEach(([assetKey, assetValue]) => {
+            Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+                var assetID = datasetID + assetKey;
+                var assetListItem = document.createElement("li");
+                var assetDiv = document.createElement("div");
+                var assetTitle = document.createElement("p");
+                var assetLink = document.createElement("a");
+                var copyIconCellDiv = document.createElement("div");
+                var copyIconLink =  document.createElement("a");
+                var copyIcon = document.createElement("img");
+                var downloadIconCellDiv = document.createElement("div");
+                var downloadIconLink = document.createElement("a");
+                var downloadIcon = document.createElement("img");
+
+                copyIconCellDiv.appendChild(copyIconLink);
+                downloadIconCellDiv.appendChild(downloadIconLink);
+
+                copyIcon.setAttribute("src", "images/copy-icon.svg");
+                copyIcon.classList.add("image-copy-icon");
+                copyIconLink.id = assetID+"icon";
+                copyIconLink.setAttribute("role", "button");
+                copyIconLink.classList.add("a-icon-copy");
+                copyIconLink.appendChild(copyIcon);
+
+
+                downloadIcon.setAttribute("src", "images/download-icon.svg");
+                downloadIcon.classList.add("image-download-icon")
+                downloadIconLink.setAttribute("role", "button");
+                downloadIconLink.classList.add("a-icon-download");
+                downloadIconLink.appendChild(downloadIcon);
+
+                assetDiv.classList.add("div-asset-list-entry");
+                assetTitle.classList.add("p-asset-title");
+                assetLink.classList.add("a-asset-link");
+
+
                 if(assetKey == "metadata_http") {
+                    /*Add asset title to details section main title*/
                     var datasetTitle = document.createElement("h4");
                     var titleArray = assetValue.title.split(".");
                     datasetTitle.innerText = titleArray[0];
                     datasetName.appendChild(datasetTitle);
+
+                    /*Set href attribute for links meant to be downloaded*/
+                    assetLink.href = assetValue.href;
+                    downloadIconLink.href = assetValue.href;
+
+                    /*Add hardcoded title in asset row entry*/
+                    assetTitle.innerText = "HTTPServer"
+                    assetDiv.appendChild(assetTitle);
                 }
+                else{
+                    /*Add asset title entry in asset row entry*/
+                    assetTitle.innerText = assetValue.title;
+                    assetDiv.appendChild(assetTitle);
+
+
+
+                    /*Set attributes for Bootstrap tooltip for asset link*/
+                    var assetLinkTooltip = new bootstrap.Tooltip(assetLink, {
+                        "trigger": "click",
+                        "placement": "top",
+                        "title":"Link copied"})
+                    assetLink.setAttribute("data-toggle", "tooltip");
+                    /*Set value attribute for links meant to be copied to clipboard*/
+                    assetLink.setAttribute("value", assetValue.href);
+                    /*Set role of link as button*/
+                    assetLink.setAttribute("role", "button");
+                    assetLink.onclick = function(){setClipboard(assetID, assetLinkTooltip)};
+
+
+
+
+                    /*Set attributes for Bootstrap tooltip for icon link*/
+                    var copyIconLinkTooltip = new bootstrap.Tooltip(copyIconLink, {
+                        "trigger": "click",
+                        "placement": "top",
+                        "title":"Link copied"})
+                    copyIconLink.setAttribute("data-toggle", "tooltip");
+                    copyIconLink.setAttribute("value", assetValue.href);
+                    copyIconLink.onclick = function(){setClipboard(copyIconLink.id, copyIconLinkTooltip)};
+                }
+
+                /*Add link entry*/
+                assetLink.id = assetID;
+                assetLink.innerText = assetValue.href;
+                assetLink.classList.add("body-1");
+                assetDiv.appendChild(assetLink);
+
+                /*Add icon entry*/
+                if(assetKey == "metadata_http"){
+                    assetDiv.appendChild(downloadIconLink);
+                }
+                else{
+                    assetDiv.appendChild(copyIconLink);
+                }
+
+                assetListItem.appendChild(assetDiv);
+                assetDetailsList.appendChild(assetListItem);
+
             })
         }
-
 
         if(featureKey == "properties"){
             var metadataTable = document.createElement("table");
@@ -443,67 +547,7 @@ function populateDatasetDetails(features){
             metadataDetails.appendChild(metadataTable);
         }
 
-        if(featureKey == "assets"){
-            Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
-                var assetListItem = document.createElement("li");
-                var assetDiv = document.createElement("div");
-                var assetTitle = document.createElement("p");
-                var assetLink = document.createElement("a");
-                var filesIconCellDiv = document.createElement("div");
-                var filesIconContainer =  document.createElement("div");
-                var filesIcon = document.createElement("img");
-                var downloadIconCellDiv = document.createElement("div");
-                var downloadIconContainer = document.createElement("div");
-                var downloadIcon = document.createElement("img");
 
-                filesIconCellDiv.appendChild(filesIconContainer);
-                downloadIconCellDiv.appendChild(downloadIconContainer);
-
-                filesIcon.setAttribute("src", "images/files-icon.svg");
-                filesIcon.classList.add("image-files-icon");
-                filesIconContainer.classList.add("div-icon-file");
-                filesIconContainer.appendChild(filesIcon);
-
-
-                downloadIcon.setAttribute("src", "images/download-icon.svg");
-                downloadIcon.classList.add("image-download-icon")
-                downloadIconContainer.classList.add("div-icon-download");
-                downloadIconContainer.appendChild(downloadIcon);
-
-                assetDiv.classList.add("div-asset-list-entry");
-                assetTitle.classList.add("p-asset-title");
-                assetLink.classList.add("a-asset-link");
-
-
-                /*Add asset title entry*/
-                if(assetKey.includes("http")){
-                    assetTitle.innerText = "HTTPServer"
-                    assetDiv.appendChild(assetTitle);
-                }
-                else{
-                    assetTitle.innerText = assetValue.title;
-                    assetDiv.appendChild(assetTitle);
-                }
-
-                /*Add link entry*/
-                assetLink.innerText = assetValue.href;
-                assetLink.href = assetValue.href;
-                assetLink.classList.add("body-1");
-                assetDiv.appendChild(assetLink);
-
-                /*Add icon entry*/
-                if(assetKey.includes("http")){
-                    assetDiv.appendChild(downloadIconContainer);
-                }
-                else{
-                    assetDiv.appendChild(filesIconContainer);
-                }
-
-                assetListItem.appendChild(assetDiv);
-                assetDetailsList.appendChild(assetListItem);
-
-            })
-        }
     })
 }
 
@@ -562,3 +606,20 @@ function getSTACSearchResults(url){
     })
 }
 
+async function setClipboard(elementID, tooltip) {
+    var assetLinkElement = document.getElementById(elementID);
+    var assetLink = assetLinkElement.getAttribute("value");
+    const type = "text/plain";
+    const clipboardItemData = {
+    [type]: assetLink,
+    };
+    const clipboardItem = new ClipboardItem(clipboardItemData);
+    await navigator.clipboard.write([clipboardItem]);
+
+    setTimeout(() => hideTooltip(elementID, tooltip), "2000");
+}
+
+function hideTooltip(elementID, tooltip){
+    var assetLinkElement = document.getElementById(elementID);
+    tooltip.hide();
+}
