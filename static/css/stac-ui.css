@@ -89,7 +89,7 @@
     /*Gradient Swatches*/
     --linear-gradient-black: linear-gradient(90deg,transparent, #000000, transparent);
     --linear-gradient-marble: linear-gradient(90deg, #3F6BAE 3%, #6DA39F 33.33%, #D89E37 66.67%, #823628 100%);
-
+    --radial-gradient-download-icon: radial-gradient(circle closest-side at center, rgba(136, 144, 194, 0.25) 20%, rgba(255, 255, 255) 100%);
 
     /*Colours for Elements*/
     --surface: #FFFFFF;
@@ -2399,7 +2399,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Dropdown List Panel*/
 .dropdown-list-panel-container{
-    width: 90%;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -2514,14 +2514,22 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .p-asset-title{
     width: 10%;
+    min-width: 163px;
 }
 
 .a-asset-link{
     width: 85%;
+    min-width: 678px;
+}
+
+.a-asset-link.tooltip{
+    color: var(--text-on-dark);
+    background-color: var(--primary);
 }
 
 .a-icon-download{
     width: 5%;
+    min-width: 60px;
     display: flex;
     justify-content: end;
 }
@@ -2530,10 +2538,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 22px;
     height: 27px;
     margin-right: 5px;
+    background-color: var(--background-transparent);
 }
 
 .a-icon-copy{
     width: 5%;
+    min-width: 60px;
     display: flex;
     justify-content: end;
 }
@@ -2541,6 +2551,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .image-copy-icon{
     width: 35px;
     height: 35px;
+}
+
+.tooltip-asset-link{
+    --bs-tooltip-bg: var(--primary) !important;
+    color: var(--text-on-dark);
+    /*background-color: var(--bs-tooltip-bg);*/
 }
 
 /*Search page content*/
