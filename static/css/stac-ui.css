@@ -2605,7 +2605,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-bottom: 19px;
 }
 
-.div-variable-row{
+.div-variable-row, .div-metadata-row{
     display: flex;
     flex-direction: row;
     padding-left: 13px;
@@ -2613,7 +2613,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-bottom: 7px;
 }
 
-.div-variable-title{
+.div-variable-title, .div-metadata-title{
     width: 20%;
     min-width: 240px;
 }
