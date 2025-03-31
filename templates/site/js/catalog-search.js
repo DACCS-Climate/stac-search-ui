@@ -153,23 +153,11 @@ function removeDefaultSearchAttributes(inputBox){
 
 function formatSearch(queryableItemKeyType, queryableItemKeyValue){
     var searchJSONDisplay = document.getElementById("searchJSON");
-/*
     var searchJSON = {
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "properties": {
-                    [queryableItemKeyType]: queryableItemKeyValue
-                }
-            }
-        ]
-
-    };*/
-     var searchJSON = {
-         "properties": {
-             [queryableItemKeyType]: queryableItemKeyValue
-         }
-     };
+     "properties": {
+         [queryableItemKeyType]: queryableItemKeyValue
+     }
+    };
 
     var displayJSON = JSON.stringify(searchJSON);
     searchJSONDisplay.innerText = displayJSON;
@@ -403,9 +391,11 @@ function swapDatasetDetails(){
 
 function populateDatasetDetails(features){
     var datasetName = document.getElementById("datasetName");
+    var datasetCollectionName = document.getElementById("datasetCollectionName");
     var assetDetails = document.getElementById("datasetAssetsContainer");
     var assetDetailsList = document.getElementById("datasetAssetsList")
     var metadataDetails = document.getElementById("datasetMetadataContainer");
+
     var datasetID;
     console.log("dataset features");
     console.log(features);
@@ -416,8 +406,20 @@ function populateDatasetDetails(features){
             datasetID = featureValue;
         }
 
+        if(featureKey == "collection"){
+            datasetCollectionName.innerText = featureValue;
+        }
+
         if(featureKey == "assets"){
-            Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+            //TODO Delete redoakJSON variable for production
+            var redoakJSON =  testDatasetProperties();
+
+
+                //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
+            //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+            Object.entries(redoakJSON["assets"]).forEach(([assetKey, assetValue]) => {
+                console.log("redoakJSON");
+            console.log(redoakJSON);
                 var assetID = datasetID + assetKey;
                 var assetListItem = document.createElement("li");
                 var assetDiv = document.createElement("div");
@@ -452,11 +454,10 @@ function populateDatasetDetails(features){
                 assetLink.classList.add("a-asset-link");
 
 
-                if(assetKey == "metadata_http") {
+                if(assetKey == "HTTPServer" || assetKey == "NetcdfSubset") {
                     /*Add asset title to details section main title*/
                     var datasetTitle = document.createElement("h4");
-                    var titleArray = assetValue.title.split(".");
-                    datasetTitle.innerText = titleArray[0];
+                    datasetTitle.innerText = assetKey;
                     datasetName.appendChild(datasetTitle);
 
                     /*Set href attribute for links meant to be downloaded*/
@@ -464,39 +465,62 @@ function populateDatasetDetails(features){
                     downloadIconLink.href = assetValue.href;
 
                     /*Add hardcoded title in asset row entry*/
-                    assetTitle.innerText = "HTTPServer"
+                    assetTitle.innerText = assetKey;
                     assetDiv.appendChild(assetTitle);
+
+                    /*Set attributes for Bootstrap tooltips for hover on the download icon and link text*/
+                    var downloadIconHoverTooltip = new bootstrap.Tooltip(downloadIconLink, {
+                        "trigger": "hover",
+                        "placement": "top",
+                        "title":"Click to download"});
+
+                    var downloadHoverTooltip = new bootstrap.Tooltip(assetLink, {
+                        "trigger": "hover",
+                        "placement": "top",
+                        "title":"Click to download"});
+
+                    downloadIconLink.setAttribute("data-toggle", "tooltip");
                 }
                 else{
                     /*Add asset title entry in asset row entry*/
-                    assetTitle.innerText = assetValue.title;
+                    assetTitle.innerText = assetKey;
                     assetDiv.appendChild(assetTitle);
 
 
-
                     /*Set attributes for Bootstrap tooltip for asset link*/
-                    var assetLinkTooltip = new bootstrap.Tooltip(assetLink, {
+                    var assetLinkClickTooltip = new bootstrap.Tooltip(assetLink, {
                         "trigger": "click",
                         "placement": "top",
-                        "title":"Link copied"})
+                        "title":"Link copied"});
+                    
+                    var assetLinkHoverTooltip = new bootstrap.Tooltip(assetLink, {
+                        "trigger": "hover",
+                        "placement": "top",
+                        "title":"Click to copy url"});
+                    
                     assetLink.setAttribute("data-toggle", "tooltip");
                     /*Set value attribute for links meant to be copied to clipboard*/
                     assetLink.setAttribute("value", assetValue.href);
                     /*Set role of link as button*/
                     assetLink.setAttribute("role", "button");
-                    assetLink.onclick = function(){setClipboard(assetID, assetLinkTooltip)};
-
-
+                    assetLink.onclick = function(){setClipboard(assetID, assetLinkClickTooltip)};
 
 
                     /*Set attributes for Bootstrap tooltip for icon link*/
-                    var copyIconLinkTooltip = new bootstrap.Tooltip(copyIconLink, {
+                    var copyIconClickTooltip = new bootstrap.Tooltip(copyIconLink, {
                         "trigger": "click",
                         "placement": "top",
-                        "title":"Link copied"})
+                        "title":"Link copied"});
+
+                    var copyIconHoverTooltip = new bootstrap.Tooltip(copyIconLink, {
+                        "trigger": "hover",
+                        "placement": "top",
+                        "title":"Click to copy url"});
+
                     copyIconLink.setAttribute("data-toggle", "tooltip");
+                    copyIconLink.setAttribute("data-bs-custom-class", "tooltip-asset-link");
                     copyIconLink.setAttribute("value", assetValue.href);
-                    copyIconLink.onclick = function(){setClipboard(copyIconLink.id, copyIconLinkTooltip)};
+                    copyIconLink.onclick = function(){setClipboard(copyIconLink.id, copyIconClickTooltip)};
                 }
 
                 /*Add link entry*/
@@ -506,7 +530,7 @@ function populateDatasetDetails(features){
                 assetDiv.appendChild(assetLink);
 
                 /*Add icon entry*/
-                if(assetKey == "metadata_http"){
+                if(assetKey == "HTTPServer" || assetKey == "NetcdfSubset"){
                     assetDiv.appendChild(downloadIconLink);
                 }
                 else{
@@ -520,9 +544,161 @@ function populateDatasetDetails(features){
         }
 
         if(featureKey == "properties"){
+            //TODO Delete redoakJSON variable for production
+            var redoakJSON =  testDatasetProperties();
+            //console.log("redoakJSON");
+            //console.log(redoakJSON);
+
             var metadataTable = document.createElement("table");
 
-            Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
+            //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
+            //Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
+            Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
+
+                /*
+                if(propertyKey.includes("datetime")){
+                    var generalContainer = document.getElementById("datasetGeneralContainer");
+                    var generalHeader = datasetDetailsHeaderTemplate("General");
+                    var datetimeArray;
+
+                    if(propertyKey.includes("start")){
+                        datetimeArray = propertyKey.split("_");
+
+
+                    }
+
+                }*/
+
+                if(propertyKey.includes(":variables")){
+                    var propertyVariables = propertyValue;
+                    var variablesContainer = document.getElementById("datasetVariablesContainer");
+                    var variablesHeader = datasetDetailsHeaderTemplate("Variables");
+                    var variablesBody = document.createElement("div");
+                    var variableRow = document.createElement("div");
+
+                    variableRow.classList.add("div-variable-row");
+
+                    variablesBody.appendChild(variableRow);
+                    variablesContainer.appendChild(variablesHeader);
+                    variablesContainer.appendChild(variablesBody);
+
+                    Object.entries(propertyVariables).forEach( ([variableKey, variableValue]) => {
+
+                        var variableTitleCell = document.createElement("div");
+                        var variableValueCell = document.createElement("div");
+
+                        variableTitleCell.classList.add("subtitle-1", "div-variable-title", "text-dataset-capitalize");
+                        variableValueCell.classList.add("body-1", "text-dataset-capitalize");
+
+                        variableTitleCell.innerText = "Variable ID";
+                        variableValueCell.innerText = variableKey;
+
+                        variableRow.appendChild(variableTitleCell);
+                        variableRow.appendChild(variableValueCell);
+                        variablesBody.appendChild(variableRow);
+
+                        Object.entries(variableValue).forEach( ([variableMetaKey, variableMetaValue]) => {
+                            var variableMetaRow = document.createElement("div");
+                            var variableMetaTitleCell = document.createElement("div");
+                            var variableMetaValueCell = document.createElement("div");
+                            var dimensionsValue = "";
+
+                            variableMetaRow.classList.add("div-variable-row");
+
+                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1", "text-dataset-capitalize");
+                            variableMetaValueCell.classList.add("body-1", "text-dataset-capitalize");
+
+                            variableMetaRow.appendChild(variableMetaTitleCell);
+                            variableMetaRow.appendChild(variableMetaValueCell);
+
+                            variableMetaTitleCell.innerText = variableMetaKey;
+                            variableMetaValueCell.innerText = variableMetaValue;
+
+                            if(variableMetaKey == "dimensions"){
+                                for(dimension of variableMetaValue){
+                                    dimensionsValue = dimensionsValue + dimension + ", ";
+                                }
+
+                                variableMetaTitleCell.innerText = variableMetaKey;
+                                variableMetaValueCell.innerText = dimensionsValue;
+                            }
+                            variablesBody.appendChild(variableMetaRow);
+                        })
+                    })
+                }
+
+                if(propertyKey.includes(":dimensions")){
+                    var dimensionsContainer = document.getElementById("datasetDimensionsContainer");
+                    var dimensionsHeader = datasetDetailsHeaderTemplate("Dimensions");
+                    var dimensionTable = document.createElement("table");
+                    var dimensionTableHeader = document.createElement("thead");
+                    var dimensionTableHeaderRow = document.createElement("tr");
+                    var dimensionTableHeaderFirstCell = document.createElement("th");
+                    var dimensionBody = document.createElement("tbody");
+
+                    dimensionTableHeaderFirstCell.innerText = "ID";
+                    dimensionTableHeaderRow.appendChild(dimensionTableHeaderFirstCell);
+                    dimensionTableHeader.appendChild(dimensionTableHeaderRow);
+                    dimensionTable.appendChild(dimensionTableHeader);
+                    dimensionTable.appendChild(dimensionBody);
+                    dimensionsContainer.appendChild(dimensionsHeader);
+                    dimensionsContainer.appendChild(dimensionTable);
+
+                    console.log("propertyValue");
+                    console.log(propertyValue);
+                    var propertyDimensionKeys = Object.keys(propertyValue);
+
+                    var firstDimensionObject = propertyValue[propertyDimensionKeys[0]];
+                    Object.entries(firstDimensionObject).forEach( ([firstObjectKey, firstObjectValue]) => {
+                        var dimensionTableHeaderCell = document.createElement("th");
+
+                        dimensionTableHeaderCell.classList.add("text-dataset-capitalize");
+                        dimensionTableHeaderCell.innerText = firstObjectKey;
+                        dimensionTableHeaderRow.appendChild(dimensionTableHeaderCell);
+                    })
+
+                    Object.entries(propertyValue).forEach( ([dimensionKey, dimensionValue]) => {
+                        var dimensionValueRow = document.createElement("tr");
+                        var dimensionIDCell = document.createElement("td");
+
+                        dimensionIDCell.classList.add("subtitle-1", "text-dataset-all-cap-bold", "td-padding-dimension");
+                        dimensionIDCell.innerText = dimensionKey;
+                        dimensionValueRow.appendChild(dimensionIDCell);
+
+                        if(dimensionKey == "time"){
+                            var dimensionNACell = document.createElement("td");
+                            dimensionNACell.innerText = "N/A";
+                            dimensionValueRow.appendChild(dimensionNACell);
+                            }
+
+                        Object.entries(dimensionValue).forEach( ([dimensionAttributeKey, dimensionAttributeValue]) => {
+
+                            var dimensionValueCell = document.createElement("td");
+
+                            if(dimensionAttributeKey == "description" && dimensionAttributeValue.includes("coordinate")){
+                                dimensionValueCell.classList.add("body-1");
+                            }
+                            else{
+                                dimensionValueCell.classList.add("body-1", "text-dataset-capitalize");
+                            }
+
+                            if(dimensionAttributeKey == "axis"){
+                                dimensionValueCell.classList.add("td-padding-dimension-axis");
+                            }
+                            else{
+                                dimensionValueCell.classList.add("td-padding-dimension");
+                            }
+
+                            dimensionValueCell.innerText = dimensionAttributeValue;
+                            dimensionValueRow.appendChild(dimensionValueCell);
+                        })
+                        dimensionBody.appendChild(dimensionValueRow);
+                    })
+                }
+
+
+
+                /*
                 var metadataTableRow = document.createElement("tr");
                 if(propertyKey == "variable_id") {
                     var metadataTitleCell = document.createElement("td");
@@ -542,9 +718,12 @@ function populateDatasetDetails(features){
                     metadataTableRow.appendChild(metadataNameCell);
                 }
                 metadataTable.appendChild(metadataTableRow);
+                */
+
 
             })
-            metadataDetails.appendChild(metadataTable);
+            //metadataDetails.appendChild(metadataTable);
+
         }
 
 
@@ -622,3 +801,36 @@ async function setClipboard(elementID, tooltip) {
 function hideTooltip(tooltip){
     tooltip.hide();
 }
+
+function datasetDetailsHeaderTemplate(headerText) {
+    var headerContainer = document.createElement("div");
+    headerContainer.classList.add("header-container");
+
+    var header = document.createElement("div");
+    header.classList.add("dropdown-list-panel-title", "div-dataset-details-header");
+
+    var headerIcon = document.createElement("div");
+    headerIcon.classList.add("dropdown-list-panel-search-icon-background");
+    headerIcon.innerHTML = '<i id="" class="fa-solid fa-magnifying-glass dropdown-list-panel-search-icon"></i>';
+
+    var headerTitle = document.createElement("h5");
+    headerTitle.innerText = headerText;
+
+    headerContainer.appendChild(header);
+    header.appendChild(headerIcon);
+    header.appendChild(headerTitle);
+
+
+    return headerContainer;
+}
+
+
+function testDatasetProperties() {
+
+    var testJSONString = '{"id":"tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-30T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-30T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"360_day","nexgddp:frequency":"day","nexgddp:source_id":"UKESM1-0-LL","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp585","nexgddp:variant_label":"r1i1p1f2","nexgddp:institution_id":"MOHC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]}'
+
+    var testJSON = JSON.parse(testJSONString);
+
+   return testJSON;
+}
+
