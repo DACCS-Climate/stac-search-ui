@@ -233,42 +233,129 @@ function addSearchResultNavigation(json, searchHomeURL){
 }
 
 
-
-function makeSearchResultTitle(jsonProperties, tableHeader){
-
-    var tableTitleFormatCell = document.createElement("td");
-    tableTitleFormatCell.innerText = "Format";
-
-    var tableTitleDatasetCell = document.createElement("td");
-    tableTitleDatasetCell.innerText = "Dataset ID";
-
-    var tableTitleDatatimeCell = document.createElement("td");
-    tableTitleDatatimeCell.innerText = "Datetime";
-
-    tableHeader.appendChild(tableTitleDatasetCell);
-    tableHeader.appendChild(tableTitleDatatimeCell);
-    tableHeader.appendChild(tableTitleFormatCell);
-}
-
-
 function populateSearchResults(json){
-    var searchResultDiv = document.getElementById("searchResults");
-    var searchResultTable = document.createElement("table");
-    var tableHeader = document.createElement("thead");
-    var tableBody = document.createElement("tbody");
+    //TODO Delete redoakJSON variable for production
+    var redoakJSON =  testSTACSearchGeneralResults();
+    console.log("redoak search results");
+    console.log(redoakJSON);
 
+    var searchResultDiv = document.getElementById("searchResults");
     if(searchResultDiv.innerHTML != "")
     {
         searchResultDiv.innerHTML = "";
     }
+    //TODO Uncomment for production
+    /*
+    var searchResultTable = document.createElement("table");
+    var tableHeader = document.createElement("thead");
+    var tableTitleFormatCell = document.createElement("td");
+    var tableTitleDatasetCell = document.createElement("td");
+    var tableTitleStartDatetimeCell = document.createElement("td");
+    var tableTitleEndDatetimeCell = document.createElement("td");
 
-    makeSearchResultTitle(json.features[0].properties, tableHeader);
+    tableTitleFormatCell.innerText = "Format";
+    tableTitleDatasetCell.innerText = "Dataset ID";
+    tableTitleStartDatetimeCell.innerText = "Start Datetime";
+    tableTitleEndDatetimeCell.innerText = "End Datetime";
+
+    tableHeader.appendChild(tableTitleDatasetCell);
+    tableHeader.appendChild(tableTitleStartDatetimeCell);
+    tableHeader.appendChild(tableTitleEndDatetimeCell);
+    tableHeader.appendChild(tableTitleFormatCell);
+    var tableBody = document.createElement("tbody");
+    var assetType;
+
 
     searchResultTable.appendChild(tableHeader);
     searchResultTable.appendChild(tableBody);
     searchResultDiv.appendChild(searchResultTable);
 
 
+    Object.entries(redoakJSON.features).forEach( ([featureKey, featureValue]) => {
+        var rowSearchResult = document.createElement("tr");
+        tableBody.appendChild(rowSearchResult);
+
+        var collectionAnchor = document.createElement("a");
+        var cellFormat = document.createElement("td");
+        cellFormat.classList.add("search-results-format");
+
+        if(featureValue.id){
+            var cellDatasetTitle = document.createElement("td");
+            var linkDatasetTitle = document.createElement("a");
+            var datasetTitleArray;
+            linkDatasetTitle.setAttribute("role", "button");
+            console.log("search result");
+            console.log(featureValue);
+            linkDatasetTitle.onclick = function(){
+                swapDatasetDetails();
+                populateDatasetDetails(featureValue);
+            };
+
+            linkDatasetTitle.innerText = featureValue.id;
+
+            cellDatasetTitle.appendChild(linkDatasetTitle);
+            rowSearchResult.appendChild(cellDatasetTitle);
+        }
+
+
+        if(featureValue.properties.start_datetime){
+              var cellStartDateTimeValue = document.createElement("td");
+
+              cellStartDateTimeValue.innerText = featureValue.properties.start_datetime;
+              rowSearchResult.appendChild(cellStartDateTimeValue);
+        }
+
+        if(featureValue.properties.end_datetime){
+              var cellEndDateTimeValue = document.createElement("td");
+
+              cellEndDateTimeValue.innerText = featureValue.properties.end_datetime;
+              rowSearchResult.appendChild(cellEndDateTimeValue);
+        }
+
+        //Add Format
+        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
+
+            var assetSpan = document.createElement("span");
+            if(assetValue.type.includes("application/")){
+                var assetTypeArray = assetValue.type.split('/');
+                assetType = assetTypeArray[1];
+            }
+            else{
+                assetType = assetValue.type;
+            }
+
+            assetSpan.innerText = assetType;
+            cellFormat.appendChild(assetSpan);
+
+        })
+        rowSearchResult.appendChild(cellFormat);
+
+    })
+    */
+
+    //TODO Remove testing code for production
+    //Testing Code Below
+
+    var searchResultTable = document.createElement("table");
+    var tableHeader = document.createElement("thead");
+    var tableTitleFormatCell = document.createElement("td");
+    var tableTitleDatasetCell = document.createElement("td");
+    var tableTitleDatetimeCell = document.createElement("td");
+
+    tableTitleFormatCell.innerText = "Format";
+    tableTitleDatasetCell.innerText = "Dataset ID";
+    tableTitleDatetimeCell.innerText = "Datetime";
+
+    tableHeader.appendChild(tableTitleDatasetCell);
+    tableHeader.appendChild(tableTitleDatetimeCell);
+    tableHeader.appendChild(tableTitleFormatCell);
+    var tableBody = document.createElement("tbody");
+    var assetType;
+
+
+    searchResultTable.appendChild(tableHeader);
+    searchResultTable.appendChild(tableBody);
+    searchResultDiv.appendChild(searchResultTable);
 
     Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
         var rowSearchResult = document.createElement("tr");
@@ -283,39 +370,19 @@ function populateSearchResults(json){
             var linkDatasetTitle = document.createElement("a");
             var datasetTitleArray;
             linkDatasetTitle.setAttribute("role", "button");
+            console.log("search result");
+            console.log(featureValue);
             linkDatasetTitle.onclick = function(){
                 swapDatasetDetails();
                 populateDatasetDetails(featureValue);
             };
 
-            //if(assetKey == "metadata_http"){
-            //linkDatasetTitle.setAttribute("href", assetValue.href);
             datasetTitleArray = featureValue.assets.metadata_http.title.split(".");
             linkDatasetTitle.innerText = datasetTitleArray[0];
 
             cellDatasetTitle.appendChild(linkDatasetTitle);
-
             rowSearchResult.appendChild(cellDatasetTitle);
-            //}
         }
-
-        /*
-        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
-            var cellDatasetTitle = document.createElement("td");
-            var linkDatasetTitle = document.createElement("a");
-            var datasetTitleArray;
-
-            if(assetKey == "metadata_http"){
-            //linkDatasetTitle.setAttribute("href", assetValue.href);
-            datasetTitleArray = assetValue.title.split(".");
-            linkDatasetTitle.innerText = datasetTitleArray[0];
-
-            cellDatasetTitle.appendChild(linkDatasetTitle);
-
-            rowSearchResult.appendChild(cellDatasetTitle);
-            }
-
-        })*/
 
 
         if(featureValue.properties.datetime){
@@ -326,23 +393,9 @@ function populateSearchResults(json){
                 rowSearchResult.appendChild(cellPropertyValue);
                 //cellPropertyValue.appendChild(collectionAnchor);
         }
-        /*
-        Object.entries(featureValue.properties).forEach(([propertyKey, propertyValue]) => {
 
 
-            if (propertyKey == "datetime") {
-                var cellPropertyValue = document.createElement("td");
-
-
-                cellPropertyValue.innerText = propertyValue;
-                rowSearchResult.appendChild(cellPropertyValue);
-                //cellPropertyValue.appendChild(collectionAnchor);
-            }
-        })*/
-
-
-
-        /*Add Format*/
+        //Add Format
         Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
 
             var assetSpan = document.createElement("span");
@@ -355,11 +408,8 @@ function populateSearchResults(json){
         })
         rowSearchResult.appendChild(cellFormat);
 
-        console.log(featureKey);
-        console.log(featureValue);
-
-
     })
+
 
 }
 
@@ -390,20 +440,34 @@ function swapDatasetDetails(){
 
 
 function populateDatasetDetails(features){
+    //TODO Delete redoakJSON variable for production
+    var redoakJSON =  testDatasetProperties();
+
     var datasetName = document.getElementById("datasetName");
     var datasetCollectionName = document.getElementById("datasetCollectionName");
     var assetDetails = document.getElementById("datasetAssetsContainer");
     var assetDetailsList = document.getElementById("datasetAssetsList")
     var metadataDetails = document.getElementById("datasetMetadataContainer");
+    var datasetType;
+    var datasetMetadataContainer = document.getElementById("datasetMetadataContainer");
+    var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
+    datasetMetadataContainer.appendChild(metadataHeader);
 
     var datasetID;
     console.log("dataset features");
     console.log(features);
-    Object.entries(features).forEach(([featureKey, featureValue]) => {
+        //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
+    //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+    Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
+    //Object.entries(features).forEach(([featureKey, featureValue]) => {
 
         if(featureKey == "id"){
 
             datasetID = featureValue;
+            /*Add asset title to details section main title*/
+            var datasetTitle = document.createElement("h4");
+            datasetTitle.innerText = featureValue;
+            datasetName.appendChild(datasetTitle);
         }
 
         if(featureKey == "collection"){
@@ -411,10 +475,10 @@ function populateDatasetDetails(features){
         }
 
         if(featureKey == "assets"){
-            //TODO Delete redoakJSON variable for production
+
+
+         //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
-
-
                 //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
             //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
             Object.entries(redoakJSON["assets"]).forEach(([assetKey, assetValue]) => {
@@ -455,11 +519,6 @@ function populateDatasetDetails(features){
 
 
                 if(assetKey == "HTTPServer" || assetKey == "NetcdfSubset") {
-                    /*Add asset title to details section main title*/
-                    var datasetTitle = document.createElement("h4");
-                    datasetTitle.innerText = assetKey;
-                    datasetName.appendChild(datasetTitle);
-
                     /*Set href attribute for links meant to be downloaded*/
                     assetLink.href = assetValue.href;
                     downloadIconLink.href = assetValue.href;
@@ -644,8 +703,6 @@ function populateDatasetDetails(features){
                     dimensionsContainer.appendChild(dimensionsHeader);
                     dimensionsContainer.appendChild(dimensionTable);
 
-                    console.log("propertyValue");
-                    console.log(propertyValue);
                     var propertyDimensionKeys = Object.keys(propertyValue);
 
                     var firstDimensionObject = propertyValue[propertyDimensionKeys[0]];
@@ -665,6 +722,7 @@ function populateDatasetDetails(features){
                         dimensionIDCell.innerText = dimensionKey;
                         dimensionValueRow.appendChild(dimensionIDCell);
 
+                        /*Adds "N/A" entry for the Axis column if the key is "time"*/
                         if(dimensionKey == "time"){
                             var dimensionNACell = document.createElement("td");
                             dimensionNACell.innerText = "N/A";
@@ -698,6 +756,37 @@ function populateDatasetDetails(features){
 
 
 
+
+                if(propertyKey.includes(":license")){
+                    var licenseKeyArray = propertyKey.split(":");
+                    datasetType = licenseKeyArray[0] + ":";
+
+                    console.log("metadata");
+                    console.log(datasetType);
+                    console.log(propertyKey);
+
+                }
+                if(propertyKey.includes(datasetType)){
+
+                    var metadataRow = document.createElement("div");
+                    var metadataTitleCellDiv = document.createElement("div");
+                    var metadataValueCellDiv = document.createElement("div");
+
+                    var metadataKeyArray = propertyKey.split(datasetType);
+
+                    metadataRow.classList.add("div-metadata-row");
+
+                    metadataTitleCellDiv.innerText = metadataKeyArray[1];
+                    metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
+
+                    metadataValueCellDiv.innerText = propertyValue;
+                    metadataValueCellDiv.classList.add("body-1");
+
+                    metadataRow.appendChild(metadataTitleCellDiv);
+                    metadataRow.appendChild(metadataValueCellDiv);
+                    datasetMetadataContainer.appendChild(metadataRow);
+
+                }
                 /*
                 var metadataTableRow = document.createElement("tr");
                 if(propertyKey == "variable_id") {
@@ -832,5 +921,13 @@ function testDatasetProperties() {
     var testJSON = JSON.parse(testJSONString);
 
    return testJSON;
+}
+
+function testSTACSearchGeneralResults(){
+    var testJSONString = '{"type":"FeatureCollection","context":{"limit":10,"returned":10},"features":[{"id":"tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp585/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-30T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-30T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"360_day","nexgddp:frequency":"day","nexgddp:source_id":"UKESM1-0-LL","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp585","nexgddp:variant_label":"r1i1p1f2","nexgddp:institution_id":"MOHC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp370/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp370_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-30T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-30T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"360_day","nexgddp:frequency":"day","nexgddp:source_id":"UKESM1-0-LL","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp370","nexgddp:variant_label":"r1i1p1f2","nexgddp:institution_id":"MOHC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp245/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp245_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-30T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-30T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"360_day","nexgddp:frequency":"day","nexgddp:source_id":"UKESM1-0-LL","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp245","nexgddp:variant_label":"r1i1p1f2","nexgddp:institution_id":"MOHC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/UKESM1-0-LL/ssp126/r1i1p1f2/tasmin/tasmin_day_UKESM1-0-LL_ssp126_r1i1p1f2_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-30T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-30T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"360_day","nexgddp:frequency":"day","nexgddp:source_id":"UKESM1-0-LL","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp126","nexgddp:variant_label":"r1i1p1f2","nexgddp:institution_id":"MOHC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp585/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp585_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"TaiESM1","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp585","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"AS-RCEC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp370/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp370_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"TaiESM1","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp370","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"AS-RCEC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp245/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp245_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"TaiESM1","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp245","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"AS-RCEC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/TaiESM1/ssp126/r1i1p1f1/tasmin/tasmin_day_TaiESM1_ssp126_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"TaiESM1","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp126","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"AS-RCEC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp585/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp585_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"NorESM2-MM","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp585","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"NCC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]},{"id":"tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100","bbox":[0.125,-59.875,359.875,89.875],"type":"Feature","links":[{"rel":"collection","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"parent","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/geo+json","href":"https://redoak.cs.toronto.edu/stac/collections/NEX-GDDP-CMIP6_UofT/items/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100"}],"assets":{"ISO":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/iso/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"WCS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wcs/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["data"]},"WMS":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/wms/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"application/xml","roles":["visual"]},"NcML":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncml/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"UDDC":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/uddc/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"","roles":[]},"OpenDAP":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/dodsC/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"text/html","roles":["data"]},"HTTPServer":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/fileServer/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]},"NetcdfSubset":{"href":"https://redoak.cs.toronto.edu/twitcher/ows/proxy/thredds/ncss/datasets/NEX-GDDP-CMIP6/NorESM2-MM/ssp370/r1i1p1f1/tasmin/tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100.nc","type":"application/x-netcdf","roles":["data"]}},"geometry":{"type":"Polygon","coordinates":[[[0.125,-59.875],[0.125,89.875],[359.875,89.875],[359.875,-59.875],[0.125,-59.875]]]},"collection":"NEX-GDDP-CMIP6_UofT","properties":{"end_datetime":"2100-12-31T12:00:00Z","cube:variables":{"tasmin":{"type":"data","unit":"K","dimensions":["time","lat","lon"],"description":"Daily Minimum Near-Surface Air Temperature"}},"start_datetime":"2100-01-01T12:00:00Z","cube:dimensions":{"lat":{"axis":"y","type":"spatial","extent":[-59.875,89.875],"description":"projection_y_coordinate"},"lon":{"axis":"x","type":"spatial","extent":[0.125,359.875],"description":"projection_x_coordinate"},"time":{"type":"temporal","extent":["2100-01-01T12:00:00Z","2100-12-31T12:00:00Z"],"description":"time"}},"marble:is_local":true,"nexgddp:license":"CC-BY-SA 4.0","nexgddp:version":"1.0","marble:host_node":"UofTRedOak","nexgddp:calendar":"365_day","nexgddp:frequency":"day","nexgddp:source_id":"NorESM2-MM","nexgddp:Conventions":"CF-1.7","nexgddp:institution":"NASA Earth Exchange, NASA Ames Research Center, Moffett Field, CA 94035","nexgddp:variable_id":"tasmin","nexgddp:cmip_version":"CMIP6","nexgddp:experiment_id":"ssp370","nexgddp:variant_label":"r1i1p1f1","nexgddp:institution_id":"NCC"},"stac_version":"1.0.0","stac_extensions":["https://raw.githubusercontent.com/DACCS-Climate/nexgddp-stac-extension/v1.0.0/json-schema/schema.json","https://stac-extensions.github.io/datacube/v2.2.0/schema.json","https://raw.githubusercontent.com/DACCS-Climate/marble-stac-extension/v1.0.0/json-schema/schema.json"]}],"links":[{"rel":"next","type":"application/geo+json","method":"GET","href":"https://redoak.cs.toronto.edu/stac/search?token=next:tasmin_day_NorESM2-MM_ssp370_r1i1p1f1_gn_2100"},{"rel":"root","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/"},{"rel":"self","type":"application/json","href":"https://redoak.cs.toronto.edu/stac/search"}]}';
+
+    var testJSON = JSON.parse(testJSONString);
+
+    return testJSON;
 }
 
