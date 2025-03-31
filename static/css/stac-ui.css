@@ -2411,7 +2411,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: unset;
     background-color: var(--indigo250-opacity-light);
     color: var(--indigo-700);
-    margin-bottom: 32px;
     padding-left: 25px;
     padding-top: 26px;
     padding-bottom: 26px;
@@ -2490,6 +2489,8 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .ul-asset{
     padding: unset;
+    /*Overrides margin-top from Bootstrap dropdown-menu class for this dropdown only*/
+    margin-top: 32px !important;
 }
 
 .ul-asset li:not(:first-child) .div-asset-list-entry{
@@ -2583,13 +2584,53 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     align-items: center;
 }
 
-/*Search details page*/
+/*Search dataset details page*/
 .div-container-dataset{
     padding-left: 20px;
     padding-right: 20px;
 }
 
+.div-container-dataset > div:not(:last-child){
+    margin-bottom: 33px;
+}
+
 .container-asset-details{
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.div-dataset-details-header{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 19px;
+}
+
+.div-variable-row{
+    display: flex;
+    flex-direction: row;
+    padding-left: 13px;
+    padding-top: 10px;
+    padding-bottom: 7px;
+}
+
+.div-variable-title{
+    width: 20%;
+    min-width: 240px;
+}
+
+.text-dataset-capitalize{
+    text-transform: capitalize;
+}
+
+.text-dataset-all-cap-bold{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.td-padding-dimension{
+    padding-right: 80px;
+}
+
+.td-padding-dimension-axis{
+    padding-right: 160px;
 }
