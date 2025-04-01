@@ -452,8 +452,13 @@ function populateDatasetDetails(features){
     var datasetMetadataContainer = document.getElementById("datasetMetadataContainer");
     var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
     datasetMetadataContainer.appendChild(metadataHeader);
-
     var datasetID;
+    var nodeHeader = datasetDetailsHeaderTemplate("Marble");
+    var nodeContainer = document.getElementById("datasetNodeContainer");
+    nodeContainer.appendChild(nodeHeader);
+
+
+
     console.log("dataset features");
     console.log(features);
         //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
@@ -475,7 +480,6 @@ function populateDatasetDetails(features){
         }
 
         if(featureKey == "assets"){
-
 
          //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
@@ -562,7 +566,11 @@ function populateDatasetDetails(features){
                     assetLink.setAttribute("value", assetValue.href);
                     /*Set role of link as button*/
                     assetLink.setAttribute("role", "button");
-                    assetLink.onclick = function(){setClipboard(assetID, assetLinkClickTooltip)};
+                    assetLink.onclick = function(){
+                        hideTooltip(assetLinkHoverTooltip);
+                        showTooltip(assetLinkClickTooltip);
+                        setClipboard(assetID, assetLinkClickTooltip)
+                    };
 
 
                     /*Set attributes for Bootstrap tooltip for icon link*/
@@ -579,7 +587,11 @@ function populateDatasetDetails(features){
                     copyIconLink.setAttribute("data-toggle", "tooltip");
                     copyIconLink.setAttribute("data-bs-custom-class", "tooltip-asset-link");
                     copyIconLink.setAttribute("value", assetValue.href);
-                    copyIconLink.onclick = function(){setClipboard(copyIconLink.id, copyIconClickTooltip)};
+                    copyIconLink.onclick = function(){
+                        hideTooltip(copyIconHoverTooltip);
+                        showTooltip(copyIconClickTooltip);
+                        setClipboard(copyIconLink.id, copyIconClickTooltip)
+                    };
                 }
 
                 /*Add link entry*/
@@ -614,6 +626,7 @@ function populateDatasetDetails(features){
             //Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
             Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
 
+                //For General section
                 /*
                 if(propertyKey.includes("datetime")){
                     var generalContainer = document.getElementById("datasetGeneralContainer");
@@ -686,6 +699,7 @@ function populateDatasetDetails(features){
                     })
                 }
 
+                //Dimensions section
                 if(propertyKey.includes(":dimensions")){
                     var dimensionsContainer = document.getElementById("datasetDimensionsContainer");
                     var dimensionsHeader = datasetDetailsHeaderTemplate("Dimensions");
@@ -756,7 +770,7 @@ function populateDatasetDetails(features){
 
 
 
-
+                //Metadata section
                 if(propertyKey.includes(":license")){
                     var licenseKeyArray = propertyKey.split(":");
                     datasetType = licenseKeyArray[0] + ":";
@@ -787,32 +801,45 @@ function populateDatasetDetails(features){
                     datasetMetadataContainer.appendChild(metadataRow);
 
                 }
-                /*
-                var metadataTableRow = document.createElement("tr");
-                if(propertyKey == "variable_id") {
-                    var metadataTitleCell = document.createElement("td");
-                    var metadataNameCell = document.createElement("td");
-                    var metadataTitle = document.createElement("p");
-                    var metadataName = document.createElement("p");
 
-                    metadataTitle.classList.add("subtitle-1");
-                    metadataName.classList.add("body-1");
+                //Node information section
+                if(propertyKey.includes("marble:")){
 
-                    metadataTitle.innerText = propertyKey;
-                    metadataName.innerText = propertyValue;
+                    var nodeInfoRow = document.createElement("div");
+                    var nodeInfoTitleCell = document.createElement("div");
+                    var nodeInfoValueCell = document.createElement("div");
+                    var nodeInfoTitle;
 
-                    metadataTitleCell.appendChild(metadataTitle);
-                    metadataNameCell.appendChild(metadataName);
-                    metadataTableRow.appendChild(metadataTitleCell);
-                    metadataTableRow.appendChild(metadataNameCell);
+                    nodeInfoRow.classList.add("div-node-row");
+                    nodeContainer.appendChild(nodeInfoRow);
+
+                    var nodeInfoArray = propertyKey.split("marble:");
+
+                    var nodeInfo = nodeInfoArray[1];
+                    nodeInfoTitle = nodeInfo.replace("_", " ");
+
+                    nodeInfoTitleCell.classList.add("subtitle-1", "text-dataset-capitalize", "div-node-title");
+                    nodeInfoTitleCell.innerText = nodeInfoTitle;
+
+                    nodeInfoValueCell.classList.add("body-1");
+
+                    if(typeof propertyValue != "string"){
+                        if(propertyValue == true){
+
+                            nodeInfoValueCell.innerHTML = '<i class="fa-solid fa-check icon-node-local-checkmark"></i>';
+                        }
+                        else{
+                            nodeInfoValueCell.innerHTML = '<i class="fa-solid fa-xmark icon-node-local-xmark"></i>;'
+                        }
+                    }
+                    else{
+                        nodeInfoValueCell.innerText = propertyValue;
+                    }
+
+                    nodeInfoRow.appendChild(nodeInfoTitleCell);
+                    nodeInfoRow.appendChild(nodeInfoValueCell);
                 }
-                metadataTable.appendChild(metadataTableRow);
-                */
-
-
             })
-            //metadataDetails.appendChild(metadataTable);
-
         }
 
 
@@ -889,6 +916,10 @@ async function setClipboard(elementID, tooltip) {
 
 function hideTooltip(tooltip){
     tooltip.hide();
+}
+
+function showTooltip(tooltip){
+    tooltip.show();
 }
 
 function datasetDetailsHeaderTemplate(headerText) {
