@@ -650,7 +650,7 @@ function populateDatasetDetails(features){
                     }
 
                 }*/
-
+                //For Variables section
                 if(propertyKey.includes(":variables")){
                     var propertyVariables = propertyValue;
                     var variablesContainer = document.getElementById("datasetVariablesContainer");
@@ -689,7 +689,7 @@ function populateDatasetDetails(features){
 
                             variableMetaRow.classList.add("div-variable-row");
 
-                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1");
+                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1", "text-dataset-capitalize");
                             variableMetaValueCell.classList.add("div-variable-value", "body-1");
 
                             variableMetaRow.appendChild(variableMetaTitleCell);
