@@ -1,8 +1,8 @@
 var shapeDict = {};
 
-function createMap(){
+function createMap(mapContainerID){
     //Creates map with the map centre at the given latitude. longitude, and zoom level
-    var map = L.map('map',{
+    var map = L.map(mapContainerID,{
             editable: true,
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
