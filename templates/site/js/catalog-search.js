@@ -447,15 +447,25 @@ function populateDatasetDetails(features){
     var datasetCollectionName = document.getElementById("datasetCollectionName");
     var assetDetails = document.getElementById("datasetAssetsContainer");
     var assetDetailsList = document.getElementById("datasetAssetsList")
-    var metadataDetails = document.getElementById("datasetMetadataContainer");
+    assetDetailsList.classList.add("border-dataset-list-details");
+
     var datasetType;
+
     var datasetMetadataContainer = document.getElementById("datasetMetadataContainer");
     var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
+    var metadataBody = document.createElement("div");
+    metadataBody.classList.add("border-dataset-div-list-details");
+
     datasetMetadataContainer.appendChild(metadataHeader);
+    datasetMetadataContainer.appendChild(metadataBody);
+
     var datasetID;
-    var nodeHeader = datasetDetailsHeaderTemplate("Marble");
     var nodeContainer = document.getElementById("datasetNodeContainer");
+    var nodeHeader = datasetDetailsHeaderTemplate("Marble");
+    var nodeBody = document.createElement("div");
+
     nodeContainer.appendChild(nodeHeader);
+    nodeContainer.appendChild(nodeBody);
 
 
 
@@ -648,11 +658,13 @@ function populateDatasetDetails(features){
                     var variablesBody = document.createElement("div");
                     var variableRow = document.createElement("div");
 
+                    variablesBody.classList.add("border-dataset-div-list-details");
                     variableRow.classList.add("div-variable-row");
 
-                    variablesBody.appendChild(variableRow);
+
                     variablesContainer.appendChild(variablesHeader);
                     variablesContainer.appendChild(variablesBody);
+                    variablesBody.appendChild(variableRow);
 
                     Object.entries(propertyVariables).forEach( ([variableKey, variableValue]) => {
 
@@ -677,8 +689,8 @@ function populateDatasetDetails(features){
 
                             variableMetaRow.classList.add("div-variable-row");
 
-                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1", "text-dataset-capitalize");
-                            variableMetaValueCell.classList.add("body-1", "text-dataset-capitalize");
+                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1");
+                            variableMetaValueCell.classList.add("div-variable-value", "body-1");
 
                             variableMetaRow.appendChild(variableMetaTitleCell);
                             variableMetaRow.appendChild(variableMetaValueCell);
@@ -707,13 +719,16 @@ function populateDatasetDetails(features){
                     var dimensionTableHeader = document.createElement("thead");
                     var dimensionTableHeaderRow = document.createElement("tr");
                     var dimensionTableHeaderFirstCell = document.createElement("th");
-                    var dimensionBody = document.createElement("tbody");
+                    var dimensionTableBody = document.createElement("tbody");
 
+                    dimensionTable.classList.add("table-width-dimension");
+                    dimensionTableHeaderRow.classList.add("border-dataset-table-header");
+                    dimensionTableBody.classList.add("border-dataset-table-body");
                     dimensionTableHeaderFirstCell.innerText = "ID";
                     dimensionTableHeaderRow.appendChild(dimensionTableHeaderFirstCell);
                     dimensionTableHeader.appendChild(dimensionTableHeaderRow);
                     dimensionTable.appendChild(dimensionTableHeader);
-                    dimensionTable.appendChild(dimensionBody);
+                    dimensionTable.appendChild(dimensionTableBody);
                     dimensionsContainer.appendChild(dimensionsHeader);
                     dimensionsContainer.appendChild(dimensionTable);
 
@@ -733,6 +748,8 @@ function populateDatasetDetails(features){
                         var dimensionIDCell = document.createElement("td");
 
                         dimensionIDCell.classList.add("subtitle-1", "text-dataset-all-cap-bold", "td-padding-dimension");
+                        dimensionValueRow.classList.add("border-dataset-table-details");
+
                         dimensionIDCell.innerText = dimensionKey;
                         dimensionValueRow.appendChild(dimensionIDCell);
 
@@ -764,7 +781,7 @@ function populateDatasetDetails(features){
                             dimensionValueCell.innerText = dimensionAttributeValue;
                             dimensionValueRow.appendChild(dimensionValueCell);
                         })
-                        dimensionBody.appendChild(dimensionValueRow);
+                        dimensionTableBody.appendChild(dimensionValueRow);
                     })
                 }
 
@@ -782,6 +799,7 @@ function populateDatasetDetails(features){
                 }
                 if(propertyKey.includes(datasetType)){
 
+
                     var metadataRow = document.createElement("div");
                     var metadataTitleCellDiv = document.createElement("div");
                     var metadataValueCellDiv = document.createElement("div");
@@ -795,10 +813,9 @@ function populateDatasetDetails(features){
 
                     metadataValueCellDiv.innerText = propertyValue;
                     metadataValueCellDiv.classList.add("body-1");
-
                     metadataRow.appendChild(metadataTitleCellDiv);
                     metadataRow.appendChild(metadataValueCellDiv);
-                    datasetMetadataContainer.appendChild(metadataRow);
+                    metadataBody.appendChild(metadataRow);
 
                 }
 
@@ -810,8 +827,11 @@ function populateDatasetDetails(features){
                     var nodeInfoValueCell = document.createElement("div");
                     var nodeInfoTitle;
 
+                    nodeBody.classList.add("border-dataset-div-list-details");
                     nodeInfoRow.classList.add("div-node-row");
-                    nodeContainer.appendChild(nodeInfoRow);
+
+                    nodeContainer.appendChild(nodeBody);
+                    nodeBody.appendChild(nodeInfoRow);
 
                     var nodeInfoArray = propertyKey.split("marble:");
 
