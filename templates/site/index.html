@@ -104,6 +104,7 @@
                             <div id="datasetGeneralContainer"></div>
                             <div id="datasetVariablesContainer"></div>
                             <div id="datasetDimensionsContainer"></div>
+                            <div id="datasetMapContainer" class="map"></div>
                             <div id="datasetMetadataContainer"></div>
                             <div id="datasetNodeContainer"></div>
 
@@ -112,12 +113,15 @@
                     </div>
                 </div>
             </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-        hideDetails();
-        getSTACSearchResults("");
-    })
-</script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+                hideDetails();
+                getSTACSearchResults("");
+
+            })
+        </script>
+        <script src="js/leaflet-ui-functions.js"></script>
+        <script src="js/leaflet-stac-ui.js"></script>
         </div>
     </div>
 
