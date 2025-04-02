@@ -2487,6 +2487,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     z-index: 25;
 }
 
+.border-dataset-list-details > li:not(:last-child) {
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--indigo250-opacity-light);
+}
+
 .ul-asset{
     padding: unset;
     /*Overrides margin-top from Bootstrap dropdown-menu class for this dropdown only*/
@@ -2506,9 +2512,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    border-bottom: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: var(--indigo250-opacity-light);
     margin-left: 26px;
     margin-right: 5px;
 }
@@ -2557,7 +2560,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .tooltip-asset-link{
     --bs-tooltip-bg: var(--primary) !important;
     color: var(--text-on-dark);
-    /*background-color: var(--bs-tooltip-bg);*/
 }
 
 /*Search page content*/
@@ -2618,6 +2620,16 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     min-width: 240px;
 }
 
+.div-variable-value{
+    width: 100%;
+}
+
+.border-dataset-div-list-details > div:not(:last-child) {
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--indigo250-opacity-light);
+}
+
 .text-dataset-capitalize{
     text-transform: capitalize;
 }
@@ -2627,12 +2639,22 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     font-weight: bold;
 }
 
+.table-width-dimension{
+    width: 100%;
+}
+
 .td-padding-dimension{
     padding-right: 80px;
 }
 
 .td-padding-dimension-axis{
     padding-right: 160px;
+}
+
+.border-dataset-table-header, .border-dataset-table-body > tr:not(:last-child){
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--indigo250-opacity-light);
 }
 
 .icon-node-local-checkmark{
