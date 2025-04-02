@@ -3,11 +3,10 @@
     --fusesearch-shadow: 0 1px 5px rgba(0,0,0,0.4);
 }
 
-#map{
+.map{
     position: relative;
     width: 100%;
     height: inherit;
-
 }
 
 .leaflet-control-button{
