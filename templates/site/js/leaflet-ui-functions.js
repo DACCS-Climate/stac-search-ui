@@ -1,6 +1,6 @@
 var shapeDict = {};
 
-function createMap(mapContainerID){
+function createMap(mapContainerID, addWidgets){
     //Creates map with the map centre at the given latitude. longitude, and zoom level
     var map = L.map(mapContainerID,{
             editable: true,
@@ -11,17 +11,19 @@ function createMap(mapContainerID){
     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    //Adds menu of buttons to draw shapes
-    createDrawMenu(map);
+    if(addWidgets) {
+        //Adds menu of buttons to draw shapes
+        createDrawMenu(map);
 
-    //Adds search box
-    createSearchTool(map);
+        //Adds search box
+        createSearchTool(map);
 
-    //Adds textbox to input single coordinate
-    createCoordinateInputField(map);
+        //Adds textbox to input single coordinate
+        createCoordinateInputField(map);
 
-    //Adds panel to paste geojson
-    createGeoJSONPanel(map);
+        //Adds panel to paste geojson
+        createGeoJSONPanel(map);
+    }
 
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
     createCursorTooltip(map);
