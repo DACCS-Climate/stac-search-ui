@@ -2607,7 +2607,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-bottom: 19px;
 }
 
-.div-variable-row, .div-metadata-row, .div-node-row{
+.div-dataset-subheader{
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
+    padding-left: 13px;
+    padding-top: 10px;
+    padding-bottom: 7px;
+}
+
+.div-metadata-extension-container{
+    margin-bottom: 33px;
+}
+
+.div-metadata-row, .div-node-row{
     display: flex;
     flex-direction: row;
     padding-left: 13px;
@@ -2615,13 +2627,41 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-bottom: 7px;
 }
 
-.div-variable-title, .div-metadata-title, .div-node-title{
+.div-variable-row{
+    display: flex;
+    flex-direction: column;
+    padding-left: 13px;
+    padding-top: 10px;
+    padding-bottom: 7px;
+}
+
+.div-metadata-title{
     width: 20%;
     min-width: 240px;
 }
 
+.div-metadata-subtitle{
+    width: 100%;
+    min-width: 240px;
+    margin-top: 19px;
+}
+
 .div-variable-value{
     width: 100%;
+}
+
+.div-metadata-extension-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.div-metadata-extension-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.div-metadata-extension-title{
+    width: 20%;
 }
 
 .border-dataset-div-list-details > div:not(:last-child) {
