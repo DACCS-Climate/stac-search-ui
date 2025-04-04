@@ -449,32 +449,172 @@ function populateDatasetDetails(features){
     var assetDetailsList = document.getElementById("datasetAssetsList")
     assetDetailsList.classList.add("border-dataset-list-details");
 
-    var datasetType;
+    var extensionKey;
+    var extensionName;
+
 
     var datasetMetadataContainer = document.getElementById("datasetMetadataContainer");
     var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
     var metadataBody = document.createElement("div");
-    metadataBody.classList.add("border-dataset-div-list-details");
 
     datasetMetadataContainer.appendChild(metadataHeader);
     datasetMetadataContainer.appendChild(metadataBody);
 
     var datasetID;
-    var nodeContainer = document.getElementById("datasetNodeContainer");
-    var nodeHeader = datasetDetailsHeaderTemplate("Marble");
-    var nodeBody = document.createElement("div");
-
-    nodeContainer.appendChild(nodeHeader);
-    nodeContainer.appendChild(nodeBody);
-
-
 
     console.log("dataset features");
     console.log(features);
-        //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
-    //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
-    Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
+
+
+
+         if ("properties" in features) {
+            //TODO Delete redoakJSON variable for production
+            var redoakJSON = testDatasetProperties();
+            //console.log("redoakJSON");
+            //console.log(redoakJSON);
+
+            var metadataTable = document.createElement("table");
+
+            if("stac_extensions" in features) {
+                //TODO Uncomment for loop start 'for(extension of feature["stac_extensions"])' below and delete 'for(extension of redoakJSON["stac_extensions"])' for production
+                //for (extension of features["stac_extensions"]) {
+
+                for (extension of redoakJSON["stac_extensions"]) {
+                    var metadataExtensionContainer = document.createElement("div");
+                    var metadataSubHeaderRow = document.createElement("div");
+                    var metadataSubBody = document.createElement("div");
+
+                    metadataExtensionContainer.classList.add("div-metadata-extension-container");
+                    metadataSubBody.classList.add("border-dataset-div-list-details");
+
+                    metadataSubHeaderRow.id = extension + "Header";
+                    metadataSubBody.id = extension + "Body";
+
+                    metadataSubHeaderRow.classList.add("div-dataset-subheader");
+
+                    metadataExtensionContainer.appendChild(metadataSubHeaderRow);
+                    metadataExtensionContainer.appendChild(metadataSubBody);
+
+                    datasetMetadataContainer.appendChild(metadataExtensionContainer);
+
+
+
+                    //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
+                    //Object.entries(feature["properties"]).forEach(([propertyKey, propertyValue]) => {
+                    Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
+
+                        if (propertyKey.includes(":")) {
+                            var extensionKeyArray = propertyKey.split(":");
+                            extensionKey = extensionKeyArray[0] + ":";
+                            extensionName = extensionKeyArray[0]
+                        }
+
+                        if (propertyKey.includes(extensionKey)) {
+
+                            if (extension.includes(extensionName)){
+                                var metadataRow = document.createElement("div");
+                                var metadataTitleCellDiv = document.createElement("div");
+                                var metadataValueCellDiv = document.createElement("div");
+
+                                var metadataKeyArray = propertyKey.split(":");
+
+                                if(propertyKey.includes(":variables") || propertyKey.includes(":dimensions"))
+                                {
+                                    metadataRow.classList.add("div-variable-row");
+                                }
+                                else{
+                                    metadataRow.classList.add("div-metadata-row");
+                                }
+
+                                metadataValueCellDiv.classList.add("body-1");
+
+                                metadataSubHeaderRow.innerText = extensionName;
+
+                                metadataTitleCellDiv.innerText = metadataKeyArray[1];
+                                metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
+                                metadataRow.appendChild(metadataTitleCellDiv);
+
+
+                                console.log("propertyValueType")
+                                console.log(typeof  propertyValue);
+                                if(typeof  propertyValue == "object"){
+
+                                    Object.entries(propertyValue).forEach( ([extensionObjectKey, extensionObjectValue]) => {
+                                        if(typeof extensionObjectValue == "object"){
+                                            var extensionDetailsContainer = document.createElement("div");
+
+                                            if(propertyKey.includes(":dimensions")){
+                                                var metadataDimensionTitle = document.createElement("div");
+                                                metadataDimensionTitle.classList.add("subtitle-1", "div-metadata-subtitle", "text-dataset-capitalize");
+                                                metadataDimensionTitle.innerText = extensionObjectKey;
+                                                metadataRow.appendChild(metadataDimensionTitle);
+                                            }
+
+                                            Object.entries(extensionObjectValue).forEach( ([extensionItemKey, extensionItemValue]) => {
+                                                var extensionItemRow = document.createElement("div");
+                                                var extensionItemTitleDiv = document.createElement("div");
+                                                var extensionItemValueDiv = document.createElement("div");
+
+                                                extensionItemRow.classList.add("div-metadata-extension-row");
+                                                extensionItemTitleDiv.classList.add("div-metadata-extension-title");
+
+                                                extensionItemRow.appendChild(extensionItemTitleDiv);
+                                                extensionItemRow.appendChild(extensionItemValueDiv);
+
+                                                extensionItemTitleDiv.innerText = extensionItemKey;
+
+                                                if(extensionItemKey == "extent"){
+                                                    extensionItemValueDiv.innerText = extensionItemValue[0] +  " , " + extensionItemValue[1];
+                                                }
+                                                else{
+                                                    extensionItemValueDiv.innerText = extensionItemValue;
+                                                }
+
+                                                if(extensionObjectKey == "time"){
+                                                    if(extensionItemKey == "extent"){
+                                                        var datetime1 = new Date(extensionItemValue[0]);
+                                                        var datetime2 = new Date(extensionItemValue[1]);
+                                                        extensionItemValueDiv.innerText = datetime1 +  " , " + datetime2;
+                                                    }
+                                                }
+                                                extensionDetailsContainer.appendChild(extensionItemRow);
+                                                metadataRow.appendChild(extensionDetailsContainer);
+                                            })
+                                        }
+                                    })
+                                }
+                                else{
+                                    if(typeof propertyValue != "string"){
+                                        if(propertyValue == true){
+
+                                            metadataValueCellDiv.innerHTML = '<i class="fa-solid fa-check icon-node-local-checkmark"></i>';
+                                        }
+                                        else{
+                                            metadataValueCellDiv.innerHTML = '<i class="fa-solid fa-xmark icon-node-local-xmark"></i>;'
+                                        }
+                                    }
+                                    else{
+                                        metadataValueCellDiv.innerText = propertyValue;
+                                    }
+                                }
+
+                                metadataRow.appendChild(metadataValueCellDiv);
+                                metadataSubBody.appendChild(metadataRow);
+
+                                metadataBody.appendChild(metadataExtensionContainer);
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+
+
+
+    //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
     //Object.entries(features).forEach(([featureKey, featureValue]) => {
+    Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
 
         if(featureKey == "id"){
 
@@ -624,6 +764,11 @@ function populateDatasetDetails(features){
             })
         }
 
+
+
+
+
+
         if(featureKey == "properties"){
             //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
@@ -650,217 +795,29 @@ function populateDatasetDetails(features){
                     }
 
                 }*/
-                //For Variables section
-                if(propertyKey.includes(":variables")){
-                    var propertyVariables = propertyValue;
-                    var variablesContainer = document.getElementById("datasetVariablesContainer");
-                    var variablesHeader = datasetDetailsHeaderTemplate("Variables");
-                    var variablesBody = document.createElement("div");
-                    var variableRow = document.createElement("div");
-
-                    variablesBody.classList.add("border-dataset-div-list-details");
-                    variableRow.classList.add("div-variable-row");
 
 
-                    variablesContainer.appendChild(variablesHeader);
-                    variablesContainer.appendChild(variablesBody);
-                    variablesBody.appendChild(variableRow);
-
-                    Object.entries(propertyVariables).forEach( ([variableKey, variableValue]) => {
-
-                        var variableTitleCell = document.createElement("div");
-                        var variableValueCell = document.createElement("div");
-
-                        variableTitleCell.classList.add("subtitle-1", "div-variable-title", "text-dataset-capitalize");
-                        variableValueCell.classList.add("body-1", "text-dataset-capitalize");
-
-                        variableTitleCell.innerText = "Variable ID";
-                        variableValueCell.innerText = variableKey;
-
-                        variableRow.appendChild(variableTitleCell);
-                        variableRow.appendChild(variableValueCell);
-                        variablesBody.appendChild(variableRow);
-
-                        Object.entries(variableValue).forEach( ([variableMetaKey, variableMetaValue]) => {
-                            var variableMetaRow = document.createElement("div");
-                            var variableMetaTitleCell = document.createElement("div");
-                            var variableMetaValueCell = document.createElement("div");
-                            var dimensionsValue = "";
-
-                            variableMetaRow.classList.add("div-variable-row");
-
-                            variableMetaTitleCell.classList.add("div-variable-title", "subtitle-1", "text-dataset-capitalize");
-                            variableMetaValueCell.classList.add("div-variable-value", "body-1");
-
-                            variableMetaRow.appendChild(variableMetaTitleCell);
-                            variableMetaRow.appendChild(variableMetaValueCell);
-
-                            variableMetaTitleCell.innerText = variableMetaKey;
-                            variableMetaValueCell.innerText = variableMetaValue;
-
-                            if(variableMetaKey == "dimensions"){
-                                for(dimension of variableMetaValue){
-                                    dimensionsValue = dimensionsValue + dimension + ", ";
-                                }
-
-                                variableMetaTitleCell.innerText = variableMetaKey;
-                                variableMetaValueCell.innerText = dimensionsValue;
-                            }
-                            variablesBody.appendChild(variableMetaRow);
-                        })
-                    })
-                }
-
-                //Dimensions section
-                if(propertyKey.includes(":dimensions")){
-                    var dimensionsContainer = document.getElementById("datasetDimensionsContainer");
-                    var dimensionsHeader = datasetDetailsHeaderTemplate("Dimensions");
-                    var dimensionTable = document.createElement("table");
-                    var dimensionTableHeader = document.createElement("thead");
-                    var dimensionTableHeaderRow = document.createElement("tr");
-                    var dimensionTableHeaderFirstCell = document.createElement("th");
-                    var dimensionTableBody = document.createElement("tbody");
-
-                    dimensionTable.classList.add("table-width-dimension");
-                    dimensionTableHeaderRow.classList.add("border-dataset-table-header");
-                    dimensionTableBody.classList.add("border-dataset-table-body");
-                    dimensionTableHeaderFirstCell.innerText = "ID";
-                    dimensionTableHeaderRow.appendChild(dimensionTableHeaderFirstCell);
-                    dimensionTableHeader.appendChild(dimensionTableHeaderRow);
-                    dimensionTable.appendChild(dimensionTableHeader);
-                    dimensionTable.appendChild(dimensionTableBody);
-                    dimensionsContainer.appendChild(dimensionsHeader);
-                    dimensionsContainer.appendChild(dimensionTable);
-
-                    var propertyDimensionKeys = Object.keys(propertyValue);
-
-                    var firstDimensionObject = propertyValue[propertyDimensionKeys[0]];
-                    Object.entries(firstDimensionObject).forEach( ([firstObjectKey, firstObjectValue]) => {
-                        var dimensionTableHeaderCell = document.createElement("th");
-
-                        dimensionTableHeaderCell.classList.add("text-dataset-capitalize");
-                        dimensionTableHeaderCell.innerText = firstObjectKey;
-                        dimensionTableHeaderRow.appendChild(dimensionTableHeaderCell);
-                    })
-
-                    Object.entries(propertyValue).forEach( ([dimensionKey, dimensionValue]) => {
-                        var dimensionValueRow = document.createElement("tr");
-                        var dimensionIDCell = document.createElement("td");
-
-                        dimensionIDCell.classList.add("subtitle-1", "text-dataset-all-cap-bold", "td-padding-dimension");
-                        dimensionValueRow.classList.add("border-dataset-table-details");
-
-                        dimensionIDCell.innerText = dimensionKey;
-                        dimensionValueRow.appendChild(dimensionIDCell);
-
-                        /*Adds "N/A" entry for the Axis column if the key is "time"*/
-                        if(dimensionKey == "time"){
-                            var dimensionNACell = document.createElement("td");
-                            dimensionNACell.innerText = "N/A";
-                            dimensionValueRow.appendChild(dimensionNACell);
-                            }
-
-                        Object.entries(dimensionValue).forEach( ([dimensionAttributeKey, dimensionAttributeValue]) => {
-
-                            var dimensionValueCell = document.createElement("td");
-
-                            if(dimensionAttributeKey == "description" && dimensionAttributeValue.includes("coordinate")){
-                                dimensionValueCell.classList.add("body-1");
-                            }
-                            else{
-                                dimensionValueCell.classList.add("body-1", "text-dataset-capitalize");
-                            }
-
-                            if(dimensionAttributeKey == "axis"){
-                                dimensionValueCell.classList.add("td-padding-dimension-axis");
-                            }
-                            else{
-                                dimensionValueCell.classList.add("td-padding-dimension");
-                            }
-
-                            dimensionValueCell.innerText = dimensionAttributeValue;
-                            dimensionValueRow.appendChild(dimensionValueCell);
-                        })
-                        dimensionTableBody.appendChild(dimensionValueRow);
-                    })
-                }
-
-
-
-                //Metadata section
-                if(propertyKey.includes(":license")){
-                    var licenseKeyArray = propertyKey.split(":");
-                    datasetType = licenseKeyArray[0] + ":";
-
-                    console.log("metadata");
-                    console.log(datasetType);
-                    console.log(propertyKey);
-
-                }
-                if(propertyKey.includes(datasetType)){
-
-
-                    var metadataRow = document.createElement("div");
-                    var metadataTitleCellDiv = document.createElement("div");
-                    var metadataValueCellDiv = document.createElement("div");
-
-                    var metadataKeyArray = propertyKey.split(datasetType);
-
-                    metadataRow.classList.add("div-metadata-row");
-
-                    metadataTitleCellDiv.innerText = metadataKeyArray[1];
-                    metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
-
-                    metadataValueCellDiv.innerText = propertyValue;
-                    metadataValueCellDiv.classList.add("body-1");
-                    metadataRow.appendChild(metadataTitleCellDiv);
-                    metadataRow.appendChild(metadataValueCellDiv);
-                    metadataBody.appendChild(metadataRow);
-
-                }
-
-                //Node information section
-                if(propertyKey.includes("marble:")){
-
-                    var nodeInfoRow = document.createElement("div");
-                    var nodeInfoTitleCell = document.createElement("div");
-                    var nodeInfoValueCell = document.createElement("div");
-                    var nodeInfoTitle;
-
-                    nodeBody.classList.add("border-dataset-div-list-details");
-                    nodeInfoRow.classList.add("div-node-row");
-
-                    nodeContainer.appendChild(nodeBody);
-                    nodeBody.appendChild(nodeInfoRow);
-
-                    var nodeInfoArray = propertyKey.split("marble:");
-
-                    var nodeInfo = nodeInfoArray[1];
-                    nodeInfoTitle = nodeInfo.replace("_", " ");
-
-                    nodeInfoTitleCell.classList.add("subtitle-1", "text-dataset-capitalize", "div-node-title");
-                    nodeInfoTitleCell.innerText = nodeInfoTitle;
-
-                    nodeInfoValueCell.classList.add("body-1");
-
-                    if(typeof propertyValue != "string"){
-                        if(propertyValue == true){
-
-                            nodeInfoValueCell.innerHTML = '<i class="fa-solid fa-check icon-node-local-checkmark"></i>';
-                        }
-                        else{
-                            nodeInfoValueCell.innerHTML = '<i class="fa-solid fa-xmark icon-node-local-xmark"></i>;'
-                        }
-                    }
-                    else{
-                        nodeInfoValueCell.innerText = propertyValue;
-                    }
-
-                    nodeInfoRow.appendChild(nodeInfoTitleCell);
-                    nodeInfoRow.appendChild(nodeInfoValueCell);
-                }
             })
         }
+
+
+       if(featureKey == "bbox") {
+            var bboxList = document.getElementById("datasetBBoxList");
+
+            console.log("bbox");
+            console.log(featureValue);
+            for (bboxValue of featureValue) {
+                var bboxListItem = document.createElement("li");
+                var bboxParagraph = document.createElement("p");
+
+                bboxParagraph.innerText = bboxValue;
+                bboxListItem.appendChild(bboxParagraph);
+                bboxList.appendChild(bboxListItem);
+            }
+        }
+
+
+
 
 
     })
