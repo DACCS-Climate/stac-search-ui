@@ -102,8 +102,24 @@
 
                             </div>
                             <div id="datasetGeneralContainer"></div>
-                            <div id="datasetVariablesContainer"></div>
-                            <div id="datasetDimensionsContainer"></div>
+                            <div id="datasetVariablesContainer">
+
+                            </div>
+                            <div id="datasetBBoxContainer">
+                                {% with %}
+                                    {% set dropdown_type = "dropdown_list_panel" %}
+                                    {% set dropdown_button_id = "datasetBBoxButton" %}
+                                    {% set dropdown_list_panel_link_id = "datasetBBoxLabel" %}
+                                    {% set dropdown_list_id  = "datasetBBoxList"%}
+                                    {% set dropdown_label_text = "BBox" %}
+                                    {% include "partials/dropdown-panel.html" %}
+                                {% endwith %}
+
+                            </div>
+                            <div id="datasetDimensionsContainer">
+
+
+                            </div>
                             <div id="datasetMapContainer" class="map"></div>
                             <div id="datasetMetadataContainer"></div>
                             <div id="datasetNodeContainer"></div>
