@@ -518,9 +518,11 @@ function populateDatasetDetails(features){
 
                                 var metadataKeyArray = propertyKey.split(":");
 
-                                if(propertyKey.includes(":variables") || propertyKey.includes(":dimensions"))
-                                {
+                                if(propertyKey.includes(":variables")) {
                                     metadataRow.classList.add("div-variable-row");
+                                }
+                                else if(propertyKey.includes(":dimensions")){
+                                    metadataRow.classList.add("div-dimension-row", "border-dataset-div-extension-details");
                                 }
                                 else{
                                     metadataRow.classList.add("div-metadata-row");
@@ -542,6 +544,7 @@ function populateDatasetDetails(features){
                                     Object.entries(propertyValue).forEach( ([extensionObjectKey, extensionObjectValue]) => {
                                         if(typeof extensionObjectValue == "object"){
                                             var extensionDetailsContainer = document.createElement("div");
+                                            extensionDetailsContainer.classList.add("div-dataset-extension-details");
 
                                             if(propertyKey.includes(":dimensions")){
                                                 var metadataDimensionTitle = document.createElement("div");
@@ -596,11 +599,10 @@ function populateDatasetDetails(features){
                                     else{
                                         metadataValueCellDiv.innerText = propertyValue;
                                     }
+                                    metadataRow.appendChild(metadataValueCellDiv);
                                 }
-
-                                metadataRow.appendChild(metadataValueCellDiv);
+                                
                                 metadataSubBody.appendChild(metadataRow);
-
                                 metadataBody.appendChild(metadataExtensionContainer);
                             }
                         }
