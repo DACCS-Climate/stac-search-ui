@@ -601,7 +601,7 @@ function populateDatasetDetails(features){
                                     }
                                     metadataRow.appendChild(metadataValueCellDiv);
                                 }
-                                
+
                                 metadataSubBody.appendChild(metadataRow);
                                 metadataBody.appendChild(metadataExtensionContainer);
                             }
@@ -771,17 +771,28 @@ function populateDatasetDetails(features){
 
 
 
-        if(featureKey == "properties"){
+        if(featureKey == "geometry"){
             //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
             //console.log("redoakJSON");
             //console.log(redoakJSON);
+            var polygonArray = [];
 
             var metadataTable = document.createElement("table");
 
             //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
             //Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
-            Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
+            Object.entries(redoakJSON["geometry"]).forEach(([geometryKey, geometryValue]) => {
+
+                if(geometryKey == "coordinates"){
+
+                    createMap("datasetMapContainer", false, geometryValue);
+
+                }
+                else{
+                    var mapContainerDiv = document.getElementById("datasetMapContainer");
+                    mapContainerDiv.innerText = "No polygons in dataset";
+                }
 
                 //For General section
                 /*
