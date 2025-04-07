@@ -1,12 +1,25 @@
 var shapeDict = {};
 
-function createMap(mapContainerID, addWidgets){
+function createMap(mapContainerID, addWidgets, stacPolygon){
+    var map;
     //Creates map with the map centre at the given latitude. longitude, and zoom level
-    var map = L.map(mapContainerID,{
+    if(stacPolygon != null){
+        map = L.map(mapContainerID,{
             editable: true,
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
         });
+        addSTACPolygon(map, mapContainerID, stacPolygon);
+    }
+    else{
+        map = L.map(mapContainerID,{
+            editable: true,
+            center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
+            zoom: `{{ map_default_zoom }}`
+        });
+    }
+
+
 
     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -702,4 +715,9 @@ function formatGeoJSON(shapeDict){
         console.log(stacGeoJSON);
         currentGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
     }
+}
+
+function addSTACPolygon(map, mapContainerID, polygonLatLngsArray){
+    var stacPolygon = L.polygon(polygonLatLngsArray, {color: 'red'}).addTo(map);
+    map.fitBounds(stacPolygon.getBounds());
 }
