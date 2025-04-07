@@ -2635,6 +2635,14 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-bottom: 7px;
 }
 
+.div-dimension-row{
+    display: flex;
+    flex-direction: column;
+    padding-left: 13px;
+    padding-top: 10px;
+    padding-bottom: 7px;
+}
+
 .div-metadata-title{
     width: 20%;
     min-width: 240px;
@@ -2664,10 +2672,21 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 20%;
 }
 
-.border-dataset-div-list-details > div:not(:last-child) {
+.border-dataset-div-list-details > div.div-variable-row:not(:last-child), .border-dataset-div-list-details > div.div-metadata-row:not(:last-child){
     border-bottom: solid;
     border-bottom-width: 1px;
     border-bottom-color: var(--indigo250-opacity-light);
+}
+
+.border-dataset-div-extension-details > div.div-dataset-extension-details:not(:last-child){
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--indigo250-opacity-light);
+    padding-bottom: 19px;
+}
+
+.div-dataset-extension-details{
+
 }
 
 .text-dataset-capitalize{
