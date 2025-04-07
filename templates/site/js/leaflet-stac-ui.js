@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function (){
-    createMap("datasetMapContainer", false);
+    createMap("datasetMapContainer", false, null);
 })
 
 
