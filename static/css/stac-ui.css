@@ -2408,12 +2408,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     height: 70px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-radius: unset;
     background-color: var(--indigo250-opacity-light);
     color: var(--indigo-700);
     padding-left: 25px;
     padding-top: 26px;
     padding-bottom: 26px;
+    padding-right: 25px;
+}
+
+.dropdown-panel-title-container{
+    display: flex;
+    flex-direction: row;
 }
 
 .dropdown-list-panel-title[aria-expanded="true"]{
@@ -2687,6 +2694,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .div-dataset-extension-details{
 
+}
+
+.dataset-details-title{
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-radius: unset;
+    background-color: var(--indigo250-opacity-light);
+    color: var(--indigo-700);
+    padding-left: 25px;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    padding-right: 25px;
 }
 
 .text-dataset-capitalize{
