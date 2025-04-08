@@ -96,6 +96,7 @@
                                     {% set dropdown_button_id = "datasetAssetsButton" %}
                                     {% set dropdown_list_panel_link_id = "datasetAssetsLabel" %}
                                     {% set dropdown_list_id  = "datasetAssetsList"%}
+                                    {% set panel_expanded = "false" %}
                                     {% set dropdown_label_text = "Assets" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
@@ -111,6 +112,7 @@
                                     {% set dropdown_button_id = "datasetBBoxButton" %}
                                     {% set dropdown_list_panel_link_id = "datasetBBoxLabel" %}
                                     {% set dropdown_list_id  = "datasetBBoxList"%}
+                                    {% set panel_expanded = "true" %}
                                     {% set dropdown_label_text = "BBox" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
@@ -129,6 +131,8 @@
                     </div>
                 </div>
             </div>
+        <script src="js/leaflet-ui-functions.js"></script>
+        <script src="js/leaflet-stac-ui.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function(){
                 hideDetails();
@@ -136,8 +140,7 @@
 
             })
         </script>
-        <script src="js/leaflet-ui-functions.js"></script>
-       <!-- <script src="js/leaflet-stac-ui.js"></script>-->
+
         </div>
     </div>
 
