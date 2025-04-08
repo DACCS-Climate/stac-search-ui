@@ -1,28 +1,34 @@
 var shapeDict = {};
+var mapsPlaceholder = [];
+function instantiateMap(mapContainerID){
 
-function createMap(mapContainerID, addWidgets, stacPolygon){
-    var map;
+
     //Creates map with the map centre at the given latitude. longitude, and zoom level
+   var map = L.map(mapContainerID,{
+            editable: true,
+            center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
+            zoom: `{{ map_default_zoom }}`
+        });
+
+       L.Map.addInitHook(function () {
+          mapsPlaceholder.push(map); // Use whatever global scope variable you like.
+        });
+
+    return map;
+}
+
+function createMap(map, addWidgets){
+  /*  console.log("stacPolygon");
+    console.log(stacPolygon);
+
     if(stacPolygon != null){
-        map = L.map(mapContainerID,{
-            editable: true,
-            center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
-            zoom: `{{ map_default_zoom }}`
-        });
-        addSTACPolygon(map, mapContainerID, stacPolygon);
+        addSTACPolygon(map, stacPolygon);
     }
-    else{
-        map = L.map(mapContainerID,{
-            editable: true,
-            center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
-            zoom: `{{ map_default_zoom }}`
-        });
-    }
-
-
+*/
 
     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
 
     if(addWidgets) {
         //Adds menu of buttons to draw shapes
@@ -39,7 +45,7 @@ function createMap(mapContainerID, addWidgets, stacPolygon){
     }
 
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
-    createCursorTooltip(map);
+    createCursorTooltip(map, addWidgets);
 
     map.on('mouseup', function(event){
         getShapeLatLng();
@@ -64,7 +70,7 @@ function clearText(elementID){
 
 
 //Create tooltip to show latitude and longitude next to cursor
-function createCursorTooltip(map){
+function createCursorTooltip(map, addWidgets){
 
     var tooltip = L.tooltip();
 
@@ -87,15 +93,18 @@ function createCursorTooltip(map){
     });
 
 
-    //Set listeners on UI elements for Tooltip actions
-    //Close tooltip when moving mouse over any UI element
-    //Open tooltip when moving mouse out of any UI element
+    if(addWidgets){
+        //Set listeners on UI elements for Tooltip actions
+        //Close tooltip when moving mouse over any UI element
+        //Open tooltip when moving mouse out of any UI element
 
-    manageToolTipDomElement(map, tooltip, "drawMenuContainer");
-    manageToolTipDomElement(map, tooltip, "coordinateContainer");
-    manageToolTipDomElement(map, tooltip, "geoJSONPanelButton");
-    manageToolTipDomElement(map, tooltip, "geoJSONPanelContainer");
-    manageToolTipDomElement(map, tooltip, "fuseSearchControlContainer");
+        manageToolTipDomElement(map, tooltip, "drawMenuContainer");
+        manageToolTipDomElement(map, tooltip, "coordinateContainer");
+        manageToolTipDomElement(map, tooltip, "geoJSONPanelButton");
+        manageToolTipDomElement(map, tooltip, "geoJSONPanelContainer");
+        manageToolTipDomElement(map, tooltip, "fuseSearchControlContainer");
+    }
+
 
 }
 
@@ -717,7 +726,8 @@ function formatGeoJSON(shapeDict){
     }
 }
 
-function addSTACPolygon(map, mapContainerID, polygonLatLngsArray){
+function addSTACPolygon(polygonLatLngsArray){
+    var map = mapsPlaceholder.pop();
     var stacPolygon = L.polygon(polygonLatLngsArray, {color: 'red'}).addTo(map);
     map.fitBounds(stacPolygon.getBounds());
 }
