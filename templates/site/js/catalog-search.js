@@ -786,7 +786,8 @@ function populateDatasetDetails(features){
 
                 if(geometryKey == "coordinates"){
 
-                    createMap("datasetMapContainer", false, geometryValue);
+
+                    addSTACPolygon(geometryValue);
 
                 }
                 else{
@@ -917,7 +918,7 @@ function datasetDetailsHeaderTemplate(headerText) {
     headerContainer.classList.add("header-container");
 
     var header = document.createElement("div");
-    header.classList.add("dropdown-list-panel-title", "div-dataset-details-header");
+    header.classList.add("dataset-details-title", "div-dataset-details-header");
 
     var headerIcon = document.createElement("div");
     headerIcon.classList.add("dropdown-list-panel-search-icon-background");
