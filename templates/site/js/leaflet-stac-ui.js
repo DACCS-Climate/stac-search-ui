@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function (){
-    createMap("datasetMapContainer", false, null);
+    var mapInstance = instantiateMap("datasetMapContainer");
+    createMap(mapInstance, false);
 })
 
 
