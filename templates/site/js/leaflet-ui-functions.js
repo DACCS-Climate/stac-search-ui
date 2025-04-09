@@ -2,29 +2,22 @@ var shapeDict = {};
 var mapsPlaceholder = [];
 function instantiateMap(mapContainerID){
 
+    //Add hook to add map object to array so it can be used later to add STAC polygons to map
+    L.Map.addInitHook(function () {
+      mapsPlaceholder.push(this); // Use whatever global scope variable you like.
+    });
 
     //Creates map with the map centre at the given latitude. longitude, and zoom level
-   var map = L.map(mapContainerID,{
+    var map = L.map(mapContainerID,{
             editable: true,
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
         });
-
-       L.Map.addInitHook(function () {
-          mapsPlaceholder.push(map); // Use whatever global scope variable you like.
-        });
-
+    
     return map;
 }
 
 function createMap(map, addWidgets){
-  /*  console.log("stacPolygon");
-    console.log(stacPolygon);
-
-    if(stacPolygon != null){
-        addSTACPolygon(map, stacPolygon);
-    }
-*/
 
     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -728,6 +721,8 @@ function formatGeoJSON(shapeDict){
 
 function addSTACPolygon(polygonLatLngsArray){
     var map = mapsPlaceholder.pop();
+    console.log("map");
+    console.log(map);
     var stacPolygon = L.polygon(polygonLatLngsArray, {color: 'red'}).addTo(map);
     map.fitBounds(stacPolygon.getBounds());
 }
