@@ -768,58 +768,26 @@ function populateDatasetDetails(features){
 
 
 
-
-
-
         if(featureKey == "geometry"){
             //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
-            //console.log("redoakJSON");
-            //console.log(redoakJSON);
-            var polygonArray = [];
 
-            var metadataTable = document.createElement("table");
+            //TODO Uncomment 'Object.keys(featureValue...' line below and delete 'Object.keys(redoakJSON...' using redoakJSON on line after for production
+            //if(Object.keys(featureValue["geometry"]).includes("coordinates")){
+            if(Object.keys(redoakJSON["geometry"]).includes("coordinates")){
 
-            //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
-            //Object.entries(featureValue).forEach(([propertyKey, propertyValue]) => {
-            Object.entries(redoakJSON["geometry"]).forEach(([geometryKey, geometryValue]) => {
-
-                if(geometryKey == "coordinates"){
-
-
-                    addSTACPolygon(geometryValue);
-
-                }
-                else{
-                    var mapContainerDiv = document.getElementById("datasetMapContainer");
-                    mapContainerDiv.innerText = "No polygons in dataset";
-                }
-
-                //For General section
-                /*
-                if(propertyKey.includes("datetime")){
-                    var generalContainer = document.getElementById("datasetGeneralContainer");
-                    var generalHeader = datasetDetailsHeaderTemplate("General");
-                    var datetimeArray;
-
-                    if(propertyKey.includes("start")){
-                        datetimeArray = propertyKey.split("_");
-
-
-                    }
-
-                }*/
-
-
-            })
+                //TODO Uncomment 'addSTACPolygon(featureValue' line below and delete 'addSTACPolygon(redoakJSON...' using redoakJSON on line after for production
+                //addSTACPolygon(featureValue["geometry"]["coordinates"]);
+                addSTACPolygon(redoakJSON["geometry"]["coordinates"]);
+            }
         }
 
 
        if(featureKey == "bbox") {
             var bboxList = document.getElementById("datasetBBoxList");
 
-            console.log("bbox");
-            console.log(featureValue);
+            addSTACBBox(featureValue);
+
             for (bboxValue of featureValue) {
                 var bboxListItem = document.createElement("li");
                 var bboxParagraph = document.createElement("p");
@@ -829,11 +797,6 @@ function populateDatasetDetails(features){
                 bboxList.appendChild(bboxListItem);
             }
         }
-
-
-
-
-
     })
 }
 
