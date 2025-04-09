@@ -4,7 +4,7 @@ function instantiateMap(mapContainerID){
 
     //Add hook to add map object to array so it can be used later to add STAC polygons to map
     L.Map.addInitHook(function () {
-      mapsPlaceholder.push(this); // Use whatever global scope variable you like.
+      mapsPlaceholder.push(this);
     });
 
     //Creates map with the map centre at the given latitude. longitude, and zoom level
@@ -13,15 +13,14 @@ function instantiateMap(mapContainerID){
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
         });
-    
+
+     //Adds map image
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
     return map;
 }
 
 function createMap(map, addWidgets){
-
-    //Adds map image
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
 
     if(addWidgets) {
         //Adds menu of buttons to draw shapes
@@ -35,14 +34,18 @@ function createMap(map, addWidgets){
 
         //Adds panel to paste geojson
         createGeoJSONPanel(map);
+
+        //Gets latitude and longitude of shapes that were added to the map
+        //Fires on mouseup
+        map.on('mouseup', function(event){
+            getShapeLatLng();
+        });
     }
 
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
     createCursorTooltip(map, addWidgets);
 
-    map.on('mouseup', function(event){
-        getShapeLatLng();
-    });
+
 }
 
 function clearShape(shapeDict){
@@ -720,9 +723,13 @@ function formatGeoJSON(shapeDict){
 }
 
 function addSTACPolygon(polygonLatLngsArray){
-    var map = mapsPlaceholder.pop();
-    console.log("map");
-    console.log(map);
+    var map = mapsPlaceholder[0];
     var stacPolygon = L.polygon(polygonLatLngsArray, {color: 'red'}).addTo(map);
     map.fitBounds(stacPolygon.getBounds());
+}
+
+function addSTACBBox(bboxLatLngsArray){
+    var map = mapsPlaceholder[0];
+    var stacBBox = L.rectangle(bboxLatLngsArray, {color: 'blue'}).addTo(map);
+    map.fitBounds(stacBBox);
 }
