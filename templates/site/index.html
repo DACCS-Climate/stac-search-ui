@@ -97,6 +97,7 @@
                                     {% set dropdown_list_panel_link_id = "datasetAssetsLabel" %}
                                     {% set dropdown_list_id  = "datasetAssetsList"%}
                                     {% set panel_expanded = "false" %}
+                                    {% set dropdown_show = "" %}
                                     {% set dropdown_label_text = "Assets" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
@@ -113,6 +114,7 @@
                                     {% set dropdown_list_panel_link_id = "datasetBBoxLabel" %}
                                     {% set dropdown_list_id  = "datasetBBoxList"%}
                                     {% set panel_expanded = "true" %}
+                                    {% set dropdown_show = "show" %}
                                     {% set dropdown_label_text = "BBox" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
