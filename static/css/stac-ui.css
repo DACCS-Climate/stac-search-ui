@@ -69,6 +69,7 @@
     --alert-background: #F6DC3D;
     --black: #000000;
     --white: #FFFFFF;
+    --blue: #0000FF;
 
     /*Opacity Swatches*/
     --black-opacity-lighter: rgba(0, 0, 0, 0.18);
@@ -2609,13 +2610,11 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-right: 20px;
 }
 
-.top-right-legend-panel{
-    width: 100px;
-}
-
 .legend-container{
     display: flex;
     flex-direction: column;
+    background-color: var(--white);
+    padding: 2px;
 }
 
 .margin-legend{
@@ -2630,7 +2629,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .bbox-legend-colour{
-    background-color: blue;
+    background-color: var(--blue);
     width: 30px;
     height: 5px;
 }
