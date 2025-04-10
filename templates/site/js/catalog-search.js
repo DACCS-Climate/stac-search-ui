@@ -786,16 +786,21 @@ function populateDatasetDetails(features){
        if(featureKey == "bbox") {
             var bboxList = document.getElementById("datasetBBoxList");
 
-            addSTACBBox(featureValue);
+            var bboxCoordsArray = addSTACBBox(featureValue);
+            console.log("bboxCoords");
+            console.log(bboxCoordsArray);
 
-            for (bboxValue of featureValue) {
-                var bboxListItem = document.createElement("li");
-                var bboxParagraph = document.createElement("p");
+            bboxCoordsArray.forEach( (bboxCoords) => {
+                Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
+                    var bboxListItem = document.createElement("li");
+                    var bboxParagraph = document.createElement("p");
 
-                bboxParagraph.innerText = bboxValue;
-                bboxListItem.appendChild(bboxParagraph);
-                bboxList.appendChild(bboxListItem);
-            }
+                    bboxParagraph.innerText = coordValue;
+                    bboxListItem.appendChild(bboxParagraph);
+                    bboxList.appendChild(bboxListItem);
+                })
+
+            })
         }
     })
 }
