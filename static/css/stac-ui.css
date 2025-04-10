@@ -80,6 +80,7 @@
     --opaque-light-grey: rgba(255,255,255, 0.3);
     --white-opacity-light: rgba(255, 255, 255, 0.18);
     --white-opacity-darker: rgba(255, 255, 255, 0.85);
+    --red-opacity-light: rgba(178, 0, 2, 0.25);
     --red-opacity-mid: rgba(178, 0, 2, 0.50);
     --primary-opacity-light: rgba(48, 79, 254, 0.12);
     --primary-opacity-midlight: rgba(48, 79,245, 0.35);
@@ -2608,6 +2609,45 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-right: 20px;
 }
 
+.top-right-legend-panel{
+    width: 100px;
+}
+
+.legend-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.margin-legend{
+    margin-right: 5px;
+}
+
+.bbox-legend-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.bbox-legend-colour{
+    background-color: blue;
+    width: 30px;
+    height: 5px;
+}
+
+.polygon-legend-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.polygon-legend-colour{
+    background-color: var(--red-opacity-light);
+    width: 30px;
+    height: 5px;
+}
+
 .div-dataset-details-header{
     display: flex;
     flex-direction: row;
@@ -2690,10 +2730,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-bottom-width: 1px;
     border-bottom-color: var(--indigo250-opacity-light);
     padding-bottom: 19px;
-}
-
-.div-dataset-extension-details{
-
 }
 
 .dataset-details-title{
