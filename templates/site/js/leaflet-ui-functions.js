@@ -42,6 +42,10 @@ function createMap(map, addWidgets){
         });
     }
 
+    if(addWidgets == false){
+        addLegend(map);
+    }
+
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
     createCursorTooltip(map, addWidgets);
 
@@ -724,12 +728,100 @@ function formatGeoJSON(shapeDict){
 
 function addSTACPolygon(polygonLatLngsArray){
     var map = mapsPlaceholder[0];
-    var stacPolygon = L.polygon(polygonLatLngsArray, {color: 'red'}).addTo(map);
+    var colourOptions = {
+        color:'red',
+        weight: 0
+    };
+
+    var stacPolygon = L.polygon(polygonLatLngsArray, colourOptions).addTo(map);
+
     map.fitBounds(stacPolygon.getBounds());
 }
 
 function addSTACBBox(bboxLatLngsArray){
     var map = mapsPlaceholder[0];
-    var stacBBox = L.rectangle(bboxLatLngsArray, {color: 'blue'}).addTo(map);
-    map.fitBounds(stacBBox);
+    var cornersArray = [];
+    var colourOptions = {
+        color: 'blue',
+        fillOpacity: 0
+    };
+
+    if(bboxLatLngsArray.length == 4){
+        cornersArray = [
+            [bboxLatLngsArray[0], bboxLatLngsArray[1]],
+            [bboxLatLngsArray[2], bboxLatLngsArray[3]]
+        ]
+    }
+
+    if(bboxLatLngsArray.length == 6){
+        cornersArray = [
+            [bboxLatLngsArray[0], bboxLatLngsArray[1]],
+            [bboxLatLngsArray[3], bboxLatLngsArray[4]]
+        ]
+    }
+
+    var bbox = L.rectangle(cornersArray, colourOptions).addTo(map);
+
+    map.fitBounds(cornersArray);
+    return bbox.getLatLngs();
+
+}
+
+function addLegend(map){
+    L.Control.GeometryLegend = L.Control.extend({
+        options: {
+            position: "topright"
+        },
+
+        initialize: function (options) {
+            L.setOptions(this, options);
+            this._panelOnLeftSide = (this.options.position.indexOf("left") !== -1);
+        },
+
+        onAdd: function () {
+            var legend = this.createPanel();
+            return legend;
+
+        },
+        createPanel: function () {
+
+            var topRightPanel = this._panel = L.DomUtil.create('div');
+            topRightPanel.id = "topRightPanel";
+
+            var legendContainer = L.DomUtil.create('div', 'legend-container', topRightPanel);
+            L.DomUtil.addClass(legendContainer, 'leaflet-bar');
+            legendContainer.id = "legendContainer";
+
+            var bboxLegendContainer = L.DomUtil.create('div', 'bbox-legend-container', legendContainer);
+            bboxLegendContainer.id = "bboxLegendContainer";
+
+            var bboxLegendColour = L.DomUtil.create('div', 'bbox-legend-colour', bboxLegendContainer);
+            L.DomUtil.addClass(bboxLegendColour, 'margin-legend');
+
+            var bboxLegendText = L.DomUtil.create('p', 'subtitle-1', bboxLegendContainer);
+            L.DomUtil.addClass(bboxLegendText, 'margin-unset');
+            bboxLegendText.innerText = "BBox";
+
+            var polygonLegendContainer = L.DomUtil.create('div', 'polygon-legend-container', legendContainer);
+            polygonLegendContainer.id = "polygonLegendContainer";
+
+            var polygonLegendColour = L.DomUtil.create('div', 'polygon-legend-colour', polygonLegendContainer);
+            L.DomUtil.addClass(polygonLegendColour, 'margin-legend');
+
+            var polygonLegendText = L.DomUtil.create('p', 'subtitle-1', polygonLegendContainer);
+            L.DomUtil.addClass(polygonLegendText, 'margin-unset');
+            polygonLegendText.innerText = "Polygon";
+
+            if (this._panelOnLeftSide) {
+                L.DomUtil.addClass(topRightPanel, 'left');
+            } else {
+                L.DomUtil.addClass(topRightPanel, 'right');
+            }
+
+            return topRightPanel;
+        }
+    })
+
+    var legend = new L.Control.GeometryLegend(map);
+    legend.addTo(map);
 }
