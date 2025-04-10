@@ -787,8 +787,6 @@ function populateDatasetDetails(features){
             var bboxList = document.getElementById("datasetBBoxList");
 
             var bboxCoordsArray = addSTACBBox(featureValue);
-            console.log("bboxCoords");
-            console.log(bboxCoordsArray);
 
             bboxCoordsArray.forEach( (bboxCoords) => {
                 Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
