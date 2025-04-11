@@ -453,11 +453,11 @@ function populateDatasetDetails(features){
     var extensionName;
 
 
-    var datasetMetadataContainer = document.getElementById("datasetMetadataContainer");
-    var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
+    var datasetMetadataContainer = document.getElementById("datasetMetadataList");
+    //var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
     var metadataBody = document.createElement("div");
 
-    datasetMetadataContainer.appendChild(metadataHeader);
+    //datasetMetadataContainer.appendChild(metadataHeader);
     datasetMetadataContainer.appendChild(metadataBody);
 
     var datasetID;
