@@ -125,7 +125,18 @@
 
                             </div>
                             <div id="datasetMapContainer" class="map"></div>
-                            <div id="datasetMetadataContainer"></div>
+                            <div id="datasetMetadataContainer">
+                                {% with %}
+                                    {% set dropdown_type = "dropdown_list_panel" %}
+                                    {% set dropdown_button_id = "datasetMetadataButton" %}
+                                    {% set dropdown_list_panel_link_id = "datasetMetadataLabel" %}
+                                    {% set dropdown_list_id  = "datasetMetadataList"%}
+                                    {% set panel_expanded = "true" %}
+                                    {% set dropdown_show = "show" %}
+                                    {% set dropdown_label_text = "Metadata" %}
+                                    {% include "partials/dropdown-panel.html" %}
+                                {% endwith %}
+                            </div>
                             <div id="datasetNodeContainer"></div>
 
                         </div>
