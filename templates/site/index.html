@@ -32,46 +32,44 @@
             {% endwith %}
         </div>
         <div class="content-search-right">
-            <div class="content-search-title">
-                <h5>Search <span id="titleSearchType" class="content-search-title-type"></span></h5>
-            </div>
-            <div class="content-search-description">
-                <p class="body-1">
-                    Filter by date range to focus on specific timeframes,location to narrow down your search area,
-                    and keywords relevant to the type of imagery or dataset. Additional options, like cloud cover and
-                    sensor type, let you further customize your results to meet quality and relevance standards.
-                </p>
-            </div>
-            <div id="searchJSON">
-                My Search
-            </div>
-            <div id="searchResultsNavigation" class="search-results-nav">
-                <div>
-                    {% with %}
-                        {% set button_type = "button_lg_nav_previous" %}
-                        {% set button_id = "searchResultsPrevious" %}
-                        {% include "partials/button.html" %}
-                    {% endwith %}
-
-                    {% with %}
-                        {% set button_type = "button_sm_nav" %}
-                        {% set button_label = "First" %}
-                        {% set button_id = "searchResultsFirst" %}
-                        {% include "partials/button.html" %}
-                    {% endwith %}
+            <div id="searchNavContainer" class="row">
+                <div class="content-search-title">
+                    <h5>Search <span id="titleSearchType" class="content-search-title-type"></span></h5>
                 </div>
-            <div>
-                {% with %}
-                    {% set button_type = "button_lg_nav_next" %}
-                    {% set button_id = "searchResultsNext" %}
-                    {% include "partials/button.html" %}
-                {% endwith %}
-            </div>
+                <div class="content-search-description">
+                    <p class="body-1">
+                        Filter by date range to focus on specific timeframes,location to narrow down your search area,
+                        and keywords relevant to the type of imagery or dataset. Additional options, like cloud cover and
+                        sensor type, let you further customize your results to meet quality and relevance standards.
+                    </p>
+                </div>
+                <div id="searchJSON">
+                    My Search
+                </div>
+                <div id="searchResultsNavigation" class="search-results-nav">
+                    <div>
+                        {% with %}
+                            {% set button_type = "button_lg_nav_previous" %}
+                            {% set button_id = "searchResultsPrevious" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
 
-            </div>
+                        {% with %}
+                            {% set button_type = "button_sm_nav" %}
+                            {% set button_label = "First" %}
+                            {% set button_id = "searchResultsFirst" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
+                    <div>
+                        {% with %}
+                            {% set button_type = "button_lg_nav_next" %}
+                            {% set button_id = "searchResultsNext" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
 
-            <div>
-                Datasets Found
+                </div>
             </div>
 
             <div class="row">
@@ -89,7 +87,6 @@
                                 <div id="datasetName"></div>
                             </div>
 
-
                             <div id="datasetAssetsContainer">
                                 {% with %}
                                     {% set dropdown_type = "dropdown_list_panel" %}
@@ -101,12 +98,9 @@
                                     {% set dropdown_label_text = "Assets" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
-
                             </div>
                             <div id="datasetGeneralContainer"></div>
-                            <div id="datasetVariablesContainer">
 
-                            </div>
                             <div id="datasetBBoxContainer">
                                 {% with %}
                                     {% set dropdown_type = "dropdown_list_panel" %}
@@ -118,13 +112,10 @@
                                     {% set dropdown_label_text = "BBox" %}
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
-
                             </div>
-                            <div id="datasetDimensionsContainer">
 
-
-                            </div>
                             <div id="datasetMapContainer" class="map"></div>
+
                             <div id="datasetMetadataContainer">
                                 {% with %}
                                     {% set dropdown_type = "dropdown_list_panel" %}
@@ -137,10 +128,7 @@
                                     {% include "partials/dropdown-panel.html" %}
                                 {% endwith %}
                             </div>
-                            <div id="datasetNodeContainer"></div>
-
                         </div>
-
                     </div>
                 </div>
             </div>
