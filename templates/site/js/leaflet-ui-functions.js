@@ -741,6 +741,7 @@ function addSTACPolygon(polygonLatLngsArray){
 function addSTACBBox(bboxLatLngsArray){
     var map = mapsPlaceholder[0];
     var cornersArray = [];
+    var tooltipDirection = "";
     var colourOptions = {
         color: 'blue',
         fillOpacity: 0
@@ -761,10 +762,29 @@ function addSTACBBox(bboxLatLngsArray){
     }
 
     var bbox = L.rectangle(cornersArray, colourOptions).addTo(map);
+    var bboxLatLngs = bbox.getLatLngs();
+
+    bboxLatLngs.forEach( (bboxCoords) => {
+        Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
+            if(coordValue.lng < 0){
+                tooltipDirection = "left";
+            }
+            else{
+                tooltipDirection = "right";
+            }
+
+            var tooltip = L.tooltip(
+                coordValue,
+                {
+                    content:coordValue.toString(),
+                    direction: tooltipDirection
+                }
+            ).addTo(map);
+        })
+    })
 
     map.fitBounds(cornersArray);
-    return bbox.getLatLngs();
-
+    return bboxLatLngs
 }
 
 function addLegend(map){
