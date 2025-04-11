@@ -422,6 +422,7 @@ function hideDetails(){
 function swapDatasetDetails(){
     var searchResultContainer = document.getElementById("searchResults");
     var datasetDetailsContainer = document.getElementById("datasetDetails");
+    var searchNavContainer = document.getElementById("searchNavContainer");
 
     if(searchResultContainer.classList.contains("display-none")){
         searchResultContainer.classList.remove("display-none");
@@ -435,6 +436,13 @@ function swapDatasetDetails(){
     }
     else{
         datasetDetailsContainer.classList.add("display-none");
+    }
+
+    if(!searchNavContainer.classList.contains("display-none")){
+        searchNavContainer.classList.add("display-none");
+    }
+    else{
+        searchNavContainer.classList.remove("display-none");
     }
 }
 
@@ -619,7 +627,7 @@ function populateDatasetDetails(features){
     Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
 
         if(featureKey == "id"){
-
+            datasetName.innerHTML = "";
             datasetID = featureValue;
             /*Add asset title to details section main title*/
             var datasetTitle = document.createElement("h4");
@@ -785,6 +793,7 @@ function populateDatasetDetails(features){
 
        if(featureKey == "bbox") {
             var bboxList = document.getElementById("datasetBBoxList");
+            bboxList.innerHTML = "";
 
             var bboxCoordsArray = addSTACBBox(featureValue);
 
