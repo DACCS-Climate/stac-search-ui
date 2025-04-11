@@ -2579,7 +2579,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .content-search-left{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
 }
 
 .search-results-nav{
