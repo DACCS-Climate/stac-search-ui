@@ -2582,6 +2582,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: start;
 }
 
+.content-search-right{
+    width:100%;
+}
+
 .search-results-nav{
     display: flex;
     justify-content: space-between;
@@ -2608,6 +2612,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .container-asset-details{
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.p-bbox-coordinate{
+    padding-left: 13px;
 }
 
 .legend-container{
@@ -2690,6 +2698,14 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .div-metadata-title{
+    width: 100%;
+    min-width: 240px;
+    background-color: var(--indigo-50);
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.div-metadata-type{
     width: 20%;
     min-width: 240px;
 }
