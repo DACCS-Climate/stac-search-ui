@@ -284,8 +284,7 @@ function populateSearchResults(json){
             var linkDatasetTitle = document.createElement("a");
             var datasetTitleArray;
             linkDatasetTitle.setAttribute("role", "button");
-            console.log("search result");
-            console.log(featureValue);
+
             linkDatasetTitle.onclick = function(){
                 swapDatasetDetails();
                 populateDatasetDetails(featureValue);
@@ -478,8 +477,6 @@ function populateDatasetDetails(features){
          if ("properties" in features) {
             //TODO Delete redoakJSON variable for production
             var redoakJSON = testDatasetProperties();
-            //console.log("redoakJSON");
-            //console.log(redoakJSON);
 
             var metadataTable = document.createElement("table");
 
@@ -528,12 +525,15 @@ function populateDatasetDetails(features){
 
                                 if(propertyKey.includes(":variables")) {
                                     metadataRow.classList.add("div-variable-row");
+                                    metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
                                 }
                                 else if(propertyKey.includes(":dimensions")){
                                     metadataRow.classList.add("div-dimension-row", "border-dataset-div-extension-details");
+                                    metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
                                 }
                                 else{
                                     metadataRow.classList.add("div-metadata-row");
+                                    metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-type", "text-dataset-capitalize");
                                 }
 
                                 metadataValueCellDiv.classList.add("body-1");
@@ -541,12 +541,10 @@ function populateDatasetDetails(features){
                                 metadataSubHeaderRow.innerText = extensionName;
 
                                 metadataTitleCellDiv.innerText = metadataKeyArray[1];
-                                metadataTitleCellDiv.classList.add("subtitle-1", "div-metadata-title", "text-dataset-capitalize");
+
                                 metadataRow.appendChild(metadataTitleCellDiv);
 
 
-                                console.log("propertyValueType")
-                                console.log(typeof  propertyValue);
                                 if(typeof  propertyValue == "object"){
 
                                     Object.entries(propertyValue).forEach( ([extensionObjectKey, extensionObjectValue]) => {
@@ -646,8 +644,7 @@ function populateDatasetDetails(features){
                 //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
             //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
             Object.entries(redoakJSON["assets"]).forEach(([assetKey, assetValue]) => {
-                console.log("redoakJSON");
-            console.log(redoakJSON);
+
                 var assetID = datasetID + assetKey;
                 var assetListItem = document.createElement("li");
                 var assetDiv = document.createElement("div");
@@ -801,6 +798,7 @@ function populateDatasetDetails(features){
                 Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
                     var bboxListItem = document.createElement("li");
                     var bboxParagraph = document.createElement("p");
+                    bboxParagraph.classList.add("p-bbox-coordinate");
 
                     bboxParagraph.innerText = coordValue;
                     bboxListItem.appendChild(bboxParagraph);
