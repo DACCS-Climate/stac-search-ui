@@ -43,7 +43,7 @@
                         sensor type, let you further customize your results to meet quality and relevance standards.
                     </p>
                 </div>
-                <div id="searchJSON">
+                <div id="mySearchJSON">
                     My Search
                 </div>
                 <div id="searchResultsNavigation" class="search-results-nav">
@@ -138,6 +138,7 @@
             document.addEventListener("DOMContentLoaded", function(){
                 hideDetails();
                 getSTACSearchResults("");
+                buildMySearchDisplay();
 
             })
         </script>
