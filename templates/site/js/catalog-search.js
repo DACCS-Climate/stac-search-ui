@@ -152,7 +152,7 @@ function removeDefaultSearchAttributes(inputBox){
 }
 
 function formatSearch(queryableItemKeyType, queryableItemKeyValue){
-    var searchJSONDisplay = document.getElementById("searchJSON");
+    var searchJSONDisplay = document.getElementById("mySearchJSON");
     var searchJSON = {
      "properties": {
          [queryableItemKeyType]: queryableItemKeyValue
@@ -166,7 +166,24 @@ function formatSearch(queryableItemKeyType, queryableItemKeyValue){
 function filterSTACSearchResults(){
     var productionURL = "{{ stac_catalog_url }}/search";
     var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search";
-    //var searchJSON = JSON.parse(document.getElementById("searchJSON").innerText);
+    //var searchJSON = JSON.parse(document.getElementById("mySearchJSON").innerText);
+
+    var filterJSON = {
+  "filter": {
+    "op" : "and",
+    "args": [
+      {
+        "op": "=",
+        "args": [ { "property": "id" }, "LC08_L1TP_060247_20180905_20180912_01_T1_L1TP" ]
+      },
+      {
+        "op": "=",
+        "args" : [ { "property": "collection" }, "landsat8_l1tp" ]
+      }
+    ]
+  }
+}
+
     var testSearch = '{"type":"FeatureCollection","features":[{"properties":{"enum":"Surface Air Pressure "}}]}';
     var testSearch = '{"properties":{"enum":"Surface Temperature"}}';
 
@@ -178,6 +195,7 @@ function filterSTACSearchResults(){
         method: "POST",
         body: testSearch
     }).then(response => response.json()).then( json => {
+        //Keep console log for testing filter functions
         console.log(json);
     })
 }
@@ -236,8 +254,6 @@ function addSearchResultNavigation(json, searchHomeURL){
 function populateSearchResults(json){
     //TODO Delete redoakJSON variable for production
     var redoakJSON =  testSTACSearchGeneralResults();
-    console.log("redoak search results");
-    console.log(redoakJSON);
 
     var searchResultDiv = document.getElementById("searchResults");
     if(searchResultDiv.innerHTML != "")
@@ -369,6 +385,7 @@ function populateSearchResults(json){
             var linkDatasetTitle = document.createElement("a");
             var datasetTitleArray;
             linkDatasetTitle.setAttribute("role", "button");
+            //Keep these console statements until search results section done
             console.log("search result");
             console.log(featureValue);
             linkDatasetTitle.onclick = function(){
@@ -468,10 +485,6 @@ function populateDatasetDetails(features){
     datasetMetadataContainer.appendChild(metadataBody);
 
     var datasetID;
-
-    console.log("dataset features");
-    console.log(features);
-
 
 
          if ("properties" in features) {
@@ -852,14 +865,12 @@ function getSTACSearchResults(url){
         stacSearchURL = stacSearchURL + decodeURIComponent(queryParams);
     }
 
-    console.log(stacSearchURL);
 
     fetch(stacSearchURL, {
         method: "GET"
 
 
     }).then(response => response.json()).then( json => {
-        console.log(json);
         addSearchResultNavigation(json, stacSearchURL);
         populateSearchResults(json);
     })
@@ -926,3 +937,34 @@ function testSTACSearchGeneralResults(){
     return testJSON;
 }
 
+function buildMySearchDisplay(){
+    var mySearchDiv = document.getElementById("mySearchJSON");
+    var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
+    var mySearchBody = document.createElement("div");
+
+    var searchFilterDataset = document.createElement("div");
+    var searchFilterDatasetHeader = document.createElement("div");
+    var searchFilterDatasetTitle = document.createElement("h5");
+    var searchFilterDatasetBody = document.createElement("div");
+    var searchFilterDatasetHidden = document.createElement("div");
+    
+    searchFilterDatasetTitle.classList.add("text-all-caps");
+    
+    searchFilterDatasetTitle.innerText = "Datasets";
+    searchFilterDatasetBody.id="searchFilterDatasetBody";
+
+    searchFilterDatasetHidden.id="searchFilterDatasetHidden";
+
+    mySearchDiv.appendChild(mySearchHeader);
+    mySearchDiv.appendChild(mySearchBody);
+
+    mySearchBody.appendChild(searchFilterDataset);
+    searchFilterDataset.appendChild(searchFilterDatasetHeader);
+    searchFilterDataset.appendChild(searchFilterDatasetBody);
+    searchFilterDataset.appendChild(searchFilterDatasetHidden);
+
+
+
+
+
+}
