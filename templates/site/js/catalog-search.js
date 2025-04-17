@@ -796,7 +796,12 @@ function populateDatasetDetails(features){
         if(featureKey == "geometry"){
             //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
+            var geometryContainer = document.getElementById("datasetGeometryContainer");
+            var leafletMapContainer = document.getElementById("datasetMapContainer");
+            var geometryHeader = datasetDetailsHeaderTemplate("Geometries");
             var longitudeRange360;
+
+            geometryContainer.insertBefore(geometryHeader, leafletMapContainer);
 
             //TODO Uncomment 'Object.keys(featureValue...' line below and delete 'Object.keys(redoakJSON...' using redoakJSON on line after for production
             //if(Object.keys(featureValue["geometry"]).includes("coordinates")){
