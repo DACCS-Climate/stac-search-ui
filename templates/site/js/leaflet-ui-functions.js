@@ -73,6 +73,7 @@ function clearText(elementID){
 function createCursorTooltip(map, addWidgets){
 
     var tooltip = L.tooltip();
+    var latLng;
 
     map.on('mouseover', function(event){
         tooltip.setLatLng(event.latlng)
@@ -726,15 +727,47 @@ function formatGeoJSON(shapeDict){
     }
 }
 
-function addSTACPolygon(polygonLatLngsArray){
+
+function checkPolygonLongitudeRange(polygonLatLngArray){
+    for(latLng of polygonLatLngArray){
+        for(coordinate of latLng){
+            if(coordinate[0] > 180){
+                return true;
+            }
+
+            if(coordinate[0] < 0){
+                return false;
+            }
+        }
+    }
+}
+
+
+
+function addSTACPolygon(polygonLatLngArray, longitudeRange360){
+    var leafletLatLngArray = [];
+    var leafletLngCoord;
     var map = mapsPlaceholder[0];
     var colourOptions = {
         color:'red',
         weight: 0
     };
+    
+    if(longitudeRange360){
+        for(latLng of polygonLatLngArray){
+            for(coordinate of latLng){
 
-    var stacPolygon = L.polygon(polygonLatLngsArray, colourOptions).addTo(map);
-
+                if(coordinate[0] > 180){
+                    leafletLngCoord = coordinate[0] - 360;
+                    leafletLatLngArray.push([coordinate[1], leafletLngCoord]);
+                }
+                else{
+                    leafletLatLngArray.push([coordinate[1], coordinate[0]]);
+                }
+            }
+        }
+    }
+    var stacPolygon = L.polygon(leafletLatLngArray, colourOptions).addTo(map);
     map.fitBounds(stacPolygon.getBounds());
 }
 
@@ -742,30 +775,60 @@ function addSTACBBox(bboxLatLngsArray){
     var map = mapsPlaceholder[0];
     var cornersArray = [];
     var tooltipDirection = "";
+    var corner1Lat;
+    var corner1Long;
+    var corner2Lat;
+    var corner2Long;
     var colourOptions = {
         color: 'blue',
         fillOpacity: 0
     };
 
+    if(bboxLatLngsArray[0] > 180) {
+        corner1Lat  = bboxLatLngsArray[1];
+        corner1Long = bboxLatLngsArray[0] - 360;
+    }
+    else{
+        corner1Lat  = bboxLatLngsArray[1];
+        corner1Long = bboxLatLngsArray[0];
+    }
+
     if(bboxLatLngsArray.length == 4){
-        cornersArray = [
-            [bboxLatLngsArray[0], bboxLatLngsArray[1]],
-            [bboxLatLngsArray[2], bboxLatLngsArray[3]]
-        ]
+        corner2Lat = bboxLatLngsArray[3];
+        if(bboxLatLngsArray[2] > 180)
+        {
+
+            corner2Long = bboxLatLngsArray[2] - 360;
+        }
+        else{
+
+            corner2Long = bboxLatLngsArray[2];
+        }
     }
 
     if(bboxLatLngsArray.length == 6){
-        cornersArray = [
-            [bboxLatLngsArray[0], bboxLatLngsArray[1]],
-            [bboxLatLngsArray[3], bboxLatLngsArray[4]]
-        ]
+        corner2Lat = bboxLatLngsArray[4];
+        if(bboxLatLngsArray[3] > 180)
+        {
+            corner2Long = bboxLatLngsArray[3] - 360;
+        }
+        else{
+            corner2Long = bboxLatLngsArray[3];
+        }
     }
+
+    cornersArray = [
+            [corner1Lat, corner1Long],
+            [corner2Lat, corner2Long]
+        ]
 
     var bbox = L.rectangle(cornersArray, colourOptions).addTo(map);
     var bboxLatLngs = bbox.getLatLngs();
 
     bboxLatLngs.forEach( (bboxCoords) => {
         Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
+
+            var displayCoordinate = [coordValue.lat, coordValue.lng];
             if(coordValue.lng < 0){
                 tooltipDirection = "left";
             }
@@ -776,7 +839,7 @@ function addSTACBBox(bboxLatLngsArray){
             var tooltip = L.tooltip(
                 coordValue,
                 {
-                    content:coordValue.toString(),
+                    content:displayCoordinate.toString(),
                     direction: tooltipDirection
                 }
             ).addTo(map);
@@ -830,7 +893,7 @@ function addLegend(map){
 
             var polygonLegendText = L.DomUtil.create('p', 'subtitle-1', polygonLegendContainer);
             L.DomUtil.addClass(polygonLegendText, 'margin-unset');
-            polygonLegendText.innerText = "Polygon";
+            polygonLegendText.innerText = "Geometry";
 
             if (this._panelOnLeftSide) {
                 L.DomUtil.addClass(topRightPanel, 'left');
