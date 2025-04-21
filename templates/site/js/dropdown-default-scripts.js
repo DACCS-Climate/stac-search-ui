@@ -139,10 +139,31 @@ function setCheckboxFilterJSON(listULID){
 }
 
 function populateDatasetsFilter(listULID){
+    var searchFilterDatasetsBody = document.getElementById("searchFilterDatasetsBody");
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]');
 
+    searchFilterDatasetsBody.innerText = "";
+    searchFilterDatasetsBody.classList.add("div-datasets-filter");
 
+        if(checkboxArray[0].checked == true) {
+        for(let i = 1; i < checkboxArray.length; i++){
+            var datasetEntry = document.createElement("p");
+            datasetEntry.classList.add("body-1");
+            datasetEntry.innerText = checkboxArray[i].value;
+            searchFilterDatasetsBody.appendChild(datasetEntry);
+        }
+    }
+    else{
+        for (checkbox of checkboxArray) {
+            if(checkbox.checked){
+                var datasetEntry = document.createElement("p");
+                datasetEntry.classList.add("body-1");
+                datasetEntry.innerText = checkbox.value;
+                searchFilterDatasetsBody.appendChild(datasetEntry);
+            }
+        }
+    }
 }
 
 function populateFrequencyFilter(listULID){
