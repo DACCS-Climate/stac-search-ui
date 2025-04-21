@@ -261,7 +261,7 @@ function populateSearchResults(json){
         searchResultDiv.innerHTML = "";
     }
     //TODO Uncomment for production
-    /*
+
     var searchResultTable = document.createElement("table");
     var tableHeader = document.createElement("thead");
     var tableTitleFormatCell = document.createElement("td");
@@ -287,7 +287,7 @@ function populateSearchResults(json){
     searchResultDiv.appendChild(searchResultTable);
 
 
-    Object.entries(redoakJSON.features).forEach( ([featureKey, featureValue]) => {
+    Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
         var rowSearchResult = document.createElement("tr");
         tableBody.appendChild(rowSearchResult);
 
@@ -346,10 +346,11 @@ function populateSearchResults(json){
         rowSearchResult.appendChild(cellFormat);
 
     })
-    */
+
 
     //TODO Remove testing code for production
     //Testing Code Below
+    /*
 
     var searchResultTable = document.createElement("table");
     var tableHeader = document.createElement("thead");
@@ -424,7 +425,7 @@ function populateSearchResults(json){
         })
         rowSearchResult.appendChild(cellFormat);
 
-    })
+    })*/
 
 
 }
@@ -495,9 +496,9 @@ function populateDatasetDetails(features){
 
             if("stac_extensions" in features) {
                 //TODO Uncomment for loop start 'for(extension of feature["stac_extensions"])' below and delete 'for(extension of redoakJSON["stac_extensions"])' for production
-                //for (extension of features["stac_extensions"]) {
+                for (extension of features["stac_extensions"]) {
 
-                for (extension of redoakJSON["stac_extensions"]) {
+                //for (extension of redoakJSON["stac_extensions"]) {
                     var metadataExtensionContainer = document.createElement("div");
                     var metadataSubHeaderRow = document.createElement("div");
                     var metadataSubBody = document.createElement("div");
@@ -518,8 +519,8 @@ function populateDatasetDetails(features){
 
 
                     //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
-                    //Object.entries(feature["properties"]).forEach(([propertyKey, propertyValue]) => {
-                    Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
+                    Object.entries(features["properties"]).forEach(([propertyKey, propertyValue]) => {
+                    //Object.entries(redoakJSON["properties"]).forEach(([propertyKey, propertyValue]) => {
 
                         if (propertyKey.includes(":")) {
                             var extensionKeyArray = propertyKey.split(":");
@@ -641,8 +642,8 @@ function populateDatasetDetails(features){
 
 
     //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
-    //Object.entries(features).forEach(([featureKey, featureValue]) => {
-    Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
+    Object.entries(features).forEach(([featureKey, featureValue]) => {
+    //Object.entries(redoakJSON).forEach(([featureKey, featureValue]) => {
 
         if(featureKey == "id"){
             datasetName.innerHTML = "";
@@ -662,8 +663,8 @@ function populateDatasetDetails(features){
          //TODO Delete redoakJSON variable for production
             var redoakJSON =  testDatasetProperties();
                 //TODO Uncomment Object.entries line below and delete Object.entries using redoakJSON on line after for production
-            //Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
-            Object.entries(redoakJSON["assets"]).forEach(([assetKey, assetValue]) => {
+            Object.entries(featureValue).forEach( ([assetKey, assetValue]) => {
+            //Object.entries(redoakJSON["assets"]).forEach(([assetKey, assetValue]) => {
 
                 var assetID = datasetID + assetKey;
                 var assetListItem = document.createElement("li");
@@ -700,7 +701,7 @@ function populateDatasetDetails(features){
 
 
                 if(assetKey == "HTTPServer" || assetKey == "NetcdfSubset") {
-                    /*Set href attribute for links meant to be downloaded*/
+                    /*Sets href attribute for links meant to be downloaded*/
                     assetLink.href = assetValue.href;
                     downloadIconLink.href = assetValue.href;
 
@@ -708,7 +709,7 @@ function populateDatasetDetails(features){
                     assetTitle.innerText = assetKey;
                     assetDiv.appendChild(assetTitle);
 
-                    /*Set attributes for Bootstrap tooltips for hover on the download icon and link text*/
+                    /*Sets attributes for Bootstrap tooltips for hover on the download icon and link text*/
                     var downloadIconHoverTooltip = new bootstrap.Tooltip(downloadIconLink, {
                         "trigger": "hover",
                         "placement": "top",
@@ -804,14 +805,15 @@ function populateDatasetDetails(features){
             geometryContainer.insertBefore(geometryHeader, leafletMapContainer);
 
             //TODO Uncomment 'Object.keys(featureValue...' line below and delete 'Object.keys(redoakJSON...' using redoakJSON on line after for production
-            //if(Object.keys(featureValue["geometry"]).includes("coordinates")){
-            if(Object.keys(redoakJSON["geometry"]).includes("coordinates")){
+            if(Object.keys(featureValue).includes("coordinates")){
+            //if(Object.keys(redoakJSON["geometry"]).includes("coordinates")){
 
                 //TODO Uncomment 'addSTACPolygon(featureValue' and 'longitudeRange360 ...featureValue[geometry] ... 'line below and delete 'addSTACPolygon(redoakJSON...' using redoakJSON on line after for production
-                //addSTACPolygon(featureValue["geometry"]["coordinates"]);
-                //longitudeRange360 = checkCoordinateRange(featureValue["geometry"]["coordinates"]);
-                longitudeRange360 = checkPolygonLongitudeRange(redoakJSON["geometry"]["coordinates"]);
-                addSTACPolygon(redoakJSON["geometry"]["coordinates"], longitudeRange360);
+
+                longitudeRange360 = checkPolygonLongitudeRange(featureValue["coordinates"]);
+                addSTACPolygon(featureValue["coordinates"], longitudeRange360);
+                //longitudeRange360 = checkPolygonLongitudeRange(redoakJSON["geometry"]["coordinates"]);
+                //addSTACPolygon(redoakJSON["geometry"]["coordinates"], longitudeRange360);
             }
         }
 
@@ -856,7 +858,8 @@ function getSTACSearchResults(url){
         stacSearchURL = url;
     }
     else{
-        stacSearchURL = testingURL;
+        //TODO Change testingURL to productionURL for production
+        stacSearchURL = productionURL;
     }
 
     if(!(stacSearchURL.includes("sortby"))){
