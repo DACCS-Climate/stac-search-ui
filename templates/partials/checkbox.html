@@ -15,6 +15,16 @@
         collectionKeys = Object.keys(json.collections);
 
         collectionKeys.forEach(key => {
+            var collectionProperties = json.collections[key].summaries;
+            var licenseKey = "";
+            var licenseKeyArray;
+            Object.entries(collectionProperties).forEach( ([propertyKey, propertyValue]) => {
+
+                if(propertyKey.includes('license')){
+                    licenseKey = propertyKey;
+                }
+            })
+            licenseKeyArray = licenseKey.split(":");
 
 
             var checkboxBufferDiv = document.createElement("div");
@@ -46,11 +56,14 @@
 
             var checkbox = document.createElement("input");
             checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("collectionType", licenseKeyArray[0]);
             checkbox.id = json.collections[key].id;
             checkbox.setAttribute("value", json.collections[key].id);
             checkbox.addEventListener('change', function(){
                 checkCheckboxCount('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
                 setSearchPageTitle('{{ dropdown_default_UL_id }}', "titleSearchType");
+                populateDatasetsFilter('{{ dropdown_default_UL_id }}');
+                setCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
             })
 
             if('{{ direction }} '== "left"){
