@@ -332,6 +332,11 @@ h6{
     display: none;
 }
 
+/*Text*/
+.text-all-caps{
+    text-transform: uppercase;
+}
+
 /* Custom default button */
 .btn-light,
 .btn-light:hover,
@@ -2584,6 +2589,26 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .content-search-right{
     width:100%;
+}
+
+.div-search-filter-container > div:not(:last-child){
+    margin-right: 55px;
+}
+
+.text-colour-search-filter{
+    color: var(--gray-700);
+}
+
+.div-my-search-body{
+    min-height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.div-datasets-filter{
+    display: flex;
+    flex-direction: column;
 }
 
 .search-results-nav{
