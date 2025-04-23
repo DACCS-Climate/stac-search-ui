@@ -1,7 +1,6 @@
 function initializeTimepicker(timepickerID, startTime, endTime){
     var timepickerElement = document.getElementById(timepickerID);
-    var timepicker = "#" + timepickerID;
-        flatpickr(timepicker, {
+        flatpickr(timepickerElement, {
             enableTime: true,
             noCalendar: true,
             dateFormat: "H:i",
