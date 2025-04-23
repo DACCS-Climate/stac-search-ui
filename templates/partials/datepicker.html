@@ -12,9 +12,7 @@
 <script src="js/datepicker.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var currentDate = new Date();
-        var nextYear = currentDate.getFullYear() + 1;
-        var currentDateString = "12" + " " + "31" + " " + nextYear.toString();
+        var currentDateString = getEndDateString();
 
         initializeCalendar("{{ datepicker_id }}", "01 01 1950", currentDateString);
     })
