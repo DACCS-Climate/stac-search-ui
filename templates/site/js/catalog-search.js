@@ -984,8 +984,13 @@ function buildMySearchDisplay(){
         searchFilterTitle.innerText = category;
 
         if(category.includes("-")){
+
             searchFilterBody.id="searchFilter" + category.replace("-", "") +"Body";
             searchFilterHidden.id="searchFilter" + category.replace("-", "") + "Hidden";
+        }
+        else if(category.includes(" ")){
+            searchFilterBody.id="searchFilter" + category.replace(" ", "") +"Body";
+            searchFilterHidden.id="searchFilter" + category.replace(" ", "") + "Hidden";
         }
         else{
             searchFilterBody.id="searchFilter" + category +"Body";
