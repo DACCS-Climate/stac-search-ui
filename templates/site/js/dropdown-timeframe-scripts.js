@@ -52,11 +52,13 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var endsOnDate = datepickerEndsOn.value;
     var dateRange = "";
 
-    var startDateTimeInput = dateStart + " " + timeStart;
+    var startDateTimeInput = dateStart + " " + timeStart + " UTC";
+    var endDateTimeInput = dateEnd + " " + timeEnd + " UTC"
     console.log(startDateTimeInput);
     var startDateTime = new Date(startDateTimeInput);
+
     var startDateTimeISO = startDateTime.toISOString();
-    var endDateTime = new Date(dateEnd + timeEnd);
+    var endDateTime = new Date(endDateTimeInput);
     var endDateTimeISO = endDateTime.toISOString();
 
     if(allDay){
