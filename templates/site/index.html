@@ -31,7 +31,7 @@
                 {% include "partials/dropdown-panel.html" %}
             {% endwith %}
 
-        <div id="advancedFilters">
+        <div id="advancedFilters" class="div-advanced-filters">
 
             {% with %}
                 {% set dropdown_type = "regular_dropdown_list_frequency" %}
@@ -55,6 +55,17 @@
             {% endwith %}
 
 
+                {% with %}
+                    {% set dropdown_type = "dropdown_time_frame" %}
+                    {% set dropdown_timeframe_id = "dropdownTimeframe" %}
+                    {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
+                    {% set user_datepicker_id  = "timeframeDatePicker" %}
+                    {% set user_timepicker_id = "timeframeTimePicker" %}
+                    {% set dropdown_label_text = "Select Time Frame" %}
+                    {% include "partials/dropdown-panel.html" %}
+                {% endwith %}
+
+
             regular_dropdown_list_frequency
         </div>
 
@@ -71,9 +82,20 @@
                         sensor type, let you further customize your results to meet quality and relevance standards.
                     </p>
                 </div>
-                <div id="mySearchFilters" class="">
+                <div id="searchFilterContainer" class="div-search-filter-container">
+                    <div id="mySearchFilters" class=""> </div>
+                    <div id="searchFilterButtonContainer">
+                        {% with %}
+                            {% set button_type = "button_reg_default_alt" %}
+                            {% set button_id = "searchFilterApply" %}
+                            {% set button_label = "Apply" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
 
+
+                    </div>
                 </div>
+
                 <div id="searchResultsNavigation" class="search-results-nav">
                     <div>
                         {% with %}
@@ -156,6 +178,9 @@
                 hideDetails();
                 getSTACSearchResults("");
                 buildMySearchDisplay();
+
+                var searchFilterApplyButton = document.getElementById("searchFilterApply")
+                searchFilterApplyButton.addEventListener("click", applyMySearch);
 
             })
         </script>
