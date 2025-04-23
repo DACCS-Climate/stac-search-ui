@@ -118,7 +118,7 @@
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
         <div id="{{ dropdown_timeframe_id }}" class="dropdown {{ dropdown_library[dropdown_type]["menu_class"] }}">
 
-            <a id="{{ dropdown_timeframe_link_id }}" class="btn btn-secondary dropdown-toggle dropdown-timeframe-title {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ dropdown_timeframe_link_id }}" class="btn btn-secondary dropdown-toggle dropdown-timeframe-title {{ dropdown_library[dropdown_type]["menu_title_class"] }} " href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="false" aria-expanded="false">
                 {{ dropdown_label_text }}
             </a>
 
@@ -127,14 +127,14 @@
                     <div class="{{ dropdown_library[dropdown_type]["content_container_class"] }}">
                         <div class="{{ dropdown_library[dropdown_type]["timeframe_start_class"] }}">
                             {% with %}
-                                {% set datepicker_id = dropdown_library[dropdown_type]['datepicker_start_id'] %}
+                                {% set datepicker_id = user_datepicker_id | default(dropdown_library[dropdown_type]['datepicker_start_id']) %}
                                 {% set datepicker_label = "Start Date" %}
                                 {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
                                 {% include "partials/datepicker.html" %}
                             {% endwith %}
 
                             {% with %}
-                                {% set timepicker_id = dropdown_library[dropdown_type]['timepicker_start_id'] %}
+                                {% set timepicker_id = user_timepicker_id | default(dropdown_library[dropdown_type]['timepicker_start_id']) %}
                                 {% set timepicker_label = "Start Time" %}
                                 {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
                                 {% include "partials/timepicker.html" %}
