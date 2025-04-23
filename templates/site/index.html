@@ -59,8 +59,13 @@
                     {% set dropdown_type = "dropdown_time_frame" %}
                     {% set dropdown_timeframe_id = "dropdownTimeframe" %}
                     {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
-                    {% set user_datepicker_id  = "timeframeDatePicker" %}
-                    {% set user_timepicker_id = "timeframeTimePicker" %}
+                    {% set user_datepicker_start_id  = "timeframeStartDatePicker" %}
+                    {% set user_timepicker_start_id = "timeframeStartTimePicker" %}
+                    {% set user_datepicker_end_id  = "timeframeEndDatePicker" %}
+                    {% set user_timepicker_end_id = "timeframeEndTimePicker" %}
+                    {% set user_checkbox_allday_id = "timeframeCheckboxAllDay" %}
+                    {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
+                    {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
                     {% set dropdown_label_text = "Select Time Frame" %}
                     {% include "partials/dropdown-panel.html" %}
                 {% endwith %}
