@@ -2587,6 +2587,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: start;
 }
 
+.div-advanced-filters > div:not(:last-child){
+    margin-bottom: 10px;
+}
+
 .content-search-right{
     width:100%;
 }
