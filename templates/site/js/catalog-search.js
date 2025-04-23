@@ -316,14 +316,14 @@ function populateSearchResults(json){
         if(featureValue.properties.start_datetime){
               var cellStartDateTimeValue = document.createElement("td");
 
-              cellStartDateTimeValue.innerText = featureValue.properties.start_datetime;
+              cellStartDateTimeValue.innerText = new Date(featureValue.properties.start_datetime);
               rowSearchResult.appendChild(cellStartDateTimeValue);
         }
 
         if(featureValue.properties.end_datetime){
               var cellEndDateTimeValue = document.createElement("td");
 
-              cellEndDateTimeValue.innerText = featureValue.properties.end_datetime;
+              cellEndDateTimeValue.innerText = new Date(featureValue.properties.end_datetime);
               rowSearchResult.appendChild(cellEndDateTimeValue);
         }
 
@@ -997,8 +997,30 @@ function buildMySearchDisplay(){
         searchFilterContainer.appendChild(searchFilterHeader);
         searchFilterContainer.appendChild(searchFilterBody);
         searchFilterContainer.appendChild(searchFilterHidden);
-
-
     }
+
+
+}
+
+function applyMySearch(){
+    var productionURL = "{{ stac_catalog_url }}/search";
+    var stacSearchURL = productionURL;
+    var filterJSON = {"filter":{}};
+    var datasetFilterContainer = document.getElementById("searchFilterDatasetsHidden");
+    var datasetFilter = JSON.parse(datasetFilterContainer.innerText);
+
+    filterJSON.filter = datasetFilter;
+
+    fetch(stacSearchURL, {
+        headers:{
+                "Content-Type": "application/json",
+        },
+        method: "POST",
+        body:JSON.stringify(filterJSON)
+
+    }).then(response => response.json()).then( json => {
+        addSearchResultNavigation(json, stacSearchURL);
+        populateSearchResults(json);
+    })
 
 }
