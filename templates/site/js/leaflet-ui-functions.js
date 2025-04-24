@@ -727,38 +727,20 @@ function formatGeoJSON(shapeDict){
     }
 }
 
-
-function checkPolygonLongitudeRange(polygonLatLngArray){
-    for(latLng of polygonLatLngArray){
-        for(coordinate of latLng){
-            if(coordinate[0] > 180){
-                return true;
-            }
-
-            if(coordinate[0] < 0){
-                return false;
-            }
-        }
-    }
-}
-
-
-
-function addSTACPolygon(polygonLatLngArray, longitudeRange360){
+function addSTACPolygon(polygonLatLngArray){
     var leafletLatLngArray = [];
     var map = mapsPlaceholder[0];
     var colourOptions = {
         color:'red',
         weight: 0
     };
-    
-    if(longitudeRange360){
-        for(latLng of polygonLatLngArray){
-            for(coordinate of latLng){
-                leafletLatLngArray.push([coordinate[1], coordinate[0]]);
-            }
+
+    for(latLng of polygonLatLngArray){
+        for(coordinate of latLng){
+            leafletLatLngArray.push([coordinate[1], coordinate[0]]);
         }
     }
+
     var stacPolygon = L.polygon(leafletLatLngArray, colourOptions).addTo(map);
     map.fitBounds(stacPolygon.getBounds());
 }
