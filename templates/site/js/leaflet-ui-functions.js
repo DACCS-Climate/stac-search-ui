@@ -746,7 +746,6 @@ function checkPolygonLongitudeRange(polygonLatLngArray){
 
 function addSTACPolygon(polygonLatLngArray, longitudeRange360){
     var leafletLatLngArray = [];
-    var leafletLngCoord;
     var map = mapsPlaceholder[0];
     var colourOptions = {
         color:'red',
@@ -756,14 +755,7 @@ function addSTACPolygon(polygonLatLngArray, longitudeRange360){
     if(longitudeRange360){
         for(latLng of polygonLatLngArray){
             for(coordinate of latLng){
-
-                if(coordinate[0] > 180){
-                    leafletLngCoord = coordinate[0] - 360;
-                    leafletLatLngArray.push([coordinate[1], leafletLngCoord]);
-                }
-                else{
-                    leafletLatLngArray.push([coordinate[1], coordinate[0]]);
-                }
+                leafletLatLngArray.push([coordinate[1], coordinate[0]]);
             }
         }
     }
@@ -784,37 +776,18 @@ function addSTACBBox(bboxLatLngsArray){
         fillOpacity: 0
     };
 
-    if(bboxLatLngsArray[0] > 180) {
-        corner1Lat  = bboxLatLngsArray[1];
-        corner1Long = bboxLatLngsArray[0] - 360;
-    }
-    else{
-        corner1Lat  = bboxLatLngsArray[1];
-        corner1Long = bboxLatLngsArray[0];
-    }
+    corner1Lat  = bboxLatLngsArray[1];
+    corner1Long = bboxLatLngsArray[0];
 
     if(bboxLatLngsArray.length == 4){
         corner2Lat = bboxLatLngsArray[3];
-        if(bboxLatLngsArray[2] > 180)
-        {
+        corner2Long = bboxLatLngsArray[2];
 
-            corner2Long = bboxLatLngsArray[2] - 360;
-        }
-        else{
-
-            corner2Long = bboxLatLngsArray[2];
-        }
     }
 
     if(bboxLatLngsArray.length == 6){
         corner2Lat = bboxLatLngsArray[4];
-        if(bboxLatLngsArray[3] > 180)
-        {
-            corner2Long = bboxLatLngsArray[3] - 360;
-        }
-        else{
-            corner2Long = bboxLatLngsArray[3];
-        }
+        corner2Long = bboxLatLngsArray[3];
     }
 
     cornersArray = [
