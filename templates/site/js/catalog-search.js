@@ -938,11 +938,28 @@ function buildMySearchDisplay(){
 function applyMySearch(){
     var productionURL = "{{ stac_catalog_url }}/search";
     var stacSearchURL = productionURL;
-    var filterJSON = {"filter":{}};
-    var datasetFilterContainer = document.getElementById("searchFilterDatasetsHidden");
-    var datasetFilter = JSON.parse(datasetFilterContainer.innerText);
+    var argumentArray = [];
+    var filterJSON = {"filter":{"op":"or","args":[]}};
+    var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
+    var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
+    var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
+    var datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
+    var timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
 
-    filterJSON.filter = datasetFilter;
+
+
+    for(datasetItem of datasetFilter){
+        filterJSON["filter"].args.push(datasetItem);
+    }
+
+    for(timeframeItem of timeframeFilter){
+        filterJSON["filter"].args.push(timeframeItem);
+    }
+
+    console.log(filterJSON);
+    fullFilterHiddenContainer.innerText = JSON.stringify(filterJSON);
+    
+
 
     fetch(stacSearchURL, {
         headers:{
