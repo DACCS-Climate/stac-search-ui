@@ -166,11 +166,15 @@
                         </div>
                         <div class="div-timeframe-norepeat">
                             <p class="button margin-label-time-range">Selected Time Range</p>
+                            <div id="selectTimeRangeHidden"></div>
 
                             {% with %}
                                 {% set dropdown_type = "medium_dropdown_list" %}
+
+                                {% set used_in_timeframe_panel = true %}
+                                {% set hidden_time_range_div_id = "selectTimeRangeHidden" %}
                                 {% set container_id = "dropdownMediumContainer" %}
-                                {% set label_id = "dropdownMediumLabel" %}
+                                {% set label_id = user_dropdown_repeat_label_id | default("dropdownMediumLabel") %}
                                 {% set chevron_id = "dropdownMediumChevron" %}
                                 {% set dropdown_list_id = user_dropdown_repeat_id | default("touchMediumList") %}
                                 {% set dropdown_label_text = "Does Not Repeat" %}
@@ -227,6 +231,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             var radioNever = document.getElementById('{{ radioButtonNeverDetails["radio_id"] }}');
             var radioEndsOn = document.getElementById('{{ radioButtonEndsOnDetails["radio_id"] }}');
+            var checkboxAllDay = document.getElementById('{{ user_checkbox_allday_id }}');
             var submitTimeFrameButton = document.getElementById("submitTimeframeButton");
 
             defaultRadioState('{{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
@@ -239,6 +244,10 @@
                disableEndsOnDateInput('{{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
             });
 
+            checkboxAllDay.addEventListener('change', function(){
+               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_datepicker_end_id }}', '{{ user_timepicker_end_id }}');
+            });
+
             submitTimeFrameButton.addEventListener('click', function(){
                populateTimeframeFilter('{{ user_datepicker_start_id }}',
                    '{{ user_timepicker_start_id }}',
@@ -246,6 +255,7 @@
                    '{{ user_timepicker_end_id }}',
                    '{{ user_checkbox_allday_id }}',
                    '{{ user_dropdown_repeat_id }}',
+                   '{{ user_dropdown_repeat_label_id }}',
                    '{{ radioButtonNeverDetails["radio_id"] }}',
                    '{{ radioButtonEndsOnDetails["radio_id"] }}',
                    '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}'
