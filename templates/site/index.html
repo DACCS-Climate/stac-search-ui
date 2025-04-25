@@ -65,6 +65,7 @@
                     {% set user_timepicker_end_id = "timeframeEndTimePicker" %}
                     {% set user_checkbox_allday_id = "timeframeCheckboxAllDay" %}
                     {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
+                    {% set user_dropdown_repeat_label_id = "timeframeDropdownRepeatLabel" %}
                     {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
                     {% set dropdown_label_text = "Select Time Frame" %}
                     {% include "partials/dropdown-panel.html" %}
@@ -89,6 +90,7 @@
                 </div>
                 <div id="searchFilterContainer" class="div-search-filter-container">
                     <div id="mySearchFilters" class=""> </div>
+                    <div id="fullFilterStringContainer"></div>
                     <div id="searchFilterButtonContainer">
                         {% with %}
                             {% set button_type = "button_reg_default_alt" %}
@@ -96,8 +98,6 @@
                             {% set button_label = "Apply" %}
                             {% include "partials/button.html" %}
                         {% endwith %}
-
-
                     </div>
                 </div>
 
