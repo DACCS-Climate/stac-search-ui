@@ -943,22 +943,29 @@ function applyMySearch(){
     var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
     var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
-    var datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
-    var timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
 
+    var datasetFilter;
+    var timeframeFilter;
 
-
-    for(datasetItem of datasetFilter){
-        filterJSON["filter"].args.push(datasetItem);
+    console.log(datasetFilterHiddenContainer.innerText);
+    if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
+        datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
+        for(datasetItem of datasetFilter){
+            filterJSON["filter"].args.push(datasetItem);
+        }
     }
 
-    for(timeframeItem of timeframeFilter){
-        filterJSON["filter"].args.push(timeframeItem);
+    if(timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== "" || timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== null){
+        timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
+        for(timeframeItem of timeframeFilter){
+            filterJSON["filter"].args.push(timeframeItem);
+        }
     }
 
+    //TODO Remove console for production
     console.log(filterJSON);
     fullFilterHiddenContainer.innerText = JSON.stringify(filterJSON);
-    
+
 
 
     fetch(stacSearchURL, {
