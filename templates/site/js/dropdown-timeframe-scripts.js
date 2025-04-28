@@ -34,15 +34,19 @@ function checkboxToggleAllDay(checkboxID, timeStartID, dateEndID, timeEndID){
 
     if(checkboxAllDay.checked){
         timeStart.setAttribute('disabled', 'disabled');
-        dateEnd.setAttribute('disabled', 'disabled');
         timeEnd.setAttribute('disabled', 'disabled');
     }
     else{
         timeStart.removeAttribute('disabled');
-        dateEnd.removeAttribute('disabled');
         timeEnd.removeAttribute('disabled');
     }
 }
+
+function buildRepeatFilterString(repeatInterval){
+
+}
+
+
 
 function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepickerEndID, timepickerEndID, checkboxAllDayID, dropdownRepeatID, dropdownRepeatLabelID, radioNeverID, radioEndsOnID, datepickerEndsOnID){
     var argumentJSON = JSON.parse('{"op": "or","args" : [ ]}');
@@ -64,12 +68,28 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var radioEndsOn = document.getElementById(radioEndsOnID);
     var datepickerEndsOn = document.getElementById(datepickerEndsOnID);
 
+    var displayDateRange = document.createElement("p");
+    var displayTimeRange = document.createElement("p");
+    var displayRepeat = document.createElement("p");
+    var displayTime = "";
+    var displayRepeatValue = "";
+
+    timeFrameFilterDiv.innerText = "";
+    displayDateRange.classList.add("subtitle-1");
+    displayTimeRange.classList.add("subtitle-1");
+
+
 
     var dateStart;
     var dateEnd;
     var timeStart;
     var timeEnd;
-    var repeat;
+    var timeStartMinute;
+    var timeStartSecond;
+    var timeEndMinute;
+    var timeEndSecond;
+    var repeatInterval;
+
 
     var neverEnds = radioNever.value;
     var endsOn = radioEndsOn.value;
@@ -126,6 +146,10 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         datetimeObject.datetime = dateRange;
         filterDateTimeArgument["args"].push(datetimeObject);
         dateArgumentArray.push(filterDateTimeArgument);
+
+        displayTime = "All Day";
+
+
     }
     else{
 
@@ -135,7 +159,9 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         timeEnd = timepickerEnd.value;
 
         startDateTimeInput = dateStart + " " + timeStart + " UTC";
-        endDateTimeInput = dateEnd + " " + timeEnd + " UTC"
+        endDateTimeInput = dateEnd + " " + timeEnd + " UTC";
+
+        console.log(startDateTimeInput);
 
         startDateTime = new Date(startDateTimeInput);
         startDateTimeISO = startDateTime.toISOString();
@@ -162,7 +188,8 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
             switch(dropdownRepeatLabel.innerText){
             case "Daily":
-
+                displayRepeatValue = "Daily";
+                repeatInterval = 1;
 
                 var repeatDailyDates = [];
 
@@ -186,6 +213,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
                 break;
             case "Weekly":
+                displayRepeatValue = "Weekly";
 
                 var repeatWeeklyDates = [];
 
@@ -208,23 +236,54 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
                 break;
             case "Monthly":
-                repeat = "month";
+                displayRepeatValue = "Monthly";
                 break;
             case "Yearly":
-                repeat = "year";
+                displayRepeatValue = "Yearly";
                 break;
             case "Decade":
-                repeat = "decade";
+                displayRepeatValue = "Decade";
             case "Custom":
-                repeat = "";
+                displayRepeatValue = "";
                 break;
             case "Does Not Repeat":
-                repeat = "none";
+                displayRepeatValue = "none";
+        }
+
+        if(startDateTime.getUTCMinutes() < 10){
+            timeStartMinute = "0" + startDateTime.getUTCMinutes().toString();
+        }
+        else{
+            timeStartMinute = startDateTime.getUTCMinutes().toString();
+        }
+
+        if(startDateTime.getUTCSeconds() < 10){
+            timeStartSecond = "0" + startDateTime.getUTCSeconds().toString();
+        }
+        else{
+            timeStartSecond = startDateTime.getUTCSeconds().toString();
+        }
+
+        if(endDateTime.getUTCMinutes() < 10){
+            timeEndMinute = "0" + endDateTime.getUTCMinutes().toString();
+        }
+        else{
+            timeEndMinute = endDateTime.getUTCMinutes().toString();
+        }
+
+        if(endDateTime.getUTCSeconds() < 10){
+            timeEndSecond = "0" + endDateTime.getUTCSeconds().toString();
+        }
+        else{
+            timeEndSecond = endDateTime.getUTCSeconds().toString();
         }
 
 
+        displayTime = startDateTime.getUTCHours().toString() + ":" + timeStartMinute + ":" + timeStartSecond +
+        " - " + endDateTime.getUTCHours().toString() + ":" + timeEndMinute + ":" + timeEndSecond;
+
     }
-    console.log(repeat);
+    console.log(displayRepeatValue);
 /*
     if(dropdownRepeat.checked){
         dateStart = datepickerStart.value;
@@ -245,6 +304,14 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     //timeFrameHiddenDiv.innerText = dateArgumentArray;
 
     //timeFrameHiddenDiv.innerText = displayDateTimeArgument;
+    displayDateRange.innerText = startDateTime.toDateString() + " - " + endDateTime.toDateString();
+    displayTimeRange.innerText = displayTime;
+    displayRepeat.innerText = displayRepeatValue;
+
+    timeFrameFilterDiv.appendChild(displayDateRange);
+    timeFrameFilterDiv.appendChild(displayTimeRange);
+    timeFrameFilterDiv.appendChild(displayRepeat);
+
     timeFrameHiddenDiv.innerText = JSON.stringify(dateArgumentArray);
     //console.log(filterDateTimeArgument);
     console.log(dateArgumentArray)
