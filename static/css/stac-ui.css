@@ -2610,6 +2610,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: center;
 }
 
+.div-hidden-filter{
+    width: 0px;
+    height: 0px;
+    visibility: hidden;
+}
+
 .div-datasets-filter{
     display: flex;
     flex-direction: column;
