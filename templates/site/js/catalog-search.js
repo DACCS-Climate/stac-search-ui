@@ -792,31 +792,9 @@ function populateDatasetDetails(features){
 }
 
 
-function populateProperties(json){
-                Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
-                    Object.entries(featureValue.properties).forEach(([propertyKey, propertyValue]) => {
-                        var cellPropertyValue = document.createElement("td");
-
-                        if (propertyKey == "collection_id") {
-                            Object.entries(featureValue.links).forEach(([linkKey, linkValue]) => {
-                                if (linkValue.rel == "collection") {
-                                    collectionAnchor.setAttribute("href", linkValue.href);
-                                }
-                            })
-
-                            collectionAnchor.innerText = propertyValue;
-                            cellPropertyValue.appendChild(collectionAnchor);
-                        } else {
-                            cellPropertyValue.innerText = propertyValue;
-                        }
-
-                        rowSearchResult.appendChild(cellPropertyValue);
-                    })
-                })
-}
-
 function getSTACSearchResults(url){
     var productionURL = "{{ stac_catalog_url }}/search?";
+    //TODO Remove testingURL for production
     var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
     var stacSearchURL;
     var queryParams = "";
@@ -939,7 +917,7 @@ function applyMySearch(){
     var productionURL = "{{ stac_catalog_url }}/search";
     var stacSearchURL = productionURL;
     var argumentArray = [];
-    var filterJSON = {"filter":{"op":"or","args":[]}};
+    var filterJSON = {"filter":{"op":"and","args":[]}};
     var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
     var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
@@ -950,16 +928,19 @@ function applyMySearch(){
     console.log(datasetFilterHiddenContainer.innerText);
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
         datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
-        for(datasetItem of datasetFilter){
+        filterJSON["filter"].args.push(datasetFilter);
+        /*for(datasetItem of datasetFilter){
             filterJSON["filter"].args.push(datasetItem);
-        }
+        }*/
     }
 
     if(timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== "" || timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== null){
         timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
+        filterJSON["filter"].args.push(timeframeFilter);
+        /*
         for(timeframeItem of timeframeFilter){
             filterJSON["filter"].args.push(timeframeItem);
-        }
+        }*/
     }
 
     //TODO Remove console for production
