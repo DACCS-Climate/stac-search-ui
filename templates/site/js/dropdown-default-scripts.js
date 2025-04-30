@@ -116,7 +116,7 @@ function setCheckboxFilterJSON(listULID){
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]');
     var argumentArray = [];
-    //var argumentJSON = JSON.parse('{"op": "or","args" : [ ]}');
+    var argumentJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentObject;
 
     if(checkboxArray[0].checked == true) {
@@ -134,8 +134,8 @@ function setCheckboxFilterJSON(listULID){
         }
     }
 
-    //argumentJSON["args"] = argumentArray;
-    searchFilterDatasetsHidden.innerText = JSON.stringify(argumentArray);
+    argumentJSON["args"] = argumentArray;
+    searchFilterDatasetsHidden.innerText = JSON.stringify(argumentJSON);
 }
 
 function populateDatasetsFilter(listULID){
