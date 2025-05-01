@@ -809,7 +809,7 @@ function getSTACSearchResults(url){
 
     if(!(stacSearchURL.includes("sortby"))){
         queryParams = new URLSearchParams({sortby: "+id"}).toString();
-        
+
         if(stacSearchURL.includes("?"))
         {
             stacSearchURL = stacSearchURL + decodeURIComponent(queryParams);
@@ -932,8 +932,7 @@ function applyMySearch(){
 
     var datasetFilter;
     var timeframeFilter;
-
-    console.log(datasetFilterHiddenContainer.innerText);
+    
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
         datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(datasetFilter);
