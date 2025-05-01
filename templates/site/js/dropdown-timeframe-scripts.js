@@ -124,8 +124,9 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var radioNever = document.getElementById(radioNeverID);
     var radioEndsOn = document.getElementById(radioEndsOnID);
     var datepickerEndsOn = document.getElementById(datepickerEndsOnID);
-
-    var displayDateRange = document.createElement("p");
+    var displayDateRangeContainer = document.createElement("div");
+    var displayDateRangeStart = document.createElement("p");
+    var displayDateRangeEnd = document.createElement("p");
     var displayTimeRangeContainer = document.createElement("div");
     var displayTimeRangeStart = document.createElement("p");
     var displayTimeRangeEnd = document.createElement("p");
@@ -134,13 +135,18 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var displayTimeEnd = "";
     var displayRepeatValue = "";
 
+    displayDateRangeContainer.appendChild(displayDateRangeStart);
+    displayDateRangeContainer.appendChild(displayDateRangeEnd);
+
     displayTimeRangeContainer.appendChild(displayTimeRangeStart);
     displayTimeRangeContainer.appendChild(displayTimeRangeEnd);
 
     timeFrameFilterDiv.innerText = "";
     timeFrameHiddenDiv.innerText = "";
+    displayDateRangeContainer.classList.add("div-search-timeframe-container");
     displayTimeRangeContainer.classList.add("div-search-timeframe-container");
-    displayDateRange.classList.add("subtitle-1");
+    displayDateRangeStart.classList.add("subtitle-1");
+    displayDateRangeEnd.classList.add("subtitle-1");
     displayTimeRangeStart.classList.add("subtitle-1");
     displayTimeRangeEnd.classList.add("subtitle-1");
 
@@ -287,7 +293,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
         displayTimeStart = startDateTime.getUTCHours().toString() + ":" + timeStartMinute + ":" + timeStartSecond;
 
-        displayDateRange.innerText = startDateTime.toDateString();
+        displayDateRangeStart.innerText = startDateTime.toDateString();
 
 
 
@@ -312,6 +318,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
             timeEndSecond = endDateTime.getUTCSeconds().toString();
          }
 
+         displayDateRangeEnd.innerText = " - " + endDateTime.toDateString();
          displayTimeEnd = " - " + endDateTime.getUTCHours().toString() + ":" + timeEndMinute + ":" + timeEndSecond;
 
          argumentDateTimeStartJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
@@ -416,7 +423,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
 
 
-    }
+    //}
 
     console.log(displayRepeatValue);
 /*
@@ -473,7 +480,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     displayTimeRangeEnd.innerText = displayTimeEnd;
     displayRepeat.innerText = displayRepeatValue;
 
-    timeFrameFilterDiv.appendChild(displayDateRange);
+    timeFrameFilterDiv.appendChild(displayDateRangeContainer);
     timeFrameFilterDiv.appendChild(displayTimeRangeContainer);
     timeFrameFilterDiv.appendChild(displayRepeat);
 
