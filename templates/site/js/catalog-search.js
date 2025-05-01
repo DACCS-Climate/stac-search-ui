@@ -809,7 +809,15 @@ function getSTACSearchResults(url){
 
     if(!(stacSearchURL.includes("sortby"))){
         queryParams = new URLSearchParams({sortby: "+id"}).toString();
-        stacSearchURL = stacSearchURL + decodeURIComponent(queryParams);
+        
+        if(stacSearchURL.includes("?"))
+        {
+            stacSearchURL = stacSearchURL + decodeURIComponent(queryParams);
+        }
+        else{
+            stacSearchURL = stacSearchURL + "?" + decodeURIComponent(queryParams);
+        }
+
     }
 
 
@@ -929,18 +937,11 @@ function applyMySearch(){
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
         datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(datasetFilter);
-        /*for(datasetItem of datasetFilter){
-            filterJSON["filter"].args.push(datasetItem);
-        }*/
     }
 
     if(timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== "" || timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== null){
         timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(timeframeFilter);
-        /*
-        for(timeframeItem of timeframeFilter){
-            filterJSON["filter"].args.push(timeframeItem);
-        }*/
     }
 
     //TODO Remove console for production
