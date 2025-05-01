@@ -50,7 +50,8 @@ function calculateDays(startDate, endDate) {
     return daysDifference;
 }
 
-
+//TODO: To be used for building repetition filter strings
+// Keep this function for now
 function buildRepeatFilterString(repeatType, repeatInterval, startDateInput, endDateInput, endsOnDate){
     var repeatArray = [];
     var argumentRepeatDailyJSON = {"op":"=", "args":[{"property":"datetime"},{"timestamp":""}]}
@@ -58,9 +59,6 @@ function buildRepeatFilterString(repeatType, repeatInterval, startDateInput, end
     var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
     var stacSearchURL;
     var dateRepeatBegin;
-
-
-
 
 
     var numberOfDays = calculateDays(startDateInput, endsOnDate);
@@ -98,8 +96,6 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var argumentDateFilterJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
-
-
 
     var argumentDateTimeSingleJSON = {"op":"=", "args":[{"property":"datetime"},{"timestamp":""}]};
 
@@ -151,10 +147,6 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     displayTimeRangeEnd.classList.add("subtitle-1");
 
 
-
-
-
-
     var dateStart;
     var dateEnd;
     var timeStart;
@@ -163,7 +155,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var timeStartSecond;
     var timeEndMinute;
     var timeEndSecond;
-    var repeatInterval;
+
 
 
     var neverEnds = radioNever.checked;
@@ -173,37 +165,23 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var endsOnDateISO;
     var dateRange = "";
 
-    var startDateInput;
-    var startTimeInput;
-    var endDateInput;
-    var endTimeInput;
     var startDateTimeInput;
     var endDateTimeInput;
-
-    var startDateISO;
-    var startTimeISO;
-    var endDateISO;
-    var endTimeISO;
 
     var startDateTime ;
     var startDateTimeISO;
     var endDateTime ;
     var endDateTimeISO;
 
+    //TODO: Keep for switch-case for repetition filters
     var currentDailyDate;
-
     var timeDifference;
     var dayDifference = 0;
 
-    console.log(endsOn);
     if(endsOn){
-        console.log(datepickerEndsOnID);
-        console.log(datepickerEndsOn);
         endsOnDateInput = datepickerEndsOn.value + " " + "UTC";
         endsOnDate = new Date(endsOnDateInput);
         endsOnDateISO = endsOnDate.toISOString();
-        console.log(endsOnDate);
-
     }
 
     if(checkboxAllDay.checked){
@@ -242,9 +220,6 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
             else{
                 timeStart = "00:00:00";
             }
-
-
-
         }
 
         if(datepickerEnd.value) {
@@ -259,16 +234,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         }
         else{
             timeEnd = "24:00:00";
-            /*
-            if(timepickerStart.value){
-                timeEnd = "24:00:00";
-            }else{
-                timeEnd = "00:00:00";
-            }*/
-
         }
-
-
 
 
         startDateTimeInput = dateStart + " " + timeStart + " " +  "UTC";
@@ -339,15 +305,9 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
 
 
-
-        //dateRange = startDateTimeISO + "/" + endDateTimeISO;
-
-        //TODO get the passed datetime from the collection start_datetime and end_datetime
-        //datetimeObject.datetime = dateRange;
-        //dateArgumentArray.push(datetimeObject);
-        //argumentDateTimeJSON.args = dateArgumentArray;
-
-
+            //TODO: Build filters for each case of repetitions
+            //TODO: Keep commented code for now
+            /*
             switch(dropdownRepeatLabel.innerText){
             case "Daily":
                 displayRepeatValue = "Daily";
@@ -370,8 +330,6 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
                     repeatDailyDates.push(dailyDateJSON);
                     currentDailyDate.setDate(currentDailyDate.getDate() + 1);
                 }
-                
-                //argumentJSON.args = repeatDailyDates;
 
                 dateArgumentArray = buildRepeatFilterString(displayRepeatValue, repeatInterval, startDateInput, endDateInput, endsOnDate);
                 
@@ -415,64 +373,25 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
             case "Does Not Repeat":
                 displayRepeatValue = "Does Not Repeat";
         }
+    */
 
 
 
-
-
-
-
-
-    //}
-
-    console.log(displayRepeatValue);
-/*
-    if(dropdownRepeat.checked){
-        dateStart = datepickerStart.value;
-        dateEnd = datepickerEnd.value;
-        timeStart = timepickerStart.value;
-        timeEnd = timepickerEnd.value;
-    }*/
-
-
-    //dateArgumentArray = [{"datetime": datetimeObject}];
-
-    //timeFrameHiddenDiv.innerText = JSON.stringify(argumentJSON);
-    //for(arrayItem of dateArgumentArray){
-      //  var argumentString = JSON.stringify(arrayItem);
-     //   displayDateTimeArgument = displayDateTimeArgument + argumentString;
-    //}
-    //displayDateTimeArgument = displayDateTimeArgument + "]";
-    //timeFrameHiddenDiv.innerText = dateArgumentArray;
-
-    //timeFrameHiddenDiv.innerText = displayDateTimeArgument;
 
     if(dateArgumentArray.length > 0 ){
         argumentDateTimeJSON.args = dateArgumentArray;
-
         dateFilterArray.push(argumentDateTimeJSON);
-        //argumentDateFilterJSON.args = dateFilterArray;
-        //timeFrameHiddenDiv.innerText = JSON.stringify(argumentDateFilterJSON);
-        //console.log(filterDateTimeArgument);
-        //console.log(argumentDateFilterJSON)
     }
 
     if(dateRangeArgumentArray.length > 0 ){
         argumentDateTimeRangeJSON.args = dateRangeArgumentArray;
-        // dateFilterArray.push(argumentDateTimeRangeJSON);
-
-        //argumentDateTimeJSON.args = dateRangeArgumentArray;
-
         dateFilterArray.push(argumentDateTimeRangeJSON);
-        //argumentDateFilterJSON.args = dateFilterArray;
-        //timeFrameHiddenDiv.innerText = JSON.stringify(argumentDateFilterJSON);
-        //console.log(filterDateTimeArgument);
-        //console.log(argumentDateFilterJSON)
     }
 
     argumentDateFilterJSON.args = dateFilterArray;
     timeFrameHiddenDiv.innerText = JSON.stringify(argumentDateFilterJSON);
-    //console.log(filterDateTimeArgument);
+
+    //TODO: Keep console log for final filter JSON for now
     console.log(argumentDateFilterJSON)
 
 
@@ -483,7 +402,4 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     timeFrameFilterDiv.appendChild(displayDateRangeContainer);
     timeFrameFilterDiv.appendChild(displayTimeRangeContainer);
     timeFrameFilterDiv.appendChild(displayRepeat);
-
-
-
 }
