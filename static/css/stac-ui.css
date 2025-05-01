@@ -2599,6 +2599,11 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-right: 55px;
 }
 
+.div-search-timeframe-container{
+    display: flex;
+    flex-direction: row;
+}
+
 .text-colour-search-filter{
     color: var(--gray-700);
 }
