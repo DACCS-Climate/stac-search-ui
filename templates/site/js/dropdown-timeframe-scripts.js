@@ -43,10 +43,9 @@ function checkboxToggleAllDay(checkboxID, timeStartID, dateEndID, timeEndID){
 }
 
 function calculateDays(startDate, endDate) {
-    let start = new Date(startDate);
-    let end = new Date(endDate);
-    let timeDifference = end - start;
+    let timeDifference = endDate - startDate;
     let daysDifference = timeDifference / (1000 * 3600 * 24);
+
     return daysDifference;
 }
 
@@ -96,7 +95,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var argumentDateFilterJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
-
+    var repeatIntervalJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeSingleJSON = {"op":"=", "args":[{"property":"datetime"},{"timestamp":""}]};
 
     var argumentDateTimeStartJSON = {"op":">=", "args":[{"property":"datetime"},{"timestamp":""}]};
@@ -175,8 +174,9 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
     //TODO: Keep for switch-case for repetition filters
     var currentDailyDate;
-    var timeDifference;
-    var dayDifference = 0;
+
+
+
 
     if(endsOn){
         endsOnDateInput = datepickerEndsOn.value + " " + "UTC";
@@ -184,34 +184,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         endsOnDateISO = endsOnDate.toISOString();
     }
 
-    if(checkboxAllDay.checked){
-        timeStart = "00:00";
-        timeEnd = "24:00";
-        dateStart = datepickerStart.value;
-        dateEnd = dateStart;
-
-        startDateTimeInput = dateStart + " " + timeStart + " " +  "UTC";
-        endDateTimeInput = dateEnd + " " + timeEnd + " " + "UTC";
-        startDateTimeInput = dateStart + " " + timeStart;
-        endDateTimeInput = dateEnd + " " + timeEnd;
-
-        startDateTime = new Date(startDateTimeInput);
-        startDateTimeISO = startDateTime.toISOString();
-        endDateTime = new Date(endDateTimeInput);
-        endDateTimeISO = endDateTime.toISOString();
-
-        dateRange = startDateTimeISO + "/" + endDateTimeISO;
-
-        datetimeObject.datetime = dateRange;
-        filterDateTimeArgument["args"].push(datetimeObject);
-        dateArgumentArray.push(filterDateTimeArgument);
-
-        displayTimeStart = "All Day";
-
-
-    }
-    else {
-        if (datepickerStart.value) {
+    if (datepickerStart.value) {
             dateStart = datepickerStart.value;
 
             if (timepickerStart.value) {
@@ -238,101 +211,155 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
 
         startDateTimeInput = dateStart + " " + timeStart + " " +  "UTC";
-        startDateTime = new Date(startDateTimeInput);
-        startDateTimeISO = startDateTime.toISOString();
-        var startDateTimeNoMilliSeconds = startDateTimeISO.slice(0, startDateTimeISO.lastIndexOf("."));
-        startDateTimeNoMilliSeconds = startDateTimeNoMilliSeconds + "Z";
+            startDateTime = new Date(startDateTimeInput);
+            startDateTimeISO = startDateTime.toISOString();
+            var startDateTimeNoMilliSeconds = startDateTimeISO.slice(0, startDateTimeISO.lastIndexOf("."));
+            startDateTimeNoMilliSeconds = startDateTimeNoMilliSeconds + "Z";
 
-        if(startDateTime.getUTCMinutes() < 10){
-            timeStartMinute = "0" + startDateTime.getUTCMinutes().toString();
+            if(startDateTime.getUTCMinutes() < 10){
+                timeStartMinute = "0" + startDateTime.getUTCMinutes().toString();
+            }
+            else{
+                timeStartMinute = startDateTime.getUTCMinutes().toString();
+            }
+
+            if(startDateTime.getUTCSeconds() < 10){
+                timeStartSecond = "0" + startDateTime.getUTCSeconds().toString();
+            }
+            else{
+                timeStartSecond = startDateTime.getUTCSeconds().toString();
+            }
+
+            displayTimeStart = startDateTime.getUTCHours().toString() + ":" + timeStartMinute + ":" + timeStartSecond;
+
+            displayDateRangeStart.innerText = startDateTime.toDateString();
+
+
+
+
+            endDateTimeInput = dateEnd + " " + timeEnd + " " + "UTC";
+            endDateTime = new Date(endDateTimeInput);
+            endDateTimeISO = endDateTime.toISOString();
+            var endDateTimeNoMilliSeconds = endDateTimeISO.slice(0, endDateTimeISO.lastIndexOf("."));
+            endDateTimeNoMilliSeconds = endDateTimeNoMilliSeconds + "Z";
+
+             if(endDateTime.getUTCMinutes() < 10){
+                timeEndMinute = "0" + endDateTime.getUTCMinutes().toString();
+             }
+             else{
+                timeEndMinute = endDateTime.getUTCMinutes().toString();
+             }
+
+             if(endDateTime.getUTCSeconds() < 10){
+                timeEndSecond = "0" + endDateTime.getUTCSeconds().toString();
+             }
+             else{
+                timeEndSecond = endDateTime.getUTCSeconds().toString();
+             }
+
+             displayDateRangeEnd.innerText = " - " + endDateTime.toDateString();
+             displayTimeEnd = " - " + endDateTime.getUTCHours().toString() + ":" + timeEndMinute + ":" + timeEndSecond;
+
+
+
+
+    if(dropdownRepeatLabel.innerText == "Does Not Repeat"){
+        displayRepeatValue = "Does Not Repeat";
+
+        if(checkboxAllDay.checked){
+            timeStart = "00:00";
+            timeEnd = "24:00";
+            dateStart = datepickerStart.value;
+            dateEnd = dateStart;
+
+            startDateTimeInput = dateStart + " " + timeStart + " " +  "UTC";
+            endDateTimeInput = dateEnd + " " + timeEnd + " " + "UTC";
+            startDateTimeInput = dateStart + " " + timeStart;
+            endDateTimeInput = dateEnd + " " + timeEnd;
+
+            startDateTime = new Date(startDateTimeInput);
+            startDateTimeISO = startDateTime.toISOString();
+            endDateTime = new Date(endDateTimeInput);
+            endDateTimeISO = endDateTime.toISOString();
+
+            dateRange = startDateTimeISO + "/" + endDateTimeISO;
+
+            datetimeObject.datetime = dateRange;
+            filterDateTimeArgument["args"].push(datetimeObject);
+            dateArgumentArray.push(filterDateTimeArgument);
+
+            displayTimeStart = "All Day";
+
+
         }
-        else{
-            timeStartMinute = startDateTime.getUTCMinutes().toString();
+
+        else {
+
+
+
+
+             argumentDateTimeStartJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
+             argumentDateTimeEndJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
+             dateArgumentArray.push(argumentDateTimeStartJSON);
+             dateArgumentArray.push(argumentDateTimeEndJSON);
+
+             argumentDateTimeEndRangeJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
+             argumentDateTimeStartRangeJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
+
+             dateRangeArgumentArray.push(argumentDateTimeStartRangeJSON);
+             dateRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
+
+
         }
-
-        if(startDateTime.getUTCSeconds() < 10){
-            timeStartSecond = "0" + startDateTime.getUTCSeconds().toString();
-        }
-        else{
-            timeStartSecond = startDateTime.getUTCSeconds().toString();
-        }
-
-        displayTimeStart = startDateTime.getUTCHours().toString() + ":" + timeStartMinute + ":" + timeStartSecond;
-
-        displayDateRangeStart.innerText = startDateTime.toDateString();
-
-
-
-
-        endDateTimeInput = dateEnd + " " + timeEnd + " " + "UTC";
-        endDateTime = new Date(endDateTimeInput);
-        endDateTimeISO = endDateTime.toISOString();
-        var endDateTimeNoMilliSeconds = endDateTimeISO.slice(0, endDateTimeISO.lastIndexOf("."));
-        endDateTimeNoMilliSeconds = endDateTimeNoMilliSeconds + "Z";
-
-         if(endDateTime.getUTCMinutes() < 10){
-            timeEndMinute = "0" + endDateTime.getUTCMinutes().toString();
-         }
-         else{
-            timeEndMinute = endDateTime.getUTCMinutes().toString();
-         }
-
-         if(endDateTime.getUTCSeconds() < 10){
-            timeEndSecond = "0" + endDateTime.getUTCSeconds().toString();
-         }
-         else{
-            timeEndSecond = endDateTime.getUTCSeconds().toString();
-         }
-
-         displayDateRangeEnd.innerText = " - " + endDateTime.toDateString();
-         displayTimeEnd = " - " + endDateTime.getUTCHours().toString() + ":" + timeEndMinute + ":" + timeEndSecond;
-
-         argumentDateTimeStartJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
-         argumentDateTimeEndJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
-         dateArgumentArray.push(argumentDateTimeStartJSON);
-         dateArgumentArray.push(argumentDateTimeEndJSON);
-
-         argumentDateTimeEndRangeJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
-         argumentDateTimeStartRangeJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
-
-         dateRangeArgumentArray.push(argumentDateTimeStartRangeJSON);
-         dateRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
-
-
     }
-
-
-
-
-
-            //TODO: Build filters for each case of repetitions
+    else{
+         //TODO: Build filters for each case of repetitions
             //TODO: Keep commented code for now
-            /*
+
             switch(dropdownRepeatLabel.innerText){
             case "Daily":
                 displayRepeatValue = "Daily";
-                repeatInterval = 1;
 
-                var repeatDailyDates = [];
+                var dateRepeatStart;
+                var dateRepeatEnd;
 
-                startDateInput = new Date(dateStart + " UTC");
-                startDateISO = startDateInput.toISOString();
-                endDateInput = new Date(dateEnd + " UTC");
-                endDateISO = endDateInput.toISOString();
+                var numberOfDays = calculateDays(startDateTime, endsOnDate);
 
-
-
-                currentDailyDate = startDateInput;
-
-                while(currentDailyDate < endDateInput){
-                    var dailyDateJSON = JSON.parse('{"datetime"}')
-                    dailyDateJSON.datetime = currentDailyDate;
-                    repeatDailyDates.push(dailyDateJSON);
-                    currentDailyDate.setDate(currentDailyDate.getDate() + 1);
+                if(endDateTime){
+                    dateRepeatStart = startDateTime;
+                    dateRepeatEnd = endDateTime;
+                }
+                else{
+                    dateRepeatStart = startDateTime;
+                    dateRepeatEnd = startDateTime;
                 }
 
-                dateArgumentArray = buildRepeatFilterString(displayRepeatValue, repeatInterval, startDateInput, endDateInput, endsOnDate);
-                
+
+                var repeatIntervalListArray = [];
+
+                for(var i = 1; i <= numberOfDays; i++){
+                    var repeatDateTimeRangeArray = [];
+                    var dateIntervalArgumentList = {"op": "and","args" : [ ]};
+                    var dateIntervalStartJSON = {"op":"<=", "args":[{"property":"datetime"},{"timestamp":""}]};
+                    var dateIntervalEndJSON = {"op":">=", "args":[{"property":"end_datetime"},{"timestamp":""}]};
+                    var dateIntervalStart = new Date(startDateTimeInput);
+                    var dateIntervalEnd = new Date(endDateTimeInput);
+
+
+                    dateIntervalStart.setDate((dateIntervalStart.getDate() + i));
+                    dateIntervalEnd.setDate((dateIntervalEnd.getDate() + i));
+
+                    dateIntervalStartJSON.args[1].timestamp = dateIntervalEnd;
+                    dateIntervalEndJSON.args[1].timestamp = dateIntervalStart;
+
+                    repeatDateTimeRangeArray.push(dateIntervalStartJSON);
+                    repeatDateTimeRangeArray.push(dateIntervalEndJSON);
+                    dateIntervalArgumentList.args = repeatDateTimeRangeArray;
+
+                    repeatIntervalListArray.push(dateIntervalArgumentList);
+
+                }
+
 
 
                 break;
@@ -369,11 +396,21 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
                 displayRepeatValue = "Decade";
             case "Custom":
                 displayRepeatValue = "";
-                break;
-            case "Does Not Repeat":
-                displayRepeatValue = "Does Not Repeat";
+
+
         }
-    */
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -386,6 +423,11 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     if(dateRangeArgumentArray.length > 0 ){
         argumentDateTimeRangeJSON.args = dateRangeArgumentArray;
         dateFilterArray.push(argumentDateTimeRangeJSON);
+    }
+
+    if(repeatIntervalListArray.length > 0){
+        repeatIntervalJSON.args = repeatIntervalListArray;
+        dateFilterArray.push(repeatIntervalJSON);
     }
 
     argumentDateFilterJSON.args = dateFilterArray;
