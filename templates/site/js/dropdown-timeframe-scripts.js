@@ -42,50 +42,95 @@ function checkboxToggleAllDay(checkboxID, timeStartID, dateEndID, timeEndID){
     }
 }
 
-function calculateDays(startDate, endDate) {
-    let timeDifference = endDate - startDate;
-    let daysDifference = timeDifference / (1000 * 3600 * 24);
+function calculateTime(timeType, startDate, endDate) {
 
-    return daysDifference;
+
+    var timeDifference;
+
+
+    switch (timeType){
+        case "Daily":
+            let dateDifference = endDate - startDate;
+            timeDifference = dateDifference / (1000 * 3600 * 24);
+            break;
+
+        case "Weekly":
+
+            let dayDifference = endDate - startDate;
+            timeDifference = dayDifference / (1000 * 3600 * 24 * 7);
+
+        case "Monthly":
+
+            timeDifference = endDate.getMonth() - startDate.getMonth() + (12 * (endDate.getFullYear() - startDate.getFullYear()));
+            break;
+
+        case "Yearly":
+
+            timeDifference = endDate.getFullYear() - startDate.getFullYear()
+            break;
+
+        case "Decade":
+
+            timeDifference = (endDate.getFullYear() - startDate.getFullYear()) / 10;
+            break;
+
+        case "Custom":
+    }
+
+
+    return timeDifference;
 }
 
 //TODO: To be used for building repetition filter strings
 // Keep this function for now
-function buildRepeatFilterString(repeatType, repeatInterval, startDateInput, endDateInput, endsOnDate){
-    var repeatArray = [];
-    var argumentRepeatDailyJSON = {"op":"=", "args":[{"property":"datetime"},{"timestamp":""}]}
-    var productionURL = "{{ stac_catalog_url }}/search?";
-    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
-    var stacSearchURL;
-    var dateRepeatBegin;
+function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInput, startOnDate, endsOnDate, incrementAmount){
+
+    var amountOfTIme = calculateTime(repeatType, startOnDate, endsOnDate);
 
 
-    var numberOfDays = calculateDays(startDateInput, endsOnDate);
+    var repeatIntervalListArray = [];
 
-    switch(displayRepeatValue){
-        case "Daily":
-            dateRepeatBegin = startDateInput;
-            for(var i = 1; i <= numberOfDays; i++){
-
-
-                dateRepeatBegin.setDate(dateRepeatBegin.getDate() + i);
-                argumentRepeatDailyJSON.args["timestamp"] = dateRepeatBegin;
-                repeatArray.push(argumentRepeatDailyJSON);
-
-            }
+    for(var i = 1; i <= amountOfTIme; i++) {
+        var repeatDateTimeRangeArray = [];
+        var dateIntervalArgumentList = {"op": "and", "args": []};
+        var dateIntervalStartJSON = {"op": "<=", "args": [{"property": "datetime"}, {"timestamp": ""}]};
+        var dateIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
+        var dateIntervalStart = new Date(startDateTimeInput);
+        var dateIntervalEnd = new Date(endDateTimeInput);
 
 
+        if(repeatType == "Daily") {
+            dateIntervalStart.setDate((dateIntervalStart.getDate() + i));
+            dateIntervalEnd.setDate((dateIntervalEnd.getDate() + i));
+        }
+
+        if(repeatType == "Weekly") {
+            dateIntervalStart.setDate((dateIntervalStart.getDate() + (i * 7)));
+            dateIntervalEnd.setDate((dateIntervalEnd.getDate() + (i * 7)));
+        }
+
+        if(repeatType == "Monthly") {
+            dateIntervalStart.setMonth((dateIntervalStart.getMonth() + i));
+            dateIntervalEnd.setMonth((dateIntervalEnd.getMonth() + i));
+        }
+
+        if(repeatType == "Yearly" || repeatType == "Decade"){
+            dateIntervalStart.setFullYear((dateIntervalStart.getFullYear() + i));
+            dateIntervalEnd.setFullYear((dateIntervalEnd.getFullYear() + i));
+        }
+
+
+        dateIntervalStartJSON.args[1].timestamp = dateIntervalEnd;
+        dateIntervalEndJSON.args[1].timestamp = dateIntervalStart;
+
+        repeatDateTimeRangeArray.push(dateIntervalStartJSON);
+        repeatDateTimeRangeArray.push(dateIntervalEndJSON);
+        dateIntervalArgumentList.args = repeatDateTimeRangeArray;
+
+        repeatIntervalListArray.push(dateIntervalArgumentList);
     }
-    console.log(repeatArray);
-    return repeatArray;
 
-/*
-    fetch(stacSearchURL, {
-        method: "GET"
-
-    }).then(response => response.json()).then( json => {
-
-    })*/
+    return repeatIntervalListArray;
 
 }
 
@@ -174,7 +219,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
     //TODO: Keep for switch-case for repetition filters
     var currentDailyDate;
-
+    var repeatIntervalArray = [];
 
 
 
@@ -296,8 +341,6 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         else {
 
 
-
-
              argumentDateTimeStartJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
              argumentDateTimeEndJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
              dateArgumentArray.push(argumentDateTimeStartJSON);
@@ -313,100 +356,39 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         }
     }
     else{
-         //TODO: Build filters for each case of repetitions
-            //TODO: Keep commented code for now
+        //TODO: Add repetition for Custom
+        switch(dropdownRepeatLabel.innerText){
+        case "Daily":
+            displayRepeatValue = "Daily";
+            repeatIntervalArray = buildRepeatFilterString("Daily", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, 1);
+            break;
 
-            switch(dropdownRepeatLabel.innerText){
-            case "Daily":
-                displayRepeatValue = "Daily";
+        case "Weekly":
+            displayRepeatValue = "Weekly";
+            repeatIntervalArray = buildRepeatFilterString("Weekly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, 7);
+            break;
 
-                var dateRepeatStart;
-                var dateRepeatEnd;
+        case "Monthly":
+            displayRepeatValue = "Monthly";
+            repeatIntervalArray = buildRepeatFilterString("Monthly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, 1);
+            break;
 
-                var numberOfDays = calculateDays(startDateTime, endsOnDate);
+        case "Yearly":
+            displayRepeatValue = "Yearly";
+            repeatIntervalArray = buildRepeatFilterString("Yearly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, 1);
+            break;
 
-                if(endDateTime){
-                    dateRepeatStart = startDateTime;
-                    dateRepeatEnd = endDateTime;
-                }
-                else{
-                    dateRepeatStart = startDateTime;
-                    dateRepeatEnd = startDateTime;
-                }
+        case "Decade":
+            displayRepeatValue = "Decade";
+            repeatIntervalArray = buildRepeatFilterString("Decade", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, 10);
+            break;
 
-
-                var repeatIntervalListArray = [];
-
-                for(var i = 1; i <= numberOfDays; i++){
-                    var repeatDateTimeRangeArray = [];
-                    var dateIntervalArgumentList = {"op": "and","args" : [ ]};
-                    var dateIntervalStartJSON = {"op":"<=", "args":[{"property":"datetime"},{"timestamp":""}]};
-                    var dateIntervalEndJSON = {"op":">=", "args":[{"property":"end_datetime"},{"timestamp":""}]};
-                    var dateIntervalStart = new Date(startDateTimeInput);
-                    var dateIntervalEnd = new Date(endDateTimeInput);
-
-
-                    dateIntervalStart.setDate((dateIntervalStart.getDate() + i));
-                    dateIntervalEnd.setDate((dateIntervalEnd.getDate() + i));
-
-                    dateIntervalStartJSON.args[1].timestamp = dateIntervalEnd;
-                    dateIntervalEndJSON.args[1].timestamp = dateIntervalStart;
-
-                    repeatDateTimeRangeArray.push(dateIntervalStartJSON);
-                    repeatDateTimeRangeArray.push(dateIntervalEndJSON);
-                    dateIntervalArgumentList.args = repeatDateTimeRangeArray;
-
-                    repeatIntervalListArray.push(dateIntervalArgumentList);
-
-                }
-
-
-
-                break;
-            case "Weekly":
-                displayRepeatValue = "Weekly";
-
-                var repeatWeeklyDates = [];
-
-                startDateInput = new Date(dateStart + " UTC");
-                startDateISO = startDateInput.toISOString();
-                endDateInput = new Date(dateEnd + " UTC");
-                endDateISO = endDateInput.toISOString();
-
-                currentDailyDate = startDateInput;
-
-                while(currentDailyDate < endDateInput){
-                    var dailyDateJSON = JSON.parse('{"datetime"}')
-                    dailyDateJSON.datetime = currentDailyDate;
-                    repeatWeeklyDates.push(dailyDateJSON);
-                    currentDailyDate.setDate(currentDailyDate.getDate() + 7);
-                }
-
-                //argumentJSON.args = repeatWeeklyDates;
-
-
-                break;
-            case "Monthly":
-                displayRepeatValue = "Monthly";
-                break;
-            case "Yearly":
-                displayRepeatValue = "Yearly";
-                break;
-            case "Decade":
-                displayRepeatValue = "Decade";
-            case "Custom":
-                displayRepeatValue = "";
+        case "Custom":
+            displayRepeatValue = "";
 
 
         }
     }
-
-
-
-
-
-
-
 
 
 
@@ -425,8 +407,8 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         dateFilterArray.push(argumentDateTimeRangeJSON);
     }
 
-    if(repeatIntervalListArray.length > 0){
-        repeatIntervalJSON.args = repeatIntervalListArray;
+    if(repeatIntervalArray.length > 0){
+        repeatIntervalJSON.args = repeatIntervalArray;
         dateFilterArray.push(repeatIntervalJSON);
     }
 
