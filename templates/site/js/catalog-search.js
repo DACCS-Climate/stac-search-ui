@@ -206,7 +206,8 @@ function addSearchResultNavigation(json, searchHomeURL){
     var firstButton = document.getElementById("searchResultsFirst");
     var nextButton = document.getElementById("searchResultsNext");
     var previousButton = document.getElementById("searchResultsPrevious");
-
+    var nextURL = "";
+    var previousURL = "";
 
     if(firstButton.onclick != ""){
         firstButton.onclick = function () {
@@ -222,30 +223,32 @@ function addSearchResultNavigation(json, searchHomeURL){
 
     Object.entries(json.links).forEach(([linkKey, linkValue]) => {
        if(linkValue.rel == "next"){
+           console.log(linkValue.href);
+           if(!linkValue.href.includes("token") && !linkValue.href.includes("?")){
+               nextURL = linkValue.href + "?" + "sortby=+id" + "&token=" + linkValue.body.token;
+           }
+           else{
+               nextURL = linkValue.href;
+           }
 
-           if(nextButton.onclick != ""){
-                nextButton.onclick = function() {
-                    getSTACSearchResults(linkValue.href);
-                }
-            }
-           else {
-                nextButton.onclick = function() {
-                    getSTACSearchResults(linkValue.href);
-                }
+           nextButton.onclick = function() {
+                    getSTACSearchResults(nextURL);
            }
        }
 
        if(linkValue.rel == "previous"){
+           console.log(linkValue.href);
+           if(!linkValue.href.includes("token") && !linkValue.href.includes("?")){
+               previousURL = linkValue.href + "?" + "sortby=+id" + "&token=" +  linkValue.body.token;
 
-           if(previousButton.onclick != ""){
-               previousButton.onclick = function() {
-                   getSTACSearchResults(linkValue.href);
-               }
+
            }
-           else {
-               previousButton.onclick = function() {
-                   getSTACSearchResults(linkValue.href);
-               }
+           else{
+               previousURL = linkValue.href;
+           }
+
+           previousButton.onclick = function() {
+                    getSTACSearchResults(previousURL);
            }
        }
     })
@@ -807,6 +810,8 @@ function getSTACSearchResults(url){
         stacSearchURL = productionURL;
     }
 
+    console.log(stacSearchURL);
+
     if(!(stacSearchURL.includes("sortby"))){
         queryParams = new URLSearchParams({sortby: "+id"}).toString();
 
@@ -922,7 +927,7 @@ function buildMySearchDisplay(){
 }
 
 function applyMySearch(){
-    var productionURL = "{{ stac_catalog_url }}/search";
+    var productionURL = "{{ stac_catalog_url }}/search?";
     var stacSearchURL = productionURL;
     var argumentArray = [];
     var filterJSON = {"filter":{"op":"and","args":[]}};
@@ -932,7 +937,7 @@ function applyMySearch(){
 
     var datasetFilter;
     var timeframeFilter;
-    
+
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
         datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(datasetFilter);
