@@ -122,7 +122,7 @@
                 {{ dropdown_label_text }}
             </a>
 
-            <ul id="{{ dropdown_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
+            <ul id="{{ dropdown_timeframe_list_id }}" class="dropdown-menu {{ dropdown_library[dropdown_type]["list_class"] }}">
                 <li>
                     <div class="{{ dropdown_library[dropdown_type]["content_container_class"] }}">
                         <div class="{{ dropdown_library[dropdown_type]["timeframe_start_class"] }}">
@@ -289,7 +289,7 @@
                     '{{ user_datepicker_endson_id }}'
                 )
 
-                closeTimeFramePanel('{{ dropdown_timeframe_link_id }}', '{{ dropdown_list_id }}');
+                closeTimeFramePanel('{{ dropdown_timeframe_link_id }}', '{{ dropdown_timeframe_list_id }}');
             });
 
         })
