@@ -1704,9 +1704,19 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     margin-right: 36px;
 }
 
+.div-timeframe-button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 .div-timeframe-button{
     display: flex;
     justify-content: center;
+}
+
+.error-timeframe{
+    color: var(--error);
 }
 /*End Dropdown Time Frame*/
 
