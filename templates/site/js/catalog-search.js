@@ -223,7 +223,6 @@ function addSearchResultNavigation(json, searchHomeURL){
 
     Object.entries(json.links).forEach(([linkKey, linkValue]) => {
        if(linkValue.rel == "next"){
-           console.log(linkValue.href);
            if(!linkValue.href.includes("token") && !linkValue.href.includes("?")){
                nextURL = linkValue.href + "?" + "sortby=+id" + "&token=" + linkValue.body.token;
            }
@@ -232,23 +231,20 @@ function addSearchResultNavigation(json, searchHomeURL){
            }
 
            nextButton.onclick = function() {
-                    getSTACSearchResults(nextURL);
+                getSTACSearchResults(nextURL);
            }
        }
 
        if(linkValue.rel == "previous"){
-           console.log(linkValue.href);
            if(!linkValue.href.includes("token") && !linkValue.href.includes("?")){
                previousURL = linkValue.href + "?" + "sortby=+id" + "&token=" +  linkValue.body.token;
-
-
            }
            else{
                previousURL = linkValue.href;
            }
 
            previousButton.onclick = function() {
-                    getSTACSearchResults(previousURL);
+                getSTACSearchResults(previousURL);
            }
        }
     })
@@ -261,7 +257,6 @@ function populateSearchResults(json){
     {
         searchResultDiv.innerHTML = "";
     }
-    //TODO Uncomment for production
 
     var searchResultTable = document.createElement("table");
     var tableHeader = document.createElement("thead");
@@ -347,88 +342,6 @@ function populateSearchResults(json){
         rowSearchResult.appendChild(cellFormat);
 
     })
-
-
-    //TODO Remove testing code for production
-    //Testing Code Below
-    /*
-
-    var searchResultTable = document.createElement("table");
-    var tableHeader = document.createElement("thead");
-    var tableTitleFormatCell = document.createElement("td");
-    var tableTitleDatasetCell = document.createElement("td");
-    var tableTitleDatetimeCell = document.createElement("td");
-
-    tableTitleFormatCell.innerText = "Format";
-    tableTitleDatasetCell.innerText = "Dataset ID";
-    tableTitleDatetimeCell.innerText = "Datetime";
-
-    tableHeader.appendChild(tableTitleDatasetCell);
-    tableHeader.appendChild(tableTitleDatetimeCell);
-    tableHeader.appendChild(tableTitleFormatCell);
-    var tableBody = document.createElement("tbody");
-    var assetType;
-
-
-    searchResultTable.appendChild(tableHeader);
-    searchResultTable.appendChild(tableBody);
-    searchResultDiv.appendChild(searchResultTable);
-
-    Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
-        var rowSearchResult = document.createElement("tr");
-        tableBody.appendChild(rowSearchResult);
-
-        var collectionAnchor = document.createElement("a");
-        var cellFormat = document.createElement("td");
-        cellFormat.classList.add("search-results-format");
-
-        if(featureValue.assets.metadata_http){
-            var cellDatasetTitle = document.createElement("td");
-            var linkDatasetTitle = document.createElement("a");
-            var datasetTitleArray;
-            linkDatasetTitle.setAttribute("role", "button");
-            //Keep these console statements until search results section done
-            console.log("search result");
-            console.log(featureValue);
-            linkDatasetTitle.onclick = function(){
-                swapDatasetDetails();
-                populateDatasetDetails(featureValue);
-            };
-
-            datasetTitleArray = featureValue.assets.metadata_http.title.split(".");
-            linkDatasetTitle.innerText = datasetTitleArray[0];
-
-            cellDatasetTitle.appendChild(linkDatasetTitle);
-            rowSearchResult.appendChild(cellDatasetTitle);
-        }
-
-
-        if(featureValue.properties.datetime){
-              var cellPropertyValue = document.createElement("td");
-
-
-                cellPropertyValue.innerText = featureValue.properties.datetime;
-                rowSearchResult.appendChild(cellPropertyValue);
-                //cellPropertyValue.appendChild(collectionAnchor);
-        }
-
-
-        //Add Format
-        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
-
-            var assetSpan = document.createElement("span");
-            var assetTypeArray = assetValue.type.split('/');
-            var assetType = assetTypeArray[1];
-
-            assetSpan.innerText = assetType;
-            cellFormat.appendChild(assetSpan);
-
-        })
-        rowSearchResult.appendChild(cellFormat);
-
-    })*/
-
-
 }
 
 
@@ -810,7 +723,6 @@ function getSTACSearchResults(url){
         stacSearchURL = productionURL;
     }
 
-    console.log(stacSearchURL);
 
     if(!(stacSearchURL.includes("sortby"))){
         queryParams = new URLSearchParams({sortby: "+id"}).toString();
@@ -922,8 +834,6 @@ function buildMySearchDisplay(){
         searchFilterContainer.appendChild(searchFilterBody);
         searchFilterContainer.appendChild(searchFilterHidden);
     }
-
-
 }
 
 function applyMySearch(){
