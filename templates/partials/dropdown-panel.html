@@ -106,7 +106,7 @@
     {% set radioButtonNeverDetails = {
         "radio_id": "radioButtonNever",
         "group_name": "endOnDateGroup",
-        "label_text": "Never"
+        "label_text": "Never Ends"
     } %}
 
     {% set radioButtonEndsOnDetails = {
@@ -165,7 +165,7 @@
                             {% endwith %}
                         </div>
                         <div class="div-timeframe-norepeat">
-                            <p class="button margin-label-time-range">Selected Time Range</p>
+                            <p class="button margin-label-time-range">Selected Time Range Repeats:</p>
                             <div id="selectTimeRangeHidden"></div>
 
                             {% with %}
@@ -213,13 +213,25 @@
 
                         </div>
 
-                        <div class="div-timeframe-button">
-                            {% with %}
-                                {% set button_type = "button_sm_default_open" %}
-                                {% set button_id = "submitTimeframeButton" %}
-                                {% set button_label = "Review" %}
-                                {% include "partials/button.html" %}
-                            {% endwith %}
+                        <div id="timeframeErrorContainer"></div>
+
+                        <div class="div-timeframe-button-container">
+                             <div class="div-timeframe-button">
+                                {% with %}
+                                    {% set button_type = "button_sm_default_open" %}
+                                    {% set button_id = "resetTimeFrameButton" %}
+                                    {% set button_label = "Reset" %}
+                                    {% include "partials/button.html" %}
+                                {% endwith %}
+                            </div>
+                            <div class="div-timeframe-button">
+                                {% with %}
+                                    {% set button_type = "button_sm_default_open" %}
+                                    {% set button_id = "submitTimeframeButton" %}
+                                    {% set button_label = "Review" %}
+                                    {% include "partials/button.html" %}
+                                {% endwith %}
+                            </div>
                         </div>
 
                     </div>
@@ -233,6 +245,7 @@
             var radioEndsOn = document.getElementById('{{ radioButtonEndsOnDetails["radio_id"] }}');
             var checkboxAllDay = document.getElementById('{{ user_checkbox_allday_id }}');
             var submitTimeFrameButton = document.getElementById("submitTimeframeButton");
+            var resetTimeFrameButton = document.getElementById("resetTimeFrameButton");
 
             defaultRadioState('{{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
 
@@ -245,11 +258,13 @@
             });
 
             checkboxAllDay.addEventListener('change', function(){
-               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_datepicker_end_id }}', '{{ user_timepicker_end_id }}');
+               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_timepicker_end_id }}');
+               resetTimeInput('{{ user_timepicker_end_id }}');
+               resetTimeInput('{{ user_timepicker_start_id }}');
             });
 
-            submitTimeFrameButton.addEventListener('click', function(){
-               populateTimeframeFilter('{{ user_datepicker_start_id }}',
+            resetTimeFrameButton.addEventListener('click', function(){
+               resetTimeFrameInput('{{ user_datepicker_start_id }}',
                    '{{ user_timepicker_start_id }}',
                    '{{ user_datepicker_end_id }}',
                    '{{ user_timepicker_end_id }}',
@@ -258,8 +273,23 @@
                    '{{ user_dropdown_repeat_label_id }}',
                    '{{ radioButtonNeverDetails["radio_id"] }}',
                    '{{ radioButtonEndsOnDetails["radio_id"] }}',
-                   '{{ user_datepicker_endson_id }}'
-               )
+                   '{{ user_datepicker_endson_id }}');
+            });
+
+            submitTimeFrameButton.addEventListener('click', function(){
+                populateTimeframeFilter('{{ user_datepicker_start_id }}',
+                    '{{ user_timepicker_start_id }}',
+                    '{{ user_datepicker_end_id }}',
+                    '{{ user_timepicker_end_id }}',
+                    '{{ user_checkbox_allday_id }}',
+                    '{{ user_dropdown_repeat_id }}',
+                    '{{ user_dropdown_repeat_label_id }}',
+                    '{{ radioButtonNeverDetails["radio_id"] }}',
+                    '{{ radioButtonEndsOnDetails["radio_id"] }}',
+                    '{{ user_datepicker_endson_id }}'
+                )
+
+                closeTimeFramePanel('{{ dropdown_timeframe_link_id }}', '{{ dropdown_list_id }}');
             });
 
         })
