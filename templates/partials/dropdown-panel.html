@@ -258,9 +258,10 @@
             });
 
             checkboxAllDay.addEventListener('change', function(){
-               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_timepicker_end_id }}');
+               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_datepicker_end_id }}', '{{ user_timepicker_end_id }}');
                resetTimeInput('{{ user_timepicker_end_id }}');
                resetTimeInput('{{ user_timepicker_start_id }}');
+               resetDateEndInput('{{ user_datepicker_end_id }}');
             });
 
             resetTimeFrameButton.addEventListener('click', function(){
