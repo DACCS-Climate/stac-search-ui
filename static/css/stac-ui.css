@@ -1694,10 +1694,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .div-timerange-ends-on{
     display: flex;
     flex-direction: row;
-}
-
-.div-timerange-ends-on div:not(:last-child){
-    margin-right: 48px;
+    justify-content: space-between;
 }
 
 .margin-label-time-range{
