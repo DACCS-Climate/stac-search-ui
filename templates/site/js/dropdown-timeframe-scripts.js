@@ -169,12 +169,6 @@ function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInpu
         var dateIntervalArgumentList = {"op": "and", "args": []};
         var dateIntervalStartJSON = {"op": "<=", "args": [{"property": propertyTimeRangeStart}, {"timestamp": ""}]};
         var dateIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
-        /*
-        var repeatStartDateTimeRangeArray = [];
-        var startDateIntervalArgumentList = {"op": "and", "args": []};
-        var startDateIntervalStartJSON = {"op": "<=", "args": [{"property": "start_datetime"}, {"timestamp": ""}]};
-        var startDateIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
-        */
         var dateIntervalStart = new Date(startDateTimeInput);
         var dateIntervalEnd = new Date(endDateTimeInput);
 
