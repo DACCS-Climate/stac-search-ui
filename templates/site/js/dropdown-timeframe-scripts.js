@@ -144,10 +144,10 @@ function calculateTime(timeType, startDate, endDate) {
     return timeDifference;
 }
 
-function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInput, startOnDate, endsOnDate){
+function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInput, startOnDate, endsOnDate, propertyTimeRangeStart){
     var initialTimeRangeArray = [];
     var initialIntervalArgumentList = {"op": "and", "args": []}
-    var initialIntervalStartJSON = {"op": "<=", "args": [{"property": "datetime"}, {"timestamp": ""}]};
+    var initialIntervalStartJSON = {"op": "<=", "args": [{"property": propertyTimeRangeStart}, {"timestamp": ""}]};
     var initialIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
     var initialDateIntervalStart = new Date(startDateTimeInput);
     var initialDateIntervalEnd = new Date(endDateTimeInput);
@@ -167,8 +167,14 @@ function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInpu
     for(var i = 1; i <= amountOfTime; i++) {
         var repeatDateTimeRangeArray = [];
         var dateIntervalArgumentList = {"op": "and", "args": []};
-        var dateIntervalStartJSON = {"op": "<=", "args": [{"property": "datetime"}, {"timestamp": ""}]};
+        var dateIntervalStartJSON = {"op": "<=", "args": [{"property": propertyTimeRangeStart}, {"timestamp": ""}]};
         var dateIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
+        /*
+        var repeatStartDateTimeRangeArray = [];
+        var startDateIntervalArgumentList = {"op": "and", "args": []};
+        var startDateIntervalStartJSON = {"op": "<=", "args": [{"property": "start_datetime"}, {"timestamp": ""}]};
+        var startDateIntervalEndJSON = {"op": ">=", "args": [{"property": "end_datetime"}, {"timestamp": ""}]};
+        */
         var dateIntervalStart = new Date(startDateTimeInput);
         var dateIntervalEnd = new Date(endDateTimeInput);
 
@@ -176,6 +182,7 @@ function buildRepeatFilterString(repeatType, startDateTimeInput, endDateTimeInpu
         if(repeatType == "Daily") {
             dateIntervalStart.setDate((dateIntervalStart.getDate() + i));
             dateIntervalEnd.setDate((dateIntervalEnd.getDate() + i));
+
         }
 
         if(repeatType == "Weekly") {
@@ -222,6 +229,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
     var argumentSearchDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
     var argumentSearchStartDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
     var repeatIntervalJSON = JSON.parse('{"op": "or","args" : [ ]}');
+    var repeatStartDateTimeIntervalJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeSingleJSON = {"op":"=", "args":[{"property":"datetime"},{"timestamp":""}]};
 
     var argumentDateTimeStartJSON = {"op":">=", "args":[{"property":"datetime"},{"timestamp":""}]};
@@ -311,6 +319,7 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
     //TODO: Keep for switch-case for repetition filters
     var repeatIntervalArray = [];
+    var repeatStartDateTimeIntervalArray = [];
 
 
 
@@ -426,21 +435,12 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
              dateSingleArgumentArray.push(argumentDateTimeStartJSON);
              dateSingleArgumentArray.push(argumentDateTimeEndJSON);
 
-           // dateRange = startDateTimeISO + "/" + endDateTimeISO;
-
-           // datetimeObject.datetime = dateRange;
-            //filterDateTimeArgument["args"].push(datetimeObject);
-            //dateArgumentArray.push(filterDateTimeArgument);
-
-            displayTimeStart = "All Day";
-
-
+             displayTimeStart = "All Day";
         }
         else {
             var daysBetweenStartEnd = Math.floor(calculateTime("Daily", startDateTime,  endDateTime));
 
             if(daysBetweenStartEnd > 0){
-
                 //Item with just datetime
                  argumentDateTimeEndJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
                  argumentDateTimeStartJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
@@ -460,15 +460,12 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
                  dateStartTimeRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
             }
             else{
-
                 //Item with just datetime
                  argumentDateTimeStartJSON.args[1].timestamp = startDateTimeNoMilliSeconds;
                  argumentDateTimeEndJSON.args[1].timestamp = endDateTimeNoMilliSeconds;
                  dateArgumentArray.push(argumentDateTimeStartJSON);
                  dateArgumentArray.push(argumentDateTimeEndJSON);
-
             }
-
         }
     }
     else{
@@ -476,27 +473,32 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
         switch(dropdownRepeatLabel.innerText){
         case "Daily":
             displayRepeatValue = "Repeats Daily";
-            repeatIntervalArray = buildRepeatFilterString("Daily", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate);
+            repeatIntervalArray = buildRepeatFilterString("Daily", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "datetime");
+            repeatStartDateTimeIntervalArray = buildRepeatFilterString("Daily", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "start_datetime");
             break;
 
         case "Weekly":
             displayRepeatValue = "Repeats Weekly";
-            repeatIntervalArray = buildRepeatFilterString("Weekly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate);
+            repeatIntervalArray = buildRepeatFilterString("Weekly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "datetime");
+            repeatStartDateTimeIntervalArray = buildRepeatFilterString("Weekly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "start_datetime");
             break;
 
         case "Monthly":
             displayRepeatValue = "Repeats Monthly";
-            repeatIntervalArray = buildRepeatFilterString("Monthly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate);
+            repeatIntervalArray = buildRepeatFilterString("Monthly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "datetime");
+            repeatStartDateTimeIntervalArray = buildRepeatFilterString("Monthly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "start_datetime");
             break;
 
         case "Yearly":
             displayRepeatValue = "Repeats Yearly";
-            repeatIntervalArray = buildRepeatFilterString("Yearly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate);
+            repeatIntervalArray = buildRepeatFilterString("Yearly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "datetime");
+            repeatStartDateTimeIntervalArray = buildRepeatFilterString("Yearly", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "start_datetime");
             break;
 
         case "Decade":
             displayRepeatValue = "Repeats Decade";
-            repeatIntervalArray = buildRepeatFilterString("Decade", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate);
+            repeatIntervalArray = buildRepeatFilterString("Decade", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "datetime");
+            repeatStartDateTimeIntervalArray = buildRepeatFilterString("Decade", startDateTimeInput, endDateTimeInput, startDateTime, endsOnDate, "start_datetime");
             break;
 
         case "Custom":
@@ -529,7 +531,9 @@ function populateTimeframeFilter(datepickerStartID, timepickerStartID, datepicke
 
     if(repeatIntervalArray.length > 0){
         repeatIntervalJSON.args = repeatIntervalArray;
+        repeatStartDateTimeIntervalJSON.args = repeatStartDateTimeIntervalArray;
         dateFilterArray.push(repeatIntervalJSON);
+        dateFilterArray.push(repeatStartDateTimeIntervalJSON);
     }
 
     argumentDateFilterJSON.args = dateFilterArray;
