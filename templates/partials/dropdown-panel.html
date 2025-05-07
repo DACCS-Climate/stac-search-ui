@@ -93,7 +93,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 //TODO uncomment for production use
-                //populateStacVersion("dropdownStacVersion");
+                populateStacVersion("dropdownStacVersion");
             })
         </script>
     {% endif %}
@@ -106,13 +106,13 @@
     {% set radioButtonNeverDetails = {
         "radio_id": "radioButtonNever",
         "group_name": "endOnDateGroup",
-        "label_text": "Never Ends"
+        "label_text": "Repeat Never Ends"
     } %}
 
     {% set radioButtonEndsOnDetails = {
         "radio_id": "radioButtonEndsOn",
         "group_name": "endOnDateGroup",
-        "label_text": "Ends On"
+        "label_text": "Repeat Ends On"
     } %}
 
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
