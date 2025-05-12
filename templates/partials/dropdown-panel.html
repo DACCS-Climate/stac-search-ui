@@ -42,7 +42,7 @@
 {% if dropdown_type == "regular_dropdown_share" or dropdown_type == "regular_dropdown_source"%}
     <div id="{{ dropdown_library[dropdown_type]["container_id"] }}" class="dropdown-panel-container" tabindex="0">
         <div class="dropdown">
-            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title {{ dropdown_library[dropdown_type]["title_swap_class"] }}" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle dropdown-panel-title subtitle-1 {{ dropdown_library[dropdown_type]["title_swap_class"] }}" href="#" role="button" data-bs-toggle="dropdown"  data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
                 {%  if dropdown_type == "regular_dropdown_source" %}
                     <div id="dropdownTitleText">
                         {{ dropdown_label_text }} {{ dropdown_library[dropdown_type]["title_icon"]|safe }}
@@ -106,12 +106,14 @@
     {% set radioButtonNeverDetails = {
         "radio_id": "radioButtonNever",
         "group_name": "endOnDateGroup",
+        "label_text_class": "button",
         "label_text": "Repeat Never Ends"
     } %}
 
     {% set radioButtonEndsOnDetails = {
         "radio_id": "radioButtonEndsOn",
         "group_name": "endOnDateGroup",
+        "label_text_class": "button",
         "label_text": "Repeat Ends On"
     } %}
 
@@ -128,92 +130,77 @@
                         <div class="{{ dropdown_library[dropdown_type]["timeframe_start_class"] }}">
                             {% with %}
                                 {% set datepicker_id = user_datepicker_start_id | default(dropdown_library[dropdown_type]['datepicker_start_id']) %}
-                                {% set datepicker_label = "Start Date" %}
+                                {% set datepicker_label = "Start Date and Time" %}
                                 {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
                                 {% include "partials/datepicker.html" %}
                             {% endwith %}
 
-                            {% with %}
-                                {% set timepicker_id = user_timepicker_start_id | default(dropdown_library[dropdown_type]['timepicker_start_id']) %}
-                                {% set timepicker_label = "Start Time" %}
-                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
-                                {% include "partials/timepicker.html" %}
-                            {% endwith %}
+                            <div id="startDateTimeError" class="div-timeframe-error-container"></div>
                         </div>
 
                         <div class="{{ dropdown_library[dropdown_type]["timeframe_end_class"] }}">
                             {% with %}
                                 {% set datepicker_id = user_datepicker_end_id | default(dropdown_library[dropdown_type]['datepicker_end_id']) %}
-                                {% set datepicker_label = "End Date" %}
+                                {% set datepicker_label = "End Date and Time" %}
                                 {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
                                 {% include "partials/datepicker.html" %}
                             {% endwith %}
 
-                            {% with %}
-                                {% set timepicker_id = user_timepicker_end_id | default(dropdown_library[dropdown_type]['timepicker_end_id']) %}
-                                {% set timepicker_label = "End Time" %}
-                                {% set label_text_class =  dropdown_library[dropdown_type]['label_text_class'] %}
-                                {% include "partials/timepicker.html" %}
-                            {% endwith %}
+                            <div id="endDateTimeError" class="div-timeframe-error-container"></div>
                         </div>
-                        <div>
-                            {% with %}
-                                {% set checkbox_id = user_checkbox_allday_id | default("checkboxAllDay") %}
-                                {% set direction_right = true %}
-                                {% set checkbox_label_text = "All Day" %}
-                                {% include "partials/checkbox.html" %}
-                            {% endwith %}
-                        </div>
+
+                    <!-- TODO Comment out repeat UI elements for now until the issues with the repeat filter queries can be resolved -->
                         <div class="div-timeframe-norepeat">
-                            <p class="button margin-label-time-range">Selected Time Range Repeats:</p>
+                            <!-- <p class="button margin-label-time-range">Selected Time Range Repeats:</p> -->
                             <div id="selectTimeRangeHidden"></div>
 
-                            {% with %}
-                                {% set dropdown_type = "medium_dropdown_list" %}
-
-                                {% set used_in_timeframe_panel = true %}
-                                {% set hidden_time_range_div_id = "selectTimeRangeHidden" %}
-                                {% set container_id = "dropdownMediumContainer" %}
-                                {% set label_id = user_dropdown_repeat_label_id | default("dropdownMediumLabel") %}
-                                {% set chevron_id = "dropdownMediumChevron" %}
-                                {% set dropdown_list_id = user_dropdown_repeat_id | default("touchMediumList") %}
-                                {% set dropdown_label_text = "Does Not Repeat" %}
-                                {% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade", "Custom"] %}
-                                {% include "partials/dropdown.html" %}
-                            {% endwith %}
+                            {#% with %#}
+                                {#% set dropdown_type = "medium_dropdown_list" %#}
+                                {#% set used_in_timeframe_panel = true %#}
+                                {#% set hidden_time_range_div_id = "selectTimeRangeHidden" %#}
+                                {#% set container_id = "dropdownMediumContainer" %#}
+                                {#% set label_id = user_dropdown_repeat_label_id | default("dropdownMediumLabel") %#}
+                                {#% set chevron_id = "dropdownMediumChevron" %#}
+                                {#% set dropdown_list_id = user_dropdown_repeat_id | default("touchMediumList") %#}
+                                {#% set dropdown_label_text = "Does Not Repeat" %#}
+                                {#% set list_items = ["Daily", "Weekly", "Monthly", "Yearly", "Decade"] %#}
+                                {#% include "partials/dropdown.html" %#}
+                            {#% endwith %#}
 
                         </div>
                         <div>
-                           {% with %}
-                                {% set button_type = "radio_button_sm" %}
-                                {% set radio_button_id = radioButtonNeverDetails["radio_id"] %}
-                                {% set radio_group_name = radioButtonNeverDetails["group_name"] %}
-                                {% set radio_button_label_text = radioButtonNeverDetails["label_text"] %}
-                                {% set radio_label_right = true %}
-                                {% set radio_button_orientation_class = "radio-button-container-row" %}
-                                {% include "partials/button-radio.html" %}
-                            {% endwith %}
+                            {#% with %#}
+                                {#% set button_type = "radio_button_sm" %#}
+                                {#% set radio_button_id = radioButtonNeverDetails["radio_id"] %#}
+                                {#% set radio_group_name = radioButtonNeverDetails["group_name"] %#}
+                                {#% set radio_button_label_text = radioButtonNeverDetails["label_text"] %#}
+                                {#% set label_text_class = radioButtonNeverDetails["label_text_class"]%#}
+                                {#% set radio_label_right = true %#}
+                                {#% set radio_button_orientation_class = "radio-button-container-row" %#}
+                                {#% include "partials/button-radio.html" %#}
+                            {#% endwith %#}
                         </div>
                         <div class="div-timerange-ends-on">
-                            {% with %}
-                                {% set button_type = "radio_button_sm" %}
-                                {% set radio_button_id = radioButtonEndsOnDetails["radio_id"] %}
-                                {% set radio_group_name = radioButtonEndsOnDetails["group_name"] %}
-                                {% set radio_button_label_text = radioButtonEndsOnDetails["label_text"] %}
-                                {% set radio_label_right = true %}
-                                {% set radio_button_orientation_class = "radio-button-container-row" %}
-                                {% include "partials/button-radio.html" %}
-                            {% endwith %}
+                            {#% with %#}
+                                {#% set button_type = "radio_button_sm" %#}
+                                {#% set radio_button_id = radioButtonEndsOnDetails["radio_id"] %#}
+                                {#% set radio_group_name = radioButtonEndsOnDetails["group_name"] %#}
+                                {#% set radio_button_label_text = radioButtonEndsOnDetails["label_text"] %#}
+                                {#% set label_text_class = radioButtonNeverDetails["label_text_class"]%#}
+                                {#% set radio_label_right = true %#}
+                                {#% set radio_button_orientation_class = "radio-button-container-row" %#}
+                                {#% include "partials/button-radio.html" %#}
+                            {#% endwith %#}
 
-                            {% with %}
-                                {% set datepicker_id = user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) %}
-                                {% set datepicker_label = "" %}
-                                {% include "partials/datepicker.html" %}
-                            {% endwith %}
+                            {#% with %#}
+                                {#% set datepicker_id = user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) %#}
+                                {#% set datepicker_label = "" %#}
+                                {#% include "partials/datepicker.html" %#}
+                            {#% endwith %#}
 
                         </div>
 
-                        <div id="timeframeErrorContainer"></div>
+                        <!-- <div id="timeFrameRepeatErrorContainer"></div> -->
 
                         <div class="div-timeframe-button-container">
                              <div class="div-timeframe-button">
@@ -239,7 +226,7 @@
             </ul>
         </div>
     <script src="js/dropdown-timeframe-scripts.js"></script>
-        <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             var radioNever = document.getElementById('{{ radioButtonNeverDetails["radio_id"] }}');
             var radioEndsOn = document.getElementById('{{ radioButtonEndsOnDetails["radio_id"] }}');
@@ -247,54 +234,32 @@
             var submitTimeFrameButton = document.getElementById("submitTimeframeButton");
             var resetTimeFrameButton = document.getElementById("resetTimeFrameButton");
 
-            defaultRadioState('{{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
+            //TODO Uncomment these functions when the issue with the repeat filter queries is resolved
+            //defaultRadioState('{#  {{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]["datepicker_end_on_id"]) }} #}');
 
-            radioEndsOn.addEventListener('change', function (){
-               enableEndsOnDateInput('{{ radioButtonEndsOnDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
-            });
+            //radioEndsOn.addEventListener('change', function (){
+            //   enableEndsOnDateInput('{#  {{ radioButtonEndsOnDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]["datepicker_end_on_id"]) }} #}');
+            //});
 
-            radioNever.addEventListener('change', function (){
-               disableEndsOnDateInput('{{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]['datepicker_end_on_id']) }}');
-            });
+            //radioNever.addEventListener('change', function (){
+            //   disableEndsOnDateInput('{#  {{ radioButtonNeverDetails["radio_id"] }}', '{{ user_datepicker_endson_id | default(dropdown_library[dropdown_type]["datepicker_end_on_id"]) }} #}');
+            //});
 
-            checkboxAllDay.addEventListener('change', function(){
-               checkboxToggleAllDay('{{ user_checkbox_allday_id }}', '{{ user_timepicker_start_id }}', '{{ user_datepicker_end_id }}', '{{ user_timepicker_end_id }}');
-               resetTimeInput('{{ user_timepicker_end_id }}');
-               resetTimeInput('{{ user_timepicker_start_id }}');
-               resetDateEndInput('{{ user_datepicker_end_id }}');
-            });
+
 
             resetTimeFrameButton.addEventListener('click', function(){
-               resetTimeFrameInput('{{ user_datepicker_start_id }}',
-                   '{{ user_timepicker_start_id }}',
-                   '{{ user_datepicker_end_id }}',
-                   '{{ user_timepicker_end_id }}',
-                   '{{ user_checkbox_allday_id }}',
-                   '{{ user_dropdown_repeat_id }}',
-                   '{{ user_dropdown_repeat_label_id }}',
-                   '{{ radioButtonNeverDetails["radio_id"] }}',
-                   '{{ radioButtonEndsOnDetails["radio_id"] }}',
-                   '{{ user_datepicker_endson_id }}');
+               resetTimeFrameInput('{{ user_datepicker_start_id }}','{{ user_datepicker_end_id }}')
             });
 
             submitTimeFrameButton.addEventListener('click', function(){
-                populateTimeframeFilter('{{ user_datepicker_start_id }}',
-                    '{{ user_timepicker_start_id }}',
-                    '{{ user_datepicker_end_id }}',
-                    '{{ user_timepicker_end_id }}',
-                    '{{ user_checkbox_allday_id }}',
-                    '{{ user_dropdown_repeat_id }}',
-                    '{{ user_dropdown_repeat_label_id }}',
-                    '{{ radioButtonNeverDetails["radio_id"] }}',
-                    '{{ radioButtonEndsOnDetails["radio_id"] }}',
-                    '{{ user_datepicker_endson_id }}'
-                )
+                checkTimeFrameInputs('{{ user_datepicker_start_id }}','{{ user_datepicker_end_id }}');
 
-                closeTimeFramePanel('{{ dropdown_timeframe_link_id }}', '{{ dropdown_timeframe_list_id }}');
+                populateTimeframeFilter('{{ user_datepicker_start_id }}','{{ user_datepicker_end_id }}');
             });
 
         })
     </script>
+
     </div>
 
 {% endif %}
