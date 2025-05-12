@@ -16,7 +16,10 @@
 <div class="row">
     <div class="container-fluid content-search-main">
         <div class="content-search-left">
-        <a id="backButton" role="button">Back</a>
+        <div id="backButtonContainer" class="div-back-button-container">
+            <i class="fa-solid fa-arrow-left back-button-arrow"></i><a id="backButton" class="button-back-button" role="button">Home</a><img  src="images/open-in-app.svg">
+        </div>
+
             {% with %}
                 {% set dropdown_type = "regular_dropdown_source" %}
                 {% set dropdown_button_id = "dropdownSourceRegular" %}
@@ -32,6 +35,9 @@
             {% endwith %}
 
         <div id="advancedFilters" class="div-advanced-filters">
+            <div>
+                <h6 class="title-advanced-filters">Advanced Filters</h6>
+            </div>
 
             {% with %}
                 {% set dropdown_type = "regular_dropdown_list_frequency" %}
