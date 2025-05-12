@@ -580,7 +580,7 @@ h6{
     box-shadow: var(--d-elevation-1);
 }
 
-.button-sm-default-open:focus, .button-sm-default-open:hover{
+.button-sm-default-open:active, .button-sm-default-open:hover{
     color: var(--text-on-dark);
     background-color: var(--primary);
 }
@@ -1639,17 +1639,20 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Dropdown Time Frame*/
 .dropdown-timeframe-menu{
-    width: 422px;
+    width: 290px;
 }
 
 .dropdown-timeframe-title{
     width: 100%;
     height: 70px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     border-radius: unset;
     background-color: var(--indigo250-opacity-light);
     color: var(--indigo-700);
+    padding-left: 32px;
+    padding-right: 32px;
 }
 
 .dropdown-timeframe-title[aria-expanded="true"]:first-child{
@@ -1661,7 +1664,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .dropdown-timeframe-container{
-    width: 422px;
+    width: 290px;
     background: var(--white);
     box-shadow: var(--timeframe-shadow);
 }
@@ -1669,11 +1672,11 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .timeframe-content-container{
     margin-top: 27px;
     margin-bottom: 18px;
-    margin-left: 58px;
-    margin-right: 43px;
+    margin-left: 53px;
+    margin-right: 38px;
 }
 
-.timeframe-content-container div:not(:last-child){
+.timeframe-content-container > div:not(:last-child){
     margin-bottom: 38px;
 }
 
@@ -1697,6 +1700,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: space-between;
 }
 
+.div-timerange-ends-on > .datepicker-container > label{
+    margin-bottom: unset;
+}
+
 .margin-label-time-range{
     margin-right: 36px;
 }
@@ -1710,6 +1717,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .div-timeframe-button{
     display: flex;
     justify-content: center;
+}
+
+.div-timeframe-error-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .error-timeframe{
@@ -2085,7 +2098,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .input-date-reg{
-    width: 123px;
+    width: 180px;
     height: 46px;
     background-color: var(--white);
     border-radius: 9px;
@@ -2289,6 +2302,8 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     background-color: var(--indigo250-opacity-light);
     border: 0px;
     border-radius: 0px;
+    padding-left: 32px;
+    padding-right: 32px;
 }
 
 .dropdown-panel-title div{
@@ -2313,10 +2328,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Style chevron icon*/
 /*Styles for Regular Share Panel, Timeframe Panel*/
-.dropdown-timeframe-title::after{
-    margin-left: 60px;
-}
-
 .dropdown-panel-title::after{
     width: 29px;
     height: 29px;
@@ -2324,7 +2335,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: center;
     align-items: center;
     position: relative;
-    right: 26px;
     border: solid;
     border-width: 1px;
     border-color: var(--primary);
@@ -2343,7 +2353,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: center;
     align-items: center;
     position: relative;
-    right: 26px;
     border: solid;
     border-width: 1px;
     border-color: var(--primary);
@@ -2594,12 +2603,46 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: start;
 }
 
+.content-search-left > div:not(:first-child){
+    margin-bottom: 10px;
+}
+
+.div-back-button-container{
+    display: flex;
+    align-items: center;
+    height: 78px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.div-back-button-container > .fa-arrow-left, .div-back-button-container > a{
+    margin-right: 14px;
+}
+
+.button-back-button{
+    color: var(--primary);
+}
+
+.back-button-arrow{
+    color: var(--primary);
+}
+
+.div-advanced-filters{
+    margin-top: 50px
+}
+
 .div-advanced-filters > div:not(:last-child){
     margin-bottom: 10px;
 }
 
+.title-advanced-filters{
+    margin-left: 24px;
+    color: var(--indigo-700);
+}
+
 .content-search-right{
     width:100%;
+    padding-left: 16px;
 }
 
 .div-search-filter-container > div:not(:last-child){
