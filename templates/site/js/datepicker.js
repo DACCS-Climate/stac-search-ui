@@ -1,7 +1,9 @@
 function initializeCalendar(datepickerID, startDate, endDate){
     var datepickerElement = document.getElementById(datepickerID);
     flatpickr(datepickerElement, {
-        dateFormat: "Y M d",
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: "Y M d H:i",
         shorthandCurrentMonth: true,
         allowInput: true,
         monthSelectorType: "dropdown",
