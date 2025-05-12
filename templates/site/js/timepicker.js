@@ -5,6 +5,7 @@ function initializeTimepicker(timepickerID, startTime, endTime){
             noCalendar: true,
             dateFormat: "H:i",
             minTime: startTime,
-            maxTime: endTime
+            maxTime: endTime,
+            time_24hr: true
         });
     }
