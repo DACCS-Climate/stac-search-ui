@@ -35,3 +35,12 @@ function setTextboxBackground(element){
     }
 }
 
+function swapBackButtonText(){
+    var backButton = document.getElementById("backButton");
+    if(backButton.innerText == "Home"){
+        backButton.innerText = "Browse";
+    }
+    else{
+        backButton.innerText = "Home";
+    }
+}
