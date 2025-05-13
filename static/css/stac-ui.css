@@ -2646,6 +2646,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     padding-left: 16px;
 }
 
+.div-search-nav-container > div:not(:first-child){
+    margin-bottom: 33px;
+}
+
 .div-search-filter-container > div:not(:last-child){
     margin-right: 55px;
 }
