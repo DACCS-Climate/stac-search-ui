@@ -196,7 +196,7 @@ function filterSTACSearchResults(){
         method: "POST",
         body: testSearch
     }).then(response => response.json()).then( json => {
-        //Keep console log for testing filter functions
+        //TODO Keep console log for testing filter functions
         console.log(json);
     })
 }
@@ -299,6 +299,7 @@ function populateSearchResults(json){
 
             linkDatasetTitle.onclick = function(){
                 swapDatasetDetails();
+                swapBackButtonText();
                 populateDatasetDetails(featureValue);
             };
 
