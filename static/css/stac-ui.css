@@ -2620,6 +2620,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 }
 
 .button-back-button{
+    text-decoration: none;
     color: var(--primary);
 }
 
