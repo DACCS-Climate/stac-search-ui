@@ -878,3 +878,71 @@ function applyMySearch(){
     })
 
 }
+
+async function checkSTACEndpoint(url){
+    var response = await fetch(url);
+
+    return response.status;
+}
+
+async function buildFrequencyFilterDropdown(){
+    var productionCollectionsURL = "{{ stac_catalog_url }}/collections";
+    var productionQueryablesURL = "{{ stac_catalog_url }}/queryables";
+
+    var frequencyDropdownUL = document.getElementById("dropdownListRegularFrequency");
+
+    var searchURL = "";
+    var searchJSONNode = "";
+    var result;
+
+
+
+
+    var endpointStatus = await checkSTACEndpoint(productionQueryablesURL);
+    console.log(endpointStatus);
+
+    if(endpointStatus == 200){
+        searchURL = productionQueryablesURL;
+        searchJSONNode = "properties";
+
+
+    }
+    else{
+        searchURL = productionCollectionsURL;
+        searchJSONNode = "summaries";
+    }
+
+
+     fetch(searchURL, {
+        headers:{
+                "Content-Type": "application/json",
+        }
+
+    }).then(response => response.json()).then( json => {
+        console.log(json)
+        result = json[searchJSONNode];
+        console.log(result);
+
+        Object.entries(json[searchJSONNode]).forEach( ([key, value]) => {
+            if (key.includes("frequency")) {
+                console.log(key);
+                console.log(value);
+
+                var enumArray = value["enum"];
+
+                for(enumItem in enumArray){
+                    var dropdownListItem = document.createElement("li");
+                    dropdownListItem.innerText = enumArray[enumItem];
+                    frequencyDropdownUL.appendChild(dropdownListItem);
+                }
+
+            }
+        })
+
+
+
+
+    })
+
+
+}
