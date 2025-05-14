@@ -814,6 +814,7 @@ function buildMySearchDisplay(){
         searchFilterContainer.classList.add("div-search-filter-container");
         searchFilterTitle.classList.add("subtitle-1", "text-all-caps", "text-colour-search-filter");
         searchFilterTitle.innerText = category;
+        searchFilterHidden.classList.add("div-hidden-filter");
 
         if(category.includes("-")){
 
@@ -895,17 +896,11 @@ async function buildFrequencyFilterDropdown(){
     var searchJSONNode = "";
     var result;
 
-
-
-
     var endpointStatus = await checkSTACEndpoint(productionQueryablesURL);
-    console.log(endpointStatus);
 
     if(endpointStatus == 200){
         searchURL = productionQueryablesURL;
         searchJSONNode = "properties";
-
-
     }
     else{
         searchURL = productionCollectionsURL;
@@ -919,15 +914,11 @@ async function buildFrequencyFilterDropdown(){
         }
 
     }).then(response => response.json()).then( json => {
-        console.log(json)
+
         result = json[searchJSONNode];
-        console.log(result);
 
         Object.entries(json[searchJSONNode]).forEach( ([key, value]) => {
             if (key.includes("frequency")) {
-                console.log(key);
-                console.log(value);
-
                 var enumArray = value["enum"];
 
                 for(enumItem in enumArray){
@@ -935,14 +926,7 @@ async function buildFrequencyFilterDropdown(){
                     dropdownListItem.innerText = enumArray[enumItem];
                     frequencyDropdownUL.appendChild(dropdownListItem);
                 }
-
             }
         })
-
-
-
-
     })
-
-
 }
