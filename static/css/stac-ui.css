@@ -369,20 +369,23 @@ h6{
 }
 
 .banner-search-container{
-    width: 622px;
-    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin-top: 53px;
 }
 
+.banner-dropdown-list-container{
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+
+}
 .banner-search-dropdown{
     position: absolute;
     z-index: 50;
 }
 
 .banner-search-searchbox{
-    position: absolute;
     z-index: 40;
 }
 
@@ -402,6 +405,11 @@ h6{
 
 .banner-image-home{
     background-image: url(../images/banner/banner-home-mobile.png);
+    z-index: -99;
+}
+
+.banner-image-home-large{
+    background-image: url(../images/banner/banner-montreal.png);
     z-index: -99;
 }
 
