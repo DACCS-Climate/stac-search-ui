@@ -77,11 +77,11 @@
 
 {% if dropdown_type == "default_dropdown_list" or dropdown_type == "regular_dropdown_list_metadata" or dropdown_type == "regular_dropdown_list_license" or dropdown_type == "regular_dropdown_list_frequency" %}
 
-    <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }}">
+    <div id="{{ container_id }}" class="{{ dropdown_library[dropdown_type]["container_class"] }} {{ banner_search_dropdown_class }}">
 
         <div id="{{ dropdown_id }}" class="dropdown">
         {% if dropdown_type == "default_dropdown_list" %}
-            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }} " role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+            <a id="{{ dropdown_button_id }}" class="btn btn-secondary dropdown-toggle padding-unset {{ dropdown_library[dropdown_type]["dropdown_button_class"] }} {{ dropdown_library[dropdown_type]["title_chevron_class"] }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
                 <h6 id="{{ dropdown_button_text_id }}" class="{{ dropdown_library[dropdown_type]["title_text_class"] }} margin-unset padding-unset">
                         {{ dropdown_label_text|safe }}
                 </h6>
