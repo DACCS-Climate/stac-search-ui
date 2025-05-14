@@ -2,12 +2,7 @@
 
     {%  if page == "home" %}
         <div id="banner-image" class="d-block d-lg-none bg opacity-30 bg-position-center-center bg-attachment-fixed {{ banner_background_class }}"></div>
-        <div id="banner-video" class="d-none d-lg-block embed-responsive embed-responsive-16by9">
-          <video loop autoplay muted>
-            <source class="embed-responsive-item" src="{{ banner_video }}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
+        <div id="banner-image" class="d-none d-lg-block bg opacity-30 bg-position-center-center bg-attachment-fixed {{ banner_large_background_class }}"></div>
 
         <div class="banner-overlay-container">
             <div class="container-fluid">
