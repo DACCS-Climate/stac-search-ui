@@ -82,14 +82,15 @@ function clearListChildren(){
     }
 }
 
-function getWord(inputBox){
+function getWord(inputBox, inputBoxContainerID){
     var queryablesArray = [];
     var queryableResultButton;
     var queryResultList = document.getElementById("suggestedWordOutputList");
+    var inputBoxContainer = document.getElementById(inputBoxContainerID);
 
 
     if(inputBox.value !="") {
-        inputBox.setAttribute("aria-expanded", "true");
+        inputBoxContainer.setAttribute("aria-expanded", "true");
 
         if (fuse !== null) {
             queryablesArray = fuse.search(inputBox.value);
@@ -123,12 +124,12 @@ function getWord(inputBox){
                 })
             }
             else{
-                inputBox.setAttribute("aria-expanded", "false");
+                inputBoxContainer.setAttribute("aria-expanded", "false");
             }
         }
     }
     else{
-        inputBox.setAttribute("aria-expanded", "false");
+        inputBoxContainer.setAttribute("aria-expanded", "false");
     }
 }
 
@@ -163,43 +164,6 @@ function formatSearch(queryableItemKeyType, queryableItemKeyValue){
     searchJSONDisplay.innerText = displayJSON;
 }
 
-//TODO Delete filterSTACSearchResults() or change function to add keyword tags to the My Search area
-function filterSTACSearchResults(){
-    var productionURL = "{{ stac_catalog_url }}/search";
-    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search";
-    //var searchJSON = JSON.parse(document.getElementById("mySearchFilters").innerText);
-
-    var filterJSON = {
-  "filter": {
-    "op" : "and",
-    "args": [
-      {
-        "op": "=",
-        "args": [ { "property": "id" }, "LC08_L1TP_060247_20180905_20180912_01_T1_L1TP" ]
-      },
-      {
-        "op": "=",
-        "args" : [ { "property": "collection" }, "landsat8_l1tp" ]
-      }
-    ]
-  }
-}
-
-    var testSearch = '{"type":"FeatureCollection","features":[{"properties":{"enum":"Surface Air Pressure "}}]}';
-    var testSearch = '{"properties":{"enum":"Surface Temperature"}}';
-
-    fetch(testingURL, {
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        method: "POST",
-        body: testSearch
-    }).then(response => response.json()).then( json => {
-        //TODO Keep console log for testing filter functions
-        console.log(json);
-    })
-}
 
 function addSearchResultNavigation(json, searchHomeURL){
 
@@ -794,7 +758,7 @@ function datasetDetailsHeaderTemplate(headerText) {
 
 
 function buildMySearchDisplay(){
-    var searchFilterCategories = ["Datasets", "Location", "Sub-Categories", "Time Frame", "Format"];
+    var searchFilterCategories = ["Datasets", "Location", "Sub-Categories", "Time Frame", "Frequency", "Format"];
     var mySearchDiv = document.getElementById("mySearchFilters");
     var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
     var mySearchBody = document.createElement("div");
@@ -923,7 +887,31 @@ async function buildFrequencyFilterDropdown(){
 
                 for(enumItem in enumArray){
                     var dropdownListItem = document.createElement("li");
-                    dropdownListItem.innerText = enumArray[enumItem];
+                    var dropdownListItemButton = document.createElement("a");
+                    dropdownListItemButton.setAttribute("role", "button");
+
+                    dropdownListItem.appendChild(dropdownListItemButton);
+
+                    switch (enumArray[enumItem]) {
+                        case "day":
+                            dropdownListItemButton.innerText = "Day";
+                            break;
+
+                        case "week":
+                            dropdownListItemButton.innerText = "Week";
+                            break;
+
+                        case "mon":
+                            dropdownListItemButton.innerText = "Month";
+                            break;
+
+                        case "year":
+                            dropdownListItemButton.innerText = "Year";
+                            break;
+                    }
+
+
+
                     frequencyDropdownUL.appendChild(dropdownListItem);
                 }
             }
