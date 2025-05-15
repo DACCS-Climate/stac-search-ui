@@ -228,11 +228,20 @@ function populateSearchResults(json){
     var tableTitleDatasetCell = document.createElement("td");
     var tableTitleStartDatetimeCell = document.createElement("td");
     var tableTitleEndDatetimeCell = document.createElement("td");
+    var errorRow = document.createElement("tr");
+    var errorCell = document.createElement("td");
+    var errorMessage = document.createElement("p");
+
+    errorMessage.classList.add("subtitle-1", "error-search-results");
 
     tableTitleFormatCell.innerText = "Format";
     tableTitleDatasetCell.innerText = "Dataset ID";
     tableTitleStartDatetimeCell.innerText = "Start Datetime";
     tableTitleEndDatetimeCell.innerText = "End Datetime";
+    errorMessage.innerText = "No results with the current query";
+
+    errorCell.appendChild(errorMessage);
+    errorRow.appendChild(errorCell);
 
     tableHeader.appendChild(tableTitleDatasetCell);
     tableHeader.appendChild(tableTitleStartDatetimeCell);
@@ -247,66 +256,70 @@ function populateSearchResults(json){
     searchResultDiv.appendChild(searchResultTable);
 
 
-    Object.entries(json.features).forEach( ([featureKey, featureValue]) => {
-        var rowSearchResult = document.createElement("tr");
-        tableBody.appendChild(rowSearchResult);
+    if(Object.entries(json.features).length > 0) {
+        Object.entries(json.features).forEach(([featureKey, featureValue]) => {
+            var rowSearchResult = document.createElement("tr");
+            tableBody.appendChild(rowSearchResult);
 
-        var collectionAnchor = document.createElement("a");
-        var cellFormat = document.createElement("td");
-        cellFormat.classList.add("search-results-format");
+            var collectionAnchor = document.createElement("a");
+            var cellFormat = document.createElement("td");
+            cellFormat.classList.add("search-results-format");
 
-        if(featureValue.id){
-            var cellDatasetTitle = document.createElement("td");
-            var linkDatasetTitle = document.createElement("a");
-            var datasetTitleArray;
-            linkDatasetTitle.setAttribute("role", "button");
+            if (featureValue.id) {
+                var cellDatasetTitle = document.createElement("td");
+                var linkDatasetTitle = document.createElement("a");
+                var datasetTitleArray;
+                linkDatasetTitle.setAttribute("role", "button");
 
-            linkDatasetTitle.onclick = function(){
-                swapDatasetDetails();
-                swapBackButtonText();
-                populateDatasetDetails(featureValue);
-            };
+                linkDatasetTitle.onclick = function () {
+                    swapDatasetDetails();
+                    swapBackButtonText();
+                    populateDatasetDetails(featureValue);
+                };
 
-            linkDatasetTitle.innerText = featureValue.id;
+                linkDatasetTitle.innerText = featureValue.id;
 
-            cellDatasetTitle.appendChild(linkDatasetTitle);
-            rowSearchResult.appendChild(cellDatasetTitle);
-        }
-
-
-        if(featureValue.properties.start_datetime){
-              var cellStartDateTimeValue = document.createElement("td");
-
-              cellStartDateTimeValue.innerText = new Date(featureValue.properties.start_datetime);
-              rowSearchResult.appendChild(cellStartDateTimeValue);
-        }
-
-        if(featureValue.properties.end_datetime){
-              var cellEndDateTimeValue = document.createElement("td");
-
-              cellEndDateTimeValue.innerText = new Date(featureValue.properties.end_datetime);
-              rowSearchResult.appendChild(cellEndDateTimeValue);
-        }
-
-        //Add Format
-        Object.entries(featureValue.assets).forEach( ([assetKey, assetValue]) => {
-
-            var assetSpan = document.createElement("span");
-            if(assetValue.type.includes("application/")){
-                var assetTypeArray = assetValue.type.split('/');
-                assetType = assetTypeArray[1];
-            }
-            else{
-                assetType = assetValue.type;
+                cellDatasetTitle.appendChild(linkDatasetTitle);
+                rowSearchResult.appendChild(cellDatasetTitle);
             }
 
-            assetSpan.innerText = assetType;
-            cellFormat.appendChild(assetSpan);
+
+            if (featureValue.properties.start_datetime) {
+                var cellStartDateTimeValue = document.createElement("td");
+
+                cellStartDateTimeValue.innerText = new Date(featureValue.properties.start_datetime);
+                rowSearchResult.appendChild(cellStartDateTimeValue);
+            }
+
+            if (featureValue.properties.end_datetime) {
+                var cellEndDateTimeValue = document.createElement("td");
+
+                cellEndDateTimeValue.innerText = new Date(featureValue.properties.end_datetime);
+                rowSearchResult.appendChild(cellEndDateTimeValue);
+            }
+
+            //Add Format
+            Object.entries(featureValue.assets).forEach(([assetKey, assetValue]) => {
+
+                var assetSpan = document.createElement("span");
+                if (assetValue.type.includes("application/")) {
+                    var assetTypeArray = assetValue.type.split('/');
+                    assetType = assetTypeArray[1];
+                } else {
+                    assetType = assetValue.type;
+                }
+
+                assetSpan.innerText = assetType;
+                cellFormat.appendChild(assetSpan);
+
+            })
+            rowSearchResult.appendChild(cellFormat);
 
         })
-        rowSearchResult.appendChild(cellFormat);
-
-    })
+    }
+    else{
+        tableBody.appendChild(errorRow);
+    }
 }
 
 
@@ -810,9 +823,12 @@ function applyMySearch(){
     var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
     var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
+    var frequencyFilterHiddenContainer = document.getElementById("searchFilterFrequencyHidden");
 
     var datasetFilter;
     var timeframeFilter;
+    var frequencyFilter;
+
 
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
         datasetFilter = JSON.parse(datasetFilterHiddenContainer.innerText);
@@ -822,6 +838,11 @@ function applyMySearch(){
     if(timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== "" || timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== null){
         timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(timeframeFilter);
+    }
+
+    if(frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== "" || frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== null){
+        frequencyFilter = JSON.parse(frequencyFilterHiddenContainer.innerText);
+        filterJSON["filter"].args.push(frequencyFilter);
     }
 
     //TODO Remove console for production
@@ -855,6 +876,8 @@ async function buildFrequencyFilterDropdown(){
     var productionQueryablesURL = "{{ stac_catalog_url }}/queryables";
 
     var frequencyDropdownUL = document.getElementById("dropdownListRegularFrequency");
+    var frequencyFilterDivHidden = document.getElementById("searchFilterFrequencyHidden");
+
 
     var searchURL = "";
     var searchJSONNode = "";
@@ -889,12 +912,19 @@ async function buildFrequencyFilterDropdown(){
                     var dropdownListItem = document.createElement("li");
                     var dropdownListItemButton = document.createElement("a");
                     dropdownListItemButton.setAttribute("role", "button");
+                    dropdownListItemButton.classList.add("button-advanced-filter-frequency");
 
                     dropdownListItem.appendChild(dropdownListItemButton);
 
                     switch (enumArray[enumItem]) {
                         case "day":
                             dropdownListItemButton.innerText = "Day";
+
+                            var filterString = buildFrequencyFilterJSON(searchJSONNode, key, value);
+
+                            dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
+                            });
                             break;
 
                         case "week":
@@ -903,6 +933,12 @@ async function buildFrequencyFilterDropdown(){
 
                         case "mon":
                             dropdownListItemButton.innerText = "Month";
+
+                            var filterString = buildFrequencyFilterJSON(searchJSONNode, key, value);
+
+                            dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
+                            });
                             break;
 
                         case "year":
@@ -910,11 +946,32 @@ async function buildFrequencyFilterDropdown(){
                             break;
                     }
 
-
-
                     frequencyDropdownUL.appendChild(dropdownListItem);
                 }
             }
         })
     })
+
 }
+
+
+function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeValue){
+    var filterString =  {"op": "or", "args": []};
+    var frequencyFilterString =  {"op":"=", "args": [{}, ""]};
+
+
+    if(collectionAttribute == "summaries"){
+        var filterArray = [];
+        filterArray.push(attributeValue);
+        frequencyFilterString.args[0][collectionAttribute] = attributeName;
+        frequencyFilterString.args[1] = filterArray
+
+    }
+    else{
+        frequencyFilterString.args[0][collectionAttribute] = attributeName;
+        frequencyFilterString.args[1] = {"enum":attributeValue.enum};
+    }
+    filterString.args.push(frequencyFilterString);
+    return filterString;
+}
+
