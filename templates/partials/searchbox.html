@@ -1,25 +1,25 @@
 <div class="search-container">
 
     <form role="search" class="search-form">
-        <div>
-
-            <input id="searchInput" type="search" autocomplete="off" aria-controls="suggestedWordOutputListContainer" aria-expanded="false" role="combobox" class="search-input" />
+        <div id="searchInputContainer" class="search-input-container" aria-expanded="false">
+            <input id="searchInput" type="search" autocomplete="off" aria-controls="suggestedWordOutputListContainer"  role="combobox" class="search-input" />
             <div id="suggestedWordOutputListContainer" class="search-output-container">
                 <ul id="suggestedWordOutputList" class="search-output"></ul>
             </div>
-
         </div>
 
         <div class="search-icon-background">
             <a id="searchIconAnchor">
                 <i id="searchIcon" class="fa-solid fa-plus search-icon"></i>
-                </a>
+            </a>
         </div>
     </form>
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             var searchButton = document.getElementById("searchIconAnchor");
-            searchButton.addEventListener("click", filterSTACSearchResults);
+            setInputTextStart();
+            //TODO Delete the call to filterSTACSearchResults or change the function call
+            //searchButton.addEventListener("click", filterSTACSearchResults);
         })
     </script>
     <script src="js/search-ui-functions.js"></script>
