@@ -848,14 +848,21 @@ h6{
     color: var(--text-on-surface);
 }
 
-.search-input{
+.search-input-container{
     width: 622px;
     height: 64px;
-    text-align: center;
     border-radius: 30px;
     border: 1px solid var(--indigo-200);
     background: var(--indigo-50);
     box-shadow: var(--text-shadow);
+}
+
+.search-input{
+    height: 62px;
+    margin-left: 200px;
+    border: none;
+    outline: none;
+    background: var(--indigo-50);
     font-family: var(--main-font-family);
     font-weight: var(--reg-font-weight);
     font-size: 24px;
@@ -863,39 +870,51 @@ h6{
     color: var(--gray-500);
 }
 
-.search-input:hover{
+.search-input-container{
+    background: var(--indigo-50);
+}
+
+.search-input-container:has( > .search-input):hover{
     background: var(--indigo-100);
     border: 1px solid var(--indigo-300);
 }
 
-.search-input:focus{
+.search-input-container:hover, .search-input-container:hover > .search-input{
+    background: var(--indigo-100);
+}
+
+.search-input-container:focus:has( > .search-input:focus){
     background: var(--gray-50);
     border: 1px solid var(--indigo-200);
 }
 
-.search-input[aria-expanded = "false"]{
+.search-input-container:focus, .search-input-container:focus > .search-input{
+    background: var(--gray-50);
+}
+
+.search-input-container[aria-expanded = "false"]{
     border-bottom-right-radius: 30px;
     border-bottom-left-radius: 30px;
     border-bottom: 1px solid var(--indigo-200);
 }
 
-.search-input[aria-expanded = "true"]{
+.search-input-container[aria-expanded = "true"]{
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
     border-bottom: 0px;
 }
 
-.search-input[aria-expanded = "true"] + #suggestedWordOutputList,
-.search-input[aria-expanded = "true"] + #suggestedWordOutputListContainer{
+.search-input-container[aria-expanded = "true"] > div#suggestedWordOutputList,
+.search-input-container[aria-expanded = "true"] > div#suggestedWordOutputListContainer{
     display: flex;
 }
 
-.search-input[aria-expanded = "false"] + #suggestedWordOutputList,
-.search-input[aria-expanded = "false"] + #suggestedWordOutputListContainer{
+.search-input-container[aria-expanded = "false"] > div#suggestedWordOutputList,
+.search-input-container[aria-expanded = "false"] > div#suggestedWordOutputListContainer{
     display: none;
 }
 
-.search-input[aria-expanded = "false"].returned-result{
+.search-input-container[aria-expanded = "false"].returned-result{
     color: black;
     background-color: var(--white);
 }
@@ -2123,6 +2142,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 /*Override default placeholder text in all input elements*/
 ::placeholder{
+    text-align: center;
     color: var(--gray-500);
 }
 
