@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function (){
     searchInputElement.addEventListener("input", function(event){
         removeReturnedResultStyle(event.target);
         clearListChildren();
-        getWord(event.target);
+        getWord(event.target, "searchInputContainer");
     });
 
 
