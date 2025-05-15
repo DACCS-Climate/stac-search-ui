@@ -409,7 +409,7 @@ h6{
 }
 
 .banner-image-home-large{
-    background-image: url(../images/banner/banner-montreal.png);
+    background-image: url(../images/banner/banner-forest.png);
     z-index: -99;
 }
 
@@ -1434,6 +1434,11 @@ background-color: var(--gray-300);
     z-index:var(--bs-dropdown-zindex);
     position: relative !important;
     margin-top: 0px !important;
+}
+
+/*Override bootstrap*/
+.dropdown-menu[data-bs-popper]{
+    top: 0 !important;
 }
 
 .btn{
