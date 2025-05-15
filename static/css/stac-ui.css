@@ -2630,6 +2630,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     display: flex;
 }
 
+/*Left dropdown area*/
 .content-search-left{
     display: flex;
     flex-direction: column;
@@ -2674,6 +2675,13 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     color: var(--indigo-700);
 }
 
+.button-advanced-filter-frequency{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/*Right content area*/
 .content-search-right{
     width:100%;
     padding-left: 16px;
@@ -2706,7 +2714,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 .div-hidden-filter{
     width: 0px;
     height: 0px;
-    visibility: hidden;
+    display: none;
 }
 
 .div-datasets-filter{
@@ -2725,6 +2733,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.error-search-results{
+    color: var(--error);
 }
 
 /*Search dataset details page*/
