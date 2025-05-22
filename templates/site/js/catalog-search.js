@@ -875,13 +875,8 @@ async function buildFrequencyFilterDropdown(){
     var productionCollectionsURL = "{{ stac_catalog_url }}/collections";
     var productionQueryablesURL = "{{ stac_catalog_url }}/queryables";
 
-    var frequencyDropdownUL = document.getElementById("dropdownListRegularFrequency");
-    var frequencyFilterDivHidden = document.getElementById("searchFilterFrequencyHidden");
-
-
     var searchURL = "";
     var searchJSONNode = "";
-    var result;
 
     var endpointStatus = await checkSTACEndpoint(productionQueryablesURL);
 
@@ -894,6 +889,8 @@ async function buildFrequencyFilterDropdown(){
         searchJSONNode = "summaries";
     }
 
+searchURL = productionCollectionsURL;
+        searchJSONNode = "summaries";
 
      fetch(searchURL, {
         headers:{
@@ -902,13 +899,35 @@ async function buildFrequencyFilterDropdown(){
 
     }).then(response => response.json()).then( json => {
 
-        result = json[searchJSONNode];
+        if(searchJSONNode == "summaries"){
+            Object.entries(json.collections).forEach( ([key,value]) => {
+                populateFrequencyFilterDropdownItems(value[searchJSONNode], searchJSONNode);
+            })
+        }
+        else{
+            populateFrequencyFilterDropdownItems(json[searchJSONNode], searchJSONNode);
+        }
+    })
 
-        Object.entries(json[searchJSONNode]).forEach( ([key, value]) => {
+}
+
+function populateFrequencyFilterDropdownItems(json, dataEndpoint){
+    var frequencyDropdownUL = document.getElementById("dropdownListRegularFrequency");
+    var frequencyFilterDiv = document.getElementById("searchFilterFrequencyBody");
+    var frequencyFilterDivHidden = document.getElementById("searchFilterFrequencyHidden");
+
+    Object.entries(json).forEach( ([key, value]) => {
             if (key.includes("frequency")) {
-                var enumArray = value["enum"];
+                var frequencyArray = [];
+                
+                if(value["enum"]){
+                    frequencyArray = value["enum"]; 
+                }
+                else{
+                    frequencyArray = value;
+                }
 
-                for(enumItem in enumArray){
+                for(frequencyItem in frequencyArray){
                     var dropdownListItem = document.createElement("li");
                     var dropdownListItemButton = document.createElement("a");
                     dropdownListItemButton.setAttribute("role", "button");
@@ -916,33 +935,49 @@ async function buildFrequencyFilterDropdown(){
 
                     dropdownListItem.appendChild(dropdownListItemButton);
 
-                    switch (enumArray[enumItem]) {
+                    switch (frequencyArray[frequencyItem]) {
                         case "day":
                             dropdownListItemButton.innerText = "Day";
 
-                            var filterString = buildFrequencyFilterJSON(searchJSONNode, key, value);
+                            var filterString = buildFrequencyFilterJSON(dataEndpoint, key, value);
 
                             dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDiv.innerText = "Day";
                                 frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
                             });
                             break;
 
                         case "week":
                             dropdownListItemButton.innerText = "Week";
+
+                            var filterString = buildFrequencyFilterJSON(dataEndpoint, key, value);
+
+                            dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDiv.innerText = "Week";
+                                frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
+                            });
                             break;
 
                         case "mon":
                             dropdownListItemButton.innerText = "Month";
 
-                            var filterString = buildFrequencyFilterJSON(searchJSONNode, key, value);
+                            var filterString = buildFrequencyFilterJSON(dataEndpoint, key, value);
 
                             dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDiv.innerText = "Month";
                                 frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
                             });
                             break;
 
                         case "year":
                             dropdownListItemButton.innerText = "Year";
+
+                            var filterString = buildFrequencyFilterJSON(dataEndpoint, key, value);
+
+                            dropdownListItemButton.addEventListener('click', function(){
+                                frequencyFilterDiv.innerText = "Year";
+                                frequencyFilterDivHidden.innerText = JSON.stringify(filterString);
+                            });
                             break;
                     }
 
@@ -950,9 +985,8 @@ async function buildFrequencyFilterDropdown(){
                 }
             }
         })
-    })
-
 }
+
 
 
 function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeValue){
@@ -961,10 +995,10 @@ function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeV
 
 
     if(collectionAttribute == "summaries"){
-        var filterArray = [];
-        filterArray.push(attributeValue);
+        //var filterArray = [];
+        //filterArray.push(attributeValue);
         frequencyFilterString.args[0][collectionAttribute] = attributeName;
-        frequencyFilterString.args[1] = filterArray
+        frequencyFilterString.args[1] = attributeValue;
 
     }
     else{
