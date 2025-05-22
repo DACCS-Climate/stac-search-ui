@@ -1,20 +1,3 @@
-async function getSTACJSON(){
-    var productionURL = "{{ stac_catalog_url }}/search?";
-    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
-    var stacSearchURL;
-    var queryParams = "";
-
-    const response = await fetch(testingURL, {
-        method: "GET",
-        headers: {
-                "Accept": "application/json, text/plain",
-                "Content-Type": "application/json"
-            }
-    });
-
-    return await response.json();
-}
-
 function setSearchPageTitle(listULID, titleDivID){
     var titleDiv = document.getElementById(titleDivID);
     var list = document.getElementById(listULID);
@@ -166,19 +149,3 @@ function populateDatasetsFilter(listULID){
     }
 }
 
-function populateFrequencyFilter(listULID){
-
-
-}
-
-
-function setFrequencyFilter(frequencyListItemID){
-    var listItem = document.getElementById(frequencyListItemID);
-    var stacJSON = getSTACJSON();
-
-    var license;
-
-
-
-
-}
