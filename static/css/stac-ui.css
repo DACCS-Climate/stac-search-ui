@@ -504,7 +504,7 @@ h6{
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--primary);
+    color: var(--indigo-700);
     background-color: var(--background-transparent);
     border: none;
     outline: none;
@@ -517,11 +517,12 @@ h6{
 }
 
 .button-close-x:hover, .button-close-x:active{
-    color: var(--text-on-dark);
-    background-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--background-transparent);
     border: none;
     outline: none;
     box-shadow: var(--button-close-shadow);
+    cursor: pointer;
 }
 
 .popup-button-close{
@@ -2680,6 +2681,41 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     display: flex;
     justify-content: center;
 }
+
+.div-location-container{
+    min-width: 290px;
+    z-index: 60;
+}
+
+.popup-button-close{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: end;
+}
+
+.button-location{
+    width: 290px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--indigo-700);
+    background-color: var(--indigo250-opacity-light);
+    padding-left: 32px;
+    padding-right: 32px;
+    border:none;
+    border-radius: unset;
+}
+
+.icon-location-globe{
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    background-color: var(--white);
+    color: var(--primary);
+}
+
 
 /*Right content area*/
 .content-search-right{
