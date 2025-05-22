@@ -150,7 +150,7 @@ function getShapeLatLng(){
     var circleCentre;
     var markerCentre;
     var polygonLatLngArray;
-    var divLatLng = document.getElementById("currentShapeLatLng");
+    //var divLatLng = document.getElementById("currentShapeLatLng");
     //Keep in case this information is needed
     /*
     let circleBounds;
@@ -175,18 +175,18 @@ function getShapeLatLng(){
             circleBoundsCornerSW = circleBounds.getSouthWest();
             */
 
-            divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
+            //divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
         } else if (shapeDict["shape"]["shapeType"] == "Marker") {
             markerCentre = shapeDict["shape"].getLatLng();
 
             //Display coordinate in point coordinate field
             displayCoordinate(markerCentre.lat, markerCentre.lng)
 
-            divLatLng.innerText = markerCentre;
+            //divLatLng.innerText = markerCentre;
         } else {
             if(shapeDict["shape"]["shapeType"] != "Map") {
                 polygonLatLngArray = shapeDict["shape"].getLatLngs();
-                divLatLng.innerText = polygonLatLngArray;
+                //divLatLng.innerText = polygonLatLngArray;
             }
         }
     }
@@ -225,8 +225,8 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
 
                 // Start drawing rectangle
                 newShape = map.editTools.startRectangle();
@@ -253,8 +253,8 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
 
                 // Start drawing circle
                 newShape = map.editTools.startCircle();
@@ -281,8 +281,8 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
 
                 // Click to add points to map that will be automatically joined into a polygon
                 newShape = map.editTools.startPolygon();
@@ -310,8 +310,8 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
 
                 //Add location marker to map
                 newShape = map.editTools.startMarker();
@@ -340,15 +340,17 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
             })
 
 
             var buttonGeoJSON = L.DomUtil.create("a", "button-convert-geojson", geoJSONConvertContainer);
             var buttonGeoJSONIconDiv = L.DomUtil.create("div", "div-geojson-icons", buttonGeoJSON);
             buttonGeoJSON.title = "Convert shape into GeoJSON";
-            buttonGeoJSONIconDiv.innerHTML = '<i class="bi bi-hexagon-fill button-geojson-hexagon"></i> <i class="fa-solid fa-arrow-right button-geojson-arrow"></i> <img class="button-geojson-icon" src="images/geojson-file.svg">';
+            //TODO Comment out icon for GeoJSON convert button until a common theme for 'Review' buttons are made
+            //buttonGeoJSONIconDiv.innerHTML = '<i class="bi bi-hexagon-fill button-geojson-hexagon"></i> <i class="fa-solid fa-arrow-right button-geojson-arrow"></i> <img class="button-geojson-icon" src="images/geojson-file.svg">';
+            buttonGeoJSONIconDiv.innerText = "Review";
 
             L.DomEvent.on(buttonGeoJSON, "click", function () {
                 //Hide coordinate input error message if visible
@@ -401,8 +403,8 @@ function createSearchTool(map){
                     locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
 
-                    clearText("currentShapeLatLng");
-                    clearText("currentShapeGeoJSON");
+                    //clearText("currentShapeLatLng");
+                    //clearText("currentShapeGeoJSON");
 
                     //Display coordinate of selected city in point coordinate field
                     displayCoordinate(coordinates[1], coordinates[0]);
@@ -515,8 +517,8 @@ function addCoordinate(coordinateValue, map){
         //Remove previously drawn shape/layer from dictionary
         clearShape(shapeDict);
 
-        clearText("currentShapeLatLng");
-        clearText("currentShapeGeoJSON");
+        //clearText("currentShapeLatLng");
+        //clearText("currentShapeGeoJSON");
 
         coordinateMarker.addTo(map);
 
@@ -601,8 +603,8 @@ function createGeoJSONPanel(map){
                 //Clear anything in coordinate input field
                 clearCoordinate();
 
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
+                //clearText("currentShapeLatLng");
+                //clearText("currentShapeGeoJSON");
 
                 uploadGeoJSON(map)
             });
@@ -696,13 +698,17 @@ function uploadGeoJSON(map){
 
 //Formats drawn shape or added geojson map area into geojson as expected by STAC API
 function formatGeoJSON(shapeDict){
-    var currentGeoJSONDiv = L.DomUtil.get("currentShapeGeoJSON");
+    var currentGeoJSONDiv = L.DomUtil.get("searchFilterLocationHidden");
     var shapeType;
     var shape = shapeDict['shape'];
     var shapeGeoJSON;
     var bounds;
     var bbox
     var stacGeoJSON  = JSON.parse('{"type": "FeatureCollection", "features": [{}]}');
+    var locationBodyDiv = document.getElementById("searchFilterLocationBody");
+    var locationHiddenDiv = document.getElementById("searchFilterLocationHidden");
+    var locationFilter = {"filter": {"op": "and", "args": []}};
+    var intersectFilter = {"op": "s_intersects", "args":[{"property":"geometry"},{"type":"", "coordinates":""}]};
 
     if(Object.keys(shapeDict).length > 0){
         shapeType = shapeDict['shape']['shapeType'];
@@ -721,9 +727,15 @@ function formatGeoJSON(shapeDict){
             stacGeoJSON["features"] = shapeGeoJSON;
         }
 
-        //Keep console for the formatted geojson for now
+        //TODO Keep console for the formatted geojson for now
         console.log(stacGeoJSON);
         currentGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
+
+        intersectFilter.args[1].type = "Polygon";
+        intersectFilter.args[1].coordinates = shapeGeoJSON.geometry.coordinates;
+        locationFilter.filter.args = intersectFilter;
+        locationBodyDiv.innerText = shapeGeoJSON.geometry.coordinates;
+        locationHiddenDiv.innerText = JSON.stringify(locationFilter);
     }
 }
 
