@@ -47,37 +47,38 @@
                 {% set dropdown_button_id = "dropdownListFrequencyButton" %}
                 {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
                 {% set label_id = "dropdownListRegularFrequencyLabel" %}
-                {% set list_items =
-                    [
-                        {
-                            "item_label": "Monthly"
-                        },
-                        {
-                            "item_label": "Yearly"
-                        }
-                    ]
-                %}
                 {% set dropdown_label_text = "Select Frequency" %}
                 {% include "partials/dropdown.html" %}
             {% endwith %}
 
 
-                {% with %}
-                    {% set dropdown_type = "dropdown_time_frame" %}
-                    {% set dropdown_timeframe_id = "dropdownTimeframe" %}
-                    {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
-                    {% set dropdown_timeframe_list_id = "dropdownTimeFrameList" %}
-                    {% set user_datepicker_start_id  = "timeframeStartDatePicker" %}
-                    {% set user_timepicker_start_id = "timeframeStartTimePicker" %}
-                    {% set user_datepicker_end_id  = "timeframeEndDatePicker" %}
-                    {% set user_timepicker_end_id = "timeframeEndTimePicker" %}
-                    {% set user_checkbox_allday_id = "timeframeCheckboxAllDay" %}
-                    {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
-                    {% set user_dropdown_repeat_label_id = "timeframeDropdownRepeatLabel" %}
-                    {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
-                    {% set dropdown_label_text = "Select Time Frame" %}
-                    {% include "partials/dropdown-panel.html" %}
-                {% endwith %}
+            {% with %}
+                {% set dropdown_type = "dropdown_time_frame" %}
+                {% set dropdown_timeframe_id = "dropdownTimeframe" %}
+                {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
+                {% set dropdown_timeframe_list_id = "dropdownTimeFrameList" %}
+                {% set user_datepicker_start_id  = "timeframeStartDatePicker" %}
+                {% set user_timepicker_start_id = "timeframeStartTimePicker" %}
+                {% set user_datepicker_end_id  = "timeframeEndDatePicker" %}
+                {% set user_timepicker_end_id = "timeframeEndTimePicker" %}
+                {% set user_checkbox_allday_id = "timeframeCheckboxAllDay" %}
+                {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
+                {% set user_dropdown_repeat_label_id = "timeframeDropdownRepeatLabel" %}
+                {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
+                {% set dropdown_label_text = "Select Time Frame" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set button_type = "button_location" %}
+                {% set button_id = "showLocationMap" %}
+                {% set button_label = "Select Location" %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% include "partials/modal-map.html" %}
+            {% endwith %}
         </div>
 
         </div>
@@ -182,7 +183,7 @@
                 </div>
             </div>
         <script src="js/leaflet-ui-functions.js"></script>
-        <script src="js/leaflet-stac-ui.js"></script>
+        <script src="js/leaflet-stac-ui.js" type="module"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function(){
                 hideDetails();
