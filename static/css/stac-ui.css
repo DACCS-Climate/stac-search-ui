@@ -2708,6 +2708,10 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: unset;
 }
 
+.button-location:hover{
+    background-color: var(--white);
+}
+
 .icon-location-globe{
     width: 29px;
     height: 29px;
@@ -2745,6 +2749,12 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+.div-my-search-filter{
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .div-hidden-filter{
