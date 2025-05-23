@@ -765,7 +765,6 @@ function datasetDetailsHeaderTemplate(headerText) {
     header.appendChild(headerIcon);
     header.appendChild(headerTitle);
 
-
     return headerContainer;
 }
 
@@ -775,7 +774,6 @@ function buildMySearchDisplay(){
     var mySearchDiv = document.getElementById("mySearchFilters");
     var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
     var mySearchBody = document.createElement("div");
-
 
     mySearchDiv.appendChild(mySearchHeader);
     mySearchDiv.appendChild(mySearchBody);
@@ -791,6 +789,7 @@ function buildMySearchDisplay(){
         searchFilterContainer.classList.add("div-search-filter-container");
         searchFilterTitle.classList.add("subtitle-1", "text-all-caps", "text-colour-search-filter");
         searchFilterTitle.innerText = category;
+        searchFilterBody.classList.add("div-my-search-filter");
         searchFilterHidden.classList.add("div-hidden-filter");
 
         if(category.includes("-")){
@@ -821,13 +820,15 @@ function applyMySearch(){
     var argumentArray = [];
     var filterJSON = {"filter":{"op":"and","args":[]}};
     var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
+    var frequencyFilterHiddenContainer = document.getElementById("searchFilterFrequencyHidden");
     var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
-    var frequencyFilterHiddenContainer = document.getElementById("searchFilterFrequencyHidden");
+    var locationFilterHiddenContainer = document.getElementById("searchFilterLocationHidden");
 
     var datasetFilter;
-    var timeframeFilter;
     var frequencyFilter;
+    var timeframeFilter;
+    var locationFilter
 
 
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
@@ -835,15 +836,21 @@ function applyMySearch(){
         filterJSON["filter"].args.push(datasetFilter);
     }
 
+    if(frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== "" || frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== null){
+        frequencyFilter = JSON.parse(frequencyFilterHiddenContainer.innerText);
+        filterJSON["filter"].args.push(frequencyFilter);
+    }
+
     if(timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== "" || timeframeFilterHiddenContainer.innerText && timeframeFilterHiddenContainer.innerText !== null){
         timeframeFilter = JSON.parse(timeframeFilterHiddenContainer.innerText);
         filterJSON["filter"].args.push(timeframeFilter);
     }
 
-    if(frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== "" || frequencyFilterHiddenContainer.innerText && frequencyFilterHiddenContainer.innerText !== null){
-        frequencyFilter = JSON.parse(frequencyFilterHiddenContainer.innerText);
-        filterJSON["filter"].args.push(frequencyFilter);
+    if(locationFilterHiddenContainer.innerText && locationFilterHiddenContainer.innerText !== "" || locationFilterHiddenContainer.innerText && locationFilterHiddenContainer.innerText !== null){
+        locationFilter = JSON.parse(locationFilterHiddenContainer.innerText);
+        filterJSON["filter"].args.push(locationFilter);
     }
+
 
     //TODO Remove console for production
     console.log(filterJSON);
@@ -888,9 +895,6 @@ async function buildFrequencyFilterDropdown(){
         searchURL = productionCollectionsURL;
         searchJSONNode = "summaries";
     }
-
-searchURL = productionCollectionsURL;
-        searchJSONNode = "summaries";
 
      fetch(searchURL, {
         headers:{
@@ -987,16 +991,11 @@ function populateFrequencyFilterDropdownItems(json, dataEndpoint){
         })
 }
 
-
-
 function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeValue){
     var filterString =  {"op": "or", "args": []};
     var frequencyFilterString =  {"op":"=", "args": [{}, ""]};
 
-
     if(collectionAttribute == "summaries"){
-        //var filterArray = [];
-        //filterArray.push(attributeValue);
         frequencyFilterString.args[0][collectionAttribute] = attributeName;
         frequencyFilterString.args[1] = attributeValue;
 
@@ -1005,6 +1004,7 @@ function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeV
         frequencyFilterString.args[0][collectionAttribute] = attributeName;
         frequencyFilterString.args[1] = {"enum":attributeValue.enum};
     }
+
     filterString.args.push(frequencyFilterString);
     return filterString;
 }
