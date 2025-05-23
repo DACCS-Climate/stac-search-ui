@@ -698,7 +698,6 @@ function uploadGeoJSON(map){
 
 //Formats drawn shape or added geojson map area into geojson as expected by STAC API
 function formatGeoJSON(shapeDict){
-    var currentGeoJSONDiv = L.DomUtil.get("searchFilterLocationHidden");
     var shapeType;
     var shape = shapeDict['shape'];
     var shapeGeoJSON;
@@ -709,17 +708,18 @@ function formatGeoJSON(shapeDict){
     var locationHiddenDiv = document.getElementById("searchFilterLocationHidden");
     var locationFilter = {"filter": {"op": "and", "args": []}};
     var intersectFilter = {"op": "s_intersects", "args":[{"property":"geometry"},{"type":"", "coordinates":""}]};
+    //var intersectFilter = {"intersects":{"type":"", "coordinates":""}};
+    locationBodyDiv.innerHTML = "";
 
-    if(Object.keys(shapeDict).length > 0){
+    if(Object.keys(shapeDict).length > 0) {
         shapeType = shapeDict['shape']['shapeType'];
 
-        if(shapeType == "Marker"){
+        if (shapeType == "Marker") {
             shapeGeoJSON = shape.toGeoJSON();
             stacGeoJSON["features"] = shapeGeoJSON;
-        }else if(shapeType == "Map"){
+        } else if (shapeType == "Map") {
             stacGeoJSON = shapeDict['shapeData'];
-        }
-        else{
+        } else {
             shapeGeoJSON = shape.toGeoJSON();
             bounds = shape.getBounds();
             bbox = [bounds._northEast["lat"], bounds._northEast["lng"], bounds._southWest["lat"], bounds._southWest["lng"]]
@@ -729,13 +729,34 @@ function formatGeoJSON(shapeDict){
 
         //TODO Keep console for the formatted geojson for now
         console.log(stacGeoJSON);
-        currentGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
 
-        intersectFilter.args[1].type = "Polygon";
+
+
+        if (shapeGeoJSON.geometry.type == "Polygon"){
+            Object.entries(shapeGeoJSON.geometry.coordinates[0]).forEach(([key, value]) => {
+                var locationCoordinate = document.createElement("p");
+
+                locationCoordinate.innerText = parseInt(key) + 1 + ": " + value[1] + ", " + value[0];
+                locationBodyDiv.appendChild(locationCoordinate);
+            })
+        }
+
+        if(shapeGeoJSON.geometry.type == "Point"){
+            var coordinateNum = 0;
+            locationCoordinate.innerText = parseInt(coordinateNum) + 1 + ": " + shapeGeoJSON.geometry.coordinates[1] +
+                ", " + shapeGeoJSON.geometry.coordinates[0];
+        }
+
+
+
+
+        //intersectFilter.intersects.type = shapeGeoJSON.geometry.type;
+        //intersectFilter.intersects.coordinates = shapeGeoJSON.geometry.coordinates;
+        intersectFilter.args[1].type = shapeGeoJSON.geometry.type;
         intersectFilter.args[1].coordinates = shapeGeoJSON.geometry.coordinates;
-        locationFilter.filter.args = intersectFilter;
-        locationBodyDiv.innerText = shapeGeoJSON.geometry.coordinates;
+        locationFilter.filter.args.push(intersectFilter);
         locationHiddenDiv.innerText = JSON.stringify(locationFilter);
+        console.log(locationFilter);
     }
 }
 
