@@ -1,6 +1,13 @@
 var shapeDict = {};
 var mapsPlaceholder = [];
 function instantiateMap(mapContainerID){
+    var map;
+    var mapContainer = L.DomUtil.get(mapContainerID);
+
+    if(mapContainer != null){
+        mapContainer._leaflet_id = null;
+    }
+
 
     //Add hook to add map object to array so it can be used later to add STAC polygons to map
     L.Map.addInitHook(function () {
@@ -8,7 +15,7 @@ function instantiateMap(mapContainerID){
     });
 
     //Creates map with the map centre at the given latitude. longitude, and zoom level
-    var map = L.map(mapContainerID,{
+    map = L.map(mapContainerID,{
             editable: true,
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
@@ -708,6 +715,9 @@ function formatGeoJSON(shapeDict){
     var locationHiddenDiv = document.getElementById("searchFilterLocationHidden");
     var locationFilter = {"filter": {"op": "and", "args": []}};
     var intersectFilter = {"op": "s_intersects", "args":[{"property":"geometry"},{"type":"", "coordinates":""}]};
+
+    //TODO Check if s_intersects filter is usable on the Redoak server
+    // Keep intersectFilter using 'intersect' as comments for now
     //var intersectFilter = {"intersects":{"type":"", "coordinates":""}};
     locationBodyDiv.innerHTML = "";
 
@@ -727,7 +737,8 @@ function formatGeoJSON(shapeDict){
             stacGeoJSON["features"] = shapeGeoJSON;
         }
 
-        //TODO Keep console for the formatted geojson for now
+        //TODO Remove console for production.
+        // Keep console for the formatted geojson for now
         console.log(stacGeoJSON);
 
 
@@ -749,14 +760,15 @@ function formatGeoJSON(shapeDict){
 
 
 
-
+        //TODO Check if s_intersects filter is usable on the Redoak server
+        // Keep intersectFilter using 'intersect' as comments for now
         //intersectFilter.intersects.type = shapeGeoJSON.geometry.type;
         //intersectFilter.intersects.coordinates = shapeGeoJSON.geometry.coordinates;
         intersectFilter.args[1].type = shapeGeoJSON.geometry.type;
         intersectFilter.args[1].coordinates = shapeGeoJSON.geometry.coordinates;
         locationFilter.filter.args.push(intersectFilter);
         locationHiddenDiv.innerText = JSON.stringify(locationFilter);
-        console.log(locationFilter);
+
     }
 }
 
