@@ -1222,6 +1222,7 @@ background-color: var(--gray-300);
     align-items: center;
     padding-left: 32px;
     padding-right: 32px;
+    background-color: var(--indigo250-opacity-light) !important;
     cursor: pointer;
 }
 
@@ -1682,7 +1683,7 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     justify-content: space-between;
     align-items: center;
     border-radius: unset;
-    background-color: var(--indigo250-opacity-light);
+    background-color: var(--indigo250-opacity-light) !important;
     color: var(--indigo-700);
     padding-left: 32px;
     padding-right: 32px;
@@ -2708,10 +2709,6 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     border-radius: unset;
 }
 
-.button-location:hover{
-    background-color: var(--white);
-}
-
 .icon-location-globe{
     width: 29px;
     height: 29px;
@@ -2761,6 +2758,18 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
     width: 0px;
     height: 0px;
     display: none;
+}
+
+.div-keyword-tag-container{
+    max-width: 200px;
+    height: 26px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    background-color: var(--primary-variant);
+    color: var(--text-on-dark);
 }
 
 .div-datasets-filter{
