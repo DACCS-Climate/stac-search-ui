@@ -26,4 +26,11 @@ document.addEventListener("DOMContentLoaded", function (){
         clearListChildren();
         getWord(event.target, "searchInputContainer");
     });
+
+    var searchKeywordAddButton = document.getElementById("searchIconAnchor");
+
+    searchKeywordAddButton.addEventListener('click', function(){
+        addKeywordTag(searchInputElement.value);
+    });
+
 })
