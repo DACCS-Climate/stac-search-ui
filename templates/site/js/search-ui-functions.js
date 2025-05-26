@@ -26,27 +26,4 @@ document.addEventListener("DOMContentLoaded", function (){
         clearListChildren();
         getWord(event.target, "searchInputContainer");
     });
-
-
-    //TODO: Uncomment when spin buttons added to frontend search UI or move to another file
-    //For text input small
-    /*
-    var textInputElement = document.getElementById("inputNumberSmall");
-
-    setPlaceholderText(textInputElement, "1");
-
-    textInputElement.addEventListener("click", function(){
-        setPlaceholderText(textInputElement, "");
-        setTextboxBackground(textInputElement);
-    });
-
-    textInputElement.addEventListener("focus", function(){
-        setPlaceholderText(textInputElement, "");
-    });
-
-    textInputElement.addEventListener("blur", function(){
-        setPlaceholderText(textInputElement , "1");
-        setTextboxBackground(textInputElement);
-    });
-    */
 })
