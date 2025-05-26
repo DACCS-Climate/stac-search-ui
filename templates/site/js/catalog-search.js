@@ -782,11 +782,13 @@ function buildMySearchDisplay(){
     for(category of searchFilterCategories){
         var searchFilterContainer = document.createElement("div");
         var searchFilterHeader = document.createElement("div");
+        var searchFilterKeywordContainer = document.createElement("div");
         var searchFilterTitle = document.createElement("div");
         var searchFilterBody = document.createElement("div");
         var searchFilterHidden = document.createElement("div");
 
         searchFilterContainer.classList.add("div-search-filter-container");
+        searchFilterKeywordContainer.id = "searchKeywordTagContainer";
         searchFilterTitle.classList.add("subtitle-1", "text-all-caps", "text-colour-search-filter");
         searchFilterTitle.innerText = category;
         searchFilterBody.classList.add("div-my-search-filter");
