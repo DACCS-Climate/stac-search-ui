@@ -20,3 +20,20 @@
         {% endif %}
     {% endfor %}
 </div>
+
+
+{% if tag_input == "keyword_tag" %}
+    {% set keyword_button_id = "keyword" + keyword + "Close" %}
+    <div class="keyword-tag-container">
+        <p class="subtitle-2">{{ keyword }}</p>
+
+        <div class="popup-button-close">
+            {% with button_type = "close_button_x"%}
+                {% set button_id = keyword_button_id %}
+                {% include "partials/button.html" %}
+            {% endwith %}
+        </div>
+
+    </div>
+
+{% endif %}
