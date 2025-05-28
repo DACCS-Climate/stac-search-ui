@@ -41,18 +41,6 @@
             </div>
 
             {% with %}
-                {% set dropdown_type = "regular_dropdown_list_frequency" %}
-                {% set dropdown_default_UL_id = "dropdownListRegularFrequency" %}
-                {% set container_id = "dropdownListRegularFrequencyContainer" %}
-                {% set dropdown_button_id = "dropdownListFrequencyButton" %}
-                {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
-                {% set label_id = "dropdownListRegularFrequencyLabel" %}
-                {% set dropdown_label_text = "Select Frequency" %}
-                {% include "partials/dropdown.html" %}
-            {% endwith %}
-
-
-            {% with %}
                 {% set dropdown_type = "dropdown_time_frame" %}
                 {% set dropdown_timeframe_id = "dropdownTimeframe" %}
                 {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
@@ -78,6 +66,17 @@
 
             {% with %}
                 {% include "partials/modal-map.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set dropdown_type = "regular_dropdown_list_frequency" %}
+                {% set dropdown_default_UL_id = "dropdownListRegularFrequency" %}
+                {% set container_id = "dropdownListRegularFrequencyContainer" %}
+                {% set dropdown_button_id = "dropdownListFrequencyButton" %}
+                {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
+                {% set label_id = "dropdownListRegularFrequencyLabel" %}
+                {% set dropdown_label_text = "Select Frequency" %}
+                {% include "partials/dropdown.html" %}
             {% endwith %}
         </div>
 
