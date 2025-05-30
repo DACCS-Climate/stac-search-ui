@@ -58,7 +58,7 @@
 <a class="undecorated-link button-anchor-tag {{ button['a_class'] }} {{ disabled }}">
 
     <button id="{{ button_id|default(button['id']) }}" 
-            class="{{ button['class'] }} {{ extra_button_class }} {{ disabled }}" 
+            class="{{ button['class'] }} {{ button_colour_class }} {{ extra_button_class }} {{ disabled }}"
             type="button"
             {% if button_value %} value="{{ button_value }}" {% endif %}
             {{ button["additional_attributes"] }}>
