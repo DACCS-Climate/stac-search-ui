@@ -44,7 +44,7 @@
             "dropdown_button_class":"dropdown-regular-list-button",
             "title_text_class":"dropdown-frequency-list-title",
             "title_chevron_class": "dropdown-regular-list-chevron-icon",
-            "list_class":"dropdown-regular-list",
+            "list_class":"dropdown-regular-list dropdown-regular-list-frequency",
             "list_item_text_class":"dropdown-frequency-list-link",
             "list_item_icon_class":""
         },
@@ -156,17 +156,10 @@
 
                             listItem.addEventListener('click', function() {
                                 replaceListItem("{{ dropdown_label_text }}", "{{ dropdown_button_text_id }}", "{{ list_item_id }}");
-                                setFrequencyFilter("{{ list_item_id }}");
                             })
                         });
                     </script>
                 {% endfor %}
-            {% endif %}
-
-            {% if dropdown_type == "regular_dropdown_list_frequency" %}
-                <script>
-
-                </script>
             {% endif %}
 
             </ul>
