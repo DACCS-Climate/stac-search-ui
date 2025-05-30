@@ -713,12 +713,7 @@ function formatGeoJSON(shapeDict){
     var stacGeoJSON  = JSON.parse('{"type": "FeatureCollection", "features": [{}]}');
     var locationBodyDiv = document.getElementById("searchFilterLocationBody");
     var locationHiddenDiv = document.getElementById("searchFilterLocationHidden");
-    var locationFilter = {"filter": {"op": "and", "args": []}};
-    var intersectFilter = {"op": "s_intersects", "args":[{"property":"geometry"},{"type":"", "coordinates":""}]};
-
-    //TODO Check if s_intersects filter is usable on the Redoak server
-    // Keep intersectFilter using 'intersect' as comments for now
-    //var intersectFilter = {"intersects":{"type":"", "coordinates":""}};
+    var intersectFilter = {"intersects":{"type":"", "coordinates":[]}};
     locationBodyDiv.innerHTML = "";
 
     if(Object.keys(shapeDict).length > 0) {
@@ -749,26 +744,23 @@ function formatGeoJSON(shapeDict){
 
                 locationCoordinate.innerText = parseInt(key) + 1 + ": " + value[1] + ", " + value[0];
                 locationBodyDiv.appendChild(locationCoordinate);
+
+                intersectFilter.intersects.coordinates.push(value);
             })
         }
 
         if(shapeGeoJSON.geometry.type == "Point"){
             var coordinateNum = 0;
+            var locationCoordinate = document.createElement("p");
             locationCoordinate.innerText = parseInt(coordinateNum) + 1 + ": " + shapeGeoJSON.geometry.coordinates[1] +
                 ", " + shapeGeoJSON.geometry.coordinates[0];
+            locationBodyDiv.appendChild(locationCoordinate);
+
+            intersectFilter.intersects.coordinates.push(shapeGeoJSON.geometry.coordinates);
         }
 
-
-
-        //TODO Check if s_intersects filter is usable on the Redoak server
-        // Keep intersectFilter using 'intersect' as comments for now
-        //intersectFilter.intersects.type = shapeGeoJSON.geometry.type;
-        //intersectFilter.intersects.coordinates = shapeGeoJSON.geometry.coordinates;
-        intersectFilter.args[1].type = shapeGeoJSON.geometry.type;
-        intersectFilter.args[1].coordinates = shapeGeoJSON.geometry.coordinates;
-        locationFilter.filter.args.push(intersectFilter);
-        locationHiddenDiv.innerText = JSON.stringify(locationFilter);
-
+        intersectFilter.intersects.type = shapeGeoJSON.geometry.type;
+        locationHiddenDiv.innerText = JSON.stringify(intersectFilter);
     }
 }
 
