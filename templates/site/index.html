@@ -57,12 +57,14 @@
                 {% include "partials/dropdown-panel.html" %}
             {% endwith %}
 
-            {% with %}
-                {% set button_type = "button_location" %}
-                {% set button_id = "showLocationMap" %}
-                {% set button_label = "Select Location" %}
-                {% include "partials/button.html" %}
-            {% endwith %}
+            <div>
+                {% with %}
+                    {% set button_type = "button_location" %}
+                    {% set button_id = "showLocationMap" %}
+                    {% set button_label = "Select Location" %}
+                    {% include "partials/button.html" %}
+                {% endwith %}
+            </div>
 
             {% with %}
                 {% include "partials/modal-map.html" %}
@@ -78,6 +80,8 @@
                 {% set dropdown_label_text = "Select Frequency" %}
                 {% include "partials/dropdown.html" %}
             {% endwith %}
+
+            <div id="dropdownQueryables" class="div-queryable-filters"></div>
         </div>
 
         </div>
@@ -189,6 +193,7 @@
                 getSTACSearchResults("");
                 buildMySearchDisplay();
                 buildFrequencyFilterDropdown();
+                buildQueryablesFilterDropdown();
 
                 var searchFilterApplyButton = document.getElementById("searchFilterApply")
                 searchFilterApplyButton.addEventListener("click", applyMySearch);
