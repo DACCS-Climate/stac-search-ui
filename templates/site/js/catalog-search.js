@@ -42,6 +42,8 @@ function fuseDictionary(_queryables, _path) {
                     Object.entries(fuseDictionary(q_value, _path)).forEach(([o_key, o_value]) => {
                         found[o_key] = found[o_key] || []
                         o_value.forEach(val => found[o_key].push(val))
+
+                        found[o_key]["stac_key"] = q_key;
                     });
                 }
             }
@@ -103,12 +105,13 @@ function getWord(inputBox, inputBoxContainerID){
                             queryableResultButton = document.createElement('a');
                             queryableResultButton.innerText = matchItem.value;
                             queryableResultButton.setAttribute('role', 'button');
+                            queryableResultButton.setAttribute('queryablekeystac', queryableItem.item.values.stac_key);
                             queryableResultButton.setAttribute('queryablekeytype', queryableItem.item.values[0][1]);
                             queryableResultButton.setAttribute('queryablekeyvalue', queryableItem.item.key);
                             queryableResultButton.id = "match" + queryablesArray.indexOf(queryableItem);
 
                             queryableResultButton.addEventListener('click', function (event) {
-                                selectSearchResults(inputBox, event.target.id);
+                                selectSearchResults(inputBox, event.target.id, queryableItem.item.values.stac_key, queryableItem.item.key);
                             })
 
                             listItemFont.appendChild(queryableResultButton);
@@ -128,10 +131,12 @@ function getWord(inputBox, inputBoxContainerID){
     }
 }
 
-function selectSearchResults(inputBox, buttonID){
+function selectSearchResults(inputBox, buttonID,stacKey, queryableValue){
     var listButton = document.getElementById(buttonID);
     inputBox.value = listButton.innerText;
     inputBox.setAttribute("aria-expanded", "false");
+    inputBox.setAttribute('queryablekeystac', stacKey);
+    inputBox.setAttribute('queryablekeyvalue', queryableValue);
     inputBox.classList.add("returned-result")
 }
 
@@ -350,10 +355,8 @@ function populateDatasetDetails(features){
 
 
     var datasetMetadataContainer = document.getElementById("datasetMetadataList");
-    //var metadataHeader = datasetDetailsHeaderTemplate("Metadata");
     var metadataBody = document.createElement("div");
 
-    //datasetMetadataContainer.appendChild(metadataHeader);
     datasetMetadataContainer.appendChild(metadataBody);
 
     var datasetID;
@@ -670,8 +673,6 @@ function populateDatasetDetails(features){
 
 function getSTACSearchResults(url){
     var productionURL = "{{ stac_catalog_url }}/search?";
-    //TODO Remove testingURL for production
-    var testingURL = "https://infomatics-dcs.cs.toronto.edu/stac/search?";
     var stacSearchURL;
     var queryParams = "";
 
@@ -679,7 +680,6 @@ function getSTACSearchResults(url){
         stacSearchURL = url;
     }
     else{
-        //TODO Change testingURL to productionURL for production
         stacSearchURL = productionURL;
     }
 
@@ -756,12 +756,16 @@ function buildMySearchDisplay(){
     var mySearchDiv = document.getElementById("mySearchFilters");
     var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
     var searchFilterKeywordContainer = document.createElement("div");
+    var searchFilterKeywordHidden = document.createElement("div");
     var mySearchBody = document.createElement("div");
 
     searchFilterKeywordContainer.id = "searchKeywordTagContainer";
+    searchFilterKeywordHidden.id = "searchFilterKeywordHidden";
     searchFilterKeywordContainer.classList.add("div-my-search-tags");
+    searchFilterKeywordHidden.classList.add("div-hidden-filter");
     mySearchDiv.appendChild(mySearchHeader);
     mySearchDiv.appendChild(searchFilterKeywordContainer);
+    mySearchDiv.appendChild(searchFilterKeywordHidden);
     mySearchDiv.appendChild(mySearchBody);
     mySearchBody.classList.add("div-my-search-body");
 
