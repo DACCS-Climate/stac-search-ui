@@ -1,31 +1,3 @@
-function defaultRadioState(radioElementID, dateInputFieldID){
-
-        var radioButton = document.getElementById(radioElementID);
-        var dateInput = document.getElementById(dateInputFieldID);
-
-        radioButton.checked = true;
-        dateInput.disabled = true;
-
-}
-
-function enableEndsOnDateInput(radioElementID, dateInputFieldID){
-        var radioButton = document.getElementById(radioElementID);
-        var dateInput = document.getElementById(dateInputFieldID);
-
-        if(radioButton.checked == true){
-                dateInput.disabled = false;
-        }
-}
-
-function disableEndsOnDateInput(radioElementID, dateInputFieldID){
-        var radioButton = document.getElementById(radioElementID);
-        var dateInput = document.getElementById(dateInputFieldID);
-
-        if(radioButton.checked == true){
-                dateInput.disabled = true;
-        }
-}
-
 function resetTimeFrameInput(dateStartElementID, dateEndElementID){
 
     var dateStart = document.getElementById(dateStartElementID);
@@ -71,78 +43,35 @@ function calculateTime(timeType, startDate, endDate) {
 }
 
 
-
-
-
 function populateTimeframeFilter(datepickerStartID, datepickerEndID){
     var argumentDateFilterJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeJSON = JSON.parse('{"op": "or","args" : [ ]}');
     var argumentDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
     var argumentSearchDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
     var argumentSearchStartDateTimeRangeJSON = JSON.parse('{"op": "and","args" : [ ]}');
-    var repeatIntervalJSON = JSON.parse('{"op": "or","args" : [ ]}');
-    var repeatStartDateTimeIntervalJSON = JSON.parse('{"op": "or","args" : [ ]}');
-    var argumentDateTimeSingleJSON = {"op":"=", "args":[{"property":"datetime"}, ""]};
-
-    var argumentPairDateTimeJSON = {"op": "and","args" : [ ]};
-    var argumentPairStartDateTimeJSON = {"op": "and","args" : [ ]};
-
-
-
-    var argumentFirstDateTimeJSON  = {"op":"between", "args":[{"property":"datetime"}, {"timestamp":""}]};
-    var argumentFirstStartDateTimeJSON = {"op":"between", "args":[{"property":"start_datetime"}, {"timestamp":""}]};
-    var argumentSecondEndDateTimeJSON = {"op":"between", "args":[{"property":"end_datetime"}, {"timestamp":""}]};
-
-
     var argumentDateTimeStartJSON = {"op":">=", "args":[{"property":"datetime"}, ""]};
     var argumentDateTimeEndJSON = {"op":"<=", "args":[{"property":"datetime"}, ""]};
-
     var argumentStartDateTimeJSON = {"op":"<=", "args":[{"property":"start_datetime"}, ""]};
-
     var argumentDateTimeStartRangeJSON = {"op":"<=", "args":[{"property":"datetime"}, ""]};
     var argumentDateTimeEndRangeJSON = {"op":">=", "args":[{"property":"end_datetime"}, ""]};
-    var filterDateTimeArgument = {"op":"=", "args":[]};
     var dateSingleArgumentArray = [];
     var dateArgumentArray = [];
     var dateStartTimeRangeArgumentArray = [];
     var dateRangeArgumentArray = [];
     var dateFilterArray = [];
-    var datetimeObject = {"datetime": ""};
     var timeFrameFilterDiv = document.getElementById("searchFilterTimeFrameBody")
     var timeFrameHiddenDiv = document.getElementById("searchFilterTimeFrameHidden");
     var datepickerStart = document.getElementById(datepickerStartID);
-    //var timepickerStart = document.getElementById(timepickerStartID);
     var datepickerEnd = document.getElementById(datepickerEndID);
-    //var timepickerEnd = document.getElementById(timepickerEndID);
-
-
-
-
-
-
-
-
 
     var displayDateRangeContainer = document.createElement("div");
     var displayDateRangeStart = document.createElement("p");
     var displayDateRangeEnd = document.createElement("p");
 
     var errorMessage = document.createElement("p");
-    var displayFullDateStart = "";
-    var displayFullDateEnd = ""
-    var displayYearStart = "";
-    var displayYearEnd = "";
-    var displayMonthStart = "";
-    var displayMonthEnd = "";
-    var displayDateStart = "";
-    var displayDateEnd = "";
     var displayTimeStart = "";
-    var displayTimeEnd = "";
-
 
     errorMessage.classList.add("error-timeframe", "content");
-
-
 
     displayDateRangeContainer.appendChild(displayDateRangeStart);
     displayDateRangeContainer.appendChild(displayDateRangeEnd);
@@ -153,34 +82,18 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
     displayDateRangeStart.classList.add("subtitle-1");
     displayDateRangeEnd.classList.add("subtitle-1");
 
-
     var dateStart;
     var dateEnd;
-    var timeStart;
-    var timeEnd;
     var timeStartMinute;
     var timeStartSecond;
     var timeEndMinute;
     var timeEndSecond;
-
-
-
-
-
-
     var startDateTimeInput;
     var endDateTimeInput;
-
     var startDateTime ;
     var startDateTimeISO;
     var endDateTime ;
     var endDateTimeISO;
-
-
-
-
-
-
 
     if (datepickerStart.value) {
         dateStart = datepickerStart.value;
@@ -198,14 +111,6 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
     startDateTime = new Date(startDateTimeInput);
     startDateTimeISO = startDateTime.toISOString();
 
-    displayYearStart = startDateTime.getUTCFullYear();
-    displayMonthStart = startDateTime.getUTCMonth();
-    displayDateStart = startDateTime.getUTCDate();
-
-
-    //var startDateTimeNoMilliSeconds = startDateTimeISO.slice(0, startDateTimeISO.lastIndexOf("."));
-    //startDateTimeNoMilliSeconds = startDateTimeNoMilliSeconds + "Z";
-
     if(startDateTime.getUTCMinutes() < 10){
         timeStartMinute = "0" + startDateTime.getUTCMinutes().toString();
     }
@@ -220,25 +125,17 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
         timeStartSecond = startDateTime.getUTCSeconds().toString();
     }
 
-    //timeStart = startDateTime.getUTCHours() + ":" + timeStartMinute;
 
 
     displayTimeStart = startDateTime.getUTCHours().toString() + ":" + timeStartMinute + ":" + timeStartSecond;
 
     displayDateRangeStart.innerText = startDateTime.getUTCFullYear() + " - " + startDateTime.getUTCMonth() + " - " +
     startDateTime.getUTCDate() + " " + displayTimeStart + " ";
-    //displayFullDateStart
-    //displayDateRangeStart.innerText = new Date(Date.UTC(displayYearStart, displayMonthStart, displayDateStart)).toUTCString();
-
-
-
 
     endDateTimeInput = dateEnd + " " + "UTC";
     endDateTime = new Date(endDateTimeInput);
     endDateTimeISO = endDateTime.toISOString();
 
-    //var endDateTimeNoMilliSeconds = endDateTimeISO.slice(0, endDateTimeISO.lastIndexOf("."));
-    //endDateTimeNoMilliSeconds = endDateTimeNoMilliSeconds + "Z";
 
     if(endDateTime.getUTCMinutes() < 10){
         timeEndMinute = "0" + endDateTime.getUTCMinutes().toString();
@@ -254,7 +151,6 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
         timeEndSecond = endDateTime.getUTCSeconds().toString();
     }
 
-    //displayDateRangeEnd.innerText = " - " + endDateTime.toDateString();
     displayDateRangeEnd.innerText = " - " + endDateTime.getFullYear().toString() + " - " + endDateTime.getMonth().toString() + " - "
         + endDateTime.getDate().toString() + " "
         + endDateTime.getUTCHours().toString() + ":" + timeEndMinute + ":" + timeEndSecond;
@@ -262,37 +158,33 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
 
 
 
+    var daysBetweenStartEnd = Math.floor(calculateTime("Daily", startDateTime, endDateTime));
 
+    if (daysBetweenStartEnd > 0) {
+        //Item with just datetime
+        argumentDateTimeEndJSON.args[1] = startDateTimeISO;
+        argumentDateTimeStartJSON.args[1] = endDateTimeISO;
+        dateSingleArgumentArray.push(argumentDateTimeStartJSON);
+        dateSingleArgumentArray.push(argumentDateTimeEndJSON);
 
+        //Item with datetime and end_datetime
+        argumentDateTimeEndRangeJSON.args[1] = startDateTimeISO;
+        argumentDateTimeStartRangeJSON.args[1] = endDateTimeISO;
+        dateRangeArgumentArray.push(argumentDateTimeStartRangeJSON);
+        dateRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
 
-
-        var daysBetweenStartEnd = Math.floor(calculateTime("Daily", startDateTime, endDateTime));
-
-        if (daysBetweenStartEnd > 0) {
-            //Item with just datetime
-            argumentDateTimeEndJSON.args[1] = startDateTimeISO;
-            argumentDateTimeStartJSON.args[1] = endDateTimeISO;
-            dateSingleArgumentArray.push(argumentDateTimeStartJSON);
-            dateSingleArgumentArray.push(argumentDateTimeEndJSON);
-
-            //Item with datetime and end_datetime
-            argumentDateTimeEndRangeJSON.args[1] = startDateTimeISO;
-            argumentDateTimeStartRangeJSON.args[1] = endDateTimeISO;
-            dateRangeArgumentArray.push(argumentDateTimeStartRangeJSON);
-            dateRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
-
-            //Item with start_datetime and end_datetime
-            argumentDateTimeEndRangeJSON.args[1] = startDateTimeISO;
-            argumentStartDateTimeJSON.args[1] = endDateTimeISO;
-            dateStartTimeRangeArgumentArray.push(argumentStartDateTimeJSON);
-            dateStartTimeRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
-        } else {
-            //Item with just datetime
-            argumentDateTimeStartJSON.args[1] = startDateTimeISO;
-            argumentDateTimeEndJSON.args[1] = endDateTimeISO;
-            dateArgumentArray.push(argumentDateTimeStartJSON);
-            dateArgumentArray.push(argumentDateTimeEndJSON);
-        }
+        //Item with start_datetime and end_datetime
+        argumentDateTimeEndRangeJSON.args[1] = startDateTimeISO;
+        argumentStartDateTimeJSON.args[1] = endDateTimeISO;
+        dateStartTimeRangeArgumentArray.push(argumentStartDateTimeJSON);
+        dateStartTimeRangeArgumentArray.push(argumentDateTimeEndRangeJSON);
+    } else {
+        //Item with just datetime
+        argumentDateTimeStartJSON.args[1] = startDateTimeISO;
+        argumentDateTimeEndJSON.args[1] = endDateTimeISO;
+        dateArgumentArray.push(argumentDateTimeStartJSON);
+        dateArgumentArray.push(argumentDateTimeEndJSON);
+    }
 
 
 
@@ -322,8 +214,6 @@ function populateTimeframeFilter(datepickerStartID, datepickerEndID){
     argumentDateFilterJSON.args = dateFilterArray;
     timeFrameHiddenDiv.innerText = JSON.stringify(argumentDateFilterJSON);
 
-    //TODO: Keep console log for final filter JSON for now
-    console.log(argumentDateFilterJSON)
 
     if(datepickerEnd.value != "" || datepickerEnd.value != null){
         timeFrameFilterDiv.appendChild(displayDateRangeContainer);
