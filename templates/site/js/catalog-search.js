@@ -6,12 +6,6 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 })
 
-function getCollection(){
-    var dropdownDefault = document.getElementById("dropdownListDefaultContainer");
-    var checkboxes = dropdownDefault.querySelectorAll('li.dropdown-default-list-item label.checkbox-container input');
-    return checkboxes;
-}
-
 function fuseDictionary(_queryables, _path) {
     var found = {};
     if (_path === undefined) {
@@ -875,6 +869,16 @@ function applyMySearch(){
 
 }
 
+function clearMySearch(){
+    var searchFilterContainer = document.getElementById("searchFilterContainer");
+    var searchItemDivs = searchFilterContainer.querySelectorAll("div.div-my-search-filter, div.div-hidden-filter");
+
+    for(filterDiv of searchItemDivs){
+        filterDiv.innerHTML = "";
+        filterDiv.innerText = "";
+    }
+}
+
 async function checkSTACEndpoint(url){
     var response = await fetch(url);
 
@@ -1080,40 +1084,40 @@ function buildDropdownQueryableElements(json){
 
         if(propertyValue.enum && !propertyKey.includes("frequency") && !propertyKey.includes("marble")){
 
-                for(enumItem in propertyValue.enum){
-                    var dropdownListItem = document.createElement("li");
-                    var checkboxBufferDiv = document.createElement("div");
-                    var checkboxLabel = document.createElement("label");
-                    var checkboxLabelText = document.createElement("p");
-                    var checkmarkSpan = document.createElement("span");
-                    var checkbox = document.createElement("input");
-                    var checkboxID = propertyKey.replaceAll(':', '_') + enumItem;
+            for(enumItem in propertyValue.enum){
+                var dropdownListItem = document.createElement("li");
+                var checkboxBufferDiv = document.createElement("div");
+                var checkboxLabel = document.createElement("label");
+                var checkboxLabelText = document.createElement("p");
+                var checkmarkSpan = document.createElement("span");
+                var checkbox = document.createElement("input");
+                var checkboxID = propertyKey.replaceAll(':', '_') + enumItem;
 
-                    dropdownListItem.id = "listItem" + enumItem.replaceAll(' ', '');
-                    checkmarkSpan.classList.add("checkmark");
-                    checkboxLabel.classList.add("checkbox-container", "margin-unset");
-                    checkboxBufferDiv.classList.add("checkbox-buffer");
+                dropdownListItem.id = "listItem" + enumItem.replaceAll(' ', '');
+                checkmarkSpan.classList.add("checkmark");
+                checkboxLabel.classList.add("checkbox-container", "margin-unset");
+                checkboxBufferDiv.classList.add("checkbox-buffer");
 
-                    checkboxLabel.setAttribute("for", checkboxID);
-                    checkboxLabelText.innerText = propertyValue.enum[enumItem];
+                checkboxLabel.setAttribute("for", checkboxID);
+                checkboxLabelText.innerText = propertyValue.enum[enumItem];
 
-                    checkbox.setAttribute("type", "checkbox");
-                    checkbox.id = checkboxID;
-                    checkbox.setAttribute("propertyname", propertyKey);
-                    checkbox.setAttribute("value", propertyValue.enum[enumItem]);
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.id = checkboxID;
+                checkbox.setAttribute("propertyname", propertyKey);
+                checkbox.setAttribute("value", propertyValue.enum[enumItem]);
 
-                    checkbox.addEventListener('change', function(){
-                        buildQueryableFilterString(dropdownList);
-                    });
+                checkbox.addEventListener('change', function(){
+                    buildQueryableFilterString(dropdownList);
+                });
 
-                    checkboxBufferDiv.appendChild(checkboxLabel);
-                    checkboxLabel.appendChild(checkbox);
-                    checkboxLabel.appendChild(checkmarkSpan);
-                    checkboxLabel.appendChild(checkboxLabelText);
-                    checkboxBufferDiv.appendChild(checkboxLabel);
-                    dropdownListItem.appendChild(checkboxBufferDiv);
-                    dropdownList.appendChild(dropdownListItem);
-                }
+                checkboxBufferDiv.appendChild(checkboxLabel);
+                checkboxLabel.appendChild(checkbox);
+                checkboxLabel.appendChild(checkmarkSpan);
+                checkboxLabel.appendChild(checkboxLabelText);
+                checkboxBufferDiv.appendChild(checkboxLabel);
+                dropdownListItem.appendChild(checkboxBufferDiv);
+                dropdownList.appendChild(dropdownListItem);
+            }
 
             dropdownButton.appendChild(dropdownButtonText);
             dropdownDiv.appendChild(dropdownButton);
