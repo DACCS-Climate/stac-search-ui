@@ -107,7 +107,14 @@
                             {% set button_label = "Apply" %}
                             {% include "partials/button.html" %}
                         {% endwith %}
-                    </div>
+
+                        {% with %}
+                                {% set button_type = "button_reg_default_alt" %}
+                                {% set button_id = "searchFilterClear" %}
+                                {% set button_label = "Clear" %}
+                                {% include "partials/button.html" %}
+                            {% endwith %}
+                        </div>
                 </div>
 
                 <div id="searchResultsNavigation" class="search-results-nav">
@@ -197,6 +204,9 @@
 
                 var searchFilterApplyButton = document.getElementById("searchFilterApply")
                 searchFilterApplyButton.addEventListener("click", applyMySearch);
+
+                var clearFilterButton = document.getElementById("searchFilterClear");
+                clearFilterButton.addEventListener("click", clearMySearch);
 
             })
         </script>
