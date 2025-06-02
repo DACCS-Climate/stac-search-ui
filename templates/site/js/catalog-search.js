@@ -814,12 +814,14 @@ function applyMySearch(){
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
     var locationFilterHiddenContainer = document.getElementById("searchFilterLocationHidden");
     var otherFilterHiddenContainer = document.getElementById("searchFilterOtherHidden");
+    var keywordFilterHiddenContainer = document.getElementById("searchFilterKeywordHidden");
 
     var datasetFilter;
     var frequencyFilter;
     var timeframeFilter;
     var locationFilter
     var otherFilter;
+    var keywordFilter;
 
 
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
@@ -843,7 +845,6 @@ function applyMySearch(){
         Object.entries(locationFilter).forEach( ([key,value]) => {
             filterJSON[key] = value;
         })
-
     }
 
     if(otherFilterHiddenContainer.innerText && otherFilterHiddenContainer.innerText !== "" || otherFilterHiddenContainer.innerText && otherFilterHiddenContainer.innerText !== null){
@@ -852,7 +853,14 @@ function applyMySearch(){
         Object.entries(otherFilter).forEach( ([key,value]) => {
             filterJSON[key] = value;
         })
+    }
 
+    if(keywordFilterHiddenContainer.innerText && keywordFilterHiddenContainer.innerText !== "" || keywordFilterHiddenContainer.innerText && keywordFilterHiddenContainer.innerText !== null){
+        keywordFilter = JSON.parse(keywordFilterHiddenContainer.innerText);
+
+        Object.entries(keywordFilter).forEach( ([key,value]) => {
+            filterJSON[key] = value;
+        })
     }
 
     //TODO Remove console for production
