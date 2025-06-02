@@ -1,15 +1,16 @@
 var keywordList = {};
 
-function addKeywordTag(keyword){
+function addKeywordTag(keyword, stacKey, queryableValue){
     var searchKeywordTagContainerDiv = document.getElementById("searchKeywordTagContainer");
 
-    var keywordContainerID = keyword.replaceAll(" ", "") + "Tag";
+    if(keyword != "" || keyword!= null) {
+        var keywordContainerID = keyword.replaceAll(" ", "") + "_Tag";
+        var keywordTag = keywordTagTemplate(keywordContainerID, keyword, stacKey, queryableValue);
 
-    keywordList[keywordContainerID] = keyword;
-
-    searchKeywordTagContainerDiv.appendChild(keywordTagTemplate(keywordContainerID, keyword));
-
-
+        keywordList[keywordContainerID] = {"keyword":keyword, "stacKey": stacKey};
+        searchKeywordTagContainerDiv.appendChild(keywordTag);
+        buildKeywordFilter();
+    }
 }
 
 function removeKeywordTag(keywordTagID){
@@ -17,43 +18,62 @@ function removeKeywordTag(keywordTagID){
     var keywordTag = document.getElementById(keywordTagID);
 
     searchKeywordTagContainerDiv.removeChild(keywordTag);
+    delete keywordList[keywordTagID];
 
+    buildKeywordFilter();
 }
 
 function buildKeywordFilter(){
-    var searchKeywordTagContainerDiv = document.getElementById("searchKeywordTagContainer");
-
+    var searchFilterKeywordHiddenDiv = document.getElementById("searchFilterKeywordHidden");
+    var keywordFilter = {"op":"or", "args": []};
 
     Object.entries(keywordList).forEach( ([key, value]) => {
-        var keywordFilter
-    })
+        var tagFilter = {"op":"=", "args":[{"property": value.stacKey}, value.keyword]};
+        keywordFilter.args.push(tagFilter);
+    });
+    searchFilterKeywordHiddenDiv.innerText = JSON.stringify(keywordFilter);
 }
 
 
-function keywordTagTemplate(keywordTagID, keyword){
-    var keywordCloseButtonID = "keyword" + keyword + "Close";
+function keywordTagTemplate(keywordTagID, keyword, stacKey, queryableValue) {
+    if(keyword != '') {
+        var keywordCloseButtonID = "keyword" + keyword + "Close";
 
-    var keywordTagContainer = document.createElement("div");
-    var keywordTagText = document.createElement("p");
-    var keywordCloseButtonContainer = document.createElement("div");
-    var keywordCloseButton = document.getElementById("keywordCloseButtonID");
+        var closeButtonLink = document.createElement("a");
+        var closeButtonTag = document.createElement("button");
+        var closeButtonIcon = document.createElement("i");
 
-    keywordTagContainer.id = keywordTagID;
-    keywordTagContainer.classList.add("keyword-tag-container");
-    keywordCloseButtonContainer.classList.add("popup-button-close");
-    keywordTagText.classList.add("subtitle-2");
+        closeButtonTag.id = keywordCloseButtonID;
+        closeButtonTag.classList.add("button-close-x", "button-close-x-tag-colour", "button-close-x-tag-size");
+        closeButtonIcon.classList.add("fa-solid", "fa-xmark");
 
-    keywordTagText.innerText = keyword;
-    keywordCloseButtonContainer.innerHTML = `{% with button_type = "close_button_x"%} {% set button_id = ` + keywordCloseButtonID + `%} {% include "partials/button.html" %}{% endwith %}`;
+        closeButtonTag.appendChild(closeButtonIcon);
+        closeButtonLink.appendChild(closeButtonTag);
 
-    keywordCloseButton.addEventListener('click', function(){
-       removeKeywordTag(keywordTagID);
-    });
-    
-    
+        var keywordTagContainer = document.createElement("div");
+        var keywordTagText = document.createElement("p");
+        var keywordCloseButtonContainer = document.createElement("div");
 
-    keywordTagContainer.appendChild(keywordTagText);
-    keywordTagContainer.appendChild(keywordCloseButtonContainer);
 
-    return keywordTagContainer;
+        keywordTagContainer.id = keywordTagID;
+        keywordTagContainer.setAttribute('queryablekeystac', stacKey);
+        keywordTagContainer.setAttribute('queryablekeyvalue', queryableValue);
+        keywordTagContainer.classList.add("div-keyword-tag-container");
+        keywordTagText.classList.add("subtitle-2", "margin-unset");
+
+        keywordTagText.innerText = keyword;
+        keywordCloseButtonContainer.appendChild(keywordTagText);
+        keywordCloseButtonContainer.appendChild(closeButtonLink);
+
+
+        closeButtonTag.addEventListener('click', function () {
+            removeKeywordTag(keywordTagID);
+        });
+
+        keywordTagContainer.appendChild(keywordTagText);
+        keywordTagContainer.appendChild(keywordCloseButtonContainer);
+
+        return keywordTagContainer;
+
+    }
 }
