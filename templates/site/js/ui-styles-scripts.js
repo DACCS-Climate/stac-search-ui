@@ -25,6 +25,7 @@ function setPlaceholderText(element, text){
     element.setAttribute("placeholder", text);
 }
 
+/*Used for spin buttons*/
 function setTextboxBackground(element){
     if(element.classList.contains("input-number-small-background")){
         element.classList.remove("input-number-small-background");
