@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", function (){
     var searchKeywordAddButton = document.getElementById("searchIconAnchor");
 
     searchKeywordAddButton.addEventListener('click', function(){
-        addKeywordTag(searchInputElement.value);
+        var stacKey = searchInputElement.getAttribute('queryablekeystac');
+        var queryableValue = searchInputElement.getAttribute('queryablekeyvalue');
+        addKeywordTag(searchInputElement.value, stacKey, queryableValue);
     });
 
 })
