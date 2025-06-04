@@ -752,19 +752,15 @@ function datasetDetailsHeaderTemplate(headerText) {
 
 
 function buildMySearchDisplay(){
-    var searchFilterCategories = ["Datasets", "Location", "Sub-Categories", "Time Frame", "Frequency", "Format", "Other"];
+    var searchFilterCategories = ["Collections", "Location", "Time Frame", "Frequency", "Other"];
     var mySearchDiv = document.getElementById("mySearchFilters");
     var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
-    var searchFilterKeywordContainer = document.createElement("div");
     var searchFilterKeywordHidden = document.createElement("div");
     var mySearchBody = document.createElement("div");
 
-    searchFilterKeywordContainer.id = "searchKeywordTagContainer";
     searchFilterKeywordHidden.id = "searchFilterKeywordHidden";
-    searchFilterKeywordContainer.classList.add("div-my-search-tags");
     searchFilterKeywordHidden.classList.add("div-hidden-filter");
     mySearchDiv.appendChild(mySearchHeader);
-    mySearchDiv.appendChild(searchFilterKeywordContainer);
     mySearchDiv.appendChild(searchFilterKeywordHidden);
     mySearchDiv.appendChild(mySearchBody);
     mySearchBody.classList.add("div-my-search-body");
@@ -810,7 +806,7 @@ function applyMySearch(){
     var filterJSON = {"filter":{"op":"and","args":[]}};
     var fullFilterHiddenContainer = document.getElementById("fullFilterStringContainer");
     var frequencyFilterHiddenContainer = document.getElementById("searchFilterFrequencyHidden");
-    var datasetFilterHiddenContainer = document.getElementById("searchFilterDatasetsHidden");
+    var datasetFilterHiddenContainer = document.getElementById("searchFilterCollectionsHidden");
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
     var locationFilterHiddenContainer = document.getElementById("searchFilterLocationHidden");
     var otherFilterHiddenContainer = document.getElementById("searchFilterOtherHidden");
@@ -1088,11 +1084,12 @@ function buildDropdownQueryableElements(json){
 
         dropdownButtonText.id = "dropdownListQueryables" + extensionName + extensionAttribute +  "ButtonText";
         dropdownButtonText.classList.add("subtitle-1", "dropdown-frequency-list-title", "margin-unset", "padding-unset");
-        dropdownButtonText.innerText = "Select " + extensionName + " " + extensionAttribute;
+        dropdownButtonText.innerText = extensionName + " " + extensionAttribute;
 
         dropdownList.id = "dropdownListRegularQueryables" + extensionName + extensionAttribute;
         dropdownList.classList.add("dropdown-menu", "margin-unset", "padding-unset", "dropdown-regular-list", "dropdown-regular-list-frequency");
         dropdownList.setAttribute("aria-labelledby", "dropdownListQueryablesButtonText");
+
 
         if(propertyValue.enum && !propertyKey.includes("frequency") && !propertyKey.includes("marble")){
 
@@ -1149,36 +1146,222 @@ function buildQueryableFilterString(checkboxList){
 
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
 
-    for(checkbox of checkboxArray){
-        if(checkbox.checked == true ){
-            var propertyKey = checkbox.getAttribute("propertyname");
-            var propertyValue = checkbox.value;
 
-            if(!(checkbox.id in filterPropertyList)){
-                var filterPropertyDisplay = document.createElement("p")
-                filterPropertyDisplay.id = checkbox.id + "Display";
-                filterPropertyDisplay.innerText = propertyValue;
-                searchFilterOtherBody.appendChild(filterPropertyDisplay);
+        for(checkbox of checkboxArray){
+            if(checkbox.checked == true ){
 
-                filterProperty.args[0].property = propertyKey;
-                filterProperty.args[1] = propertyValue;
-                filterPropertyList[checkbox.id] = filterProperty;
 
-                searchFilterOtherBody.appendChild(filterPropertyDisplay);
+                var propertyKey = checkbox.getAttribute("propertyname");
+                var propertyValue = checkbox.value;
+
+                if(!(checkbox.id in filterPropertyList)){
+                    var filterPropertyDisplay = document.createElement("p")
+                    filterPropertyDisplay.id = checkbox.id + "Display";
+                    filterPropertyDisplay.setAttribute("queryablekeyvalue", checkbox.value);
+                    filterPropertyDisplay.classList.add("subtitle-2");
+                    filterPropertyDisplay.innerText = propertyValue;
+                    searchFilterOtherBody.appendChild(filterPropertyDisplay);
+
+                    filterProperty.args[0].property = propertyKey;
+                    filterProperty.args[1] = propertyValue;
+                    filterPropertyList[checkbox.id] = filterProperty;
+
+                    searchFilterOtherBody.appendChild(filterPropertyDisplay);
+                }
+            }
+            else{
+                var propertyKey = checkbox.getAttribute("propertyname");
+                removeOtherEntry(propertyKey, checkboxList);
+
+                if(checkbox.id in filterPropertyList){
+                     delete filterPropertyList[checkbox.id];
+                    // var otherProperty = document.getElementById(checkbox.id + "Display");
+                    // otherProperty.remove();
+                }
             }
         }
-        else{
-            if(checkbox.id in filterPropertyList){
-                 delete filterPropertyList[checkbox.id];
-                 var otherProperty = document.getElementById(checkbox.id + "Display");
-                 otherProperty.remove();
-            }
-        }
-    }
+
+
 
     Object.entries(filterPropertyList).forEach( ([key,value]) => {
         filterQueryables.filter.args.push(value);
     })
 
     searchFilterOtherHidden.innerText = JSON.stringify(filterQueryables);
+}
+
+/*Searchbox Keyword Functions*/
+var keywordList = {};
+
+function addKeyword(keyword, stacKey, queryableValue){
+    var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
+    var searchKeywordTagContainerDiv = document.getElementById("searchKeywordTagContainer");
+    var keywordTagText = document.createElement("p");
+
+    var propertyNameArray = stacKey.split(":");
+    var extensionName = propertyNameArray[0].toUpperCase();
+    var extensionAttribute = String(propertyNameArray[1]).charAt(0).toUpperCase() + String(propertyNameArray[1]).slice(1);
+
+    console.log("dropdownListRegularQueryables" + extensionName + extensionAttribute);
+    var checkboxList = document.getElementById("dropdownListRegularQueryables" + extensionName + extensionAttribute);
+
+    if(keyword != "" || keyword!= null) {
+        removeOtherEntry(stacKey, checkboxList);
+        /*Add keyword under Other in My Search*/
+        var keywordContainerID = stacKey.replaceAll(":", "_") + "_Tag";
+        keywordTagText.id = keywordContainerID;
+        keywordTagText.setAttribute('queryablekeystac', stacKey);
+        keywordTagText.setAttribute('queryablekeyvalue', queryableValue);
+        keywordTagText.classList.add("subtitle-2", "margin-unset");
+
+        keywordTagText.innerText = keyword;
+
+        searchFilterOtherBody.appendChild(keywordTagText);
+
+
+        /*Find corresponding checkbox, make it checked, and expand the dropdown it's in*/
+        var selector = 'input[value=' + '"' + keyword + '"' + ']';
+        var correspondingCheckboxList = document.querySelectorAll(selector);
+
+        for(checkbox of correspondingCheckboxList){
+            var correspondingCheckbox = document.getElementById(checkbox.id);
+            var propertyName = correspondingCheckbox.getAttribute("propertyname");
+
+            correspondingCheckbox.checked = true;
+
+            if(propertyName.includes(":")){
+                var propertyNameArray = propertyName.split(":");
+                var extensionName = propertyNameArray[0].toUpperCase();
+                var extensionAttribute = String(propertyNameArray[1]).charAt(0).toUpperCase() + String(propertyNameArray[1]).slice(1);
+                var propertyKey = extensionName + extensionAttribute;
+                var dropdownQueryablesButton = document.getElementById("dropdownListQueryables" + propertyKey + "Button");
+                var dropdownQueryablesList = document.getElementById("dropdownListRegularQueryables" + propertyKey);
+
+                dropdownQueryablesList.classList.add("show");
+                dropdownQueryablesButton.setAttribute("aria-expanded", "true");
+            }
+        }
+
+
+        /*Make the filter*/
+        keywordList[keywordContainerID] = {"keyword":keyword, "stacKey": stacKey};
+        buildKeywordFilter();
+    }
+}
+
+function removeOtherEntry(propertyKey, checkboxList){
+    var keywordTagID;
+    var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
+    var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
+    var paragraphArray = searchFilterOtherBody.querySelectorAll('p');
+
+   // if(document.getElementById(keywordTagID) != null){
+        for(paragraph of paragraphArray) {
+            keywordTagID = propertyKey.replaceAll(":", "_") + "_Tag";
+            //var propertyNameArray = paragraph.getAttribute("queryablekeystac").split(":");
+
+
+            for (checkbox of checkboxArray) {
+                if (checkbox.checked == true) {
+                    /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
+                    var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
+                    var checkboxValue = checkbox.getAttribute("value");
+
+                    if(paragraphValue == checkboxValue){
+                        var paragraphEntry = document.getElementById(paragraph.id);
+                        searchFilterOtherBody.removeChild(paragraphEntry);
+                        delete keywordList[keywordTagID];
+                    }
+
+                }
+                else{
+                /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
+                    var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
+                    var checkboxValue = checkbox.getAttribute("value");
+
+                    if(paragraphValue == checkboxValue){
+                        var paragraphEntry = document.getElementById(paragraph.id);
+                        searchFilterOtherBody.removeChild(paragraphEntry);
+                        delete keywordList[keywordTagID];
+                    }
+                }
+            }
+        }
+   // }
+
+
+
+    //var searchKeywordTagContainerDiv = document.getElementById("searchFilterOtherBody");
+    //var keywordTag = document.getElementById(keywordTagID);
+
+    //searchKeywordTagContainerDiv.removeChild(keywordTag);
+
+
+    buildKeywordFilter();
+}
+
+function buildKeywordFilter(){
+    var searchFilterKeywordHiddenDiv = document.getElementById("searchFilterKeywordHidden");
+    var keywordFilter = {"op":"or", "args": []};
+
+    Object.entries(keywordList).forEach( ([key, value]) => {
+        var tagFilter = {"op":"=", "args":[{"property": value.stacKey}, value.keyword]};
+        keywordFilter.args.push(tagFilter);
+    });
+    searchFilterKeywordHiddenDiv.innerText = JSON.stringify(keywordFilter);
+}
+
+function keywordTagTemplate(keywordTagID, keyword, stacKey, queryableValue) {
+
+    if(keyword != '') {
+        var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
+
+        var keywordCloseButtonID = "keyword" + keyword + "Close";
+
+        var closeButtonLink = document.createElement("a");
+        var closeButtonTag = document.createElement("button");
+        var closeButtonIcon = document.createElement("i");
+
+        closeButtonTag.id = keywordCloseButtonID;
+        closeButtonTag.classList.add("button-close-x", "button-close-x-tag-colour", "button-close-x-tag-size");
+        closeButtonIcon.classList.add("fa-solid", "fa-xmark");
+
+        closeButtonTag.appendChild(closeButtonIcon);
+        closeButtonLink.appendChild(closeButtonTag);
+
+        //var keywordTagContainer = document.createElement("div");
+        var keywordTagText = document.createElement("p");
+        var keywordCloseButtonContainer = document.createElement("div");
+
+
+        keywordTagText.id = keywordTagID;
+        keywordTagText.setAttribute('queryablekeystac', stacKey);
+        keywordTagText.setAttribute('queryablekeyvalue', queryableValue);
+        //keywordTagContainer.classList.add("div-keyword-tag-container");
+        keywordTagText.classList.add("subtitle-2", "margin-unset");
+/*
+        if(keyword.length > 22){
+            var tagDisplayText = keyword.slice(0,17) + "...";
+            keywordTagText.innerText = tagDisplayText;
+        }
+        else{
+            keywordTagText.innerText = keyword;
+        }*/
+
+        keywordTagText.innerText = keyword;
+
+        searchFilterOtherBody.appendChild(keywordTagText);
+        //keywordCloseButtonContainer.appendChild(closeButtonLink);
+
+
+        //closeButtonTag.addEventListener('click', function () {
+        //    removeKeywordTag(keywordTagID);
+        //});
+
+        //keywordTagContainer.appendChild(keywordTagText);
+        //keywordTagContainer.appendChild(keywordCloseButtonContainer);
+
+        //return keywordTagContainer;
+
+    }
 }
