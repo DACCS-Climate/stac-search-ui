@@ -53,7 +53,7 @@
                 {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
                 {% set user_dropdown_repeat_label_id = "timeframeDropdownRepeatLabel" %}
                 {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
-                {% set dropdown_label_text = "Select Time Frame" %}
+                {% set dropdown_label_text = "Time Frame" %}
                 {% include "partials/dropdown-panel.html" %}
             {% endwith %}
 
@@ -61,7 +61,7 @@
                 {% with %}
                     {% set button_type = "button_location" %}
                     {% set button_id = "showLocationMap" %}
-                    {% set button_label = "Select Location" %}
+                    {% set button_label = "Location" %}
                     {% include "partials/button.html" %}
                 {% endwith %}
             </div>
@@ -77,7 +77,7 @@
                 {% set dropdown_button_id = "dropdownListFrequencyButton" %}
                 {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
                 {% set label_id = "dropdownListRegularFrequencyLabel" %}
-                {% set dropdown_label_text = "Select Frequency" %}
+                {% set dropdown_label_text = "Frequency" %}
                 {% include "partials/dropdown.html" %}
             {% endwith %}
 
@@ -200,7 +200,10 @@
                 getSTACSearchResults("");
                 buildMySearchDisplay();
                 buildFrequencyFilterDropdown();
+                //TODO delete commented function call to buildQueryablesFilterDropdown()
                 buildQueryablesFilterDropdown();
+                //buildDropdownQueryableElements();
+
 
                 var searchFilterApplyButton = document.getElementById("searchFilterApply")
                 searchFilterApplyButton.addEventListener("click", applyMySearch);
