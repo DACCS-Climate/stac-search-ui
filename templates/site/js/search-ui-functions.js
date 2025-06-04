@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function (){
     searchKeywordAddButton.addEventListener('click', function(){
         var stacKey = searchInputElement.getAttribute('queryablekeystac');
         var queryableValue = searchInputElement.getAttribute('queryablekeyvalue');
-        addKeywordTag(searchInputElement.value, stacKey, queryableValue);
+        addKeyword(searchInputElement.value, stacKey, queryableValue);
     });
 
 })
