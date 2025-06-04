@@ -16,7 +16,7 @@ function setSearchPageTitle(listULID, titleDivID){
     }
 
     if(checkboxArray[0].checked == true){
-        titleDiv.innerText = "All Categories";
+        titleDiv.innerText = "All Collections";
     }
     else{
         for(checkbox of checkboxArray){
@@ -59,7 +59,7 @@ function checkCheckboxCount( listULID, defaultDropdownButtonTextID, defaultDropd
         else{
             checkboxArray[0].checked = false;
         }
-        dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
+        dropdownButtonTextElement.innerText = checkboxCount + " Collections Selected" ;
     }
 }
 
@@ -83,7 +83,7 @@ function selectAllCheckbox(listULID, defaultDropdownButtonTextID, defaultDropdow
             dropdownButtonTextElement.innerText = defaultDropdownLabelText ;
         }
         else{
-            dropdownButtonTextElement.innerText = checkboxCount + " Catalogs Selected" ;
+            dropdownButtonTextElement.innerText = checkboxCount + " Collections Selected" ;
         }
     }
     else{
@@ -95,7 +95,7 @@ function selectAllCheckbox(listULID, defaultDropdownButtonTextID, defaultDropdow
 }
 
 function setCheckboxFilterJSON(listULID){
-    var searchFilterDatasetsHidden = document.getElementById("searchFilterDatasetsHidden");
+    var searchFilterCollectionsHidden = document.getElementById("searchFilterCollectionsHidden");
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]');
     var argumentArray = [];
@@ -118,23 +118,23 @@ function setCheckboxFilterJSON(listULID){
     }
 
     argumentJSON["args"] = argumentArray;
-    searchFilterDatasetsHidden.innerText = JSON.stringify(argumentJSON);
+    searchFilterCollectionsHidden.innerText = JSON.stringify(argumentJSON);
 }
 
 function populateDatasetsFilter(listULID){
-    var searchFilterDatasetsBody = document.getElementById("searchFilterDatasetsBody");
+    var searchFilterCollectionsBody = document.getElementById("searchFilterCollectionsBody");
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]');
 
-    searchFilterDatasetsBody.innerText = "";
-    searchFilterDatasetsBody.classList.add("div-datasets-filter");
+    searchFilterCollectionsBody.innerText = "";
+    searchFilterCollectionsBody.classList.add("div-datasets-filter");
 
         if(checkboxArray[0].checked == true) {
         for(let i = 1; i < checkboxArray.length; i++){
             var datasetEntry = document.createElement("p");
             datasetEntry.classList.add("body-1");
             datasetEntry.innerText = checkboxArray[i].value;
-            searchFilterDatasetsBody.appendChild(datasetEntry);
+            searchFilterCollectionsBody.appendChild(datasetEntry);
         }
     }
     else{
@@ -143,7 +143,7 @@ function populateDatasetsFilter(listULID){
                 var datasetEntry = document.createElement("p");
                 datasetEntry.classList.add("body-1");
                 datasetEntry.innerText = checkbox.value;
-                searchFilterDatasetsBody.appendChild(datasetEntry);
+                searchFilterCollectionsBody.appendChild(datasetEntry);
             }
         }
     }
