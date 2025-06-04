@@ -6,10 +6,6 @@
     var parentList = document.getElementById('{{ dropdown_default_UL_id }}');
     var collectionKeys;
 
-
-    //checkboxLabelText.innerHTML = "{#   checkbox_label_text }#}";
-
-
     fetch("{{ stac_catalog_url }}/collections").then(response => response.json()).then(json => {
 
         collectionKeys = Object.keys(json.collections);
