@@ -14,7 +14,7 @@ function fuseDictionary(_queryables, _path) {
     if (_queryables === undefined) {
         return fetch("{{ stac_catalog_url }}/queryables").then(response => response.json())
                                                          .then(json => Object.entries(fuseDictionary(json.properties))
-                                                                             .map(([key, val]) => { return {"key": key, "values": val} }) )
+                                                                 .map(([key, val]) => {return {"key": key, "values": val} }) )
     } else if (typeof _queryables === "object") {
         Object.entries(_queryables).forEach(([q_key, q_value]) => {
             if (q_key === "properties") {
@@ -42,7 +42,6 @@ function fuseDictionary(_queryables, _path) {
                     Object.entries(fuseDictionary(q_value, _path)).forEach(([o_key, o_value]) => {
                         found[o_key] = found[o_key] || []
                         o_value.forEach(val => found[o_key].push(val))
-
                         found[o_key]["stac_key"] = q_key;
                     });
                 }
@@ -755,13 +754,9 @@ function buildMySearchDisplay(){
     var searchFilterCategories = ["Collections", "Location", "Time Frame", "Frequency", "Other"];
     var mySearchDiv = document.getElementById("mySearchFilters");
     var mySearchHeader = datasetDetailsHeaderTemplate("My Search");
-    var searchFilterKeywordHidden = document.createElement("div");
     var mySearchBody = document.createElement("div");
 
-    searchFilterKeywordHidden.id = "searchFilterKeywordHidden";
-    searchFilterKeywordHidden.classList.add("div-hidden-filter");
     mySearchDiv.appendChild(mySearchHeader);
-    mySearchDiv.appendChild(searchFilterKeywordHidden);
     mySearchDiv.appendChild(mySearchBody);
     mySearchBody.classList.add("div-my-search-body");
 
@@ -810,14 +805,12 @@ function applyMySearch(){
     var timeframeFilterHiddenContainer = document.getElementById("searchFilterTimeFrameHidden");
     var locationFilterHiddenContainer = document.getElementById("searchFilterLocationHidden");
     var otherFilterHiddenContainer = document.getElementById("searchFilterOtherHidden");
-    var keywordFilterHiddenContainer = document.getElementById("searchFilterKeywordHidden");
 
     var datasetFilter;
     var frequencyFilter;
     var timeframeFilter;
     var locationFilter
     var otherFilter;
-    var keywordFilter;
 
 
     if(datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== "" || datasetFilterHiddenContainer.innerText && datasetFilterHiddenContainer.innerText !== null){
@@ -851,13 +844,6 @@ function applyMySearch(){
         })
     }
 
-    if(keywordFilterHiddenContainer.innerText && keywordFilterHiddenContainer.innerText !== "" || keywordFilterHiddenContainer.innerText && keywordFilterHiddenContainer.innerText !== null){
-        keywordFilter = JSON.parse(keywordFilterHiddenContainer.innerText);
-
-        Object.entries(keywordFilter).forEach( ([key,value]) => {
-            filterJSON[key] = value;
-        })
-    }
 
     //TODO Remove console for production
     console.log(filterJSON);
@@ -1033,99 +1019,118 @@ function buildFrequencyFilterJSON(collectionAttribute, attributeName, attributeV
 }
 
 
-async function buildQueryablesFilterDropdown(){
-    var productionQueryablesURL = "{{ stac_catalog_url }}/queryables";
-    var endpointStatus = await checkSTACEndpoint(productionQueryablesURL);
 
-    if(endpointStatus == 200) {
-        fetch(productionQueryablesURL, {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }).then(response => response.json()).then(json => {
-            buildDropdownQueryableElements(json["properties"]);
+function buildQueryablesFilterDropdown(){
+
+    fuseDictionary().then(queryablesArray => {
+        var groupedQueryablesExtensionNameArray;
+        Object.entries(queryablesArray).forEach( ([queryablesArrayKey, queryablesArrayValue]) => {
+            var stacKeyArray = queryablesArrayValue.values.stac_key.split(":");
+            queryablesArray[queryablesArrayKey]["extension_name"] = stacKeyArray[0];
+            queryablesArray[queryablesArrayKey]["extension_type"] = stacKeyArray[1];
+
         })
-    }
+
+        groupedQueryablesExtensionNameArray =  Object.groupBy(queryablesArray, ({extension_name}) => extension_name);
+
+        buildDropdownQueryableElements(groupedQueryablesExtensionNameArray);
+    })
 }
 
 function buildDropdownQueryableElements(json){
     var filterDropdownQueryablesContainer = document.getElementById("dropdownQueryables");
 
-    Object.entries(json).forEach( ([propertyKey, propertyValue]) => {
-        var dropdownContainer = document.createElement("div");
-        var dropdownDiv = document.createElement("div");
-        var dropdownButton = document.createElement("a");
-        var dropdownButtonText = document.createElement("div");
-        var dropdownList = document.createElement("ul");
-
+    Object.entries(json).forEach( ([queryableKey, queryableValue]) => {
+        var dropdownCollectionTitleContainer = document.createElement("div");
+        var dropdownCollectionTitle = document.createElement("p");
         var extensionName = "";
         var extensionAttribute = "";
 
-        if(propertyKey.includes(":") && !propertyKey.includes("frequency")){
-            var propertyKeyArray = propertyKey.split(":");
-            extensionName = propertyKeyArray[0].toUpperCase();
-
-            extensionAttribute = String(propertyKeyArray[1]).charAt(0).toUpperCase() + String(propertyKeyArray[1]).slice(1);
+        if (!queryableKey.includes("marble")) {
+            dropdownCollectionTitle.innerText = queryableKey;
         }
-
-        dropdownContainer.id = "dropdownListQueryables" + extensionName + extensionAttribute + "Container";
-        dropdownContainer.classList.add("dropdown-regular-list-container");
-
-        dropdownDiv.classList.add("dropdown");
-
-        dropdownButton.id= "dropdownListQueryables" + extensionName + extensionAttribute +  "Button";
-        dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "padding-unset",
-            "dropdown-regular-list-button", "dropdown-regular-list-chevron-icon");
-        dropdownButton.setAttribute("role", "button");
-        dropdownButton.setAttribute("data-bs-toggle", "dropdown");
-        dropdownButton.setAttribute("data-bs-display", "static");
-        dropdownButton.setAttribute("data-bs-auto-close", "outside");
-        dropdownButton.setAttribute("aria-expanded", "false");
-
-        dropdownButtonText.id = "dropdownListQueryables" + extensionName + extensionAttribute +  "ButtonText";
-        dropdownButtonText.classList.add("subtitle-1", "dropdown-frequency-list-title", "margin-unset", "padding-unset");
-        dropdownButtonText.innerText = extensionName + " " + extensionAttribute;
-
-        dropdownList.id = "dropdownListRegularQueryables" + extensionName + extensionAttribute;
-        dropdownList.classList.add("dropdown-menu", "margin-unset", "padding-unset", "dropdown-regular-list", "dropdown-regular-list-frequency");
-        dropdownList.setAttribute("aria-labelledby", "dropdownListQueryablesButtonText");
+        dropdownCollectionTitle.classList.add("subtitle-1", "title-advanced-filters");
+        dropdownCollectionTitleContainer.appendChild(dropdownCollectionTitle);
+        filterDropdownQueryablesContainer.appendChild(dropdownCollectionTitleContainer);
 
 
-        if(propertyValue.enum && !propertyKey.includes("frequency") && !propertyKey.includes("marble")){
+        var groupedByExtensionType = Object.groupBy(queryableValue, ({extension_type}) => extension_type);
 
-            for(enumItem in propertyValue.enum){
-                var dropdownListItem = document.createElement("li");
-                var checkboxBufferDiv = document.createElement("div");
-                var checkboxLabel = document.createElement("label");
-                var checkboxLabelText = document.createElement("p");
-                var checkmarkSpan = document.createElement("span");
-                var checkbox = document.createElement("input");
-                var checkboxID = propertyKey.replaceAll(':', '_') + enumItem;
+        Object.entries(groupedByExtensionType).forEach( ([extensionTypeKey, extensionTypeValue]) => {
 
-                dropdownListItem.id = "listItem" + enumItem.replaceAll(' ', '');
-                checkmarkSpan.classList.add("checkmark");
-                checkboxLabel.classList.add("checkbox-container", "margin-unset");
-                checkboxBufferDiv.classList.add("checkbox-buffer");
+            var dropdownContainer = document.createElement("div");
+            var dropdownDiv = document.createElement("div");
+            var dropdownButton = document.createElement("a");
+            var dropdownButtonText = document.createElement("div");
+            var dropdownList = document.createElement("ul");
 
-                checkboxLabel.setAttribute("for", checkboxID);
-                checkboxLabelText.innerText = propertyValue.enum[enumItem];
+            for (extensionType of extensionTypeValue){
 
-                checkbox.setAttribute("type", "checkbox");
-                checkbox.id = checkboxID;
-                checkbox.setAttribute("propertyname", propertyKey);
-                checkbox.setAttribute("value", propertyValue.enum[enumItem]);
+                if (queryableKey == extensionType.extension_name && !queryableKey.includes("marble")) {
 
-                checkbox.addEventListener('change', function(){
-                    buildQueryableFilterString(dropdownList);
-                });
+                    extensionName = extensionType.extension_name.toUpperCase();
 
-                checkboxBufferDiv.appendChild(checkboxLabel);
-                checkboxLabel.appendChild(checkbox);
-                checkboxLabel.appendChild(checkmarkSpan);
-                checkboxLabel.appendChild(checkboxLabelText);
-                checkboxBufferDiv.appendChild(checkboxLabel);
-                dropdownListItem.appendChild(checkboxBufferDiv);
-                dropdownList.appendChild(dropdownListItem);
+                    extensionAttribute = String(extensionType.extension_type).charAt(0).toUpperCase() + String(extensionType.extension_type).slice(1);
+
+                    dropdownContainer.id = "dropdownListQueryables" + extensionName + extensionAttribute + "Container";
+                    dropdownContainer.classList.add("dropdown-regular-list-container");
+
+                    dropdownDiv.classList.add("dropdown");
+
+                    dropdownButton.id = "dropdownListQueryables" + extensionName + extensionAttribute + "Button";
+                    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "padding-unset",
+                        "dropdown-regular-list-button", "dropdown-regular-list-chevron-icon");
+                    dropdownButton.setAttribute("role", "button");
+                    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+                    dropdownButton.setAttribute("data-bs-display", "static");
+                    dropdownButton.setAttribute("data-bs-auto-close", "outside");
+                    dropdownButton.setAttribute("aria-expanded", "false");
+
+                    dropdownButtonText.id = "dropdownListQueryables" + extensionName + extensionAttribute + "ButtonText";
+                    dropdownButtonText.classList.add("subtitle-1", "dropdown-frequency-list-title", "margin-unset", "padding-unset");
+                    dropdownButtonText.innerText = extensionAttribute;
+
+                    dropdownList.id = "dropdownListRegularQueryables" + extensionName + extensionAttribute;
+                    dropdownList.classList.add("dropdown-menu", "margin-unset", "padding-unset", "dropdown-regular-list", "dropdown-regular-list-frequency");
+                    dropdownList.setAttribute("aria-labelledby", "dropdownListQueryablesButtonText");
+
+                    var dropdownListItem = document.createElement("li");
+                    var checkboxBufferDiv = document.createElement("div");
+                    var checkboxLabel = document.createElement("label");
+                    var checkboxLabelText = document.createElement("p");
+                    var checkmarkSpan = document.createElement("span");
+                    var checkbox = document.createElement("input");
+                    var checkboxID = extensionType.values.stac_key.replaceAll(':', '_')
+                        + extensionType.key.replaceAll(" ", "");
+
+                    dropdownListItem.id = "listItem" + extensionType.key.replaceAll(' ', '');
+
+                    checkmarkSpan.classList.add("checkmark");
+                    checkboxLabel.classList.add("checkbox-container", "margin-unset");
+
+                    checkboxLabel.setAttribute("for", checkboxID);
+                    checkboxLabelText.classList.add("checkbox-label-text");
+                    checkboxLabelText.innerText = extensionType.key.trim();
+
+                    checkbox.setAttribute("type", "checkbox");
+                    checkbox.id = checkboxID;
+                    checkbox.setAttribute("propertyname", extensionType.values.stac_key);
+                    checkbox.setAttribute("value", extensionType.key);
+
+                    checkbox.addEventListener('change', function () {
+                        buildQueryableFilterString(dropdownList);
+                        //buildQueryableFilterString("dropdownListRegularQueryables" + extensionName + extensionAttribute);
+                    });
+
+                    checkboxBufferDiv.appendChild(checkboxLabel);
+                    checkboxLabel.appendChild(checkbox);
+                    checkboxLabel.appendChild(checkmarkSpan);
+                    checkboxLabel.appendChild(checkboxLabelText);
+                    checkboxBufferDiv.appendChild(checkboxLabel);
+                    dropdownListItem.appendChild(checkboxBufferDiv);
+
+                    dropdownList.appendChild(dropdownListItem);
+                }
             }
 
             dropdownButton.appendChild(dropdownButtonText);
@@ -1134,7 +1139,8 @@ function buildDropdownQueryableElements(json){
             dropdownContainer.appendChild(dropdownDiv);
 
             filterDropdownQueryablesContainer.appendChild(dropdownContainer);
-        }
+
+        });
     })
 }
 
@@ -1143,13 +1149,17 @@ function buildQueryableFilterString(checkboxList){
     var filterProperty =  {"op": "=", "args": [{ "property": "" }, ""]};
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
     var searchFilterOtherHidden = document.getElementById("searchFilterOtherHidden");
-
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
+    console.log("checkboxArray")
+    console.log(checkboxArray)
 
-
+        /*Adds entry under Other if checkbox is checked*/
         for(checkbox of checkboxArray){
             if(checkbox.checked == true ){
-
+                console.log("checkbox")
+                console.log(checkbox)
+                console.log("filterPropertyList")
+                console.log(filterPropertyList)
 
                 var propertyKey = checkbox.getAttribute("propertyname");
                 var propertyValue = checkbox.value;
@@ -1175,18 +1185,13 @@ function buildQueryableFilterString(checkboxList){
 
                 if(checkbox.id in filterPropertyList){
                      delete filterPropertyList[checkbox.id];
-                    // var otherProperty = document.getElementById(checkbox.id + "Display");
-                    // otherProperty.remove();
                 }
             }
         }
 
-
-
     Object.entries(filterPropertyList).forEach( ([key,value]) => {
         filterQueryables.filter.args.push(value);
     })
-
     searchFilterOtherHidden.innerText = JSON.stringify(filterQueryables);
 }
 
@@ -1195,14 +1200,12 @@ var keywordList = {};
 
 function addKeyword(keyword, stacKey, queryableValue){
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
-    var searchKeywordTagContainerDiv = document.getElementById("searchKeywordTagContainer");
     var keywordTagText = document.createElement("p");
 
     var propertyNameArray = stacKey.split(":");
     var extensionName = propertyNameArray[0].toUpperCase();
     var extensionAttribute = String(propertyNameArray[1]).charAt(0).toUpperCase() + String(propertyNameArray[1]).slice(1);
 
-    console.log("dropdownListRegularQueryables" + extensionName + extensionAttribute);
     var checkboxList = document.getElementById("dropdownListRegularQueryables" + extensionName + extensionAttribute);
 
     if(keyword != "" || keyword!= null) {
@@ -1213,11 +1216,9 @@ function addKeyword(keyword, stacKey, queryableValue){
         keywordTagText.setAttribute('queryablekeystac', stacKey);
         keywordTagText.setAttribute('queryablekeyvalue', queryableValue);
         keywordTagText.classList.add("subtitle-2", "margin-unset");
-
         keywordTagText.innerText = keyword;
 
         searchFilterOtherBody.appendChild(keywordTagText);
-
 
         /*Find corresponding checkbox, make it checked, and expand the dropdown it's in*/
         var selector = 'input[value=' + '"' + keyword + '"' + ']';
@@ -1242,9 +1243,9 @@ function addKeyword(keyword, stacKey, queryableValue){
             }
         }
 
-
         /*Make the filter*/
         keywordList[keywordContainerID] = {"keyword":keyword, "stacKey": stacKey};
+        console.log(keywordList)
         buildKeywordFilter();
     }
 }
@@ -1255,113 +1256,48 @@ function removeOtherEntry(propertyKey, checkboxList){
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
     var paragraphArray = searchFilterOtherBody.querySelectorAll('p');
 
-   // if(document.getElementById(keywordTagID) != null){
-        for(paragraph of paragraphArray) {
-            keywordTagID = propertyKey.replaceAll(":", "_") + "_Tag";
-            //var propertyNameArray = paragraph.getAttribute("queryablekeystac").split(":");
+    for(paragraph of paragraphArray) {
+        keywordTagID = propertyKey.replaceAll(":", "_") + "_Tag";
 
 
-            for (checkbox of checkboxArray) {
-                if (checkbox.checked == true) {
-                    /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
-                    var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
-                    var checkboxValue = checkbox.getAttribute("value");
-
-                    if(paragraphValue == checkboxValue){
-                        var paragraphEntry = document.getElementById(paragraph.id);
-                        searchFilterOtherBody.removeChild(paragraphEntry);
-                        delete keywordList[keywordTagID];
-                    }
-
-                }
-                else{
+        for (checkbox of checkboxArray) {
+            if (checkbox.checked == true) {
                 /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
-                    var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
-                    var checkboxValue = checkbox.getAttribute("value");
+                var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
+                var checkboxValue = checkbox.getAttribute("value");
 
-                    if(paragraphValue == checkboxValue){
-                        var paragraphEntry = document.getElementById(paragraph.id);
-                        searchFilterOtherBody.removeChild(paragraphEntry);
-                        delete keywordList[keywordTagID];
-                    }
+                if(paragraphValue == checkboxValue){
+                    var paragraphEntry = document.getElementById(paragraph.id);
+                    searchFilterOtherBody.removeChild(paragraphEntry);
+                    delete keywordList[keywordTagID];
+                }
+
+            }
+            else{
+            /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
+                var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
+                var checkboxValue = checkbox.getAttribute("value");
+
+                if(paragraphValue == checkboxValue){
+                    var paragraphEntry = document.getElementById(paragraph.id);
+                    searchFilterOtherBody.removeChild(paragraphEntry);
+                    delete keywordList[keywordTagID];
                 }
             }
         }
-   // }
-
-
-
-    //var searchKeywordTagContainerDiv = document.getElementById("searchFilterOtherBody");
-    //var keywordTag = document.getElementById(keywordTagID);
-
-    //searchKeywordTagContainerDiv.removeChild(keywordTag);
+    }
 
 
     buildKeywordFilter();
 }
 
 function buildKeywordFilter(){
-    var searchFilterKeywordHiddenDiv = document.getElementById("searchFilterKeywordHidden");
+    var searchFilterOtherHiddenDiv = document.getElementById("searchFilterOtherHidden");
     var keywordFilter = {"op":"or", "args": []};
 
     Object.entries(keywordList).forEach( ([key, value]) => {
         var tagFilter = {"op":"=", "args":[{"property": value.stacKey}, value.keyword]};
         keywordFilter.args.push(tagFilter);
     });
-    searchFilterKeywordHiddenDiv.innerText = JSON.stringify(keywordFilter);
-}
-
-function keywordTagTemplate(keywordTagID, keyword, stacKey, queryableValue) {
-
-    if(keyword != '') {
-        var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
-
-        var keywordCloseButtonID = "keyword" + keyword + "Close";
-
-        var closeButtonLink = document.createElement("a");
-        var closeButtonTag = document.createElement("button");
-        var closeButtonIcon = document.createElement("i");
-
-        closeButtonTag.id = keywordCloseButtonID;
-        closeButtonTag.classList.add("button-close-x", "button-close-x-tag-colour", "button-close-x-tag-size");
-        closeButtonIcon.classList.add("fa-solid", "fa-xmark");
-
-        closeButtonTag.appendChild(closeButtonIcon);
-        closeButtonLink.appendChild(closeButtonTag);
-
-        //var keywordTagContainer = document.createElement("div");
-        var keywordTagText = document.createElement("p");
-        var keywordCloseButtonContainer = document.createElement("div");
-
-
-        keywordTagText.id = keywordTagID;
-        keywordTagText.setAttribute('queryablekeystac', stacKey);
-        keywordTagText.setAttribute('queryablekeyvalue', queryableValue);
-        //keywordTagContainer.classList.add("div-keyword-tag-container");
-        keywordTagText.classList.add("subtitle-2", "margin-unset");
-/*
-        if(keyword.length > 22){
-            var tagDisplayText = keyword.slice(0,17) + "...";
-            keywordTagText.innerText = tagDisplayText;
-        }
-        else{
-            keywordTagText.innerText = keyword;
-        }*/
-
-        keywordTagText.innerText = keyword;
-
-        searchFilterOtherBody.appendChild(keywordTagText);
-        //keywordCloseButtonContainer.appendChild(closeButtonLink);
-
-
-        //closeButtonTag.addEventListener('click', function () {
-        //    removeKeywordTag(keywordTagID);
-        //});
-
-        //keywordTagContainer.appendChild(keywordTagText);
-        //keywordTagContainer.appendChild(keywordCloseButtonContainer);
-
-        //return keywordTagContainer;
-
-    }
+    searchFilterOtherHiddenDiv.innerText = JSON.stringify(keywordFilter);
 }
