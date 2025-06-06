@@ -767,17 +767,11 @@ h6{
 
 
 /*Checkbox*/
-.checkbox-buffer{
-    width: 25px;
-    height: 25px;
-}
 
 /* The container */
 .checkbox-container {
     display: block;
     position: relative;
-    width: 25px;
-    height: 25px;
     padding-left: 35px;
     margin-bottom: 12px;
     cursor: pointer;
@@ -785,7 +779,6 @@ h6{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    white-space: nowrap;
 }
 
 /* Hide the browser's default checkbox */
@@ -802,8 +795,8 @@ h6{
     position: absolute;
     top: 0;
     left: 0;
-    height: 22px;
-    width: 22px;
+    height: 21px;
+    width: 21px;
     background-color: var(--white);
     border-style: solid;
     border-width: 3px;
@@ -846,6 +839,9 @@ h6{
     transform: rotate(45deg);
 }
 
+.checkbox-label-text{
+    display: flex;
+}
 
 /*Search box*/
 
@@ -2460,6 +2456,8 @@ ul.dropdown-small-list, ul.dropdown-medium-list{
 
 .dropdown-regular-list li{
     text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .dropdown-regular-list li a{
