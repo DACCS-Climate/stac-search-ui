@@ -1100,8 +1100,8 @@ function buildDropdownQueryableElements(json){
                     var checkboxLabelText = document.createElement("p");
                     var checkmarkSpan = document.createElement("span");
                     var checkbox = document.createElement("input");
-                    var checkboxID = extensionType.values.stac_key.replaceAll(':', '_')
-                        + extensionType.key.replaceAll(" ", "");
+                    var checkboxID = (extensionType.values.stac_key.replaceAll(':', '_')
+                        + extensionType.key.replaceAll(" ", "")).replaceAll('"','');
 
                     dropdownListItem.id = "listItem" + extensionType.key.replaceAll(' ', '');
 
@@ -1119,7 +1119,6 @@ function buildDropdownQueryableElements(json){
 
                     checkbox.addEventListener('change', function () {
                         buildQueryableFilterString(dropdownList);
-                        //buildQueryableFilterString("dropdownListRegularQueryables" + extensionName + extensionAttribute);
                     });
 
                     checkboxBufferDiv.appendChild(checkboxLabel);
@@ -1146,46 +1145,40 @@ function buildDropdownQueryableElements(json){
 
 function buildQueryableFilterString(checkboxList){
     var filterQueryables = {"filter": {"op": "or", "args": []}};
-    var filterProperty =  {"op": "=", "args": [{ "property": "" }, ""]};
+
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
     var searchFilterOtherHidden = document.getElementById("searchFilterOtherHidden");
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
-    console.log("checkboxArray")
-    console.log(checkboxArray)
-
         /*Adds entry under Other if checkbox is checked*/
         for(checkbox of checkboxArray){
+            var filterProperty =  {"op": "=", "args": [{ "property": "" }, ""]};
             if(checkbox.checked == true ){
-                console.log("checkbox")
-                console.log(checkbox)
-                console.log("filterPropertyList")
-                console.log(filterPropertyList)
 
                 var propertyKey = checkbox.getAttribute("propertyname");
                 var propertyValue = checkbox.value;
 
                 if(!(checkbox.id in filterPropertyList)){
-                    var filterPropertyDisplay = document.createElement("p")
-                    filterPropertyDisplay.id = checkbox.id + "Display";
-                    filterPropertyDisplay.setAttribute("queryablekeyvalue", checkbox.value);
-                    filterPropertyDisplay.classList.add("subtitle-2");
-                    filterPropertyDisplay.innerText = propertyValue;
-                    searchFilterOtherBody.appendChild(filterPropertyDisplay);
+
+                    if(checkKeywordsDisplayed(checkbox.value) == false){
+                        var filterPropertyDisplay = document.createElement("p");
+                        filterPropertyDisplay.id = checkbox.id + "Display";
+                        filterPropertyDisplay.setAttribute("queryablekeyvalue", checkbox.value);
+                        filterPropertyDisplay.classList.add("subtitle-2");
+                        filterPropertyDisplay.innerText = propertyValue;
+                        searchFilterOtherBody.appendChild(filterPropertyDisplay);
+                    }
 
                     filterProperty.args[0].property = propertyKey;
                     filterProperty.args[1] = propertyValue;
                     filterPropertyList[checkbox.id] = filterProperty;
-
-                    searchFilterOtherBody.appendChild(filterPropertyDisplay);
                 }
             }
-            else{
-                var propertyKey = checkbox.getAttribute("propertyname");
-                removeOtherEntry(propertyKey, checkboxList);
 
-                if(checkbox.id in filterPropertyList){
-                     delete filterPropertyList[checkbox.id];
-                }
+            if(checkbox.checked == false && checkbox.id in filterPropertyList){
+                var propertyKey = checkbox.getAttribute("propertyname");
+
+                    removeOtherEntry(propertyKey, checkboxList);
+                    delete filterPropertyList[checkbox.id];
             }
         }
 
@@ -1195,8 +1188,32 @@ function buildQueryableFilterString(checkboxList){
     searchFilterOtherHidden.innerText = JSON.stringify(filterQueryables);
 }
 
+
+function checkKeywordsDisplayed(checkboxValue){
+    var keywordDisplayStatus;
+    var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
+    var paragraphArray = searchFilterOtherBody.querySelectorAll('p');
+
+    if(paragraphArray.length > 0){
+        for(paragraph of paragraphArray){
+            var keywordValue = paragraph.getAttribute("queryablekeyvalue");
+            if(checkboxValue == keywordValue){
+                keywordDisplayStatus = true;
+            }
+            else{
+                keywordDisplayStatus = false;
+            }
+        }
+    }
+    else{
+        keywordDisplayStatus = false;
+    }
+
+    return keywordDisplayStatus;
+}
+
+
 /*Searchbox Keyword Functions*/
-var keywordList = {};
 
 function addKeyword(keyword, stacKey, queryableValue){
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
@@ -1210,15 +1227,6 @@ function addKeyword(keyword, stacKey, queryableValue){
 
     if(keyword != "" || keyword!= null) {
         removeOtherEntry(stacKey, checkboxList);
-        /*Add keyword under Other in My Search*/
-        var keywordContainerID = stacKey.replaceAll(":", "_") + "_Tag";
-        keywordTagText.id = keywordContainerID;
-        keywordTagText.setAttribute('queryablekeystac', stacKey);
-        keywordTagText.setAttribute('queryablekeyvalue', queryableValue);
-        keywordTagText.classList.add("subtitle-2", "margin-unset");
-        keywordTagText.innerText = keyword;
-
-        searchFilterOtherBody.appendChild(keywordTagText);
 
         /*Find corresponding checkbox, make it checked, and expand the dropdown it's in*/
         var selector = 'input[value=' + '"' + keyword + '"' + ']';
@@ -1244,60 +1252,28 @@ function addKeyword(keyword, stacKey, queryableValue){
         }
 
         /*Make the filter*/
-        keywordList[keywordContainerID] = {"keyword":keyword, "stacKey": stacKey};
-        console.log(keywordList)
-        buildKeywordFilter();
+        buildQueryableFilterString(checkboxList);
     }
 }
 
 function removeOtherEntry(propertyKey, checkboxList){
-    var keywordTagID;
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
     var paragraphArray = searchFilterOtherBody.querySelectorAll('p');
 
-    for(paragraph of paragraphArray) {
-        keywordTagID = propertyKey.replaceAll(":", "_") + "_Tag";
-
-
+    for (paragraph of paragraphArray) {
         for (checkbox of checkboxArray) {
-            if (checkbox.checked == true) {
+            if(checkbox.checked == false) {
                 /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
                 var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
                 var checkboxValue = checkbox.getAttribute("value");
 
-                if(paragraphValue == checkboxValue){
+                if (paragraphValue == checkboxValue) {
                     var paragraphEntry = document.getElementById(paragraph.id);
                     searchFilterOtherBody.removeChild(paragraphEntry);
-                    delete keywordList[keywordTagID];
-                }
-
-            }
-            else{
-            /*Remove duplicate entries in Other if they contain the same value/content as the checkbox*/
-                var paragraphValue = paragraph.getAttribute("queryablekeyvalue");
-                var checkboxValue = checkbox.getAttribute("value");
-
-                if(paragraphValue == checkboxValue){
-                    var paragraphEntry = document.getElementById(paragraph.id);
-                    searchFilterOtherBody.removeChild(paragraphEntry);
-                    delete keywordList[keywordTagID];
+                    delete filterPropertyList[checkbox.id];
                 }
             }
         }
     }
-
-
-    buildKeywordFilter();
-}
-
-function buildKeywordFilter(){
-    var searchFilterOtherHiddenDiv = document.getElementById("searchFilterOtherHidden");
-    var keywordFilter = {"op":"or", "args": []};
-
-    Object.entries(keywordList).forEach( ([key, value]) => {
-        var tagFilter = {"op":"=", "args":[{"property": value.stacKey}, value.keyword]};
-        keywordFilter.args.push(tagFilter);
-    });
-    searchFilterOtherHiddenDiv.innerText = JSON.stringify(keywordFilter);
 }
