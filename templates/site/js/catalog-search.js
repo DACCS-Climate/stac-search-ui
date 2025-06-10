@@ -866,10 +866,18 @@ function applyMySearch(){
 function clearMySearch(){
     var searchFilterContainer = document.getElementById("searchFilterContainer");
     var searchItemDivs = searchFilterContainer.querySelectorAll("div.div-my-search-filter, div.div-hidden-filter");
+    var dropdownQueryableContainer = document.getElementById("dropdownQueryables");
+    var dropdownQueryableCheckboxes = dropdownQueryableContainer.querySelectorAll('input[type=checkbox]');
 
     for(filterDiv of searchItemDivs){
         filterDiv.innerHTML = "";
         filterDiv.innerText = "";
+    }
+
+    for(checkbox of dropdownQueryableCheckboxes){
+        if(checkbox.checked == true){
+            checkbox.checked = false;
+        }
     }
 }
 
