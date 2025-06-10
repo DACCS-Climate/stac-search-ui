@@ -868,6 +868,8 @@ function clearMySearch(){
     var searchItemDivs = searchFilterContainer.querySelectorAll("div.div-my-search-filter, div.div-hidden-filter");
     var dropdownQueryableContainer = document.getElementById("dropdownQueryables");
     var dropdownQueryableCheckboxes = dropdownQueryableContainer.querySelectorAll('input[type=checkbox]');
+    var dropdownCollectionsContainer = document.getElementById("dropdownListDefaultContainer");
+    var dropdownCollectionsCheckboxes = dropdownCollectionsContainer.querySelectorAll('input[type=checkbox]');
 
     for(filterDiv of searchItemDivs){
         filterDiv.innerHTML = "";
@@ -875,6 +877,12 @@ function clearMySearch(){
     }
 
     for(checkbox of dropdownQueryableCheckboxes){
+        if(checkbox.checked == true){
+            checkbox.checked = false;
+        }
+    }
+
+    for(checkbox of dropdownCollectionsCheckboxes){
         if(checkbox.checked == true){
             checkbox.checked = false;
         }
@@ -1048,13 +1056,13 @@ function buildQueryablesFilterDropdown(){
 function buildDropdownQueryableElements(json){
     var filterDropdownQueryablesContainer = document.getElementById("dropdownQueryables");
 
-    Object.entries(json).forEach( ([queryableKey, queryableValue]) => {
+        Object.entries(json).forEach( ([queryableKey, queryableValue]) => {
         var dropdownCollectionTitleContainer = document.createElement("div");
         var dropdownCollectionTitle = document.createElement("p");
         var extensionName = "";
         var extensionAttribute = "";
 
-        if (!queryableKey.includes("marble")) {
+        if (!queryableKey.includes("marble") && queryableValue[0].values[0].includes("enum")) {
             dropdownCollectionTitle.innerText = queryableKey;
         }
         dropdownCollectionTitle.classList.add("subtitle-1", "title-advanced-filters");
@@ -1074,7 +1082,7 @@ function buildDropdownQueryableElements(json){
 
             for (extensionType of extensionTypeValue){
 
-                if (queryableKey == extensionType.extension_name && !queryableKey.includes("marble")) {
+                if (queryableKey == extensionType.extension_name && !queryableKey.includes("marble") && extensionType.values[0] && extensionType.values[0].includes("enum")) {
 
                     extensionName = extensionType.extension_name.toUpperCase();
 
