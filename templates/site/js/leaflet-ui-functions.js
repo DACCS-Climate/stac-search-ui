@@ -732,9 +732,6 @@ function formatGeoJSON(shapeDict){
             stacGeoJSON["features"] = shapeGeoJSON;
         }
 
-        //TODO Remove console for production.
-        // Keep console for the formatted geojson for now
-        console.log(stacGeoJSON);
 
 
 
