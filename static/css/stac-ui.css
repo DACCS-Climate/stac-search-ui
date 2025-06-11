@@ -369,8 +369,13 @@ h6{
 }
 
 .banner-search-container{
+    width: max-content;
+    height: 64px;
     display: flex;
-    justify-content: center;
+    border-radius: 30px;
+    border: 1px solid var(--indigo-200);
+    background: var(--indigo-50);
+    box-shadow: var(--text-shadow);
     margin-top: 53px;
 }
 
@@ -380,14 +385,7 @@ h6{
     min-height: 64px;
 
 }
-.banner-search-dropdown{
-    position: absolute;
-    z-index: 50;
-}
 
-.banner-search-searchbox{
-    z-index: 40;
-}
 
 .bg {
     position: absolute;
@@ -859,17 +857,12 @@ h6{
 }
 
 .search-input-container{
-    width: 622px;
     height: 64px;
-    border-radius: 30px;
-    border: 1px solid var(--indigo-200);
     background: var(--indigo-50);
-    box-shadow: var(--text-shadow);
 }
 
 .search-input{
     height: 62px;
-    margin-left: 200px;
     border: none;
     outline: none;
     background: var(--indigo-50);
@@ -884,12 +877,23 @@ h6{
     background: var(--indigo-50);
 }
 
-.search-input-container:has( > .search-input):hover{
+.search-input-container:hover{
     background: var(--indigo-100);
-    border: 1px solid var(--indigo-300);
 }
 
-.search-input-container:hover, .search-input-container:hover > .search-input{
+.banner-search-container:has(.search-input:hover){
+    background: var(--indigo-100);
+}
+
+.banner-search-container:hover, .banner-search-container:hover .search-input{
+    background: var(--indigo-100);
+}
+
+.search-input-container:has(.search-input:hover){
+    background: var(--indigo-100);
+}
+
+.search-input-container:has(.search-output-container:hover), .search-input-container:has(.search-output:hover), .search-input-container:has(.search-output li:hover){
     background: var(--indigo-100);
 }
 
@@ -941,7 +945,6 @@ h6{
     border-width: 1px;
     border-radius: 50%;
     border-color: var(--white);
-    right: 60.5px;
     top: 14.5px;
     z-index: 25;
 }
@@ -956,6 +959,7 @@ h6{
     padding-top: 11px;
     padding-bottom: 11px;
     background-color: var(--gray-500);
+    transform: none !important;
 }
 
 .search-output{
@@ -1170,7 +1174,6 @@ background-color: var(--gray-300);
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    border-radius: 0px;
 }
 
 /*Styles for when default dropdown expanded*/
