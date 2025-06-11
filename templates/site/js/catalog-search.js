@@ -845,8 +845,6 @@ function applyMySearch(){
     }
 
 
-    //TODO Remove console for production
-    console.log(filterJSON);
     fullFilterHiddenContainer.innerText = JSON.stringify(filterJSON);
 
     fetch(stacSearchURL, {
@@ -1104,7 +1102,7 @@ function buildDropdownQueryableElements(json){
 
                     dropdownButtonText.id = "dropdownListQueryables" + extensionName + extensionAttribute + "ButtonText";
                     dropdownButtonText.classList.add("subtitle-1", "dropdown-frequency-list-title", "margin-unset", "padding-unset");
-                    dropdownButtonText.innerText = extensionAttribute;
+                    dropdownButtonText.innerText = extensionAttribute.replaceAll("_", " ");
 
                     dropdownList.id = "dropdownListRegularQueryables" + extensionName + extensionAttribute;
                     dropdownList.classList.add("dropdown-menu", "margin-unset", "padding-unset", "dropdown-regular-list", "dropdown-regular-list-frequency");
@@ -1231,17 +1229,21 @@ function checkKeywordsDisplayed(checkboxValue){
 
 /*Searchbox Keyword Functions*/
 
-function addKeyword(keyword, stacKey, queryableValue){
-    var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
-    var keywordTagText = document.createElement("p");
+function addKeyword(keyword, stacKey){
+    var propertyNameArray;
+    var extensionName;
+    var extensionAttribute;
+    var checkboxList;
 
-    var propertyNameArray = stacKey.split(":");
-    var extensionName = propertyNameArray[0].toUpperCase();
-    var extensionAttribute = String(propertyNameArray[1]).charAt(0).toUpperCase() + String(propertyNameArray[1]).slice(1);
+    if(stacKey != null){
+        propertyNameArray = stacKey.split(":");
+        extensionName = propertyNameArray[0].toUpperCase();
+        extensionAttribute = String(propertyNameArray[1]).charAt(0).toUpperCase() + String(propertyNameArray[1]).slice(1);
 
-    var checkboxList = document.getElementById("dropdownListRegularQueryables" + extensionName + extensionAttribute);
+        checkboxList = document.getElementById("dropdownListRegularQueryables" + extensionName + extensionAttribute);
+    }
 
-    if(keyword != "" || keyword!= null) {
+    if(keyword && (keyword != "" || keyword != null)) {
         removeOtherEntry(stacKey, checkboxList);
 
         /*Find corresponding checkbox, make it checked, and expand the dropdown it's in*/
