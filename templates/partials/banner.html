@@ -18,9 +18,9 @@
                 </div>
 
                 <div class="row">
-                    <div class="container-fluid banner-search-container">
-                        <div>
-                            <div class="banner-search-dropdown">
+                    <div class="container-fluid">
+                        <div class="banner-search-container padding-unset">
+                            <div>
                                 {% with %}
                                     {% set dropdown_type = "default_dropdown_list" %}
                                     {% set container_id = "dropdownListDefaultContainer" %}
@@ -33,8 +33,8 @@
                                     {% include "partials/dropdown.html" %}
                                 {% endwith %}
                             </div>
-                        <!--TODO: Find out why the searchbox div renders outside of the search container div -->
-                            <div class="banner-search-searchbox">
+
+                            <div>
                                 {% include "partials/searchbox.html" %}
                             </div>
                         </div>
