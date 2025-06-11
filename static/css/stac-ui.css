@@ -376,6 +376,7 @@ h6{
     border: 1px solid var(--indigo-200);
     background: var(--indigo-50);
     box-shadow: var(--text-shadow);
+    padding-right: 10px;
     margin-top: 53px;
 }
 
