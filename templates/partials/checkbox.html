@@ -59,7 +59,7 @@
                 checkCheckboxCount('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
                 setSearchPageTitle('{{ dropdown_default_UL_id }}', "titleSearchType");
                 populateDatasetsFilter('{{ dropdown_default_UL_id }}');
-                setCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
+                setCollectionsCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
             })
 
             if('{{ direction }} '== "left"){
@@ -82,7 +82,7 @@
 
 {% else %}
     <div class="checkbox-buffer">
-        <label class="checkbox-container margin-unset" for="{{ checkbox_id }}">
+        <label class="checkbox-container" for="{{ checkbox_id }}">
             {% if direction_left %}
                 <p>{{ checkbox_label_text }}</p>
             {% endif %}
