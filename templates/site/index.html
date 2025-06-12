@@ -70,16 +70,16 @@
                 {% include "partials/modal-map.html" %}
             {% endwith %}
             <!--TODO: Check if Frequency dropdown IDs are no longer used anywhere, then delete this templates include -->
-            {% with %}
-                {% set dropdown_type = "regular_dropdown_list_frequency" %}
-                {% set dropdown_default_UL_id = "dropdownListRegularFrequency" %}
-                {% set container_id = "dropdownListRegularFrequencyContainer" %}
-                {% set dropdown_button_id = "dropdownListFrequencyButton" %}
-                {% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %}
-                {% set label_id = "dropdownListRegularFrequencyLabel" %}
-                {% set dropdown_label_text = "Frequency" %}
-                {% include "partials/dropdown.html" %}
-            {% endwith %}
+            {#% with %#}
+                {#% set dropdown_type = "regular_dropdown_list_frequency" %#}
+                {#% set dropdown_default_UL_id = "dropdownListRegularFrequency" %#}
+                {#% set container_id = "dropdownListRegularFrequencyContainer" %#}
+                {#% set dropdown_button_id = "dropdownListFrequencyButton" %#}
+                {#% set dropdown_button_text_id = "dropdownListFrequencyButtonText" %#}
+                {#% set label_id = "dropdownListRegularFrequencyLabel" %#}
+                {#% set dropdown_label_text = "Frequency" %#}
+                {#% include "partials/dropdown.html" %#}
+            {#% endwith %#}
 
             <div id="nonEnumQueryables" class="div-queryable-filters"></div>
 
