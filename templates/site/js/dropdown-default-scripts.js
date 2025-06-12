@@ -94,7 +94,7 @@ function selectAllCheckbox(listULID, defaultDropdownButtonTextID, defaultDropdow
     }
 }
 
-function setCheckboxFilterJSON(listULID){
+function setCollectionsCheckboxFilterJSON(listULID){
     var searchFilterCollectionsHidden = document.getElementById("searchFilterCollectionsHidden");
     var list = document.getElementById(listULID);
     var checkboxArray = list.querySelectorAll('input[type=checkbox]');
