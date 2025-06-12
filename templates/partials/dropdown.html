@@ -116,7 +116,7 @@
                                     selectAllCheckbox('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
                                     setSearchPageTitle('{{ dropdown_default_UL_id }}', "titleSearchType");
                                     populateDatasetsFilter('{{ dropdown_default_UL_id }}');
-                                    setCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
+                                    setCollectionsCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
                                 })
                             })
                         </script>
@@ -128,6 +128,8 @@
                     {% endwith %}
                 {% endif %}
 
+            <!--TODO CHeck if this loop is used outside of the sample.html -->
+            <!--the javascript may just be targeting the UL list ID to populate the list items -->
             {% if dropdown_type == "regular_dropdown_list_metadata" %}
 
 
@@ -140,6 +142,7 @@
                 {% endfor %}
             {% endif %}
 
+            <!--TODO CHeck if this loop is used outside of the sample.html -->
             {%  if dropdown_type == "regular_dropdown_list_license" %}
 
                 {% for item in dropdown_list %}
@@ -150,6 +153,7 @@
                         </a>
                     </li>
 
+                    <!--TODO Keep this script-->
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
                             var listItem = document.getElementById("{{ list_item_id }}");
@@ -168,7 +172,6 @@
         <script src="js/dropdown-default-scripts.js"></script>
     {% endif %}
     </div>
-
 {% endif %}
 
 
@@ -223,8 +226,3 @@
 
 {% endif %}
 <script src="js/dropdown-list.js"></script>
-
-
-
-
-
