@@ -1,4 +1,5 @@
 var filterPropertyList = {};
+var filterPropertyFrequencyList = {};
 
 $(document).ready(function() {
     /*Initialize Popper.js and Tooltips.js*/
@@ -886,7 +887,7 @@ function clearMySearch(){
         }
     }
 }
-
+//TODO: Check if buildFrequencyFilterDropdown() and related functions are no longer used anywhere
 async function checkSTACEndpoint(url){
     var response = await fetch(url);
 
@@ -911,7 +912,8 @@ async function buildFrequencyFilterDropdown(){
         searchURL = productionCollectionsURL;
         searchJSONNode = "summaries";
     }
-
+    return
+/*
      fetch(searchURL, {
         headers:{
                 "Content-Type": "application/json",
@@ -927,7 +929,7 @@ async function buildFrequencyFilterDropdown(){
         else{
             populateFrequencyFilterDropdownItems(json[searchJSONNode], searchJSONNode);
         }
-    })
+    })*/
 
 }
 
@@ -1053,20 +1055,24 @@ function buildQueryablesFilterDropdown(){
 
 function buildDropdownQueryableElements(json){
     var filterDropdownQueryablesContainer = document.getElementById("dropdownQueryables");
+    var nonEnumQueryablesContainer = document.getElementById("nonEnumQueryables");
 
-        Object.entries(json).forEach( ([queryableKey, queryableValue]) => {
+    Object.entries(json).forEach( ([queryableKey, queryableValue]) => {
         var dropdownCollectionTitleContainer = document.createElement("div");
         var dropdownCollectionTitle = document.createElement("p");
         var extensionName = "";
         var extensionAttribute = "";
 
-        if (!queryableKey.includes("marble") && queryableValue[0].values[0].includes("enum")) {
-            dropdownCollectionTitle.innerText = queryableKey;
-        }
         dropdownCollectionTitle.classList.add("subtitle-1", "title-advanced-filters");
         dropdownCollectionTitleContainer.appendChild(dropdownCollectionTitle);
-        filterDropdownQueryablesContainer.appendChild(dropdownCollectionTitleContainer);
 
+        /*Uses prefix/extension name as a category title.  Queryables without a prefix/extension don't have a separate title*/
+        if (!queryableKey.includes("marble") && queryableValue[0].values[0].includes("enum")) {
+            if(queryableValue[0].values.stac_key.includes(":")){
+                dropdownCollectionTitle.innerText = queryableKey;
+                filterDropdownQueryablesContainer.appendChild(dropdownCollectionTitleContainer);
+            }
+        }
 
         var groupedByExtensionType = Object.groupBy(queryableValue, ({extension_type}) => extension_type);
 
@@ -1079,12 +1085,53 @@ function buildDropdownQueryableElements(json){
             var dropdownList = document.createElement("ul");
 
             for (extensionType of extensionTypeValue){
-
                 if (queryableKey == extensionType.extension_name && !queryableKey.includes("marble") && extensionType.values[0] && extensionType.values[0].includes("enum")) {
 
-                    extensionName = extensionType.extension_name.toUpperCase();
+                    /*Uses the extension type as the title of the dropdown button*/
+                    /*If there is no extension type use the extension name as the title of the dropdown button*/
+                    if(extensionType.values.stac_key.includes(":")){
+                        extensionName = extensionType.extension_name.toUpperCase();
 
-                    extensionAttribute = String(extensionType.extension_type).charAt(0).toUpperCase() + String(extensionType.extension_type).slice(1);
+                        if(extensionType.extension_type.includes("_")){
+                            var extensionTypeArray = extensionType.extension_type.split("_");
+                            extensionAttribute = "";
+                            for(typeNamePartial of extensionTypeArray){
+                                var typeNamePartialID = "";
+
+                                if(typeNamePartial != "id" || typeNamePartial != "url"){
+                                    extensionAttribute = extensionAttribute + String(typeNamePartial).charAt(0).toUpperCase() + String(typeNamePartial).slice(1) + " ";
+                                }
+                                else{
+                                    typeNamePartialID = typeNamePartial.toUpperCase();
+                                    extensionAttribute = extensionAttribute + typeNamePartialID;
+                                }
+                            }
+                        }
+                        else{
+                            extensionAttribute = String(extensionType.extension_type).charAt(0).toUpperCase() + String(extensionType.extension_type).slice(1);
+                        }
+
+                        dropdownButtonText.innerText = extensionAttribute.replaceAll("_", " ");
+                    }
+                    else{
+                        if(extensionType.extension_name == "id"){
+                            extensionName = extensionType.extension_name.toUpperCase();
+                        }
+                        else{
+                            if(extensionType.extension_name.includes("_")){
+                                var extensionNameArray = extensionType.extension_name.split("_");
+                                extensionName = String(extensionNameArray[0]).charAt(0).toUpperCase() + String(extensionNameArray[0]).slice(1) +
+                                    " " + String(extensionNameArray[1]).charAt(0).toUpperCase() + String(extensionNameArray[1]).slice(1);
+                            }
+                            else{
+                                extensionName = String(extensionType.extension_name).charAt(0).toUpperCase() + String(extensionType.extension_name).slice(1);
+                            }
+                        }
+                        extensionAttribute = "";
+
+                        dropdownButtonText.innerText = extensionName;
+                    }
+
 
                     dropdownContainer.id = "dropdownListQueryables" + extensionName + extensionAttribute + "Container";
                     dropdownContainer.classList.add("dropdown-regular-list-container");
@@ -1102,7 +1149,7 @@ function buildDropdownQueryableElements(json){
 
                     dropdownButtonText.id = "dropdownListQueryables" + extensionName + extensionAttribute + "ButtonText";
                     dropdownButtonText.classList.add("subtitle-1", "dropdown-frequency-list-title", "margin-unset", "padding-unset");
-                    dropdownButtonText.innerText = extensionAttribute.replaceAll("_", " ");
+
 
                     dropdownList.id = "dropdownListRegularQueryables" + extensionName + extensionAttribute;
                     dropdownList.classList.add("dropdown-menu", "margin-unset", "padding-unset", "dropdown-regular-list", "dropdown-regular-list-frequency");
@@ -1123,7 +1170,7 @@ function buildDropdownQueryableElements(json){
                     checkboxLabel.classList.add("checkbox-container", "margin-unset");
 
                     checkboxLabel.setAttribute("for", checkboxID);
-                    checkboxLabelText.classList.add("checkbox-label-text");
+                    checkboxLabelText.classList.add("checkbox-label-text", "margin-unset");
                     checkboxLabelText.innerText = extensionType.key.trim();
 
                     checkbox.setAttribute("type", "checkbox");
@@ -1131,9 +1178,12 @@ function buildDropdownQueryableElements(json){
                     checkbox.setAttribute("propertyname", extensionType.values.stac_key);
                     checkbox.setAttribute("value", extensionType.key);
 
+
                     checkbox.addEventListener('change', function () {
                         buildQueryableFilterString(dropdownList);
                     });
+
+
 
                     checkboxBufferDiv.appendChild(checkboxLabel);
                     checkboxLabel.appendChild(checkbox);
@@ -1151,7 +1201,13 @@ function buildDropdownQueryableElements(json){
             dropdownDiv.appendChild(dropdownList);
             dropdownContainer.appendChild(dropdownDiv);
 
-            filterDropdownQueryablesContainer.appendChild(dropdownContainer);
+            if(queryableValue[0].values.stac_key.includes(":")){
+                filterDropdownQueryablesContainer.appendChild(dropdownContainer);
+            }
+            else{
+                nonEnumQueryablesContainer.appendChild(dropdownContainer)
+            }
+
 
         });
     })
@@ -1159,9 +1215,14 @@ function buildDropdownQueryableElements(json){
 
 function buildQueryableFilterString(checkboxList){
     var filterQueryables = {"filter": {"op": "or", "args": []}};
+    var filterFrequency = {"filter": {"op": "or", "args": []}};
 
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
     var searchFilterOtherHidden = document.getElementById("searchFilterOtherHidden");
+
+    var searchFilterFrequencyBody = document.getElementById("searchFilterFrequencyBody");
+    var searchFilterFrequencyHidden = document.getElementById("searchFilterFrequencyHidden");
+
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
         /*Adds entry under Other if checkbox is checked*/
         for(checkbox of checkboxArray){
@@ -1179,27 +1240,59 @@ function buildQueryableFilterString(checkboxList){
                         filterPropertyDisplay.setAttribute("queryablekeyvalue", checkbox.value);
                         filterPropertyDisplay.classList.add("subtitle-2");
                         filterPropertyDisplay.innerText = propertyValue;
-                        searchFilterOtherBody.appendChild(filterPropertyDisplay);
+
+                        if(propertyKey.includes("frequency")){
+                            searchFilterFrequencyBody.appendChild(filterPropertyDisplay);
+                        }
+                        else{
+                            searchFilterOtherBody.appendChild(filterPropertyDisplay);
+                        }
                     }
 
                     filterProperty.args[0].property = propertyKey;
                     filterProperty.args[1] = propertyValue;
-                    filterPropertyList[checkbox.id] = filterProperty;
+
+                    if(propertyKey.includes("frequency")){
+                        filterPropertyFrequencyList[checkbox.id] = filterProperty;
+                    }
+                    else{
+                        filterPropertyList[checkbox.id] = filterProperty;
+                    }
+
                 }
             }
 
             if(checkbox.checked == false && checkbox.id in filterPropertyList){
                 var propertyKey = checkbox.getAttribute("propertyname");
 
-                    removeOtherEntry(propertyKey, checkboxList);
-                    delete filterPropertyList[checkbox.id];
+                removeOtherEntry(propertyKey, checkboxList);
+                delete filterPropertyList[checkbox.id];
+
             }
+
+            if(checkbox.checked == false && checkbox.id in filterPropertyFrequencyList){
+                var propertyKey = checkbox.getAttribute("propertyname");
+
+                removeOtherEntry(propertyKey, checkboxList);
+                delete filterPropertyFrequencyList[checkbox.id];
+
+            }
+
+
+
         }
 
     Object.entries(filterPropertyList).forEach( ([key,value]) => {
         filterQueryables.filter.args.push(value);
-    })
+    });
+
     searchFilterOtherHidden.innerText = JSON.stringify(filterQueryables);
+
+    Object.entries(filterPropertyFrequencyList).forEach( ([key,value]) => {
+        filterFrequency.filter.args.push(value);
+    });
+
+    searchFilterFrequencyHidden.innerText = JSON.stringify(filterFrequency);
 }
 
 
@@ -1276,8 +1369,18 @@ function addKeyword(keyword, stacKey){
 
 function removeOtherEntry(propertyKey, checkboxList){
     var searchFilterOtherBody = document.getElementById("searchFilterOtherBody");
+    var searchFilterFrequencyBody = document.getElementById("searchFilterFrequencyBody");
     var checkboxArray = checkboxList.querySelectorAll('input[type=checkbox]');
-    var paragraphArray = searchFilterOtherBody.querySelectorAll('p');
+    var paragraphArray;
+    var paragraphOtherArray = searchFilterOtherBody.querySelectorAll('p');
+    var paragraphFrequencyArray = searchFilterFrequencyBody.querySelectorAll('p');
+
+    if(propertyKey.includes("frequency")){
+        paragraphArray = paragraphFrequencyArray;
+    }
+    else{
+        paragraphArray = paragraphOtherArray;
+    }
 
     for (paragraph of paragraphArray) {
         for (checkbox of checkboxArray) {
@@ -1288,8 +1391,16 @@ function removeOtherEntry(propertyKey, checkboxList){
 
                 if (paragraphValue == checkboxValue) {
                     var paragraphEntry = document.getElementById(paragraph.id);
-                    searchFilterOtherBody.removeChild(paragraphEntry);
-                    delete filterPropertyList[checkbox.id];
+
+                    if(propertyKey.includes("frequency")){
+                        searchFilterFrequencyBody.removeChild(paragraphEntry);
+                        delete filterPropertyFrequencyList[checkbox.id];
+                    }
+                    else{
+                        searchFilterOtherBody.removeChild(paragraphEntry);
+                        delete filterPropertyList[checkbox.id];
+                    }
+
                 }
             }
         }
