@@ -4,9 +4,13 @@ function instantiateMap(mapContainerID){
     var map;
     var mapContainer = L.DomUtil.get(mapContainerID);
 
+    //TODO: Find a way to stop error 'Map container is already initialized.' from happening without interfering with
+    // map functionality
+    // Keep commented code for now
+    /*
     if(mapContainer != null){
         mapContainer._leaflet_id = null;
-    }
+    }*/
 
 
     //Add hook to add map object to array so it can be used later to add STAC polygons to map
