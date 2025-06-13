@@ -25,8 +25,9 @@ function setPlaceholderText(element, text){
     element.setAttribute("placeholder", text);
 }
 
+//TODO: Uncomment when spin buttons added to search UI
 /*Used for spin buttons*/
-function setTextboxBackground(element){
+/*function setTextboxBackground(element){
     if(element.classList.contains("input-number-small-background")){
         element.classList.remove("input-number-small-background");
     }
@@ -35,7 +36,7 @@ function setTextboxBackground(element){
         element.classList.add("input-number-small-background");
     }
 }
-
+*/
 function swapBackButtonText(){
     var backButton = document.getElementById("backButton");
     if(backButton.innerText == "Home"){
