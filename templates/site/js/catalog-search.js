@@ -886,6 +886,7 @@ function clearMySearch(){
             checkbox.checked = false;
         }
     }
+    checkCheckboxCount( "dropdownListDefaultUL", "dropdownListTitleText", "All Collections");
 }
 //TODO: Check if buildFrequencyFilterDropdown() and related functions are no longer used anywhere
 async function checkSTACEndpoint(url){
