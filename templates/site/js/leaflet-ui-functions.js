@@ -70,12 +70,6 @@ function clearShape(shapeDict){
     }
 }
 
-function clearText(elementID){
-    var divLatLng = document.getElementById(elementID);
-    divLatLng.innerText = "";
-}
-
-
 //Create tooltip to show latitude and longitude next to cursor
 function createCursorTooltip(map, addWidgets){
 
@@ -232,8 +226,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
 
                 // Start drawing rectangle
                 newShape = map.editTools.startRectangle();
@@ -260,8 +252,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
 
                 // Start drawing circle
                 newShape = map.editTools.startCircle();
@@ -288,8 +278,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
 
                 // Click to add points to map that will be automatically joined into a polygon
                 newShape = map.editTools.startPolygon();
@@ -317,8 +305,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
 
                 //Add location marker to map
                 newShape = map.editTools.startMarker();
@@ -347,8 +333,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
             })
 
 
@@ -409,9 +393,6 @@ function createSearchTool(map){
 
                     locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
-
-                    //clearText("currentShapeLatLng");
-                    //clearText("currentShapeGeoJSON");
 
                     //Display coordinate of selected city in point coordinate field
                     displayCoordinate(coordinates[1], coordinates[0]);
@@ -524,9 +505,6 @@ function addCoordinate(coordinateValue, map){
         //Remove previously drawn shape/layer from dictionary
         clearShape(shapeDict);
 
-        //clearText("currentShapeLatLng");
-        //clearText("currentShapeGeoJSON");
-
         coordinateMarker.addTo(map);
 
         coordinateMarker['shapeType'] = "Marker";
@@ -609,9 +587,6 @@ function createGeoJSONPanel(map){
             L.DomEvent.on(geoJSONUploadButton, 'click', function() {
                 //Clear anything in coordinate input field
                 clearCoordinate();
-
-                //clearText("currentShapeLatLng");
-                //clearText("currentShapeGeoJSON");
 
                 uploadGeoJSON(map)
             });
