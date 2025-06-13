@@ -5,7 +5,3 @@ document.addEventListener("DOMContentLoaded", function (){
         swapDatasetDetails();
     });
 })
-
-function stopPropagation(event){
-    event.stopPropagation();
-}
