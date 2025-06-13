@@ -45,7 +45,7 @@ function createMap(map, addWidgets){
         //Gets latitude and longitude of shapes that were added to the map
         //Fires on mouseup
         map.on('mouseup', function(event){
-            getShapeLatLng();
+            getMarkerLatLng();
         });
     }
 
@@ -146,49 +146,18 @@ function displayCoordinate(lat, lng){
 //Gets latitude and longitude of shapes added to the map and prints them out in the "Current Shape Lat Long" div
 //For the Marker it also outputs the latitude and longitude of the added Marker to the coordinate input text field
 //For Polygons it prints out an updated list of added polygon points as points are added.
-function getShapeLatLng(){
-    var circleRadius;
-    var circleCentre;
+function getMarkerLatLng(){
     var markerCentre;
-    var polygonLatLngArray;
-    //var divLatLng = document.getElementById("currentShapeLatLng");
-    //Keep in case this information is needed
-    /*
-    let circleBounds;
-    let circleBoundsCornerNE;
-    let circleBoundsCornerSW;
-    */
-
 
     //Hide coordinate input error message if visible
     hideCoordinateErrorPanel();
 
     if (Object.keys(shapeDict).length > 0) {
-        if (shapeDict["shape"]["shapeType"] == "Circle") {
-
-            circleRadius = shapeDict["shape"].getRadius();
-            circleCentre = shapeDict["shape"].getLatLng();
-
-            //Keep in case this information is needed
-            /*
-            circleBounds = shapeDict["shape"].getBounds();
-            circleBoundsCornerNE = circleBounds.getNorthEast();
-            circleBoundsCornerSW = circleBounds.getSouthWest();
-            */
-
-            //divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
-        } else if (shapeDict["shape"]["shapeType"] == "Marker") {
+        if (shapeDict["shape"]["shapeType"] == "Marker") {
             markerCentre = shapeDict["shape"].getLatLng();
 
             //Display coordinate in point coordinate field
             displayCoordinate(markerCentre.lat, markerCentre.lng)
-
-            //divLatLng.innerText = markerCentre;
-        } else {
-            if(shapeDict["shape"]["shapeType"] != "Map") {
-                polygonLatLngArray = shapeDict["shape"].getLatLngs();
-                //divLatLng.innerText = polygonLatLngArray;
-            }
         }
     }
 }
