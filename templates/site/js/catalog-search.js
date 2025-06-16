@@ -80,6 +80,11 @@ function clearListChildren(){
     }
 }
 
+function hideKeywordList(){
+        var inputElementContainer = document.getElementById("searchInputContainer");
+        inputElementContainer.setAttribute("aria-expanded", "false");
+}
+
 function getWord(inputBox, inputBoxContainerID){
     var queryablesArray = [];
     var queryableResultButton;
@@ -112,7 +117,8 @@ function getWord(inputBox, inputBoxContainerID){
 
                             queryableResultButton.addEventListener('click', function (event) {
                                 selectSearchResults(inputBox, event.target.id, queryableItem.item.values.stac_key, queryableItem.item.key);
-                            })
+                                hideKeywordList();
+                            });
 
                             listItemFont.appendChild(queryableResultButton);
                             queryResultListItem.appendChild(listItemFont);
