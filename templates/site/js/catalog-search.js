@@ -895,7 +895,164 @@ function clearMySearch(){
     checkCheckboxCount( "dropdownListDefaultUL", "dropdownListTitleText", "All Collections");
 }
 
+async function checkSTACEndpoint(url){
+    var response = await fetch(url);
+
+    return response;
+
+}
+
+
+
+ async function buildFilterDropdowns(){
+    var keywordURL;
+    var dataCollections;
+    var collectionSummariesArray = [];
+    var queryablesURL = "{{ stac_catalog_url }}/queryables";
+    var collectionsURL = "{{ stac_catalog_url }}/collections";
+    var serverResponse =  await checkSTACEndpoint(queryablesURL);
+    
+    if(serverResponse.status == 404)
+    {
+        keywordURL = collectionsURL;
+        fetch(keywordURL).then(response => response.json()).then( json => {
+            dataCollections = json.collections;
+
+            for(collection of dataCollections){
+                collectionSummariesArray.push(collection.summaries);
+            }
+
+            buildDropdownQueryableElements(groupByExtension(collectionsURL, collectionSummariesArray))
+        })
+    }
+    else{
+        fuseDictionary().then(queryablesArray => buildDropdownQueryableElements(groupByExtension(queryablesURL, queryablesArray)));
+    }
+}
+
+function groupByExtension(url, array){
+    var groupedArray;
+
+    if(url.includes("queryables") ){
+        Object.entries(array).forEach( ([extensionKey, extensionValue]) => {
+            var stacKeyArray = extensionValue.values.stac_key.split(":");
+            array[extensionKey]["extension_name"] = stacKeyArray[0];
+            array[extensionKey]["extension_type"] = stacKeyArray[1];
+        })
+        groupedArray =  Object.groupBy(array, ({extension_name}) => extension_name);
+    }
+
+
+    /*Format collections like queryables*/
+    if(url.includes("collections")){
+        var mappedArray = [];
+
+        Object.entries(array).forEach( ([summaryKey, summaryValue]) => {
+
+            Object.entries(summaryValue).forEach( ([summaryValueObjectKey, summaryValueObjectValue]) => {
+
+                if(summaryValueObjectKey.includes(":")){
+                    var stacKeyArray = summaryValueObjectKey.split(":");
+
+                    for(value of summaryValueObjectValue){
+                        var mappedObject = {"values":  [[[],"enum"]]}
+                        mappedObject["extension_name"] = stacKeyArray[0];
+                        mappedObject["extension_type"] = stacKeyArray[1]
+                        mappedObject["key"] = value;
+                        mappedObject["values"]["stac_key"] = summaryValueObjectKey;
+                        mappedArray.push(mappedObject);
+                    }
+                }
+            })
+        })
+        groupedArray =  Object.groupBy(mappedArray, ({extension_name}) => extension_name);
+    }
+    return groupedArray;
+}
+
+function buildCollectionsFilterDropdown(json){
+
+    console.log("groupded json")
+    console.log((json))
+    //var groupedByCollection = Object.groupBy(json, ({extension_name}) => extension_name);
+     //   console.log(groupedByCollection)
+    Object.entries(json).forEach( ([collectionKey, collectionValue]) =>{
+
+
+
+        var dropdownCollectionTitleContainer = document.createElement("div");
+        var dropdownCollectionTitle = document.createElement("p");
+        var extensionName = "";
+        var collectionName = "";
+
+        dropdownCollectionTitle.classList.add("subtitle-1", "title-advanced-filters");
+        dropdownCollectionTitleContainer.appendChild(dropdownCollectionTitle);
+
+        dropdownCollectionTitle.innerText = collectionKey;
+
+
+        Object.entries(collectionValue).forEach( ([collectionGroupKey, collectionGroupValue]) => {
+            var dropdownContainer = document.createElement("div");
+            var dropdownDiv = document.createElement("div");
+            var dropdownButton = document.createElement("a");
+            var dropdownButtonText = document.createElement("div");
+            var dropdownList = document.createElement("ul");
+
+            collectionName = collectionValue.id;
+            extensionName = collectionValue.extension_name;
+
+            dropdownContainer.id = "dropdownListCollections" + collectionName + extensionName + "Container";
+            dropdownContainer.classList.add("dropdown-regular-list-container");
+
+            dropdownDiv.classList.add("dropdown");
+
+            dropdownButton.id = "dropdownListCollections" + collectionName + extensionName + "Button";
+            dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "padding-unset",
+                "dropdown-regular-list-button", "dropdown-regular-list-chevron-icon");
+            dropdownButton.setAttribute("role", "button");
+            dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+            dropdownButton.setAttribute("data-bs-display", "static");
+            dropdownButton.setAttribute("data-bs-auto-close", "outside");
+            dropdownButton.setAttribute("aria-expanded", "false");
+
+            var dropdownListItem = document.createElement("li");
+            var checkboxBufferDiv = document.createElement("div");
+            var checkboxLabel = document.createElement("label");
+            var checkboxLabelText = document.createElement("p");
+            var checkmarkSpan = document.createElement("span");
+            var checkbox = document.createElement("input");
+            var checkboxID = collectionValue.extension_name + collectionValue.extension_type;
+
+
+            dropdownListItem.id = "listItem" + extensionType.key.replaceAll(' ', '');
+
+            checkmarkSpan.classList.add("checkmark");
+            checkboxLabel.classList.add("checkbox-container", "margin-unset");
+
+            checkboxLabel.setAttribute("for", checkboxID);
+            checkboxLabelText.classList.add("checkbox-label-text", "margin-unset");
+            checkboxLabelText.innerText = extensionType.key.trim();
+
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.id = checkboxID;
+            checkbox.setAttribute("propertyname", extensionType.values.stac_key);
+            checkbox.setAttribute("value", extensionType.key);
+
+
+
+
+        })
+
+
+
+
+
+
+    })
+}
+
 //TODO: Make this fail gracefully and build dropdowns from /collections endpoint
+// or make another function to get from /collections
 function buildQueryablesFilterDropdown(){
 
     fuseDictionary().then(queryablesArray => {
