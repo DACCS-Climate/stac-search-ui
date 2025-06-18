@@ -194,7 +194,7 @@
     {% endwith %}
 
     {% with %}
-        {% set button_type = "button_reg_default-alt" %}
+        {% set button_type = "button_reg_default_alt" %}
         {% set button_label = "Clear" %}
         {% include "partials/button.html" %}
     {% endwith %}
@@ -370,9 +370,22 @@
         {% include "partials/dropdown-panel.html" %}
     {% endwith %}
 
-        <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+<br>
+    <br>
+    {% with %}
+        {% set dropdown_type = "dropdown_list_panel" %}
+        {% set dropdown_button_id = "dropdownListPanel" %}
+        {% set dropdown_list_panel_link_id = "dropdownListPanelLabel" %}
+        {% set dropdown_list_id  = ""%}
+        {% set dropdown_label_text = "Assets" %}
+        {% include "partials/dropdown-panel.html" %}
+    {% endwith %}
+
+
+
+        <!--<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>-->
         <script src="js/catalog-search.js"></script>
-        <script src="js/sample.js"></script>
+        <script src="js/search-ui-functions.js"></script>
         <script src="js/ui-styles-scripts.js"></script>
         <script src="js/modal.js"></script>
 

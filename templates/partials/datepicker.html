@@ -1,7 +1,7 @@
 {% set datepicker = {
-    "placeholder_text": "YYYY MM DD",
+    "placeholder_text": "YYYY MM DD HH:mm",
     "class": "input-date-reg",
-    "label_text_class": "caption"
+    "label_text_class": "button"
 } %}
 
 <div class="datepicker-container">
@@ -9,17 +9,14 @@
     <input type="text" id="{{ datepicker_id }}" class="{{ datepicker["class"] }}"  placeholder="{{ datepicker["placeholder_text"] }}">
 </div>
 
+<script src="js/datepicker.js"></script>
 <script>
-    initializeCalendar("01 01 1950", "12 31 2023");
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentDateString = getEndDateString();
 
-    function initializeCalendar(startDate, endDate){
-        flatpickr("#{{ datepicker_id }}", {
-            dateFormat: "Y M d",
-            shorthandCurrentMonth: true,
-            allowInput: true,
-            monthSelectorType: "dropdown",
-            minDate: startDate,
-            maxDate: endDate
-        });
-    }
+        initializeCalendar("{{ datepicker_id }}", "01 01 1950", currentDateString);
+    })
+
+
+
 </script>

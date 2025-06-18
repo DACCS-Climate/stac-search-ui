@@ -1,0 +1,209 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+    {% with page = "home"  %}
+        {% set banner_background_class= "banner-image-home" %}
+        {% set banner_large_background_class = "banner-image-home-large" %}
+        {% set banner_title_class = "banner-title-home" %}
+        {% set banner_video = "video/banner-video.mp4" %}
+        {% set page_title = "Data Analytics for Canadian Climate Services, STAC API" %}
+        {% set page_subtitle = "Climate Data Search" %}
+        {% set page_slogan = "Explore this rich repository of information about Earth’s climate—uncovering insights into its past, understanding current trends, and anticipating future changes." %}
+        {% include "partials/banner.html" %}
+    {% endwith %}
+
+<!--Page content area-->
+<div class="row">
+    <div class="container-fluid content-search-main">
+        <div class="content-search-left">
+        <div id="backButtonContainer" class="div-back-button-container">
+            <i class="fa-solid fa-arrow-left back-button-arrow"></i><a id="backButton" class="button-back-button subtitle-1" role="button">Home</a><img  src="images/open-in-app.svg">
+        </div>
+
+            {% with %}
+                {% set dropdown_type = "regular_dropdown_source" %}
+                {% set dropdown_button_id = "dropdownSourceRegular" %}
+                {% set dropdown_label_text = "Source" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
+
+            {% with %}
+                {% set dropdown_type = "regular_dropdown_share" %}
+                {% set dropdown_button_id = "dropdownShareRegular" %}
+                {% set dropdown_label_text = "Share" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
+
+        <div id="advancedFilters" class="div-advanced-filters">
+            <div>
+                <h6 class="title-advanced-filters">Advanced Filters</h6>
+            </div>
+
+            {% with %}
+                {% set dropdown_type = "dropdown_time_frame" %}
+                {% set dropdown_timeframe_id = "dropdownTimeframe" %}
+                {% set dropdown_timeframe_link_id = "dropdownTimeframeLabel" %}
+                {% set dropdown_timeframe_list_id = "dropdownTimeFrameList" %}
+                {% set user_datepicker_start_id  = "timeframeStartDatePicker" %}
+                {% set user_timepicker_start_id = "timeframeStartTimePicker" %}
+                {% set user_datepicker_end_id  = "timeframeEndDatePicker" %}
+                {% set user_timepicker_end_id = "timeframeEndTimePicker" %}
+                {% set user_checkbox_allday_id = "timeframeCheckboxAllDay" %}
+                {% set user_dropdown_repeat_id = "timeframeDropdownRepeat" %}
+                {% set user_dropdown_repeat_label_id = "timeframeDropdownRepeatLabel" %}
+                {% set user_datepicker_endson_id = "timeframeEndsOnDatepicker" %}
+                {% set dropdown_label_text = "Time Frame" %}
+                {% include "partials/dropdown-panel.html" %}
+            {% endwith %}
+
+            <div>
+                {% with %}
+                    {% set button_type = "button_location" %}
+                    {% set button_id = "showLocationMap" %}
+                    {% set button_label = "Location" %}
+                    {% include "partials/button.html" %}
+                {% endwith %}
+            </div>
+
+            {% with %}
+                {% include "partials/modal-map.html" %}
+            {% endwith %}
+
+            <div id="nonEnumQueryables" class="div-queryable-filters"></div>
+
+            <div id="dropdownQueryables" class="div-queryable-filters"></div>
+        </div>
+
+        </div>
+        <div class="content-search-right">
+            <div id="searchNavContainer" class="row div-search-nav-container">
+                <div class="content-search-title">
+                    <h5>Search <span id="titleSearchType" class="content-search-title-type"></span></h5>
+                </div>
+                <div class="content-search-description">
+                    <p class="body-1">
+                        Filter by date range to focus on specific timeframes,location to narrow down your search area,
+                        and keywords relevant to the type of imagery or dataset. Additional options, like cloud cover and
+                        sensor type, let you further customize your results to meet quality and relevance standards.
+                    </p>
+                </div>
+                <div id="searchFilterContainer" class="div-search-filter-container">
+                    <div id="mySearchFilters"> </div>
+                    <div id="fullFilterStringContainer" class="div-hidden-filter"></div>
+                    <div id="searchFilterButtonContainer">
+                        {% with %}
+                            {% set button_type = "button_reg_default_alt" %}
+                            {% set button_id = "searchFilterApply" %}
+                            {% set button_label = "Apply" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+
+                        {% with %}
+                                {% set button_type = "button_reg_default_alt" %}
+                                {% set button_id = "searchFilterClear" %}
+                                {% set button_label = "Clear" %}
+                                {% include "partials/button.html" %}
+                            {% endwith %}
+                        </div>
+                </div>
+
+                <div id="searchResultsNavigation" class="search-results-nav">
+                    <div>
+                        {% with %}
+                            {% set button_type = "button_lg_nav_previous" %}
+                            {% set button_id = "searchResultsPrevious" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+
+                        {% with %}
+                            {% set button_type = "button_sm_nav" %}
+                            {% set button_label = "First" %}
+                            {% set button_id = "searchResultsFirst" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
+                    <div>
+                        {% with %}
+                            {% set button_type = "button_lg_nav_next" %}
+                            {% set button_id = "searchResultsNext" %}
+                            {% include "partials/button.html" %}
+                        {% endwith %}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container-fluid">
+                    <div id="searchResults"></div>
+                    <div id="datasetDetails">
+                        <div id="datasetContainer" class="div-container-dataset">
+                            <div id="datasetCollectionContainer">
+                                <div id="datasetCollection"><h4>Collection</h4></div>
+                                <div id="datasetCollectionName"></div>
+                            </div>
+
+                            <div id="datasetTitleContainer">
+                                <div id="datasetTitle"><h4>Dataset</h4></div>
+                                <div id="datasetName"></div>
+                            </div>
+
+                            <div id="datasetAssetsContainer">
+                                {% with %}
+                                    {% set dropdown_type = "dropdown_list_panel" %}
+                                    {% set dropdown_button_id = "datasetAssetsButton" %}
+                                    {% set dropdown_list_panel_link_id = "datasetAssetsLabel" %}
+                                    {% set dropdown_list_id  = "datasetAssetsList"%}
+                                    {% set panel_expanded = "false" %}
+                                    {% set dropdown_show = "" %}
+                                    {% set dropdown_label_text = "Assets" %}
+                                    {% include "partials/dropdown-panel.html" %}
+                                {% endwith %}
+                            </div>
+                            <div id="datasetGeneralContainer"></div>
+
+                            <div id="datasetGeometryContainer">
+                                <div id="datasetMapContainer" class="map"></div>
+                            </div>
+
+                            <div id="datasetMetadataContainer">
+                                {% with %}
+                                    {% set dropdown_type = "dropdown_list_panel" %}
+                                    {% set dropdown_button_id = "datasetMetadataButton" %}
+                                    {% set dropdown_list_panel_link_id = "datasetMetadataLabel" %}
+                                    {% set dropdown_list_id  = "datasetMetadataList"%}
+                                    {% set panel_expanded = "true" %}
+                                    {% set dropdown_show = "show" %}
+                                    {% set dropdown_label_text = "Metadata" %}
+                                    {% include "partials/dropdown-panel.html" %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <script src="js/leaflet-ui-functions.js"></script>
+        <script src="js/leaflet-stac-ui.js" type="module"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+                hideDetails();
+                getSTACSearchResults("");
+                buildMySearchDisplay();
+                buildFilterDropdowns();
+
+                var searchFilterApplyButton = document.getElementById("searchFilterApply")
+                searchFilterApplyButton.addEventListener("click", applyMySearch);
+
+                var clearFilterButton = document.getElementById("searchFilterClear");
+                clearFilterButton.addEventListener("click", clearMySearch);
+
+            })
+        </script>
+
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

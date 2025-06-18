@@ -24,26 +24,14 @@ document.addEventListener("DOMContentLoaded", function (){
     searchInputElement.addEventListener("input", function(event){
         removeReturnedResultStyle(event.target);
         clearListChildren();
-        getWord(event.target);
+        getWord(event.target, "searchInputContainer");
     });
 
+    var searchKeywordAddButton = document.getElementById("searchIconAnchor");
 
-    //For text input small
-    var textInputElement = document.getElementById("inputNumberSmall");
-
-    setPlaceholderText(textInputElement, "1");
-
-    textInputElement.addEventListener("click", function(){
-        setPlaceholderText(textInputElement, "");
-        setTextboxBackground(textInputElement);
+    searchKeywordAddButton.addEventListener('click', function(){
+        var stacKey = searchInputElement.getAttribute('queryablekeystac');
+        addKeyword(searchInputElement.value, stacKey);
     });
 
-    textInputElement.addEventListener("focus", function(){
-        setPlaceholderText(textInputElement, "");
-    });
-
-    textInputElement.addEventListener("blur", function(){
-        setPlaceholderText(textInputElement , "1");
-        setTextboxBackground(textInputElement);
-    });
 })

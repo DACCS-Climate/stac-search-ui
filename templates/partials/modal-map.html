@@ -1,0 +1,12 @@
+<dialog id="modalLeafletMap" class="padding-unset modal-map-dialog">
+    <div id="modalMapContainer" class="modal-leaflet-container">
+        <div class="popup-button-close">
+                {% with button_type = "close_button_x"%}
+                    {% set button_id = "modalMapClose" %}
+                    {% set button_colour_class = "button-close-x-modal-colour" %}
+                    {% include "partials/button.html" %}
+                {% endwith %}
+            </div>
+        <div id="modalMap" class="map-custom"></div>
+    </div>
+</dialog>

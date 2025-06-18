@@ -1,34 +1,68 @@
 var shapeDict = {};
+var mapsPlaceholder = [];
+function instantiateMap(mapContainerID){
+    var map;
 
-function createMap(){
+
+    //TODO: Find a way to stop error 'Map container is already initialized.' from happening without interfering with
+    // map functionality
+    // Keep commented code for now
+    /*
+    var mapContainer = L.DomUtil.get(mapContainerID);
+    if(mapContainer != null){
+        mapContainer._leaflet_id = null;
+    }
+    */
+
+
+    //Add hook to add map object to array so it can be used later to add STAC polygons to map
+    L.Map.addInitHook(function () {
+      mapsPlaceholder.push(this);
+    });
+
     //Creates map with the map centre at the given latitude. longitude, and zoom level
-    var map = L.map('map',{
+    map = L.map(mapContainerID,{
             editable: true,
             center: [`{{ map_default_lat }}`, `{{ map_default_lng }}`],
             zoom: `{{ map_default_zoom }}`
         });
 
-    //Adds map image
+     //Adds map image
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    //Adds menu of buttons to draw shapes
-    createDrawMenu(map);
+    return map;
+}
 
-    //Adds search box
-    createSearchTool(map);
+function createMap(map, addWidgets){
 
-    //Adds textbox to input single coordinate
-    createCoordinateInputField(map);
+    if(addWidgets) {
+        //Adds menu of buttons to draw shapes
+        createDrawMenu(map);
 
-    //Adds panel to paste geojson
-    createGeoJSONPanel(map);
+        //Adds search box
+        createSearchTool(map);
+
+        //Adds textbox to input single coordinate
+        createCoordinateInputField(map);
+
+        //Adds panel to paste geojson
+        createGeoJSONPanel(map);
+
+        //Gets latitude and longitude of shapes that were added to the map
+        //Fires on mouseup
+        map.on('mouseup', function(event){
+            getMarkerLatLng();
+        });
+    }
+
+    if(addWidgets == false){
+        addLegend(map);
+    }
 
     //Adds tooltip on cursor that shows latitude and longitude of cursor position
-    createCursorTooltip(map);
+    createCursorTooltip(map, addWidgets);
 
-    map.on('mouseup', function(event){
-        getShapeLatLng();
-    });
+
 }
 
 function clearShape(shapeDict){
@@ -42,16 +76,11 @@ function clearShape(shapeDict){
     }
 }
 
-function clearText(elementID){
-    var divLatLng = document.getElementById(elementID);
-    divLatLng.innerText = "";
-}
-
-
 //Create tooltip to show latitude and longitude next to cursor
-function createCursorTooltip(map){
+function createCursorTooltip(map, addWidgets){
 
     var tooltip = L.tooltip();
+    var latLng;
 
     map.on('mouseover', function(event){
         tooltip.setLatLng(event.latlng)
@@ -72,15 +101,18 @@ function createCursorTooltip(map){
     });
 
 
-    //Set listeners on UI elements for Tooltip actions
-    //Close tooltip when moving mouse over any UI element
-    //Open tooltip when moving mouse out of any UI element
+    if(addWidgets){
+        //Set listeners on UI elements for Tooltip actions
+        //Close tooltip when moving mouse over any UI element
+        //Open tooltip when moving mouse out of any UI element
 
-    manageToolTipDomElement(map, tooltip, "drawMenuContainer");
-    manageToolTipDomElement(map, tooltip, "coordinateContainer");
-    manageToolTipDomElement(map, tooltip, "geoJSONPanelButton");
-    manageToolTipDomElement(map, tooltip, "geoJSONPanelContainer");
-    manageToolTipDomElement(map, tooltip, "fuseSearchControlContainer");
+        manageToolTipDomElement(map, tooltip, "drawMenuContainer");
+        manageToolTipDomElement(map, tooltip, "coordinateContainer");
+        manageToolTipDomElement(map, tooltip, "geoJSONPanelButton");
+        manageToolTipDomElement(map, tooltip, "geoJSONPanelContainer");
+        manageToolTipDomElement(map, tooltip, "fuseSearchControlContainer");
+    }
+
 
 }
 
@@ -120,49 +152,18 @@ function displayCoordinate(lat, lng){
 //Gets latitude and longitude of shapes added to the map and prints them out in the "Current Shape Lat Long" div
 //For the Marker it also outputs the latitude and longitude of the added Marker to the coordinate input text field
 //For Polygons it prints out an updated list of added polygon points as points are added.
-function getShapeLatLng(){
-    var circleRadius;
-    var circleCentre;
+function getMarkerLatLng(){
     var markerCentre;
-    var polygonLatLngArray;
-    var divLatLng = document.getElementById("currentShapeLatLng");
-    //Keep in case this information is needed
-    /*
-    let circleBounds;
-    let circleBoundsCornerNE;
-    let circleBoundsCornerSW;
-    */
-
 
     //Hide coordinate input error message if visible
     hideCoordinateErrorPanel();
 
     if (Object.keys(shapeDict).length > 0) {
-        if (shapeDict["shape"]["shapeType"] == "Circle") {
-
-            circleRadius = shapeDict["shape"].getRadius();
-            circleCentre = shapeDict["shape"].getLatLng();
-
-            //Keep in case this information is needed
-            /*
-            circleBounds = shapeDict["shape"].getBounds();
-            circleBoundsCornerNE = circleBounds.getNorthEast();
-            circleBoundsCornerSW = circleBounds.getSouthWest();
-            */
-
-            divLatLng.innerText = "Centre = " + circleCentre + "\n" + "Radius = " + circleRadius;
-        } else if (shapeDict["shape"]["shapeType"] == "Marker") {
+        if (shapeDict["shape"]["shapeType"] == "Marker") {
             markerCentre = shapeDict["shape"].getLatLng();
 
             //Display coordinate in point coordinate field
             displayCoordinate(markerCentre.lat, markerCentre.lng)
-
-            divLatLng.innerText = markerCentre;
-        } else {
-            if(shapeDict["shape"]["shapeType"] != "Map") {
-                polygonLatLngArray = shapeDict["shape"].getLatLngs();
-                divLatLng.innerText = polygonLatLngArray;
-            }
         }
     }
 }
@@ -200,8 +201,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
 
                 // Start drawing rectangle
                 newShape = map.editTools.startRectangle();
@@ -228,8 +227,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
 
                 // Start drawing circle
                 newShape = map.editTools.startCircle();
@@ -256,8 +253,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
 
                 // Click to add points to map that will be automatically joined into a polygon
                 newShape = map.editTools.startPolygon();
@@ -285,8 +280,6 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
 
                 //Add location marker to map
                 newShape = map.editTools.startMarker();
@@ -315,15 +308,15 @@ function createDrawMenu(map){
                 //Remove previously drawn shape/layer from dictionary
                 //Clear text from div displaying the point coordinates of the shape
                 clearShape(shapeDict);
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
             })
 
 
             var buttonGeoJSON = L.DomUtil.create("a", "button-convert-geojson", geoJSONConvertContainer);
             var buttonGeoJSONIconDiv = L.DomUtil.create("div", "div-geojson-icons", buttonGeoJSON);
             buttonGeoJSON.title = "Convert shape into GeoJSON";
-            buttonGeoJSONIconDiv.innerHTML = '<i class="bi bi-hexagon-fill button-geojson-hexagon"></i> <i class="fa-solid fa-arrow-right button-geojson-arrow"></i> <img class="button-geojson-icon" src="images/geojson-file.svg">';
+            //TODO Comment out icon for GeoJSON convert button until a common theme for 'Review' buttons are made
+            //buttonGeoJSONIconDiv.innerHTML = '<i class="bi bi-hexagon-fill button-geojson-hexagon"></i> <i class="fa-solid fa-arrow-right button-geojson-arrow"></i> <img class="button-geojson-icon" src="images/geojson-file.svg">';
+            buttonGeoJSONIconDiv.innerText = "Review";
 
             L.DomEvent.on(buttonGeoJSON, "click", function () {
                 //Hide coordinate input error message if visible
@@ -375,9 +368,6 @@ function createSearchTool(map){
 
                     locationMarker["shapeType"] = "Marker";
                     shapeDict["shape"] = locationMarker;
-
-                    clearText("currentShapeLatLng");
-                    clearText("currentShapeGeoJSON");
 
                     //Display coordinate of selected city in point coordinate field
                     displayCoordinate(coordinates[1], coordinates[0]);
@@ -490,9 +480,6 @@ function addCoordinate(coordinateValue, map){
         //Remove previously drawn shape/layer from dictionary
         clearShape(shapeDict);
 
-        clearText("currentShapeLatLng");
-        clearText("currentShapeGeoJSON");
-
         coordinateMarker.addTo(map);
 
         coordinateMarker['shapeType'] = "Marker";
@@ -575,9 +562,6 @@ function createGeoJSONPanel(map){
             L.DomEvent.on(geoJSONUploadButton, 'click', function() {
                 //Clear anything in coordinate input field
                 clearCoordinate();
-
-                clearText("currentShapeLatLng");
-                clearText("currentShapeGeoJSON");
 
                 uploadGeoJSON(map)
             });
@@ -671,24 +655,26 @@ function uploadGeoJSON(map){
 
 //Formats drawn shape or added geojson map area into geojson as expected by STAC API
 function formatGeoJSON(shapeDict){
-    var currentGeoJSONDiv = L.DomUtil.get("currentShapeGeoJSON");
     var shapeType;
     var shape = shapeDict['shape'];
     var shapeGeoJSON;
     var bounds;
     var bbox
     var stacGeoJSON  = JSON.parse('{"type": "FeatureCollection", "features": [{}]}');
+    var locationBodyDiv = document.getElementById("searchFilterLocationBody");
+    var locationHiddenDiv = document.getElementById("searchFilterLocationHidden");
+    var intersectFilter = {"intersects":{"type":"", "coordinates":[]}};
+    locationBodyDiv.innerHTML = "";
 
-    if(Object.keys(shapeDict).length > 0){
+    if(Object.keys(shapeDict).length > 0) {
         shapeType = shapeDict['shape']['shapeType'];
 
-        if(shapeType == "Marker"){
+        if (shapeType == "Marker") {
             shapeGeoJSON = shape.toGeoJSON();
             stacGeoJSON["features"] = shapeGeoJSON;
-        }else if(shapeType == "Map"){
+        } else if (shapeType == "Map") {
             stacGeoJSON = shapeDict['shapeData'];
-        }
-        else{
+        } else {
             shapeGeoJSON = shape.toGeoJSON();
             bounds = shape.getBounds();
             bbox = [bounds._northEast["lat"], bounds._northEast["lng"], bounds._southWest["lat"], bounds._southWest["lng"]]
@@ -696,8 +682,168 @@ function formatGeoJSON(shapeDict){
             stacGeoJSON["features"] = shapeGeoJSON;
         }
 
-        //Keep console for the formatted geojson for now
-        console.log(stacGeoJSON);
-        currentGeoJSONDiv.innerText = JSON.stringify(stacGeoJSON);
+
+
+
+        if (shapeGeoJSON.geometry.type == "Polygon"){
+            Object.entries(shapeGeoJSON.geometry.coordinates[0]).forEach(([key, value]) => {
+                var locationCoordinate = document.createElement("p");
+
+                locationCoordinate.innerText = parseInt(key) + 1 + ": " + value[1] + ", " + value[0];
+                locationBodyDiv.appendChild(locationCoordinate);
+
+                intersectFilter.intersects.coordinates.push(value);
+            })
+        }
+
+        if(shapeGeoJSON.geometry.type == "Point"){
+            var coordinateNum = 0;
+            var locationCoordinate = document.createElement("p");
+            locationCoordinate.innerText = parseInt(coordinateNum) + 1 + ": " + shapeGeoJSON.geometry.coordinates[1] +
+                ", " + shapeGeoJSON.geometry.coordinates[0];
+            locationBodyDiv.appendChild(locationCoordinate);
+
+            intersectFilter.intersects.coordinates.push(shapeGeoJSON.geometry.coordinates);
+        }
+
+        intersectFilter.intersects.type = shapeGeoJSON.geometry.type;
+        locationHiddenDiv.innerText = JSON.stringify(intersectFilter);
     }
+}
+
+function addSTACPolygon(polygonLatLngArray){
+    var leafletLatLngArray = [];
+    var map = mapsPlaceholder[0];
+    var colourOptions = {
+        color:'red',
+        weight: 0
+    };
+
+    for(latLng of polygonLatLngArray){
+        for(coordinate of latLng){
+            leafletLatLngArray.push([coordinate[1], coordinate[0]]);
+        }
+    }
+
+    var stacPolygon = L.polygon(leafletLatLngArray, colourOptions).addTo(map);
+    map.fitBounds(stacPolygon.getBounds());
+}
+
+function addSTACBBox(bboxLatLngsArray){
+    var map = mapsPlaceholder[0];
+    var cornersArray = [];
+    var tooltipDirection = "";
+    var corner1Lat;
+    var corner1Long;
+    var corner2Lat;
+    var corner2Long;
+    var colourOptions = {
+        color: 'blue',
+        fillOpacity: 0
+    };
+
+    corner1Lat  = bboxLatLngsArray[1];
+    corner1Long = bboxLatLngsArray[0];
+
+    if(bboxLatLngsArray.length == 4){
+        corner2Lat = bboxLatLngsArray[3];
+        corner2Long = bboxLatLngsArray[2];
+
+    }
+
+    if(bboxLatLngsArray.length == 6){
+        corner2Lat = bboxLatLngsArray[4];
+        corner2Long = bboxLatLngsArray[3];
+    }
+
+    cornersArray = [
+            [corner1Lat, corner1Long],
+            [corner2Lat, corner2Long]
+        ]
+
+    var bbox = L.rectangle(cornersArray, colourOptions).addTo(map);
+    var bboxLatLngs = bbox.getLatLngs();
+
+    bboxLatLngs.forEach( (bboxCoords) => {
+        Object.entries(bboxCoords).forEach( ([coordKey, coordValue]) => {
+
+            var displayCoordinate = [coordValue.lat, coordValue.lng];
+            if(coordValue.lng < 0){
+                tooltipDirection = "left";
+            }
+            else{
+                tooltipDirection = "right";
+            }
+
+            var tooltip = L.tooltip(
+                coordValue,
+                {
+                    content:displayCoordinate.toString(),
+                    direction: tooltipDirection
+                }
+            ).addTo(map);
+        })
+    })
+
+    map.fitBounds(cornersArray);
+    return bboxLatLngs
+}
+
+function addLegend(map){
+    L.Control.GeometryLegend = L.Control.extend({
+        options: {
+            position: "topright"
+        },
+
+        initialize: function (options) {
+            L.setOptions(this, options);
+            this._panelOnLeftSide = (this.options.position.indexOf("left") !== -1);
+        },
+
+        onAdd: function () {
+            var legend = this.createPanel();
+            return legend;
+
+        },
+        createPanel: function () {
+
+            var topRightPanel = this._panel = L.DomUtil.create('div');
+            topRightPanel.id = "topRightPanel";
+
+            var legendContainer = L.DomUtil.create('div', 'legend-container', topRightPanel);
+            L.DomUtil.addClass(legendContainer, 'leaflet-bar');
+            legendContainer.id = "legendContainer";
+
+            var bboxLegendContainer = L.DomUtil.create('div', 'bbox-legend-container', legendContainer);
+            bboxLegendContainer.id = "bboxLegendContainer";
+
+            var bboxLegendColour = L.DomUtil.create('div', 'bbox-legend-colour', bboxLegendContainer);
+            L.DomUtil.addClass(bboxLegendColour, 'margin-legend');
+
+            var bboxLegendText = L.DomUtil.create('p', 'subtitle-1', bboxLegendContainer);
+            L.DomUtil.addClass(bboxLegendText, 'margin-unset');
+            bboxLegendText.innerText = "BBox";
+
+            var polygonLegendContainer = L.DomUtil.create('div', 'polygon-legend-container', legendContainer);
+            polygonLegendContainer.id = "polygonLegendContainer";
+
+            var polygonLegendColour = L.DomUtil.create('div', 'polygon-legend-colour', polygonLegendContainer);
+            L.DomUtil.addClass(polygonLegendColour, 'margin-legend');
+
+            var polygonLegendText = L.DomUtil.create('p', 'subtitle-1', polygonLegendContainer);
+            L.DomUtil.addClass(polygonLegendText, 'margin-unset');
+            polygonLegendText.innerText = "Geometry";
+
+            if (this._panelOnLeftSide) {
+                L.DomUtil.addClass(topRightPanel, 'left');
+            } else {
+                L.DomUtil.addClass(topRightPanel, 'right');
+            }
+
+            return topRightPanel;
+        }
+    })
+
+    var legend = new L.Control.GeometryLegend(map);
+    legend.addTo(map);
 }

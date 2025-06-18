@@ -1,14 +1,95 @@
 {% set checkbox_id = checkbox_id | default("attributeCheckbox") %}
 
-<div class="checkbox-buffer">
-    <label class="checkbox-container margin-unset" for="{{ checkbox_id }}">
-        {% if direction_left %}
-            <p>{{ checkbox_label_text }}</p>
-        {% endif %}
-        <input id="{{ checkbox_id }}" type="checkbox" value="{{ checkbox_value }}">
-        <span class="checkmark"></span>
-        {% if direction_right %}
-            <p class="{{ checkbox_text_class }} margin-unset">{{ checkbox_label_text }}</p>
-        {% endif %}
-    </label>
-</div>
+{% if default_dropdown_checkbox  %}
+<script>
+    var parentList = document.getElementById('{{ dropdown_default_UL_id }}');
+    var collectionKeys;
+
+    fetch("{{ stac_catalog_url }}/collections").then(response => response.json()).then(json => {
+
+        collectionKeys = Object.keys(json.collections);
+
+        collectionKeys.forEach(key => {
+            var collectionProperties = json.collections[key].summaries;
+            var licenseKey = "";
+            var licenseKeyArray;
+            Object.entries(collectionProperties).forEach( ([propertyKey, propertyValue]) => {
+
+                if(propertyKey.includes('license')){
+                    licenseKey = propertyKey;
+                }
+            })
+            licenseKeyArray = licenseKey.split(":");
+
+
+            var checkboxBufferDiv = document.createElement("div");
+            checkboxBufferDiv.classList.add("checkbox-buffer");
+
+            var customDividerHR = document.createElement("hr");
+            customDividerHR.classList.add("dropdown-custom-divider")
+            var listDivider = document.createElement("li");
+            listDivider.appendChild(customDividerHR);
+            var checkboxListItem = document.createElement("li");
+            checkboxListItem.classList.add("dropdown-default-list-item");
+
+            var checkboxLabel = document.createElement("label");
+            checkboxLabel.classList.add("checkbox-container", "margin-unset");
+
+            var checkboxLabelText = document.createElement("p");
+
+            parentList.appendChild(customDividerHR);
+            parentList.appendChild(checkboxListItem);
+
+            checkboxListItem.appendChild(checkboxBufferDiv);
+
+            checkboxBufferDiv.appendChild(checkboxLabel);
+            checkboxLabel.setAttribute("for", json.collections[key].id);
+            checkboxLabelText.innerHTML = json.collections[key].id;
+
+            var checkmarkSpan = document.createElement("span");
+            checkmarkSpan.classList.add("checkmark");
+
+            var checkbox = document.createElement("input");
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("collectionType", licenseKeyArray[0]);
+            checkbox.id = json.collections[key].id;
+            checkbox.setAttribute("value", json.collections[key].id);
+            checkbox.addEventListener('change', function(){
+                checkCheckboxCount('{{ dropdown_default_UL_id }}', '{{ dropdown_button_text_id }}', '{{ dropdown_label_text }}');
+                setSearchPageTitle('{{ dropdown_default_UL_id }}', "titleSearchType");
+                populateDatasetsFilter('{{ dropdown_default_UL_id }}');
+                setCollectionsCheckboxFilterJSON('{{ dropdown_default_UL_id }}');
+            })
+
+            if('{{ direction }} '== "left"){
+                checkboxLabel.appendChild(checkboxLabelText);
+            }
+
+            checkboxLabel.appendChild(checkbox);
+            checkboxLabel.appendChild(checkmarkSpan);
+
+            if('{{ direction }}' == "right"){
+                checkboxLabel.appendChild(checkboxLabelText);
+            }
+
+        })
+
+
+    })
+
+</script>
+
+{% else %}
+    <div class="checkbox-buffer">
+        <label class="checkbox-container" for="{{ checkbox_id }}">
+            {% if direction_left %}
+                <p>{{ checkbox_label_text }}</p>
+            {% endif %}
+            <input id="{{ checkbox_id }}" type="checkbox" value="{{ checkbox_value }}">
+            <span class="checkmark"></span>
+            {% if direction_right %}
+                <p class="{{ checkbox_text_class }} margin-unset">{{ checkbox_label_text }}</p>
+            {% endif %}
+        </label>
+    </div>
+{% endif %}

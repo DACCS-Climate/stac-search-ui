@@ -9,16 +9,10 @@
     <input type="text" id="{{ timepicker_id }}" class="{{ timepicker["class"] }}"  placeholder="{{ timepicker["placeholder_text"] }}">
 </div>
 
-<script>
-    initializeTimepicker("00:00", "23:59");
+<script src="js/timepicker.js"></script>
 
-    function initializeTimepicker(startTime, endTime){
-        flatpickr("#{{ timepicker_id }}", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            minTime: startTime,
-            maxTime: endTime
-        });
-    }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeTimepicker("{{ timepicker_id }}", "00:00", "23:59");
+    })
 </script>

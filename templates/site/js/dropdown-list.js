@@ -5,6 +5,7 @@ function swapListItems(firstItemID, secondItemID){
     var firstItemValue = firstItem.innerHTML;
 
     firstItem.innerHTML = secondItem.innerHTML;
+    firstItem.setAttribute('swappedID', secondItemID);
     secondItem.innerHTML = firstItemValue;
 }
 
