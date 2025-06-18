@@ -911,7 +911,7 @@ async function checkSTACEndpoint(url){
     var queryablesURL = "{{ stac_catalog_url }}/queryables";
     var collectionsURL = "{{ stac_catalog_url }}/collections";
     var serverResponse =  await checkSTACEndpoint(queryablesURL);
-    
+
     if(serverResponse.status == 404)
     {
         keywordURL = collectionsURL;
@@ -970,105 +970,6 @@ function groupByExtension(url, array){
     return groupedArray;
 }
 
-function buildCollectionsFilterDropdown(json){
-
-    console.log("groupded json")
-    console.log((json))
-    //var groupedByCollection = Object.groupBy(json, ({extension_name}) => extension_name);
-     //   console.log(groupedByCollection)
-    Object.entries(json).forEach( ([collectionKey, collectionValue]) =>{
-
-
-
-        var dropdownCollectionTitleContainer = document.createElement("div");
-        var dropdownCollectionTitle = document.createElement("p");
-        var extensionName = "";
-        var collectionName = "";
-
-        dropdownCollectionTitle.classList.add("subtitle-1", "title-advanced-filters");
-        dropdownCollectionTitleContainer.appendChild(dropdownCollectionTitle);
-
-        dropdownCollectionTitle.innerText = collectionKey;
-
-
-        Object.entries(collectionValue).forEach( ([collectionGroupKey, collectionGroupValue]) => {
-            var dropdownContainer = document.createElement("div");
-            var dropdownDiv = document.createElement("div");
-            var dropdownButton = document.createElement("a");
-            var dropdownButtonText = document.createElement("div");
-            var dropdownList = document.createElement("ul");
-
-            collectionName = collectionValue.id;
-            extensionName = collectionValue.extension_name;
-
-            dropdownContainer.id = "dropdownListCollections" + collectionName + extensionName + "Container";
-            dropdownContainer.classList.add("dropdown-regular-list-container");
-
-            dropdownDiv.classList.add("dropdown");
-
-            dropdownButton.id = "dropdownListCollections" + collectionName + extensionName + "Button";
-            dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "padding-unset",
-                "dropdown-regular-list-button", "dropdown-regular-list-chevron-icon");
-            dropdownButton.setAttribute("role", "button");
-            dropdownButton.setAttribute("data-bs-toggle", "dropdown");
-            dropdownButton.setAttribute("data-bs-display", "static");
-            dropdownButton.setAttribute("data-bs-auto-close", "outside");
-            dropdownButton.setAttribute("aria-expanded", "false");
-
-            var dropdownListItem = document.createElement("li");
-            var checkboxBufferDiv = document.createElement("div");
-            var checkboxLabel = document.createElement("label");
-            var checkboxLabelText = document.createElement("p");
-            var checkmarkSpan = document.createElement("span");
-            var checkbox = document.createElement("input");
-            var checkboxID = collectionValue.extension_name + collectionValue.extension_type;
-
-
-            dropdownListItem.id = "listItem" + extensionType.key.replaceAll(' ', '');
-
-            checkmarkSpan.classList.add("checkmark");
-            checkboxLabel.classList.add("checkbox-container", "margin-unset");
-
-            checkboxLabel.setAttribute("for", checkboxID);
-            checkboxLabelText.classList.add("checkbox-label-text", "margin-unset");
-            checkboxLabelText.innerText = extensionType.key.trim();
-
-            checkbox.setAttribute("type", "checkbox");
-            checkbox.id = checkboxID;
-            checkbox.setAttribute("propertyname", extensionType.values.stac_key);
-            checkbox.setAttribute("value", extensionType.key);
-
-
-
-
-        })
-
-
-
-
-
-
-    })
-}
-
-//TODO: Make this fail gracefully and build dropdowns from /collections endpoint
-// or make another function to get from /collections
-function buildQueryablesFilterDropdown(){
-
-    fuseDictionary().then(queryablesArray => {
-        var groupedQueryablesExtensionNameArray;
-        Object.entries(queryablesArray).forEach( ([queryablesArrayKey, queryablesArrayValue]) => {
-            var stacKeyArray = queryablesArrayValue.values.stac_key.split(":");
-            queryablesArray[queryablesArrayKey]["extension_name"] = stacKeyArray[0];
-            queryablesArray[queryablesArrayKey]["extension_type"] = stacKeyArray[1];
-
-        })
-
-        groupedQueryablesExtensionNameArray =  Object.groupBy(queryablesArray, ({extension_name}) => extension_name);
-
-        buildDropdownQueryableElements(groupedQueryablesExtensionNameArray);
-    })
-}
 
 function buildDropdownQueryableElements(json){
     var filterDropdownQueryablesContainer = document.getElementById("dropdownQueryables");
